@@ -1,0 +1,686 @@
+3.00.265
+
+Updated PCRE library to 8.42 (though the exe grew by 60K)
+Added spawn window trigger type
+Changed sound playback so that it can play more than wav, like mp3/mp4/wmv/wma/mkv/ogg/etc (if the OS can do it, BeipMU can)
+  Note: To get ogg playback, you will need to install this first: https://www.microsoft.com/en-us/store/p/web/9n5tdp8vcmhs?rtc=1
+  Sound playback also now supports multiple sounds overlapping (artificially limited to 16)
+Changed Trigger dialog appearance tab to only show colors in the preview when they're actually being applied
+Changed Trigger dialog appearance tab to auto-check the fore/back color options when a color is chosen
+Changed default of 'Strip trailing spaces in received text' to off as it was breaking MUD maps
+Changed default of Ansi option 'Reset settings on new lines' to off as it was breaking MUD text coloring
+Added VGA ansi color defaults to the Ansi presets, and renamed XP to CMD
+Fixed a bug where </font> tags didn't restore font face & size, only colors
+Fixed some flashing text bugs. Text with a background color wouldn't redraw, plus the first blinking tag on screen was out of sync with the rest.
+Fixed the tooltips in the bottom button bar, looks like they broke on the switch to Unicode
+
+3.00.264
+
+Changed the ReverseDNSLookup script function to Unicode
+Improved the built in help for the /delay, /idle, and /log commands
+Added 24-bit ansi support (see '/test ansi' for an example)
+
+3.00.263
+
+Fixed a couple of regressions from the timer code rewritten in 261. One was that all timer based events would stop, another was the blinking activity notify didn't blink.
+
+3.00.262
+
+Fixed a crash when MUD Prompt handling is enabled and a server with MCP enabled is connected to (accidental recursion)
+When opening the worlds/connection window it will now automatically select the current character/server in the tree view
+Fixed a regression caused in build 261 that caused hyperlinks to not work properly (the std::thread fix missed an important step)
+Fixed another regression caused in build 261 that could cause sending large puppet strings to crash (sorry Squirrelly!)
+
+3.00.261
+
+The taskbar was still drawing text in a non-unicode way, so world names with unicode chars would display ugly
+The time & date display code is now unicode (the yyyy-MM-dd formatting stuff)
+Rewrote the timer code again (last time was in build 193) using a single OS timer plus a priority queue
+Fixed a crash in the triggers dialog when clicking 'copy' while a server/character is selected.
+Noticed that using std::thread was adding an extra 100+K to the build (loads of dependencies), so used my previous code
+
+3.00.260 - Skipped, accidentally released build 259 on the store as build 260
+
+3.00.259
+
+Help->Contents... now opens up the online wiki instead of looking for BeipMU.chm
+Fixed bug where store version of BeipMU would look for config.txt in startup directory, now it only looks in the store %appdata% folder
+Fixed a glitch where adding a comma in the middle of a word "sentence" "sent,ence" would cause the correct first part "sent" to appear misspelled
+Unicode! BeipMU now uses UTF-8 for everything, so you can use emojis or foreign language text everywhere
+Added an emoji substitution table so that things like "dog" and "zebra" will have the emoji appended after them without mu* UTF8/emoji support (see Options->Emoji)
+Fixed bug where trigger substitution text can cause a crash when the replacement is an empty string, and it happens at the end of the line
+Switched to RichEdit 4.1 for the input text, misspelled words now get a squiggly line (previously was a straight line)
+Added character encodings to the server properties since not everything supports unicode/UTF8, currently have UTF8/CP-1252/CP-437
+Added /rawnetwork command to show raw network data being sent & received for easier protocol debugging
+Simplified the Server Settings dialog to have 'TLS (SSL)' be a checkbox
+Added the option to verify TLS/SSL certificates in the server settings
+HTML Logfiles - Correct UTF-8 specifier
+
+3.00.258
+
+Importing the config will now completely restart BeipMU with the new config, so that the window position/startup scripts/etc all run correctly
+Fixed a bug introduced in 256 where importing the config can cause a crash (the code assumed the config would never be deleted at runtime, which is no longer true)
+Fixed a rare bug where the MessageBox asking if you want to delete nested triggers was not modal and could lead to a crash if it was ignored
+Changed the design of the server & character duplicate names so that now there is only one name instead of two separate name fields. If anyone had a fancy name here, it is put into the Info field when updating.
+Fixed an annoyance where when selecting text the tooltip window will appear and obscure what's being selected
+
+3.00.257
+
+Updated defaults when there is no config file, as the existing defaults looked really bad
+Fixed a bug where BeipMU can crash on closing if any message boxes appear while closing.
+
+3.00.256 - First microsoft store release!
+
+Changed the "Connect String" to act like it was typed into the input window, so multiple lines of commands and text is processed.
+After disconnecting from a server, the ansi properties are always reset.
+Added an option to puppets "Hide Receive Prefix" (default to true) so that the prefix can optionally be left visible
+Rewrote how config files are handled, now %APPDATA%/BeipMU is used to store the config. If a config.txt is found in the app startup folder it is kept there, so existing users won't see a change if they update.
+New Import/Export config ability
+A new Edit sub-menu, "Convert". With "New lines to %R", and "Tabs to %T"
+Fixed how telnet IAC + GA was handled, previously it was adding blank lines when there was no prompt text.
+
+3.00.255
+
+Increased the UI font size, and changed the font to Calibri to be easier to read at all DPIs.
+Fixed bug in logging where newline isn't added on sent lines (introduced in an earlier code cleanup)
+
+3.00.254
+
+Fixed a bug where logging to an HTML file wouldn't write the HTML header when creating a new file
+Improved the history text selection when auto adjust height is on, so more than the last line of text is shown
+Fixed a crash when double clicking to the right of a line of text (added in 243 with the select word feature)
+
+3.00.253
+
+More high DPI fixes, taskbar icons, some fonts, and the font size display in the text window
+Fixed what looks like a Windows 10 bug with the tooltips blinking in the text window. Switched to a custom implementation.
+Fixed a bug where fan fold colors were not correct after filling up scrollback completely
+
+3.00.252
+
+Added initial high DPI support
+Changed puppet autoconnect code to not use the current window if it's disconnected
+Fixed a bug in the window scrolling code, where the motion formula can swing out of bounds and cause a crash
+
+3.00.251
+
+Improved logging code so that log file names have environment variables expanded (%homepath%, etc)
+Added 'Copy' feature to triggers pane
+Fixed a bug in smart paste where the last line wasn't being sent
+Simplified the puppet prefix detection code
+
+3.00.250
+
+Fixed a minor glitch when correcting misspelled words, leading punctuation would be deleted (for example "Tezt -> Test)
+
+3.00.249
+
+Fixed a hopefully rare crashing bug where a full output buffer, a just deleted MUD prompt, and two input lines could cause a crash.
+
+3.00.248
+
+Fixed a bug where the maximum lines in the text windows wasn't being honored (introduced in 247)
+
+3.00.247
+
+Fixed the bug where clicking the speller in the preferences dialog and exiting would cause a crash (properly this time, by making it type safe in the code)
+Changed the text window to use the new Variant type to hold text records, plus a bunch of other code cleanups in the text window
+Brought back saving of input & history window sizes (only applies to input window if auto sizing is disabled)
+
+3.00.246
+
+Fixed a bug recently introduced where received puppet text shows up empty
+Fixed a race condition in new networking code on sending data
+
+3.00.245
+
+Added back dockable windows to the scripting API
+Fixed a bug where selecting a speller in the preferences dialog and then exiting the dialog causes a crash (introduced in last build by code cleanup).
+Fixed a bug where puppets would send a blank line after every line
+Patched a bug where holding down the mouse button on the scrollbar prevents the window from repainting (OS design flaw really)
+Rewrote the trigger/characters/keyboard macros code to be shared and fixed some inconsistencies with them along the way
+Fixed a crash in the App.NewWindow_Text(x,y) script command due to forgetting to set a default font.
+Fixed a bug in the prompt code which would result in multiple prompts
+Fixed a regression caused in 243 where retrying a failed connect broke
+Fixed a bug in logging where word wrapping wasn't done correctly
+Fixed it where any data sent during connecting now gets sent (previously it would get into an invalid state)
+Also changed the networking code to not use IO completion ports, now it's thread pool wait objects
+
+3.00.244
+
+Fixed bug where creating new daily logs at midnight was broken (it just didn't happen)
+Fixed bug where main window title was set to previously connected world instead of current one
+Fixed a bad text formatting bug where text baseline is incorrect when wrapping a line of text with multiple font sizes
+Fixed a minor drawing error where the time column in the output view overlaps the text by a few pixels at some time values
+Fixed a minor bug where selection of the last character in a line wasn't rounding nicely
+Fixed a minor bug where turning on/off the time column doesn't reformat the text properly
+Fixed a minor bug where turning on/off the time column and fixed width text formatting doesn't format the text properly
+Worked around a Unix Wine issue where text is black/wrong size at certain times in the RichEdit input control
+Changed booting without a configuration file to not show an error when you exit
+
+3.00.243
+
+Changed double click on text to select whole words (previously was broken and did nothing useful)
+Fixed a couple mouse/prompt bugs that only happen if you clear the output window
+Fixed a minor text scroll issue when making the window bigger (would let you grow past the top, then allow scrolling down)
+Fixed an issue where a network error would leave the connection in a perpetual 'trying to reconnect' state that doesn't reconnect
+Fixed a bug in SSL where if you send more than 16K in one line it screws up and sends the encrypted data as though that is what you typed
+Fixed a performance issue where sending multiple lines at once would be sent as individual lines instead of being batched into one send (worse for SSL)
+
+3.00.242
+
+Changed right click menu on input window to be at click location
+Changed selection of text so that it rounds to the nearest character
+Changed rendering of tab characters in output to be visible when selected
+Changed Ansi Colors to be xterm colors by default
+Added 'Settings...' to the input window right click menu
+Added 'Invert Brightness' option to the output window settings
+Improved 'Ansi Colors' dialog to show some standard presets
+Fixed 'Options->History Window' & 'Edit->Pause' menu options to show check box correctly
+Fixed that mouse wheel was broken in the input window
+Fixed broken TTYPE terminal response, caused by a null char not being sent
+
+3.00.241
+
+Added Windows 8 speller support
+Added smooth scrolling! On by default since everyone thought it was really nice
+Changed how connecting works, if the current window is not connected it will use it for the new connection
+Fixed a crash with MUD prompts
+Fixed a bug in ForwardDNS & ReverseDNS script methods so they were IPv6 compatible, and fixed a crash in them on lookup failures
+
+3.00.240
+
+Grayed out window tab text didn't match the connected text.
+Direct Connect/Regular Connect/Quick Connect now share the same logic of 'reuse disconnected world' else 'use current window' else 'search for never connected window' else 'create new window'
+/@ command to run immediate scripts was broken (it forgot to strip the /@ out, so the scripting engine would get confused)
+
+3.00.239
+
+Fixed bug introduced in very recent build that broke puppets and sending empty lines of text.
+Made Ctrl-'+' be ignored when typing in the input window
+
+3.00.238
+
+Rewrote input text handling to properly handle aliases on multiple lines
+Minor bug where regular expression aliases wouldn't enable/disable checkboxes properly
+Merged Color & Style tab in trigger pane to a single Appearance pane. Sample box now shows text styles.
+Fixed a crash when dragging a trigger to make it into a child of itself.
+Added an Apply button to the Triggers/Macros/Aliases
+
+3.00.237
+
+Added /delay command to send text after a set amount of time
+Fixed bug where triggers contained in other triggers didn't order correctly (they were added to tree in reverse order)
+Fixed a recent regression where shrinking the text windows then growing them again would cause a confused client area.
+
+3.00.236
+
+Changed quick connect to not reuse a disconnected window of a different world
+Fixed bug where a disconnect started a failed connection retry process.
+
+3.00.235
+
+Fixed activate window trigger (broke in the multiple windows/tabs change)
+Changed send trigger & idle timer to send a CRLF (previously just LF) to work with certain systems
+Fixed a scroll to bottom bug when there is no scroll delay
+
+3.00.234
+
+Fixed a bug where tabs were drawn incorrectly when there was a time/date display column
+
+3.00.233
+
+Majorly changed the text windows to be pixel based and have variable height lines with multiple fonts per line.
+Added font triggers
+Made fan-fold an option
+Added paragraph spacing option
+Made window tabs draggable
+
+3.00.232
+
+Added a character counter to count the number of letters typed into the input window.
+Fixed config file bug, where array type items (keys & colors) were relying on undefined behavior and crashing.
+
+3.00.231
+
+Fixed the SSL bug thanks to Shiveneve! The trailing encryption buffer changes size after encryption, who knew?
+
+3.00.230
+
+Made the mouse wheel scroll amount match the system setting instead of being hardcoded to two.
+Removed my SSL hack since now it seems to be breaking Windows 8.1 users.
+Fixed crash bug when loading a newer config file than the current version supports.
+
+3.00.229
+
+Fixed bug where closing a main window could crash (SetFocus accessing deleted memory)
+
+3.00.228
+
+Fixed bug where saving the settings does not save the window position
+Fixed mixed up descriptions in keyboard shortcuts dialog
+
+3.00.227
+
+Fixed a stupid bug where typing a word longer than 64 letters crashes Beip due to overwriting the spellchecking buffer.
+
+3.00.226
+
+Fixed a bug where 24 hour time display still showed am/pm.
+Renamed 'Military' to '24 Hour' in the options
+
+3.00.225
+
+Fixed bug where deleting a puppet crashes
+
+3.00.224
+
+Fixed so all date & time display uses the system locale default format strings.
+
+3.00.223
+
+Fixed a bug where closing the main window wouldn't prompt if windows are connected
+Fixed text window date & time tooltip to use system locale default format string
+
+3.00.222
+
+Improved the trigger script dialog to be more helpful
+Fixed a crash on exit when a puppet window is open
+
+3.00.221
+
+Added the ability to disable blinking ansi tag parsing
+
+3.00.220
+
+Fixed crash when deleting a character
+
+3.00.219
+
+Fixed crash at exit bug in the file save code (was bringing up a dialog too late)
+
+3.00.218
+
+Changed socket code to avoid QueueUserAPC due to reentrancy issues.
+Added command 'ttype' to override Telnet TType response
+
+3.00.217
+
+Fixed tab formatting bug introduced recently, where tabs acted like newlines (tab code used maximum line width instead of current line width)
+Fixed idle send timer not resetting after unidling
+Fixed window title not updating when switching between tabs
+Fixed logging status not updating properly
+Fixed multiple URL tag detection bug (ship only)
+Fixed HTML logging colors bleeding
+
+3.00.216
+
+Fixed a bug in closing with a log file open (Crazy C++ madness in the destructor)
+UI redesign with multiple tabs & multiple windows
+
+2.00.215
+
+Fan Fold coloring for the output window
+
+2.00.214
+
+Spell Checker
+
+2.00.213
+
+Fixed a nasty bug in the text line editing code, such that deleting text in a trigger did not work properly.
+
+2.00.212
+
+Fixed a few bugs in the overlapped IO, convert server socket to overlapped IO
+
+2.00.209
+
+Switch networking to Overlapped IO & Completion Ports
+
+2.00.208
+
+Removed ping & traceroute
+
+2.00.207
+
+Added IPv6 Support
+
+2.00.206
+
+Add 256 color ansi support
+
+2.00.203
+
+Fixed a weird bug where when unpausing a full scrollback offset the text position horizontally
+
+2.00.202
+
+Fixed the docking code & autolayout code to work together properly (for PE integration)
+
+2.00.201
+
+Fixed a minor bug where the window doesn't repaint properly when you type too much into the input window and it automatically grows larger
+
+2.00.200
+
+Tweaked the dialog font size so that it's friendlier to Wine (Windows was fugding it for me apparently)
+
+2.00.199
+
+Fixed a nasty history navigation bug introduced in 196
+
+2.00.198
+
+Fixed a bug that Sennard found when writing out small scopes.  This must have been broken for years!
+
+2.00.197
+
+Change how the config file is written to prevent bad saves
+
+2.00.196
+
+Small change to how the history window preserves edited lines
+
+2.00.195
+
+Fixed some scripting bugs that broke window events
+
+2.00.194
+
+Added support for the dns-org-otakugeeksquad-typingnotification MCP package
+
+2.00.193
+
+Simplified the event code
+Rewrote the timer code
+Simplified the windowing code
+
+2.00.187
+
+Rewrote the midnight timer event, so hopefully the midnight rollover glitch will be fixed.
+
+2.00.186
+
+Bug in last time used display, it never expected '0 seconds'
+
+2.00.185
+
+Nasty bug in text output fixed (internal iterator turning invalid)
+
+2.00.184
+
+Added option to enable/disable notification icon
+Removed symbol ansi display, it was broken and causing bugs on some mucks
+
+2.00.183
+
+Toast through the Notification Icon on the taskbar
+
+2.00.182
+
+Added 'NoActivity' trigger
+
+2.00.181
+
+Changed internal storage mechanism for output window, so that it's pay as you go (no more up front allocation based on # of lines)
+
+2.00.178
+
+Added IPuppets, and IPuppet interfaces to the OM
+Added Connection.Reconnect
+Added Connection.Puppet
+
+2.00.177
+
+Auto resizing input window option
+
+2.00.176
+
+Ctrl+U added to clear input window
+ITextWindowLine.Delete added
+ITextWindowLine.Insert added
+IWindow_Text.CreateHTML added
+
+Script trigger (script function is called with 'IWindow_Main and ITextWindowLine')
+
+2.00.175
+
+Added experimental MUD prompt support
+
+
+2.00.174
+
+<command send=> changed to <command go=> <command look=> and <command smell=> also with cursor icons to show what action will be taken.  The change was to prevent easy phishing attacks like <command send=@force wiz to set me as a wiz>
+
+2.00.173
+
+<command send=> tags!  URL code rewritten to handle more possibilities
+
+2.00.172
+
+Fixed a bug in IConnection where it didn't detect being zombied
+Added ILog interface
+Added option to Replacement trigger to parse HTML - SMILEYS!!  Ex.. turn :) into <icon smiley_smile>.. voila!
+
+2.00.168
+
+HTML Logging!  Just name the log file as .htm or .html and it's automatic
+
+2.00.158
+
+New text engine!
+Proper Tab Support
+Fixed puppet prefix scanning to handle any embedded ansi tags
+
+2.00.150
+
+Added TCP_KeepAlive and TCP_NoDelay options
+Added Regular Expression Replacement for Replacement & Send Triggers
+
+
+2.00.147
+
+Added internal MCP support
+Added MCP multiline support
+Added @mcpedit package
+Added MCP object model (not complete)
+Added Regular Expressions for Aliases
+
+2.00.146
+
+Fixed small bug in logging with date appending.  It would cut off the extension of the file (due to the date formatting adding a premature NULL)
+Fixed a memory leak in the alias processing (the debug build told me as I added the following feature)
+Added an option to not echo the processed alias, "Echo processed alias" in the alias dialog.
+Fixed a window flashing bug that caused the flash state to toggle when in solid blink mode (toggled to off every other line)
+Fixed the find dialog so that if new text arrives while it's visible it pauses/unpauses properly
+Fixed SSL so that it handles the case where the server asks for client credentials (but we don't send any)
+Added some new scripting features for Mark, such as IWindow_Text.Paused, IConnection.IsLogging(), and their associated events.
+IWindow_Main.TitlePrefix property (write only) - To set a prefix to the window title that is independant from BeipMU's window title
+
+2.00.145
+
+Options for fixed output window formatting (specify the number of chars to wrap at)
+Added Triggers to the object model
+Added basic Docking windows to the object model
+Fixed the /idle bug (was setting the string to empty after idling out once)
+Fixed a macro bug that caused 1 undefined character to be sent (causing an error on the next thing you say)
+
+2.00.144
+
+Experimenting with docking windows, and reorganized a lot of the internal code to be much cleaner.
+
+2.00.142
+
+Added new Ansi code support, along with some telnet support for Cryosphere (see '/test ansi' for details)
+
+2.00.141
+
+Made a small off by 1 fix in the window resize code that you could hit if you're Whyrl
+
+2.00.140
+
+Imaging Work
+Splash screen is now a separate file, splash.* (search order is splash.jpg, splash.gif then splash.bmp)
+
+2.00.139
+
+Splash screen test
+Fixed Ctrl+F (broke in regular expressions)
+Fixed .* hang with regular expressions (.* matches nothing, wasn't prepared for nothing)
+Fixed the large SSL buffer send bug (caught by Stelard)
+
+2.00.138
+
+Added the ability to process triggers optionally in reverse order (see the triggers dialog for more info)
+
+2.00.137
+
+Made the cursor up/down redefinition work on 9x (hopefully for real this time Kal!)
+
+2.00.136
+
+Extension API work.
+Corner case bug fixes in internal storage (don't think this has ever been hit).
+
+2.00.133
+
+Fixed the top border glitch, and made it not draw to the nearest line when there is a top border.
+Made the appended date to the log file names customizeable
+Made the cursor Up/Down navigation in the input window redefinable
+
+2.00.132
+
+Regular Expressions!
+
+2.00.131
+
+Removed the useless 'Output window is paused but text was still sent' message.
+
+2.00.130
+
+Added new 'pause behaves like scrollback' feature.  Also improved the 'don't scroll to bottom on new activity' with a <> indicator in the 'Lines:' section of the status bar that shows how many lines haven't been read yet.
+
+2.00.128
+
+Found out there was a CRT dll on all systems past Win95 that I could use instead of importing 30k into Imaging.dll and BeipMU.exe, so now it's dynamically loaded which saved 20k for BeipMU and reduced the imaging library by 60k.
+
+2.00.127
+
+Logging now includes options to log what you typed and/or what was sent to the server.
+Saves the Direct Connect info in the connect dialog.
+Adjusted the font style used to measure text, fixing an underline dreg in Courier New 9pt
+
+2.00.126
+
+Fixed Thygrrr's 16-bit scroll bar limit.  Uses the 32-bit windows api now (instead of the 16-bit message)
+
+2.00.125
+
+Fixed Thygrrr's text selection bug into the indented region above. (GDI call failure)
+
+2.00.124
+
+More Visual Basic style event interfaces supported.
+Improved internal event system (spurred by VB's requirements)
+Object Model: Added Connection object + events
+
+2.00.123
+
+Made it so that when dialogs are reactivated the focus returns to the control who had it when the dialog was deactivated.  It's standard behavior and I just wasn't doing it.
+Made Alt+0 activate window 10 (used to only work from Alt+1 to Alt+9)
+Fixed image receiving code.  Stupid bug.
+Added ansi codes: 2, 7, 22, 24, 25, 27 (dim, reverse, and unset-flags), handle [;;m empty codes
+
+
+2.00.121
+
+Mav and I figured out the strange crash when viewing /help then doing a few things.  Turns out it was me passing in a negative length to GDI which caused a crash on Win9x.  NT handled it fine.
+
+2.00.119
+
+Fixed Sabbath's Text Layout Bug
+Made it so that when viewing scrollback, new lines do not cause it to jump to the bottom, as per Revar's guidelines.
+Added a Last Used time and a created time in the characters.
+Fixed the weird 'cursor moved after going back to window' problem.  Squirrelly and I magically figured that one out.
+
+2.00.118
+
+Added a forward DNS lookup command
+Added an IsAddress command to return true if the string passed is a valid IP address
+
+2.00.117
+
+Added a reverse DNS lookup command in the app interface to help with the sockets.
+
+2.00.116
+
+Added the ISocket and ISocketServer interfaces, so that outgoing connections and simple servers can be done in a few lines of script!
+
+2.00.0115
+
+Added 'Reconnect' to the Connect menu for easy access and discoverability, rather than finding out by trying to send something once you're already disconnected.
+
+2.00.0114
+
+Fixed the bug where switching windows in MDI mode when all windows were maximized would cause a reformat behind the scenes (regression from blinking text causing the reformat).
+
+Fixed a bug in the new 'Last IP' field where a crash might result on a failed DNS lookup due to attempting to access the undefined hostinfo structure.
+
+2.00.0113
+
+Added a debug output window for scripts.  Script errors are sent here instead of through a popup window, and scripts can output their own debug messages through app.OutputDebugHTML(string), and app.OutputDebugText(string).
+
+2.00.0111
+
+Added '/logall' that does the same thing as 'Starting from the beginning...' under the logging menu.
+
+Added a 'Last IP' field for every server that remembers the last DNS lookup so that in case the DNS lookup fails, it will fall back to the last looked up IP.
+
+/Tracert and /Ping will now work on the current server if you're connected, and if a current tracert or ping is in progress they will abort it.
+Fixed a minor issue in tracert where it waits unnecessarily, lowering performance.
+
+2.00.0110
+
+SSL connection spam would appear with <$color> tags as it was displaying text incorrectly (and becoming dependant on the HTML tag parsing flag in the world settings)
+Text wrapping - Lines with carriage returns would incorrectly wrap on the last word before the carriage return.
+/test ansi - Caused a crash since the code assumed there was a server during the test
+
+2.00.0109
+
+MDI: Edit menu was being left disabled after closing all windows and opening a new one.  Bug caused because MDI is sneaky.
+
+Fixed the hang in the Trigger dialog when clicking on away/present
+
+2.00.0108
+
+Fixed SSL issue that only surfaced on Windows 9X where it'd hang on an error
+Fixed another SSL issue where on Windows 9X connections after the first are broken due to having the same SPN value as the original (basically only the first SSL connection on win9x worked well, after that it was luck).
+
+2.00.0107
+
+Fixed crash at midnight when you're autologging with date
+Fixed crash in the multiple retry code if you're unlucky
+
+Fixed connection still showing as connected in the multiple retry code due to me forgetting to have it say 'yea, I'm really disconnected now' though this was purely cosmetic.
+
+Reworked the event system to support multiple event hooks natively (and broke Squirrelly's scripts temporarily)
+
+Beautified the network error codes a bit (don't know how I lived without those).
+ 
+Pre 2.00.0107
+
+ SSL Support (added a new server type in the connect dialog)
+ Network connect/disconnect errors are now reported properly
+ New log file created at midnight when auto logging with date appended
+ Splitters in main window move nicer and smoother
+ Smart Paste now shows what's in the clipboard and the number of bytes it will take
+ Keyboard Shortcuts now have 'don't care' options on modifier keys so that you can say 'Key is Ctrl+K and I don't care if shift is down or not'
+ Some Ansi handling bugs
+ Option to not reset ansi colors on new lines
+ MDI mode bug fix where switching windows slowed down when more text was in the window, caused by a hidden window resize that did a hidden reformat of all the text (ouch)
+
+ Puppet Auto Logging
+ Auto Connecting Puppets
+ ActiveScripting support (VB & Java) see scripting.txt for more info
+ 

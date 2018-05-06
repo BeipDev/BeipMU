@@ -1,0 +1,41 @@
+Version=265
+Connections
+{
+  KeyboardMacros
+  {
+    ""=NumPad1,"southwest"
+    ""=NumPad2,"south"
+    ""=NumPad3,"southeast"
+    ""=NumPad4,"west"
+    ""=NumPad6,"east"
+    ""=NumPad7,"northwest"
+    ""=NumPad8,"north"
+    ""=NumPad9,"northeast"
+  }
+  Shortcuts
+  {
+    LambdaMOO
+    {
+      Host="lambda.moo.mud.org:8888"
+      Info="Website: https://www.cc.gatech.edu/classes/cs8113e_99_winter/lambda.html"
+      Encoding=CP1252
+      Characters
+      {
+        Guest.Connect="connect guest"
+      }
+      Triggers
+      {
+        {
+          FindString.MatchText="^Player name +Connected +Idle time +Location"
+          FindString.RegularExpression=true
+          Spawn
+          {
+            Active=true
+            Title="WHO"
+            CaptureUntil="^Total: [0-9]+ players"
+          }
+        }
+      }
+    }
+  }
+}
