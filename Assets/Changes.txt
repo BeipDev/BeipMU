@@ -1,3 +1,7 @@
+3.00.266
+
+Fixed a bad regression when choosing the spell language choice in the preferences dialog. I think it broke with the big unicode switch
+
 3.00.265
 
 Updated PCRE library to 8.42 (though the exe grew by 60K)
