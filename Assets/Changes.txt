@@ -1,3 +1,8 @@
+3.00.267
+
+Added 'Connect at Startup' to characters
+Fixed another separate spelling bug where if it's set to an invalid language, you can't select a valid one
+
 3.00.266
 
 Fixed a bad regression when choosing the spell language choice in the preferences dialog. I think it broke with the big unicode switch
