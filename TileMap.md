@@ -1,6 +1,6 @@
 # TileMap Tags
 
-Tilemaps let you encode any single layer 2D tile map in a compact and simple format.
+Tilemaps let you encode any single layer 2D tile map in a compact and simple XML based format.
 
 ```
 <tilemap name='Map1' tiles='http://wiki.ultimacodex.com/images/5/55/Ultima_5_-_Tiles-pc.png' tileSize='16,16' mapSize='10,4' enc='hex_4'>0123456701234567012345670123456701234567</tilemap>
