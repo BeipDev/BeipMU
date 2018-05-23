@@ -16,10 +16,10 @@ Tilemaps let you encode any single layer 2D tile map in a compact and simple XML
 * The tiles are assumed to be stored left to right, top to bottom without gaps. There is no restriction on the aspect ratio of the tilemap. If a tile map holds fewer tiles than are referenced by the map data, the wrong graphics might be drawn (or none at all). If a tile map holds more tiles, then it's just being wasteful.
 
 **tileSize='width,height'** - The size in pixels of the tiles in the tilemap
-* tileSize is currently restricted to at most 256 in each dimension (tileSize='256,256') most tiles are probably 32 by 32
+* tileSize is currently restricted to at most 256 in each dimension (tileSize='256,256') most tiles are probably 32 by 32 or 16 by 16.
 
 **mapSize='width,height'** - The size of the map in tiles
-* mapSize is currently restricted to 256 by 256 (mapSize='256,256')
+* mapSize is currently restricted to a maximum size of 256 by 256 (mapSize='256,256'). That is a huge maximum and most maps are expected to be much smaller, like mapsize='32,32'.
 
 **enc='string'** - Encoding format of the content data (the 012345... part between the tags)
  enc has multiple possibilities to make it easy to use or as compact as possible:
