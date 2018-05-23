@@ -22,8 +22,7 @@ Tilemaps let you encode any single layer 2D tile map in a compact and simple XML
 * mapSize is currently restricted to 256 by 256 (mapSize='256,256')
 
 **enc='string'** - Encoding format of the content data (the 012345... part between the tags)
-
-enc has multiple possibilities to make it easy to use or as compact as possible:
+ enc has multiple possibilities to make it easy to use or as compact as possible:
 
 * hex_4 - Hexadecimal with 4 bits per tile (16 tiles possible). In this format a single hex character is a single tile.
 ** The tilemap tag at the start of this document uses hex_4 encoding
