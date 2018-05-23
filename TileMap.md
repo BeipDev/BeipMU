@@ -39,7 +39,7 @@ The map data itself is just a binary block of data with the ordering being from 
 ## Map examples
 
 ```
-<tilemap name='Lighthouse' tiles='http://wiki.ultimacodex.com/images/5/55/Ultima_5_-_Tiles-pc.png' tileSize='16,16' mapSize='32,32' enc='zbase64_8'>eJytkkEKwjAQRVe5TrB6hVn7D6DeqWhxXRBEaHXdhejWYzltEjrWGbpoPjT54f2ZDiHO5ZPXrFeCi3pnajjbK+N/EGT1BYiAq8j8YfoMmSekEmdMQ2hLl/2hN2/c6SZ5rCjZdhSXCU+IzZHQtArn73ECVa8zJvVB7Mq4NO0Ocv4wIzpl/hQACj5s9PvrC53FE1jEVyzBvdyLMarXr4Ms/juGpVrl4r0Ebj/Mmf4a/wJ4Ll9p</tilemap>
+<tilemap name='Lighthouse 1' tiles='http://wiki.ultimacodex.com/images/5/55/Ultima_5_-_Tiles-pc.png' tileSize='16,16' mapSize='32,32' enc='zbase64_8'>eJytkkEKwjAQRVe5TrB6hVn7D6DeqWhxXRBEaHXdhejWYzltEjrWGbpoPjT54f2ZDiHO5ZPXrFeCi3pnajjbK+N/EGT1BYiAq8j8YfoMmSekEmdMQ2hLl/2hN2/c6SZ5rCjZdhSXCU+IzZHQtArn73ECVa8zJvVB7Mq4NO0Ocv4wIzpl/hQACj5s9PvrC53FE1jEVyzBvdyLMarXr4Ms/juGpVrl4r0Ebj/Mmf4a/wJ4Ll9p</tilemap>
 ```
 
 ![Image of Lighthouse](/images/LightHouse.png)
