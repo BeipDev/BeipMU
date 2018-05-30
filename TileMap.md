@@ -43,3 +43,9 @@ The map data itself is just a binary block of data with the ordering being from 
 ```
 
 ![Image of Lighthouse](/images/LightHouse.png)
+
+```
+<tilemap name='Laboratory' tiles='http://www.beipmu.com/FutureTiles.png' tileSize='32,32' mapSize='16,16' enc='ZBase64_8'>eJyT5kUBfNosrEiATX/mLEeG2wxgEHMsWUx/5apAhtevGDg4uRhyrhWL6WuDZH4xSEhKMdQwNID4WotBQsYgAsKfDtG+eyeUv5xBF8Q/fRLKD2WwZbh8mYHhJlyeAci/DNe/nQEswHAHzI9lSAcbd5nhDZhfy9DOEM1whAFm31cGBADxVVSRgJq+jy8K8AMAsu0ywg</tilemap>
+```
+
+![Image of Laboratory](/images/Laboratory.png)
