@@ -1,3 +1,21 @@
+3.00.269
+
+Added dns-com-awns-status MCP package
+Added 'Use Fast Flash' option to the trigger appearance action
+Added Folders for Triggers and Aliases, through a 'Treat as Folder' option
+Improved emoji rendering so that they flash if in flashing text
+Changed the spawn windows to support regex \1 \2 style match replacement
+Fixed unclickable hyperlinks in spawn windows, now they work the same as in the main window
+Added .Active property to ITimer interface
+Honor WM_ENDSESSION and don't show any dialogs when the app is shutting down (otherwise when windows is shutting down, BeipMU looks like it hangs when it has a dialog up)
+Added <tilemap> tag handling (see https://github.com/BeipDev/BeipMU/blob/master/TileMap.md for more info)
+
+3.00.268
+
+Changed the sound file selection dialog filter from *.wav to *.* since many formats are supported
+Fixed a bug where if an unsupported sound file plays, it uses up a playback slot, after too many unsupported files no new sounds can play
+A couple minor fixes so that it runs in Windows 10 mode on Wine (it called functions that exist on Windows 10, but not on Wine set to Windows 10)
+
 3.00.267
 
 Added 'Connect at Startup' to characters
