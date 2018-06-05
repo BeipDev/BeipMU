@@ -49,3 +49,9 @@ The map data itself is just a binary block of data with the ordering being from 
 ```
 
 ![Image of Laboratory](/images/Laboratory.png)
+
+## Usage in BeipMU
+
+To enable tilemap tag parsing, type: \tilemap on
+To show an example tilemap, use: \test tilemap1
+
