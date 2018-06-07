@@ -1,3 +1,34 @@
+- [Interface List](#interface-list)
+  * [Interface Descriptions](#interface-descriptions)
+  * [Windows OLE Types](#windows-ole-types)
+  * [App](#app)
+  * [Character](#character)
+  * [Characters](#characters)
+  * [Connection](#connection)
+  * [FindString](#findstring)
+  * [Puppet](#puppet)
+  * [Puppets](#puppets)
+  * [Socket](#socket)
+  * [SocketServer](#socketserver)
+  * [TextWindowLine](#textwindowline)
+  * [Timer](#timer)
+  * [Trigger](#trigger)
+  * [Triggers](#triggers)
+  * [Window_Control_Edit](#window-control-edit)
+  * [Window_Events](#window-events)
+  * [Window_FixedText](#window-fixedtext)
+  * [Window_Graphics](#window-graphics)
+  * [Window_Main](#window-main)
+  * [Window_Properties](#window-properties)
+  * [Window_Text](#window-text)
+  * [Windows](#windows)
+  * [World](#world)
+  * [Worlds](#worlds)
+- [Advanced](#advanced)
+  * [Using BeipMU from Visual Basic](#using-beipmu-from-visual-basic)
+
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
+
 # Interface List
 
 This document assumes a familiarity with VB, JavaScript, or C/C++.  The interfaces are described in a JavaScript/C++ fashion which should be easier to understand in the long run. 
@@ -757,7 +788,7 @@ Note: instead of worlds.item(5), worlds(5) can also be used since it's a default
 
 The number of worlds in this list 
 
-#Advanced
+# Advanced
 
 You can also use OLEVIEW.EXE or anything else that can view a type library resource on BeipMU's executable to see the raw interface in OLE-speak.
 
