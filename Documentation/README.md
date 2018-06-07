@@ -2,15 +2,15 @@ Note! This was started by copying some of the items from our help file, it's pro
 
 [Foreword](Foreword.md)
 
-[Getting Started](/r/BeipMU/wiki/GettingStarted)
+[Getting Started](GettingStarted.md)
 
-[Command Line Commands](/r/BeipMU/wiki/commandline)
+[Command Line Commands](CommandLine.md)
 
 Triggers (not written, any volunteers?)
 
-[Aliases](/r/BeipMU/wiki/Aliases)
+[Aliases](Aliases.md)
 
-[Scripting](/r/BeipMU/wiki/scripting/index)
+[Scripting](Scripting.md)
 
-[Change Log](http://www.beipmu.com/Changes.txt)
+[Change Log](../Assets/Changes.txt)
 
