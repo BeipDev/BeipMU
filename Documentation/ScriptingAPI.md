@@ -1,8 +1,8 @@
-#Interface List
+# Interface List
 
 This document assumes a familiarity with VB, JavaScript, or C/C++.  The interfaces are described in a JavaScript/C++ fashion which should be easier to understand in the long run. 
 
-##Interface Descriptions 
+## Interface Descriptions 
 
 All interface methods are in the form of:
 
@@ -31,7 +31,7 @@ But this is just a property named 'Worlds' that returns an object of type 'World
 
 Some callbacks will pass 'this' as their first parameter on the callback function, and when setting the callback there is no 'variant' parameter.  The 'this' object is the interface the hook was set on.  For example, in a Socket interface, the 'this' is the Socket you set the callback on.  This allows easy access to the socket object, and to the userdata property on the object. 
 
-##Windows OLE Types 
+## Windows OLE Types 
 
 Some of the parameter types are from Windows OLE. The two ones used here are IDispatch and VARIANT. Think of IDispatch as a pointer to an object (usually some script code in these interfaces), and VARIANT as a pointer to anything (number, string, object, etc.). Their main uses are for events where there is some code that needs to be run on an event, and some special userdata that is passed to the event code. So the code is the IDispatch and the user data is the VARIANT, this allows for maximum flexibility. I left the types in this help file as what they really and gave this explanation rather than make up fake types since if anyone knows the real types this will already be familiar to them.
 
@@ -57,7 +57,7 @@ An example in JavaScript to tell the difference of the Date/Undefined by compari
 
 #Available Interfaces
 
-##App
+## App
 
     unsigned int BuildNumber
 
@@ -153,7 +153,7 @@ Appends a string to the debug window.
 
 Same as OutputDebugText, except that HTML codes in the bstr are parsed. 
 
-##Character
+## Character
 
     [read/write] String shortcut
 
@@ -175,7 +175,7 @@ The date & time the character was created on. Will return 'undefined' (VT_EMPTY)
 
     [read] Puppets Puppets
 
-##Characters
+## Characters
 
     [default] Character Item(VARIANT var)
 
@@ -187,7 +187,7 @@ Note: instead of characters.item(5), characters(5) can also be used since it's a
 
 The number of characters in this world 
 
-##Connection
+## Connection
 
     Send(String string) 
 
@@ -267,7 +267,7 @@ Server -> Receive() -> OnReceive() -> Display() -> OnDisplay()
 
 The On<> functions are hooks that can intercept the flow and do anything they want with it.  To stop further processing in a hook, simply return 'true'
 
-##FindString
+## FindString
 
     [read/write] String MatchText 
 
@@ -285,7 +285,7 @@ If MatchText defines a regular expression or just a string. When this flag is on
 
     [read/write] bool WholeWord
 
-##Puppet
+## Puppet
 
     [read/write] String Name 
 
@@ -303,7 +303,7 @@ If MatchText defines a regular expression or just a string. When this flag is on
 
     [read] Triggers Triggers 
 
-##Puppets
+## Puppets
 
     [default] Puppet Item(VARIANT var) 
 
@@ -315,7 +315,7 @@ Note: instead of puppets.item(5), puppets(5) can also be used since it's a defau
 
 The number of puppets 
 
-##Socket
+## Socket
 
     Connect(String host, unsigned int port) 
 
@@ -351,7 +351,7 @@ Prototype: OnDisconnect(this)
 
 User data storage for this object (accessible through this.userdata on a callback) 
 
-##SocketServer
+## SocketServer
 
     Shutdown()
 
@@ -362,7 +362,7 @@ A example server in JavaScript that simply welcomes new connections then termina
     var server=app.new_socketserver(4098);
     function OnConnection(socket) { socket.send("Welcome!\r\n"); socket.Disconnect(); }
 
-##TextWindowLine
+## TextWindowLine
 
     int length 
 
@@ -424,7 +424,7 @@ iBits = Number of bits to cycle through
 
 iMask = Bit mask for when the text is blinked 
  
-##Timer
+## Timer
 
     [read/write] VARIANT UserData 
 
@@ -434,7 +434,7 @@ User data passed to the timer callback function
 
 Stops the timer
 
-##Trigger
+## Trigger
 
 See the help topic on Triggers for an explanation on each of these flags. 
 
@@ -449,7 +449,7 @@ See the help topic on Triggers for an explanation on each of these flags.
 
 The list of triggers that are nested under this trigger 
 
-##Triggers
+## Triggers
 
     [default] ITrigger Item(VARIANT var) 
 
@@ -465,7 +465,7 @@ The number of characters in this world
 
 Adds a copy of the passed in trigger, and returns a reference to the copy. 
 
-##Window_Control_Edit
+## Window_Control_Edit
 
     SetSel(int start, int end)
 
@@ -498,7 +498,7 @@ When there is no selection, GetSelStart() and GetSelEnd() will both return the c
 SetSel( pos, pos ) can be used to put the cursor at position 'pos'.
 
 
-##Window_Events
+## Window_Events
 
 Provides hookable events for a window 
 
@@ -528,7 +528,7 @@ Run this script below to see how the OnMouseMove function works.
     t.cursory=3; t.write("Move the mouse in this window");
 
 
-##Window_FixedText
+## Window_FixedText
 
 A terminal type window using a fixed text font.  Perfect for output consoles/debugging, etc. 
 
@@ -552,7 +552,7 @@ Erases all text and puts the cursor at position (0,0)
 
 Writes 'text' into the window, processing line feeds and carriage returns. Moves the cursor to the end of the written text. 
 
-##Window_Graphics
+## Window_Graphics
 
 All units are in pixels 
 
@@ -610,7 +610,7 @@ Run this script to see how an OnMouseMove hook can be used to draw into the grap
     g.text(10,10,"Move the mouse!");
 
 
-##Window_Main
+## Window_Main
 
 The current Window_Main object is accessible through the 'window' object.
 
@@ -677,7 +677,7 @@ A string that is prepended to the title of the window
 
 The title of the window (not including the prefix) 
 
-##Window_Properties
+## Window_Properties
 
 Basic properties that can be modified on some windows.
 
@@ -689,7 +689,7 @@ The window's titlebar text
 
 Returns the HWND of this window (Win32 internal) 
 
-##Window_Text
+## Window_Text
 
     Window_Properties Properties 
 
@@ -723,7 +723,7 @@ Called when the window gets Paused/Unpaused
 
 Prototype: OnPauseEvent(bool paused) 
 
-##Windows
+## Windows
 
     [default] Window_Main Item(VARIANT var) 
 
@@ -735,7 +735,7 @@ Note: instead of windows.item(5), windows(5) can also be used since it's a defau
 
 The number of main windows 
 
-##World
+## World
 
     [read/write] String name 
     [read/write] String info 
@@ -745,7 +745,7 @@ The host:port, for example www.example.com:8888
 
     Characters characters 
 
-##Worlds
+## Worlds
 
     [default] World Item(VARIANT var) 
 
@@ -761,7 +761,7 @@ The number of worlds in this list
 
 You can also use OLEVIEW.EXE or anything else that can view a type library resource on BeipMU's executable to see the raw interface in OLE-speak.
 
-##Using BeipMU from Visual Basic
+## Using BeipMU from Visual Basic
 
 (Note, this was cool and exciting back in the early 2000's. I haven't tried using this for many years, but if anyone needs it here's the info)
 
