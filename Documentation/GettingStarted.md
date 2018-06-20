@@ -4,54 +4,54 @@ This guide will introduce you to the main features of BeipMU so that you can get
 
 By the end of this guide you should be able to:
 
-* Connect to a world (server) 
 * Add a server to the World List 
+* Connect to a world (server) 
 * Add a character 
 * Enable automated logging 
 * Connect to a character 
 * Create a macro 
 * Create a trigger 
 * Create an alias 
-* Recognise the other main features of BeipMU 
+* Recognize the other main features of BeipMU 
+ 
 
 ##Before we begin
 
-This help file assumes that you are already familiar with using MUCKs/MUDs/etc. If you are new to these then look on the web for more information.
+This help file assumes that you are already familiar with using MUCKs/MUDs/etc. If you are new to these terms then look on the web for more information.
+
+Note that BeipMU's internal commands use / as a prefix, so you will need to use // if you need to send a string that begins with a slash to a connected server. See the Command Line Commands page for a list of BeipMU's commands.
 
 ##Connecting to a World
 
-As a simple example, let's connect to Fluff MUCK. Simply type '/connect fluffmuck.org:8888' in the input window and press enter.
- 
-At this point things should start to look very familiar to you!
+To send text just type it in the input window and press enter. To type multiple lines of text before sending, use Ctrl+Enter to separate the lines before pressing Enter.
 
-To send text just type it in the input window and press enter. Note that BeipMU's internal commands use / as a prefix. See the Command Line Commands page for a list of BeipMU's commands. To type multiple lines of text before sending use Ctrl+Enter to separate the lines before pressing Enter.
+As a simple example, let's connect to FluffMUCK. Simply type '/connect fluffmuck.org:8888' in the input window and press enter.  
+
+This utilizes BeipMU’s ‘direct connection’ feature which has some options disabled by default.  If the server you are connecting to has special extensions or encryption, you will want to create an entry for it in the World List where you can set these parameters.
 
 ##Using the World List
 
-Many of BeipMU's features use the World List as a way to organise your characters, puppets, triggers and more.
+The World List is used to organize your servers, characters, and puppets. Many of BeipMU’s features use the information in the World list to arrange triggers, aliases, and other connection specific data.
 
-First, open the World Editor. This can be achieved by clicking on the World List icon in the toolbar.
-
-For this example we will use a fictitious world called "Compy MUCK".
+You can open the Worlds dialog by using CTRL-\[ or by choosing Connect under the Connection drop-down menu.
 
 ##Adding a server
 
-We want to add a world to the World List, so click on New, then select Server. Type in the name of this world, e.g. "Compy MUCK".
+For this example, we will use a fictitious world called "Compy MUCK".
 
-Now we need to fill in the server details, especially the 'host'.
+We want to add a world to the World List, so click on New, and then select Server. Type in the name of this world, e.g. "Compy MUCK".
 
-The server host is the hostname or IP address of the world you wish to connect to followed by the port. The format is server:port
+Next fill in the server details, especially the host field.  The server host is the hostname or IP address of the world you wish to connect to followed by the port on the server to communicate with. The format is server:port
 
-The server info field is not used by BeipMU and is to store any information useful to you about the world.
+The Server Info field is a place to keep notes and can be used to store any information useful to you about the world.
  
 ##Adding a character
 
 To add a character to the World List, select the server you want to add it to, click on New, then select Character. Type in the name of the character, e.g. "Beip".
 
-The Connect String is what BeipMU will automatically send to the server when you connect. This will save you from typing it in every time you connect. Our example uses "connect Beip fakepasswd" on the first line and pages Bennet "Hi!" on the second line. To type in multiple lines use Ctrl+Enter.
+The Connect String is what BeipMU will automatically send to the server when you connect using this character. This will save you from typing it in every time you connect. Our example uses "connect Beip fakepasswd" on the first line and pages Bennet "Hi!" on the second line. To type in multiple lines use Ctrl+Enter to separate each line of commands.
 
-The character info is the same as the server info.
-
+The Character Info field is the same as the Server Info in the previous example and can be used as a place to store notes or information about the character.
  
 ##Automated logging
 
@@ -63,11 +63,11 @@ Note that automated logging only works if you connect to your character as descr
 
 ##Connecting to a character
 
-To connect to a character you have set up in the World Editor, click on the Connect icon  in the toolbar, expand the character list by selecting the plus icon  next to the server, then double-click on the character to connect. Or you can use the 'Quick Connect' menu by clicking the little person icon next to the worlds icon. This will bring up a menu of all characters.
+To connect to a character, click on Connect, expand the character list next to the server, then double-click on the character to connect. 
 
-An alternative method is to use the /connect and /char BeipMU commands in the input window. The /connect command uses the short name for the server that you gave it in the World Editor and connects you to the server. Likewise, the /char command uses the short name for the character on the server you have connected to. The /char command tells BeipMU which character you have connected to, optionally sends the connect string to the server, and starts logging if you have specified a file under the character settings.
+An alternative method is to use the /connect and /char BeipMU commands in the input window. Apart from the direct connect method, the /connect command will also use the name for the server that you gave it in the World List and connects you to the server. Likewise, the /char command uses the name for the character on the server you have connected to. The /char command tells BeipMU which character you have connected to, sends the character’s connect string to the server, and starts logging if you have specified a file under the character settings.
 
-To connect to our example character we would use the following two commands:
+To connect to our example character using the input window we would use the following two commands:
 
     /connect Compy
     /char Beip
@@ -76,14 +76,18 @@ To connect to our example character we would use the following two commands:
 
 Keyboard macros, triggers and aliases make your BeipMU experience more effective by automating commands and responding to world output.
 
-These features are placed in the World List according to when they apply. Global macros, triggers and aliases apply to all servers and characters. They can also be set up to apply to specific servers or characters.
+A keyboard macro, also called a shortcut, allows you to send text to the server or input window with the single press of a key or key combination. This can be used to quickly enter frequently-typed or long commands.
+
+A trigger, also sometimes called an event, responds to output text from the world. It has many uses, such as highlighting words or lines, playing sounds, hiding or filtering the text, or automatically sending a response.
+
+An alias allows you to abbreviate commands so that you can type something much shorter into the Input Window. An alias automatically replaces text that appears in the Input Window before it is sent to the server.
+
+These features are placed in the World List according to where they should be applied. Global macros, triggers and aliases apply to all servers and characters. They can also be set up to apply to specific servers or characters by creating the macro, trigger, or alias while selecting the server or character or dragging the macro to the desired location.
 
  
 ###Creating a macro
 
-A keyboard macro, also called a shortcut, allows you to send text to the server or input window with the single press of a key or key combination. This can be used to quickly enter frequently-typed or long commands.
-
-To create a macro, press the Macros button  on the toolbar.
+To create a macro, go to Options, then Macros on the pull-down menu.
 
 Using the World List, select where you want the macro to apply, then press New.
 
@@ -100,15 +104,12 @@ Our example sets Ctrl+Q to send "QUIT" to Compy MUCK whenever we press it. (Note
  
 ###Creating a trigger
 
-A trigger, also sometimes called an event, responds to output text from the world. It has many uses, such as highlighting words or lines, playing sounds, hiding or filtering the text, automatically sending a response and more!
-
-To create a trigger, press the Triggers button  on the toolbar. We will create an example trigger that makes noise and pops up BeipMU whenever our name appears. This is mainly to get our attention when we are playing a game in another window.
+To create a trigger, go to Options, then Triggers on the pull-down menu. We will create an example trigger that makes noise and pops up BeipMU whenever our name appears. This can be useful to get our attention when we are playing a game in another window.
 
 Using the World List, select where you want the trigger to apply, then press New.
 
 In the long empty textbox near the top right of the Triggers window, type in the text that you want your trigger to match on. In our example, we want to trigger whenever the text "Beip" appears (because we are vain;).
 
- 
 The checkboxes below the textbox allow you to refine text matching. For example, we want to match "Beip" only when it appears as a word, and not for example as part of the word "Beipiaosaurus", so we select Whole Word. We also select Only When and Away so that the trigger only happens when we're using a different program at the time (we do not want BeipMU to get our attention when it already has it!).
 
 The list of tabs let you select what you want the trigger to do when it has matched the text. Most are self-explanatory. We want our trigger to play a sound, so we select the Sound tab, select Play Sound, and then Browse for our sound file. You can press the Play button to test the sound. We also want BeipMU to pop up (for that real sense of urgency) so we select the Activate tab and select Activate Window On Trigger.
@@ -159,15 +160,15 @@ Prefix and Suffix allows you to add text to the start and end respectively of ea
  
 ###Pause
 
-Pause allows you to suspend the Output Window temporarily while you read it. This is particularly useful when reading scrollback since the Output Window does not automatically scroll to the bottom when paused.
+Pause allows you to suspend the Output Window, halting the flow of new text. This is particularly useful when reading scrollback since the Output window will not automatically scroll when paused.
 
-To turn Pause on or off, press the Pause button  on the toolbar.
+To turn Pause on or off, use the pause key on your keyboard. A pause symbol will appear in the top right corner when a window is paused. This symbol will also appear when selecting text to indicate that the window is paused while a selection is being made.
 
-The status bar will show the number of new lines in the Output Window enclosed in square brackets.  Unpause the output to display the new lines.
+A status window will show the number of new lines that have arrived since the display was halted. Unpause the output to display the new lines.
 
 ###Logging From Beginning
 
-If you would like to log all the text in the Output Window to a file and continue logging, select Logging from the menu bar, then Log From Beginning.
+When starting a log file, if you wish to log the existing scrollback text, choose Logging then Starting From Beginning.  
 
 ###Local Echo
 
