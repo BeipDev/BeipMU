@@ -1,0 +1,34 @@
+
+html {
+	background-color: #222;
+	color: #fff;
+}
+
+body {
+	width: 75%;
+	background-color: #333;
+	margin-left: 12.5%;
+	padding: 2em;
+	font-family: 'Roboto', sans-serif;
+	box-shadow: 0 0 .5em .5em #1a1a1a;
+}
+
+a {
+	color: #7FDBFF;
+}
+
+a:visited {
+	color: #aa55ff;
+}
+
+h1 {
+	font-family: 'Encode Sans Condensed', sans-serif;
+}
+
+h2 {
+	font-family: 'Encode Sans Condensed', sans-serif;
+}
+
+h3 {
+	font-family: 'Encode Sans Condensed', sans-serif;
+}
