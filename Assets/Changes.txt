@@ -1,3 +1,14 @@
+3.00.270
+
+Added a fix for WINE to detect a server side socket disconnect
+Added a "Selection Copied to Clipboard" popup to help new users discover the clipboard option
+Added "Don't clear input on enter" option for the input window
+Added support for dns_com_awns_status MCP package
+Added support for dns_com_awns_ping MCP package
+Added support for dns-com-vmoo-client MCP package
+Fixed a crash where if a spawn window was still capturing and then closed, that any incoming received text would cause a crash
+Changed the tooltips to be the dark theme vs the old 1995 style yellow
+
 3.00.269
 
 Added dns-com-awns-status MCP package
