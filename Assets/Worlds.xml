@@ -5,4 +5,10 @@
  <guest connect="connect guest"/>
 </world>
 <world name="8Bit MUSH" host="8bit.fansi.org:4201" url="http://www.ansiart.com/" encoding="CP1252" keywords="fansi"/>
-</worlds>
+</world>
+<world name="Cybersphere" host="cs.netsville.com:7777" url="https://www.cybersphere.net/cs/Cybersphere" encoding="CP1252" keywords="moo|cyberpunk">
+ <guest connect="connect guest"/>
+</world>
+<world name="Sindome" host="moo.sindome.org:5555" url="http://www.sindome.org" encoding="CP1252" keywords="moo|cyberpunk|"/>
+<guest connect="connect guest"/>
+<world name="Miriani" host="toastsoft.net:1234" url="https://www.toastsoft.net/" encoding="CP1252" keywords="moo|Sci-fi|"/>
