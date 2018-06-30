@@ -12,3 +12,7 @@
 <world name="Sindome" host="moo.sindome.org:5555" url="http://www.sindome.org" encoding="CP1252" keywords="moo|cyberpunk|"/>
 <guest connect="connect guest"/>
 <world name="Miriani" host="toastsoft.net:1234" url="https://www.toastsoft.net/" encoding="CP1252" keywords="moo|Sci-fi|"/>
+</world>
+<world name="Armageddon" host="ginka.armageddon.org:4050" url="https://www.armageddon.org/" encoding="CP1252" keywords="mud|fantasy|apocalyptic"/>
+ <guest connect="connect guest"/>
+</world>
