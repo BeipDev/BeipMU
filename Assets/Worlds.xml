@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <worlds>
- <world name="LambdaMOO" host="lambda.moo.mud.org:8888" url="https://www.cc.gatech.edu/classes/cs8113e_99_winter/lambda.html" encoding="CP1252" keywords="moo">
+
+ <world name="LambdaMOO" host="lambda.moo.mud.org:8888" url="https://www.cc.gatech.edu/classes/cs8113e_99_winter/lambda.html" encoding="CP1252" keywords="MOO">
   <guest connect="connect guest"/>
  </world>
- <world name="8Bit MUSH" host="8bit.fansi.org:4201" url="http://www.ansiart.com/" encoding="CP1252" keywords="fansi"/>
- <world name="Cybersphere" host="cs.netsville.com:7777" url="https://www.cybersphere.net/cs/Cybersphere" encoding="CP1252" keywords="moo|cyberpunk">
+ <world name="8Bit MUSH" host="8bit.fansi.org:4201" url="http://www.ansiart.com/" encoding="CP1252" keywords="Fansi"/>
+ <world name="Cybersphere" host="cs.netsville.com:7777" url="https://www.cybersphere.net/cs/Cybersphere" encoding="CP1252" keywords="Moo|Cyberpunk|Dystopia">
   <guest connect="connect guest"/>
  </world>
- <world name="Sindome" host="moo.sindome.org:5555" url="http://www.sindome.org" encoding="CP1252" keywords="moo|cyberpunk|">
+ <world name="Sindome" host="moo.sindome.org:5555" url="http://www.sindome.org" encoding="CP1252" keywords="MOO|Cyberpunk|Dystopia">
   <guest connect="connect guest"/>
  </world>
- <world name="Miriani" host="toastsoft.net:1234" url="https://www.toastsoft.net/" encoding="CP1252" keywords="moo|Sci-fi|"/>
+ <world name="Miriani" host="toastsoft.net:1234" url="https://www.toastsoft.net/" encoding="CP1252" keywords="MOO|Sci-fi|"/>
+ <world name="Armageddon" host="ginka.armageddon.org:4050" url="https://www.armageddon.org/" encoding="CP1252" keywords="Mud|Fantasy|Apocalyptic|Dystopia">
+  <guest connect="connect guest"/>
+ </world>
+ <world name="NeonMOO" host="neon-moo.space:7777" url="https://neon-moo.space/" encoding="CP1252" keywords="MOO|Cyberpunk|Dystopia">
+  <guest connect="connect guest"/>
+ </world>
+
 </worlds>
