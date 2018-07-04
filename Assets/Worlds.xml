@@ -6,7 +6,7 @@
 </world>
 <world name="8Bit MUSH" host="8bit.fansi.org:4201" url="http://www.ansiart.com/" encoding="CP1252" keywords="fansi"/>
 </world>
-<world name="Cybersphere" host="cs.netsville.com:7777" url="https://www.cybersphere.net/cs/Cybersphere" encoding="CP1252" keywords="moo|cyberpunk|dystopia">
+<world name="Cybersphere" description="An RPG MOO set in the dark American future of a fictional metropolis known as New Carthage. Monolithic corporations and apathetic governments have reduced society to a writhing neo-anarchy of violence and the struggle of the individual to survive. The streets are deadly, and crime runs rampant. Described as, 'Virtual reality RPG based in a post-holocaust cyberpunk world. The best dream you've ever had. Hard realism.'" host="cs.netsville.com:7777" url="https://www.cybersphere.net/cs/Cybersphere" encoding="CP1252" keywords="moo|cyberpunk|dystopia">
  <guest connect="connect guest"/>
 </world>
 <world name="Sindome" host="moo.sindome.org:5555" url="http://www.sindome.org" encoding="CP1252" keywords="moo|cyberpunk|dystopia"/>
