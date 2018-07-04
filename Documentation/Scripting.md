@@ -1,10 +1,10 @@
 ## API Reference
 
-[API Reference](/r/BeipMU/wiki/scripting/interfaces)
+[API Reference](ScriptingAPI.md)
 
 ## Examples
 
-[Examples](/r/BeipMU/wiki/scripting/examples)
+[Examples](ScriptingExamples.md)
 
 ## Global Objects
 
