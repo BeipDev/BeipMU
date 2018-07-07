@@ -5,17 +5,46 @@
  <guest connect="connect guest"/>
 </world>
 <world name="8Bit MUSH" host="8bit.fansi.org:4201" url="http://www.ansiart.com/" encoding="CP1252" keywords="fansi"/>
+ <description><![CDATA[8BitMUSH is a collaborative virtual world, based upon text-based artwork (16-color ANSI Art, 256-color FANSI Art, and ASCII Art.) Every player is encouraged to extend the world with their own creations, and explore the creations of others. The community is very social, with a unique culture and over 10 years of history. 
+
+The virtual world is based around a colorful megatropolis called ANSI City, with a surrounding suburbia and various other landscapes to 
+explore and build upon. The virtual economy allows for players to run their own companies, invest in a stock market, and buy and sell 
+products from various shops and vendors. Many projects and games have been coded on 8Bit using MUSHCode, the in-game programming language, including arcade games, toys, board games, interactive-fiction puzzles, a space system and much more. There are also tools to create content without writing any code. 
+
+<a http://AnsiArt.Com/Play</a> ]]></description>
 </world>
-<world name="Cybersphere" description="An RPG MOO set in the dark American future of a fictional metropolis known as New Carthage. Monolithic corporations and apathetic governments have reduced society to a writhing neo-anarchy of violence and the struggle of the individual to survive. The streets are deadly, and crime runs rampant. Described as, 'Virtual reality RPG based in a post-holocaust cyberpunk world. The best dream you've ever had. Hard realism.'" host="cs.netsville.com:7777" url="https://www.cybersphere.net/cs/Cybersphere" encoding="CP1252" keywords="moo|cyberpunk|dystopia">
+<world name="Cybersphere" host="cs.netsville.com:7777" url="https://www.cybersphere.net/cs/Cybersphere" encoding="CP1252" keywords="moo|cyberpunk|dystopia">
+ <description><![CDATA[CyberSphere is set in New Carthage, a bustling metropolis. The wastelands of the American Southwest lurk behind the city wall, and the corporate powers that pull the citizen's strings lurk behind the inner wall. A wide variety of options are available for characters. Be a decker in the beautifully-crafted matrix system, a mechanic keeping others cars on the road, a bounty-hunter, a reporter, or work for one of the soulless megacorps. The world is constantly changing and improving, and boasts a variety of code systems to handle many situations. Above all, though, is the role playing. A dedicated hardcore group of players have been keeping the city alive, but they could use some new blood to let.... I mean greet.]]></description>
  <guest connect="connect guest"/>
 </world>
 <world name="Sindome" host="moo.sindome.org:5555" url="http://www.sindome.org" encoding="CP1252" keywords="moo|cyberpunk|dystopia"/>
+ <description><![CDATA[Sindome is an online text-based Cyberpunk Role Playing game (RPG) inspired by Neuromancer, Judge Dredd and more. You play online in real-time with other people. You'll develop a unique character with a past, thoughts, dreams, and secrets. Because roleplaying is required, there is an expectation that your character will have reasons for their actions. We've gone beyond your typical roleplaying text game. You don't decide your character's success or failure, the game does. Most everything you do will depend on the stats and skills your character possesses. This includes understanding languages, perception, combat, and a vast array of other things you can do.]]></description>
 <guest connect="connect guest"/>
 <world name="Miriani" host="toastsoft.net:1234" url="https://www.toastsoft.net/" encoding="CP1252" keywords="moo|Sci-fi|"/>
+ <description><![CDATA[Despite a long-lasting and bloody war with the insectoid Praelor race, humanity remains divided. Three major alliances, each based on strict political ideals, have risen to dominant power. The AIE, explorers at heart, believe that humanity's efforts should be directed toward dominating the stars. The Hale Collective asserts that science and technology should be paramount, focusing their efforts purely on researching and developing new technologies, some wonderful and some terrible. The third and final alliance, the Commonwealth, hold that humanity has become too violent and fragmented and should concentrate on improving the species before technological or territorial expansion. 
+
+With terraforming becoming a popular event, much of the galaxy has been colonized. Faster than light travel through wormholes makes starships as common in the year 2357 as automobiles were in the 20th century. Those with a pilot's license are free to bounce around from planet to planet at their leisure, taking part in any number of activities along the way. Space provides countless opportunities for salvage operations, hauling asteroids, engaging in battles with aliens and other humans, discovering alien artifacts, exploring uncharted worlds, or even shopping in one of the hundreds of shopping establishments that have cropped up on colony worlds. 
+
+Humanity's foray into the stars has yielded powerful and blood-thirsty enemies, wondrous new technologies, and even given rise to three new empires. What will you find when you venture out into the unknown?]]></description>
+ <guest connect="connect guest"/>
 </world>
 <world name="Armageddon" host="ginka.armageddon.org:4050" url="https://www.armageddon.org/" encoding="CP1252" keywords="mud|fantasy|apocalyptic|dystopia"/>
+ <description><![CDATA[Zalanthas: a harsh low-technology desert where settlements and shelter are few and far between, and once you're within the walls,you may not actually be any safer. 
+
+In the city-state of Allanak, governed by the ruthless sorcerer king Tektolnes, the common rabble struggle to eke out a living under the strangling boot of the city's nobility. Criminals are put to death for the masses' amusement, and elementalists with arcane, unpredictable powers are allowed to walk the streets, so long as 
+they wear the gem, a mysterious device of the Highlord Tektolnes' divising. To the north, in the magick-free city-state of Tuluk, the all-knowing Sun King Muk Utep rules with despotism cloaked as benevolence. His Templars are the city's arbiters, and while the city is no less brutal than Allanak, those who stray on the wrong side of the law usually vanish without a trace. 
+
+Across the desert of the Known World, bands of nomadic humans and xenophobic elves dot the rest of the map. The Great Merchant Houses of Salarr, Kadius, and Kurac traverse the world for trade, maintaining cutthroat monopolies and a lethal grip on their markets. Yet in spite of the numerous threats that will await your character 
+at every twist and turn, you will find a niche for yourself in the world of Zalanthas. 
+
+Over two decades old Armageddon MUD is as addictive for its harsh desert theme as it is for its beautifully written environment, and intense, required roleplay. Real-time interaction with multiple players around the world will draw you into this world and offer you a gaming experience you will never forget.]]></description>
  <guest connect="connect guest"/>
 </world>
 <world name="NeonMOO" host="neon-moo.space:7777" url="https://neon-moo.space/" encoding="CP1252" keywords="moo|cyberpunk|dystopia"/>
+ <description><![CDATA[NeonMOO is a MUD set in an alternate-history present day North America, in the city of Arnold Island, D.C., capital of the COS. 
+
+Known for its smoggy air in the Banks and the glittering edifices on the island proper, simply called "Downtown", Arnold Island is, like the COS as a whole, tightly held in the grip of unchecked corporate power, most prominently the Arnold Island Neon Sequestration Company, Inc., and in the grip of unchecked state power, administered by WARD. 
+
+So where do you fit in? Will you fight your way to the top of the pile to that shining office in the sky? Or will you stalk the streets, preying on the poor and the foolish? Or will you take up arms and bring the fight to WARD, breaking their iron grip on the people?]]></description>
  <guest connect="connect guest"/>
 </world>
