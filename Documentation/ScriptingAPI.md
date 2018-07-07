@@ -14,13 +14,13 @@
   * [Timer](#timer)
   * [Trigger](#trigger)
   * [Triggers](#triggers)
-  * [Window_Control_Edit](#window-control-edit)
-  * [Window_Events](#window-events)
-  * [Window_FixedText](#window-fixedtext)
-  * [Window_Graphics](#window-graphics)
-  * [Window_Main](#window-main)
-  * [Window_Properties](#window-properties)
-  * [Window_Text](#window-text)
+  * [Window_Control_Edit](#window_control_edit)
+  * [Window_Events](#window_events)
+  * [Window_FixedText](#window_fixedtext)
+  * [Window_Graphics](#window_graphics)
+  * [Window_Main](#window_main)
+  * [Window_Properties](#window_properties)
+  * [Window_Text](#window_text)
   * [Windows](#windows)
   * [World](#world)
   * [Worlds](#worlds)
@@ -92,7 +92,7 @@ An example in JavaScript to tell the difference of the Date/Undefined by compari
 
     unsigned int BuildNumber
 
-The build number (a small number as the build number is fairly new) 
+The build number
 
     DATE BuildDate 
 
@@ -100,7 +100,11 @@ The build date
 
     int Version 
 
-Current version (200 in this release) 
+Current version
+
+    ConfigPath String
+
+The path of the config file
 
     Worlds Worlds
 
