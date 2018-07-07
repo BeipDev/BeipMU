@@ -176,6 +176,14 @@ Prototype is: OnLookup(String name, VARIANT var)
 
 Returns TRUE if the given string is a valid IP address. Useful for doing the proper DNS lookup.
 
+    PlaySound(String filename, [optional] float volume=1.0)
+
+Plays the sound 'filename' at volume level volume.
+
+    StopSounds()
+
+Stops all playing sounds
+
     OutputDebugText(String text)
 
 Appends a string to the debug window.
