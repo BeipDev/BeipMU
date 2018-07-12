@@ -1,3 +1,14 @@
+3.00.271
+
+Fixed some Tilemap error checking, now tileSize and mapSize are validated (can crash if they're omitted)
+Fixed an infinite recursion bug with 'MUD Prompts' and a send trigger (the prompt fake a receive, which can cause a send trigger, that leads to another receive, etc)
+Fixed a crash on shutdown if a toast window was dismissed
+Worked around a weird input box issue where FixedSys doesn't get set until you first type some text. Only for that font, so some odd bug in Windows.
+Added app.PlaySound(filename, volume=1.0) and app.StopSounds() script functions to enable playing sounds.
+Added app.configpath to get the location of the config file
+Modified startup script load code to make any relative path to be relative to the config file location
+Added 'BeipMU updated' message on startup
+
 3.00.270
 
 Added a fix for WINE to detect a server side socket disconnect
