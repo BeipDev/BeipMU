@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <worlds>
 
-<world name="LambdaMOO" host="lambda.moo.mud.org:8888" url="https://www.cc.gatech.edu/classes/cs8113e_99_winter/lambda.html" encoding="CP1252" keywords="moo">
+<world name="LambdaMOO" host="lambda.moo.mud.org:8888" url="https://www.cc.gatech.edu/classes/cs8113e_99_winter/lambda.html" encoding="CP1252" keywords="moo|social">
  <guest connect="connect guest"/>
 </world>
 <world name="8Bit MUSH" host="8bit.fansi.org:4201" url="http://www.ansiart.com/" encoding="CP1252" keywords="fansi">
