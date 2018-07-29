@@ -49,5 +49,7 @@ Known for its smoggy air in the Banks and the glittering edifices on the island 
 So where do you fit in? Will you fight your way to the top of the pile to that shining office in the sky? Or will you stalk the streets, preying on the poor and the foolish? Or will you take up arms and bring the fight to WARD, breaking their iron grip on the people?]]></description>
  <guest connect="connect guest"/>
 </world>
-
+<world name="SFMUX" host="sfmux.com:1337" url="http://www.sfmux.com/index.php/Main_Page" encoding="CP1252" keywords="moo|dystopia">
+ <guest connect="connect guest"/>
+</world>
 </worlds>
