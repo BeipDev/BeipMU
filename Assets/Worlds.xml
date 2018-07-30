@@ -49,7 +49,7 @@ Known for its smoggy air in the Banks and the glittering edifices on the island 
 So where do you fit in? Will you fight your way to the top of the pile to that shining office in the sky? Or will you stalk the streets, preying on the poor and the foolish? Or will you take up arms and bring the fight to WARD, breaking their iron grip on the people?]]></description>
  <guest connect="connect guest"/>
 </world>
-<world name="SFMUX" host="sfmux.com:1337" url="http://www.sfmux.com/index.php/Main_Page" encoding="CP1252" keywords="moo|dystopia">
+<world name="SFMUX" host="sfmux.com:1337" url="http://www.sfmux.com/index.php/Main_Page" encoding="CP1252" keywords="mux|dystopia|WoD">
  <description><![CDATA[A gleaming edifice of technology, tolerance, and trends. This city is on the forefront of humanity, and the march of progress has become a sprint. Be on the front lines here in the City by the Bay.
 
 At least, that's what they want you to think. The streets are clean, mostly, but please pay no attention to the junkie hiding at the mouth of the alley, drool rolling down his chin as he blissfully stares off into nothing. Jobs are plentiful, but please pay no attention to the child quietly sobbing while standing in the long lines at the food banks. Opportunities are equal, but please pay no attention to the whitewashed executive boardrooms.
@@ -57,4 +57,68 @@ At least, that's what they want you to think. The streets are clean, mostly, but
 The San Francisco of 2025 is different. A tech bubble that rivals Silicon Valley in the 90's has swept through the city, bringing with it prosperity for those with the right skills. It has also brought income disparity the likes of which the city hasn't seen since the gold rush of the late 1940's. Political activism is on the rise as the have-nots push to become the haves, and, just like in any sort of conflict, factions are already forming.]]></description>
  <guest connect="connect guest"/>
 </world>
+<world name="Reno" host="reno.kydance.net:2018" url="http://reno.kydance.net/index.php/Main_Page" encoding="CP1252" keywords="mush|WoD">
+ <description><![CDATA[Reno, Nevada is a city of cycles. Growth and decay. Fortunes rise and fall. Happy little lives end in a quick spilling of blood. And behind the cracks of the World, the Darkness creeps in. RenoMush is a Chronicles of Darkness Storytelling game, combining elements of The World of Darkness with the Second Edition gamelines of Hunter: The Vigil, Vampire: the Requiem and Werewolf: the Forsaken in a persistent online roleplaying environment.
+
+Just as the Material influences the Shadow, and the Shadow impacts the Material, nothing on Reno occurs in a vacuum. Little things cause small ripples, but everything has an impact. An argument in Elysium spawns a few rumors and bad blood. A Death Rage downtown? That brings in heat.
+
+The point is, your actions should matter. If you feel you have done something that should change the world, let us know. Did you kill a hobo in the street? Did you purge a hatred spirit from a trailer park? Did you blow up a bus full of nuns? Actions have impacts, and we aim to make it so that you can see your changes in the world.]]></description>
+ <guest connect="connect guest"/>
+</world>
+<world name="Fallcoast" host="fallcoast.net:2009" url="http://fallcoast.net/wiki/Main_Page" encoding="CP1252" keywords="mush|WoD">
+ <description><![CDATA[This is an RP Mux set in modern day Maine using the New World of Darkness storytelling rules.]]></description>
+ <guest connect="connect guest"/>
+</world>
+<world name="Fate's Harvest" host="fatesharvest.com:6464" url="http://fatesharvest.com/w/Main_Page" encoding="CP1252" keywords="mush|WoD">
+ <description><![CDATA[The game's physical setting is centered around the small town of Tamarack Falls and the city of Fort Brunsett.
+
+Tamarack Falls has a reputation as a country backwater, a poor cousin, a failed provider which refuses to give up. It still provides some local lumber, and there are the occasional grumblings about reopening the local mine, but those never get too much traction. It's locally known for being a bit queer, what with the loopy Lefevres and all, but most folks ascribe that to the murders some fifty years back. Others know better.
+
+Fort Brunsett, on the other hand, is a small, but slowly growing city, caught between the small-town values of its antecedents and the metropolitan ideals of its dreams. Located in the general vicinity of Stowe, it gets much of its money from tourism, thanks to the ten mile lake along its northern border, and the shipping of goods downriver. Despite its best efforts, there is a fair amount of decay in the industrial district, both genteel and...less genteel. Crime is rising.]]></description>
+  <guest connect="connect guest"/>
+</world>
+<world name="GarouMUSH" host="garoumush.org:7000" url="http://web.garoumush.org/" encoding="CP1252" keywords="mush|WoD">
+ <description><![CDATA[GarouMUSH is a cooperative storytelling MUSH themed around the White Wolf line of World of Darkness Storyteller games, with specific focus on the werewolves, the Garou of that world. It is an original World of Darkness game, based around Werewolf: The Apocalypse. It came online in 1993 and is one of the oldest World of Darkness MUSHes in existence.]]></description>
+ <guest connect="connect guest"/> 
+</world> 
+<world name="City of Hope MUSH" host="cityofhopemush.net port 8888" url="http://coh.spork.com/index.php?title=Main_Page" encoding="CP1252" keywords="mush|WoD">
+ <description><![CDATA[Have you ever looked for something better? Better than what you have now? Better than what's around you? Are you tired of the same old, dull and dreary, the stressful life that surrounds you? The frustrating feeling that you just simply aren't getting anywhere no matter how hard you try? Well, there is a place of Hope. A place where you can relax and take the ease off every day stressful life and find that peace that you've been looking for... that prosperity.
+
+Prospect, California, the "City of Hope", welcomes all within its glamorous fold with secrets and mysteries abound with rich history and life of its own. There's plenty of room for all within this new, undiscovered territory and everyone has the chance to take a piece of the pie, revel in the freedom that America brings to these sacred lands and take a chance to make something of themselves, becoming the legends of the future.
+
+Prospect is a little bit of a paradise. Half of the year is summer, the other half is fall skipping over winter and going right into spring. Within paradise's boundaries even the most humble can find easy living. When things are so simple and easy it becomes hard to care for the big things in life. Those things that truly matter in the greater scheme of things slip through our conscious mind and end up behind the solace of our more comfortable lives.
+
+What will this paradise hold for the soul? A haven of comfort and stability? Or perhaps the encroaching darkness will sink its tendrils into your spirit and infect your humanity...slowly corrupting you in its wake. Will you strive for power, lust for wealth, and let apathy crush your cares for those that you love and cherish? This is paradise in a World of Darkness.]]></description>
+ <guest connect="connect guest"/> 
+</world>
+<world name="Let Freedom Ring" host="portent.genesismuds.com:8020" url="http://letfreedomring.wikidot.com/" encoding="CP1252" keywords="mush|WoD">
+ <guest connect="connect guest"/>
+</world>  
+<world name="MahouMUSH" host="MahouMUSH.com:7342" url="http://www.mahoumush.com" encoding="CP1252" keywords="mush|anime">  
+ <description><![CDATA[Darkness is everywhere, looming out from the shadows to hurt or corrupt the weak of heart, the scared, the greedy. The average person has no idea that in the world they live in, actual monsters skulk in the shadows and twisted hearts make conspiracies to control or destroy the world.
+
+All is not lost, however! As standing in the way of the darkness are the champions of light - Sailor Senshi, Chara Bearers, Puella Magi, Pretty Cures, and more - turning the strength which we all gain from the emotions of hope, the connections of friendship, and the warmth of love into power which stands and protects our world from evil! While each of these may seem different on the outside, on the inside each of them draws their true power from the strength of their hearts - allowing them to wield the power of magic.
+
+Join us on MahouMUSH, and use the power of the heart to protect the world... or corrupt it.]]></description>
+ <guest connect="connect guest"/>
+</world>
+<world name="Multiverse Crisis" host="multiversemush.com:5001" url="http://multiversemush.com/mw/index.php?title=Main_Page" encoding="CP1252" keywords="mush|mixed">
+ <description><![CDATA[We are an application-only role playing site with broad inclusion of characters and settings from anime, video games, movies, books, sci-fi, and more. We are receptive to Alternate Universe takes on existing series, and original characters. If there's something you're interested in role playing, there is a pretty good chance that you can find it here!]]></description>
+ <guest connect="connect guest"/>
+</world> 
+ <world name="Lost Dominion" host="lostdominion.org:600" url="https://lostdominion.org" encoding="CP1252" keywords="mush|horror|urban">
+ <description><![CDATA[There was a time when mankind knew two things: That we were alone in the cosmos and that there was no such thing as magic.
+
+We were wrong.
+
+The coming of the Rifts changed everything. Ignited by a spark still unknown to us, the planet began to surge with arcane energies absent for thousands of years. The results were devastating. Seas rose. Volcanoes roared to life. The earth buckled and cracked and split. Millions died in the first hours.
+
+And then came the monsters.
+
+Civilization never stood a chance. Life, on the other hand, is a hardy and determined thing. Our cities and nations crumbled, but we survived the dark age. We now share our world with invaders and refugees alike. A world fallen far from its former glory. A world that’s dark and dangerous and deadly.
+
+But it is our world, and by spell and science and iron will we will forge it anew.]]></description>
+ <guest connect="connect guest"/>
+</world>
+ 
 </worlds>
