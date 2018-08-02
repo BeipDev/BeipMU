@@ -1,35 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <worlds>
 
-<world name="LambdaMOO" host="lambda.moo.mud.org:8888" url="https://www.cc.gatech.edu/classes/cs8113e_99_winter/lambda.html" encoding="CP1252" keywords="moo">
+<world name="LambdaMOO" host="lambda.moo.mud.org:8888" encoding="CP1252" keywords="moo|social">
+ <description><![CDATA[MUD stands for multi-user dungeon (or multi-user dimension). It is a term used to describe a group of multi-user, interactive, text based virtual reality systems. MUD's were originally developed as interactive, networked game systems akin to Dungeons & Dragons and other hack-and-slash games. Since the development of the first MUD's in the late 70's, a number of derivations have appeared, and there is now a multitude of systems and acronyms (MUD, MOO, MUSH, MUCK, WOO etc.) While these systems all differ in some aspect, they are all MUD's.
+MOO's are somewhat different from MUD's under the hood, but the main difference lies in their use. A MUD is a system which is organized as an online game, and which places heavy restrictions on who can contribute to the world (by building new places etc). A MOO is a system that is usually centered around communication instead of gaming, and which invites a large part of its members to extend and contribute to the world (constructivist enviroments). LambdaMOO was the first MOO, and continues to be one of the most active. It is the source for the most popular System releases, and a well established forum for all things related to online communities. <a href="https://www.cc.gatech.edu/classes/cs8113e_99_winter/lambda.html">Website</a>]]></description>
  <guest connect="connect guest"/>
 </world>
-<world name="8Bit MUSH" host="8bit.fansi.org:4201" url="http://www.ansiart.com/" encoding="CP1252" keywords="fansi">
+<world name="8Bit MUSH" host="8bit.fansi.org:4201" encoding="CP1252" keywords="fansi">
  <description><![CDATA[8BitMUSH is a collaborative virtual world, based upon text-based artwork (16-color ANSI Art, 256-color FANSI Art, and ASCII Art.) Every player is encouraged to extend the world with their own creations, and explore the creations of others. The community is very social, with a unique culture and over 10 years of history. 
 
 The virtual world is based around a colorful megatropolis called ANSI City, with a surrounding suburbia and various other landscapes to 
 explore and build upon. The virtual economy allows for players to run their own companies, invest in a stock market, and buy and sell 
-products from various shops and vendors. Many projects and games have been coded on 8Bit using MUSHCode, the in-game programming language, including arcade games, toys, board games, interactive-fiction puzzles, a space system and much more. There are also tools to create content without writing any code. 
-
-<a http://AnsiArt.Com/Play</a> ]]></description>
+products from various shops and vendors. Many projects and games have been coded on 8Bit using MUSHCode, the in-game programming language, including arcade games, toys, board games, interactive-fiction puzzles, a space system and much more. There are also tools to create content without writing any code. <a href="http://www.ansiart.com/">Website</a> ]]></description>
 </world>
-<world name="Cybersphere" host="cs.netsville.com:7777" url="https://www.cybersphere.net/cs/Cybersphere" encoding="CP1252" keywords="moo|cyberpunk|dystopia">
- <description><![CDATA[CyberSphere is set in New Carthage, a bustling metropolis. The wastelands of the American Southwest lurk behind the city wall, and the corporate powers that pull the citizen's strings lurk behind the inner wall. A wide variety of options are available for characters. Be a decker in the beautifully-crafted matrix system, a mechanic keeping others cars on the road, a bounty-hunter, a reporter, or work for one of the soulless megacorps. The world is constantly changing and improving, and boasts a variety of code systems to handle many situations. Above all, though, is the role playing. A dedicated hardcore group of players have been keeping the city alive, but they could use some new blood to let.... I mean greet.]]></description>
+<world name="Cybersphere" host="cs.netsville.com:7777" encoding="CP1252" keywords="moo|cyberpunk|dystopia">
+ <description><![CDATA[CyberSphere is a Role-Playing MOO set in a dark American future. Your virtual journey begins in New Carthage, the denizens of which range from the benign eccentric to the malicious psychotic. Shadowed alleys conceal dark secrets, and gleaming towers of urban wealth hide fantastic conspiracies.
+
+Past the skeletal buildings of the anarchic New Carthage outskirts, beyond its armored city wall, a vast Wasteland of post-apocalyptic Hell awaits the truly brave. Its glowing sands crawl with the horrific mutant champions of natural selection, and are stained with the blood of the weak.
+
+Delta-winged shuttles crisscross the scarred planet as reconstruction continues under the control of emergent superpowers in a new world order: mega-corporations and crime syndicates. Bangkok harbors shadowy black markets of cybernetic technology, while orbital colonies turn serenely on axes of money, power, and privilege.
+
+As the physical landscape still smoulders from the ravages of global wars and environmental disasters, an alternate reality glows brightly in the worldwide matrix network. Deckers and console jockeys swim the depths of this data sea, knights rendered in chrome on battlefields formed in the cognitive non-space of a collective consciousness.
+
+The pulse-pounding excitement of our virtual world is but a keystroke away. <a href="https://www.cybersphere.net/">Website</a>]]></description>
  <guest connect="connect guest"/>
 </world>
-<world name="Sindome" host="moo.sindome.org:5555" url="http://www.sindome.org" encoding="CP1252" keywords="moo|cyberpunk|dystopia">
- <description><![CDATA[Sindome is an online text-based Cyberpunk Role Playing game (RPG) inspired by Neuromancer, Judge Dredd and more. You play online in real-time with other people. You'll develop a unique character with a past, thoughts, dreams, and secrets. Because roleplaying is required, there is an expectation that your character will have reasons for their actions. We've gone beyond your typical roleplaying text game. You don't decide your character's success or failure, the game does. Most everything you do will depend on the stats and skills your character possesses. This includes understanding languages, perception, combat, and a vast array of other things you can do.]]></description>
-<guest connect="connect guest"/>
+<world name="Sindome" host="moo.sindome.org:5555" encoding="CP1252" keywords="moo|cyberpunk|dystopia">
+ <description><![CDATA[Sindome is an online text-based Cyberpunk Role Playing game (RPG) inspired by Neuromancer, Judge Dredd and more. You play online in real-time with other people. You'll develop a unique character with a past, thoughts, dreams, and secrets. Because roleplaying is required, there is an expectation that your character will have reasons for their actions. We've gone beyond your typical roleplaying text game. You don't decide your character's success or failure, the game does. Most everything you do will depend on the stats and skills your character possesses. This includes understanding languages, perception, combat, and a vast array of other things you can do.<a href="http://www.sindome.org">Website</a>]]></description>
+ <guest connect="connect guest"/>
 </world>
-<world name="Miriani" host="toastsoft.net:1234" url="https://www.toastsoft.net/" encoding="CP1252" keywords="moo|Sci-fi|">
+<world name="Miriani" host="toastsoft.net:1234" encoding="CP1252" keywords="moo|Sci-fi|">
  <description><![CDATA[Despite a long-lasting and bloody war with the insectoid Praelor race, humanity remains divided. Three major alliances, each based on strict political ideals, have risen to dominant power. The AIE, explorers at heart, believe that humanity's efforts should be directed toward dominating the stars. The Hale Collective asserts that science and technology should be paramount, focusing their efforts purely on researching and developing new technologies, some wonderful and some terrible. The third and final alliance, the Commonwealth, hold that humanity has become too violent and fragmented and should concentrate on improving the species before technological or territorial expansion. 
 
 With terraforming becoming a popular event, much of the galaxy has been colonized. Faster than light travel through wormholes makes starships as common in the year 2357 as automobiles were in the 20th century. Those with a pilot's license are free to bounce around from planet to planet at their leisure, taking part in any number of activities along the way. Space provides countless opportunities for salvage operations, hauling asteroids, engaging in battles with aliens and other humans, discovering alien artifacts, exploring uncharted worlds, or even shopping in one of the hundreds of shopping establishments that have cropped up on colony worlds. 
 
-Humanity's foray into the stars has yielded powerful and blood-thirsty enemies, wondrous new technologies, and even given rise to three new empires. What will you find when you venture out into the unknown?]]></description>
+Humanity's foray into the stars has yielded powerful and blood-thirsty enemies, wondrous new technologies, and even given rise to three new empires. What will you find when you venture out into the unknown?<a href="https://www.toastsoft.net/">Website</a>]]></description>
  <guest connect="connect guest"/>
 </world>
-<world name="Armageddon" host="ginka.armageddon.org:4050" url="https://www.armageddon.org/" encoding="CP1252" keywords="mud|fantasy|apocalyptic|dystopia">
+<world name="Armageddon" host="ginka.armageddon.org:4050" encoding="CP1252" keywords="mud|fantasy|apocalyptic|dystopia">
  <description><![CDATA[Zalanthas: a harsh low-technology desert where settlements and shelter are few and far between, and once you're within the walls,you may not actually be any safer. 
 
 In the city-state of Allanak, governed by the ruthless sorcerer king Tektolnes, the common rabble struggle to eke out a living under the strangling boot of the city's nobility. Criminals are put to death for the masses' amusement, and elementalists with arcane, unpredictable powers are allowed to walk the streets, so long as 
@@ -38,15 +46,236 @@ they wear the gem, a mysterious device of the Highlord Tektolnes' divising. To t
 Across the desert of the Known World, bands of nomadic humans and xenophobic elves dot the rest of the map. The Great Merchant Houses of Salarr, Kadius, and Kurac traverse the world for trade, maintaining cutthroat monopolies and a lethal grip on their markets. Yet in spite of the numerous threats that will await your character 
 at every twist and turn, you will find a niche for yourself in the world of Zalanthas. 
 
-Over two decades old Armageddon MUD is as addictive for its harsh desert theme as it is for its beautifully written environment, and intense, required roleplay. Real-time interaction with multiple players around the world will draw you into this world and offer you a gaming experience you will never forget.]]></description>
+Over two decades old Armageddon MUD is as addictive for its harsh desert theme as it is for its beautifully written environment, and intense, required roleplay. Real-time interaction with multiple players around the world will draw you into this world and offer you a gaming experience you will never forget.<a href="https://www.armageddon.org/">Website</a>]]></description>
  <guest connect="connect guest"/>
 </world>
-<world name="NeonMOO" host="neon-moo.space:7777" url="https://neon-moo.space/" encoding="CP1252" keywords="moo|cyberpunk|dystopia">
+<world name="NeonMOO" host="neon-moo.space:7777" encoding="CP1252" keywords="moo|cyberpunk|dystopia">
  <description><![CDATA[NeonMOO is a MUD set in an alternate-history present day North America, in the city of Arnold Island, D.C., capital of the COS. 
 
 Known for its smoggy air in the Banks and the glittering edifices on the island proper, simply called "Downtown", Arnold Island is, like the COS as a whole, tightly held in the grip of unchecked corporate power, most prominently the Arnold Island Neon Sequestration Company, Inc., and in the grip of unchecked state power, administered by WARD. 
 
-So where do you fit in? Will you fight your way to the top of the pile to that shining office in the sky? Or will you stalk the streets, preying on the poor and the foolish? Or will you take up arms and bring the fight to WARD, breaking their iron grip on the people?]]></description>
+So where do you fit in? Will you fight your way to the top of the pile to that shining office in the sky? Or will you stalk the streets, preying on the poor and the foolish? Or will you take up arms and bring the fight to WARD, breaking their iron grip on the people?<a href="https://neon-moo.space/">Website</a>]]></description>
+ <guest connect="connect guest"/>
+</world>
+<world name="SFMUX" host="sfmux.com:1337" encoding="CP1252" keywords="mux|dystopia|WoD">
+ <description><![CDATA[A gleaming edifice of technology, tolerance, and trends. This city is on the forefront of humanity, and the march of progress has become a sprint. Be on the front lines here in the City by the Bay.
+
+At least, that's what they want you to think. The streets are clean, mostly, but please pay no attention to the junkie hiding at the mouth of the alley, drool rolling down his chin as he blissfully stares off into nothing. Jobs are plentiful, but please pay no attention to the child quietly sobbing while standing in the long lines at the food banks. Opportunities are equal, but please pay no attention to the whitewashed executive boardrooms.
+
+The San Francisco of 2025 is different. A tech bubble that rivals Silicon Valley in the 90's has swept through the city, bringing with it prosperity for those with the right skills. It has also brought income disparity the likes of which the city hasn't seen since the gold rush of the late 1940's. Political activism is on the rise as the have-nots push to become the haves, and, just like in any sort of conflict, factions are already forming.<a href="http://www.sfmux.com/index.php/Main_Page">Website</a>]]></description>
+ <guest connect="connect guest"/>
+</world>
+<world name="Reno" host="reno.kydance.net:2018" encoding="CP1252" keywords="mush|WoD">
+ <description><![CDATA[Reno, Nevada is a city of cycles. Growth and decay. Fortunes rise and fall. Happy little lives end in a quick spilling of blood. And behind the cracks of the World, the Darkness creeps in. RenoMush is a Chronicles of Darkness Storytelling game, combining elements of The World of Darkness with the Second Edition gamelines of Hunter: The Vigil, Vampire: the Requiem and Werewolf: the Forsaken in a persistent online roleplaying environment.
+
+Just as the Material influences the Shadow, and the Shadow impacts the Material, nothing on Reno occurs in a vacuum. Little things cause small ripples, but everything has an impact. An argument in Elysium spawns a few rumors and bad blood. A Death Rage downtown? That brings in heat.
+
+The point is, your actions should matter. If you feel you have done something that should change the world, let us know. Did you kill a hobo in the street? Did you purge a hatred spirit from a trailer park? Did you blow up a bus full of nuns? Actions have impacts, and we aim to make it so that you can see your changes in the world.<a href="http://reno.kydance.net/index.php/Main_Page">Website</a>]]></description>
+ <guest connect="connect guest"/>
+</world>
+<world name="Fallcoast" host="fallcoast.net:2009" encoding="CP1252" keywords="mush|WoD">
+ <description><![CDATA[This is an RP Mux set in modern day Maine using the New World of Darkness storytelling rules.<a href="http://fallcoast.net/wiki/Main_Page">Website</a>]]></description>
+</world>
+<world name="Fate's Harvest" host="fatesharvest.com:6464" encoding="CP1252" keywords="mush|WoD">
+ <description><![CDATA[The game's physical setting is centered around the small town of Tamarack Falls and the city of Fort Brunsett.
+
+Tamarack Falls has a reputation as a country backwater, a poor cousin, a failed provider which refuses to give up. It still provides some local lumber, and there are the occasional grumblings about reopening the local mine, but those never get too much traction. It's locally known for being a bit queer, what with the loopy Lefevres and all, but most folks ascribe that to the murders some fifty years back. Others know better.
+
+Fort Brunsett, on the other hand, is a small, but slowly growing city, caught between the small-town values of its antecedents and the metropolitan ideals of its dreams. Located in the general vicinity of Stowe, it gets much of its money from tourism, thanks to the ten mile lake along its northern border, and the shipping of goods downriver. Despite its best efforts, there is a fair amount of decay in the industrial district, both genteel and...less genteel. Crime is rising.<a href="http://fatesharvest.com/w/Main_Page">Website</a>]]></description>
+  <guest connect="connect guest"/>
+</world>
+<world name="GarouMUSH" host="garoumush.org:7000" encoding="CP1252" keywords="mush|WoD">
+ <description><![CDATA[GarouMUSH is a cooperative storytelling MUSH themed around the White Wolf line of World of Darkness Storyteller games, with specific focus on the werewolves, the Garou of that world. It is an original World of Darkness game, based around Werewolf: The Apocalypse. It came online in 1993 and is one of the oldest World of Darkness MUSHes in existence.<a href="http://web.garoumush.org/">Website</a>]]></description>
+ <guest connect="connect guest"/> 
+</world> 
+<world name="City of Hope MUSH" host="cityofhopemush.net port:8888" encoding="CP1252" keywords="mush|WoD">
+ <description><![CDATA[Have you ever looked for something better? Better than what you have now? Better than what's around you? Are you tired of the same old, dull and dreary, the stressful life that surrounds you? The frustrating feeling that you just simply aren't getting anywhere no matter how hard you try? Well, there is a place of Hope. A place where you can relax and take the ease off every day stressful life and find that peace that you've been looking for... that prosperity.
+
+Prospect, California, the "City of Hope", welcomes all within its glamorous fold with secrets and mysteries abound with rich history and life of its own. There's plenty of room for all within this new, undiscovered territory and everyone has the chance to take a piece of the pie, revel in the freedom that America brings to these sacred lands and take a chance to make something of themselves, becoming the legends of the future.
+
+Prospect is a little bit of a paradise. Half of the year is summer, the other half is fall skipping over winter and going right into spring. Within paradise's boundaries even the most humble can find easy living. When things are so simple and easy it becomes hard to care for the big things in life. Those things that truly matter in the greater scheme of things slip through our conscious mind and end up behind the solace of our more comfortable lives.
+
+What will this paradise hold for the soul? A haven of comfort and stability? Or perhaps the encroaching darkness will sink its tendrils into your spirit and infect your humanity...slowly corrupting you in its wake. Will you strive for power, lust for wealth, and let apathy crush your cares for those that you love and cherish? This is paradise in a World of Darkness.<a href="http://coh.spork.com/index.php?title=Main_Page">Website</a>]]></description>
+ <guest connect="connect guest"/> 
+</world>
+<world name="Let Freedom Ring" host="portent.genesismuds.com:8020" url="" encoding="CP1252" keywords="mush|WoD">
+   <description><![CDATA[<a href="http://letfreedomring.wikidot.com/">Website</a>]]></description>
+ <guest connect="connect guest"/>
+</world>  
+<world name="MahouMUSH" host="MahouMUSH.com:7342" encoding="CP1252" keywords="mush|anime">  
+ <description><![CDATA[Darkness is everywhere, looming out from the shadows to hurt or corrupt the weak of heart, the scared, the greedy. The average person has no idea that in the world they live in, actual monsters skulk in the shadows and twisted hearts make conspiracies to control or destroy the world.
+
+All is not lost, however! As standing in the way of the darkness are the champions of light - Sailor Senshi, Chara Bearers, Puella Magi, Pretty Cures, and more - turning the strength which we all gain from the emotions of hope, the connections of friendship, and the warmth of love into power which stands and protects our world from evil! While each of these may seem different on the outside, on the inside each of them draws their true power from the strength of their hearts - allowing them to wield the power of magic.
+
+Join us on MahouMUSH, and use the power of the heart to protect the world... or corrupt it.<a href="http://www.mahoumush.com">Website</a>]]></description>
+ <guest connect="connect guest"/>
+</world>
+<world name="Multiverse Crisis" host="multiversemush.com:5001" encoding="CP1252" keywords="mush|mixed">
+ <description><![CDATA[We are an application-only role playing site with broad inclusion of characters and settings from anime, video games, movies, books, sci-fi, and more. We are receptive to Alternate Universe takes on existing series, and original characters. If there's something you're interested in role playing, there is a pretty good chance that you can find it here!<a href="http://multiversemush.com/mw/index.php?title=Main_Page">Website</a>]]></description>
+ <guest connect="connect guest"/>
+</world> 
+<world name="Lost Dominion" host="lostdominion.org:600" encoding="CP1252" keywords="mush|horror|urban">
+ <description><![CDATA[There was a time when mankind knew two things: That we were alone in the cosmos and that there was no such thing as magic.
+
+We were wrong.
+
+The coming of the Rifts changed everything. Ignited by a spark still unknown to us, the planet began to surge with arcane energies absent for thousands of years. The results were devastating. Seas rose. Volcanoes roared to life. The earth buckled and cracked and split. Millions died in the first hours.
+
+And then came the monsters.
+
+Civilization never stood a chance. Life, on the other hand, is a hardy and determined thing. Our cities and nations crumbled, but we survived the dark age. We now share our world with invaders and refugees alike. A world fallen far from its former glory. A world that’s dark and dangerous and deadly.
+
+But it is our world, and by spell and science and iron will we will forge it anew.<a href="https://lostdominion.org">Website</a>]]></description>
+ <guest connect="connect guest"/>
+</world>
+<world name="Blood of Dragons" host="bod.westeros.org:3000" encoding="CP1252" keywords="mush|fantasy">
+ <description><![CDATA[Blood of Dragons is the only author-approved MUSH based on George R.R. Martin's A Song of Ice and Fire. Play the Game of Thrones and become a part of the history of the Seven Kingdoms.<a href="http://www.westeros.org/BoD/">Website</a>]]></description>
+ <guest connect="connect guest"/>
+</world>   
+<world name="Marsilikos - Under the Wings of Angels" host="marsilikos.silvertree.org:1310" encoding="CP1252" keywords="mush|fantasy">
+ <description><![CDATA[Marsilikos - Under the Wings of Angels is a text based game exploring a parallel history in a late medieval/early renaissance setting based on the Kushiel trilogies by Jacqueline Carey. Unlike other games of the theme, play focuses on the Capital of the province of Eisande, the beautiful city of Marsilikos (which corresponds to our RL Marseille). This shifts the point of view to politics of a more local nature, narrowing the majority of noble characters down on families of that area, courtesans of local salons and commoners, of course!
+
+The local salons aiming to provide entertainment to nobility are fewer than the legendary thirteen Houses of Mont Nuit in the City of Elua, each offering a wider variety that combine traits of different canons.
+
+Marsilikos is a port town, and other lands like Caerdicca Unitas, Aragonia and Hellas, for instance, can easily be reached by ship. This brings a modest foreign influx to the city, as well as a potential for sea-related adventures and plots. Meanwhile, the Royal Court is still active in the City of Elua, which will bring emissaries to Marsilikos occasionally, with news from the Capital of Terre d'Ange. News that will even affect Marsilikos.
+
+Our goal is to provide a friendly environment for plot driven RP, encouraging players to develop their own storylines in cooperation with staff.<a href="http://marsilikos.wikidot.com/">Website</a>]]></description>
+ <guest connect="connect guest"/>
+</world>
+<world name="Mythara: At the Crossroads" host="mythara.com:9900" encoding="CP1252" keywords="mux|horror|urban">
+ <description><![CDATA[At the Crossroads is a Multi-User eXperience, a text-based role-playing game run via telnet. The game's theme is urban fantasy, set primarily in northern California. We welcome both original and feature characters, drawing on sources such as Buffy: The Vampire Slayer, Charmed, The Dresden Files, Highlander, Supernatural, and Teen Wolf.<a href="http://atcmux.wikia.com/wiki/At_the_Crossroads">Website</a>]]></description>
+ <guest connect="connect guest"/>
+</world>
+<world name="Welcome to Lovecraft" host="LovecraftMa.com:1880" encoding="CP1252" keywords="mux|horror|urban">
+ <description><![CDATA[Welcome to Lovecraft is a game of mortal horror set in the fictional island town of Lovecraft, Massachusetts. Players primarily take on the roles of high school and college students in a town where evil lurks and most adults can't see or remember it. We employ a modified version of the Slasher Flick system which emphasizes personal horror and cinematic narrative over stats and combat.
+
+This game is intended for mature players.<a href="http://lovecraftma.com/index.php/Main_Page">Website</a>]]></description>
+ <guest connect="connect guest"/>
+</world>
+<world name="Star Conquest" host="squidsoft.net:7777" encoding="CP1252" keywords="moo|sci-fi">
+ <description><![CDATA[Star Conquest is a pulp science fiction adventure RPG set 300 years in the future.
+
+“Pulp” science fiction means that we went back to the sci-fi authors of the 50s and 60s, and built a future that they might’ve envisioned. Other solar systems are colonized, starships move faster than light through space, and there are aliens and strange artifacts to find.
+
+Our game is also roleplay-intensive, and we encourage each player to develop a fleshed-out character concept.<a href="http://squidsoft.net:7779/">Website</a>]]></description>
+ <guest connect="connect guest"/>
+</world>
+<world name="Road to Amber" host="roadtoamber.com:6250" encoding="CP1252" keywords="mush|fantasy">
+ <description><![CDATA[Road to Amber is a MUSH based on Roger Zelazny's Amber novels. It begins at the end of the second novel, Guns of Avalon, when many questions are still unanswered but all the things that make the game Amber are firmly in place. 
+Curious players are welcome to come read about the game on the Wiki, or just come over and play.<a href="http://roadtoamber.com/">Website</a>]]></description>
+ <guest connect="connect guest"/>
+</world>
+<world name="Shadowrun: Denver" host="aelfhame.net:1999" encoding="CP1252" keywords="mu|fantasy|cyberpunk">
+ <description><![CDATA[A city of contrasts, Denver shows many faces to visitors. The Mile High City is home to gangsters and thieves, grifters and spirits, politics and passion plays. The home of the Nexus, the Matrix's hidden heart, Denver also plays host to six political factions each with their own plans, dreams, and machinations.
+
+A part of the Old West, it never wallows in cowboy cliche. A part of the future with many skyrakers and corporate 'plexes, it holds to its past as well in the quaint downtown shops and parks dotting the city. A part of the mountains, and yet, willing to embrace urban living. Denver is a different face to one and all, a place where the shadows are deep with mystery and intrigue.
+
+Denver Shadowrun MU* is a multi-player environment set in Denver in 2072. This fractured city gives ample opportunity for shadowrunners to delve into a myriad of possible story lines, from political intrigue to mob wars to deals with dragons. The game also branches out into North America and the world, with narrative storytelling, player interaction and helpful staff. <a href="http://denver.wikidot.com/">Website</a>]]></description>
+ <guest connect="connect guest"/>
+</world>
+<world name="United Heroes Mush" host="unitedheroesmush.com:1999" encoding="CP1252" keywords="mu|comic">
+ <description><![CDATA[Link to game website and description:<a href="https://www.unitedheroesmush.com/index.php?title=Main_Page">Website</a>]]></description>
+ <guest connect="connect guest"/>
+</world>
+<world name="Star Trek: Among The Stars" host="ats.trekmush.org:1701" encoding="CP1252" keywords="mu|sci-fi">
+ <description><![CDATA[Beginning in 1993 under the name Future Realms, ATS has stood the test of time (and the MMORPG age) as a bastion for those Trekkies who want an open-ended experience living in a Trek-themed universe. The home of the ASpace virtual space system employed on many Trek-themed MU*, ATS continues to move forward with new systems and new ideas as it celebrates the twentieth anniversary of its launch.
+
+With an active playerbase of over one hundred individuals settled in five nations (or orgs as they are referred to in-game) and a diligent staff, ATS is always looking for new players to join us in playing Star Trek and perhaps even bringing some unique, new thoughts on how we can continue to evolve and remain the most successful TrekMUSH ever. If you have the time and the desire. The history of ATS splits from the series after Deep Space Nine's episode "The Way of the Warrior", and has it's own rich history and backstory spanning over 20 real life years.
+
+Some pieces of history to note include the extinction of the Q, and the MUSH universe being locked from the rest of the multiverse due to a long list of reasons which we encourage you to find out ICly and through the game history page. <a href="http://www.trekmush.org/index.php/Main_Page">Website</a>]]></description>
+ <guest connect="connect guest"/>
+</world>
+<world name="Star Wars: Rebirth Mush" host="game.starwarsrebirth.com:9999" encoding="CP1252" keywords="mush|sci-fi">
+ <description><![CDATA[It is twenty years after the Battle of Yavin. The Imperial Remnant has retreated to the Remnant of Space, far off in the Outer Rim. But, still strong and focused, it seeks to free the galaxy from the chaos of the New Republic and inflict Order once more on existence and bring a firm boot to heel and guidance to the galaxy once more. The New Republic is warily trying to rebuild itself after years of constant warfare, to try and bring prosperity back to the galaxy at large and it's own territory. The Sith are based out of Korriban, playing events indirectly off one another to their own benefit and power, and the Jedi operate out of Yavin IV, the guardians of peace.
+
+Star⭐ Wars Rebirth is a game where constant and strife are at large but not open and direct. The New Republic and Empire fight and skirmish along the border, eyeing one another warily and the Jedi and Sith try to disrupt the games of one another. Plots, intrigue, romance and action as smugglers try to make a (dis)honest living, fleets and armies ready themselves for war, and the citizens of the galaxy hope for a break from the near endless strife of the last century. Will a period of peace break out to wider war once more or will the galaxy have a chance to collect it's breath and renew itself? Will it be under the peace of the New Republic, the Order of the Empire, or the manipulations of the Sith? Help make the story and setting in a game where you can influence galactic events and play out a galaxy on the edge, whether of sliding ot a period of untold prosperity or back to the brutality of galactic warfare. <a href="http://www.trekmush.org/index.php/Main_Page">Website</a> ]]></description>
+ <guest connect="connect guest"/>
+</world>
+<world name="Tenebrae - the Emblem of Ea" host="tenebraemush.net:4001" encoding="CP1252" keywords="mush|fantasy">
+ <description><![CDATA[When you settle into Tenebrae, we ask you settle into the community. Treat others fairly, be a team player, give others a fair shake, and realize that a staffer is never merely suggesting that you knock it off.
+Stats are secondary to a good attitude, and a willingness to step forward and work with others. They're the things we look for most.
+
+We also look to maintain a safe, comfortable place where everyone can play. When settling down at our Gaming Table, then, don't be 'That Guy.' You know the one. The creepy, loudmouthed, or pushy one you'd never invite back to your table. We wouldn't want to invite 'that guy' back to ours, either. <a href="http://www.tenebraemush.net/index.php/Main_Page">Website</a> ]]></description>
+ <guest connect="connect guest"/>
+</world>
+<world name="Pernworld" host="paper.mudmagic.com:2211" encoding="CP1252" keywords="mush|fantasy|sci-fi">
+ <description><![CDATA[Welcome to PernWorld, we’re glad you stopped by! We are a MUSH community based on the Dragonriders of Pern series created by Anne McCaffrey. Players create and play characters within the theme where dragons and technology mesh together for an experience unlike any other. Currently we have five PC Weyrs (Fort, Half Moon Bay, Xanadu, Igen, and Monaco Bay), one PC Weyrhold (Ierne), one PC Hold (Stonehaven), one Renegade Camp and a variety of crafting areas in which you can play and develop your character. While some locations are ‘off camera’ they do still exist and others which occasionally host a clutch but are not generally considered PC. <a href="http://www.trekmush.org/index.php/Main_Page">Website</a> ]]></description>
+ <guest connect="connect guest"/>
+</world>
+<world name="CoMuX: NuGenesis" host="nugenesismux.com:6006" encoding="CP1252" keywords="mush|comic">
+ <description><![CDATA[CoMUX1 is a superhero-based RPG with a focus on providing a wide variety of RP within a relatively cohesive and persistent world. That means the stuff our characters do not only affects the world, it helps to define what sort of future that world will have. Players are invited to create characters, taking on the various roles of heroes and villains, not to mention all the guys in between… even the poor Regular Joes caught in the middle of it all. <a href="http://cmbeta.wikidot.com/">Website</a> ]]></description>
+ <guest connect="connect guest"/>
+</world>
+<world name="Marvel:1963" host="marvel-1963.com:1963" encoding="CP1252" keywords="mush|comic">
+ <description><![CDATA[Marvel: 1963 is a super hero game set in New York City in the Marvel Universe. Our story started in 1963, but time marches on and it's now 1965. We accept characters from more comic companies than just Marvel (as long as they're adapted to Marvel cosmology), and original concepts are welcome. Take a look at the About page for more details. Come check us out and join in the fun! <a href="http://www.trekmush.org/index.php/Main_Page">Website</a> ]]></description>
+ <guest connect="connect guest"/>
+</world>
+<world name="Inheritance Gambit" host="inheritancegambit.com:2099" encoding="CP1252" keywords="mush|comic">
+ <description><![CDATA[The Age of Heroes is gone, snuffed out before most people even knew it had come. It ended in the fire and fury of a global war - The Gene War - and the great purge that followed. It took earth's mightiest champions and in some ways the earth's hope. The worst, however, was yet to come.
+ 
+ Humanity’s judgement has come. It did not come with the end of the heroes. It did not announce itself with the thunder of war, nor the lightning flash of atomic fire as many thought it might. It crept in slowly and quietly, slipping through cities full of people too caught up in their own worlds to notice the silences and voids amid the bustle and din of life.
+ 
+ The genophage got into everything: air, water, soil. It spread to every corner of the globe. There was no cure. The result was not a tide of mass death but rather the absence of life. Birth rates plummeted. Schools shut, and the echo of children's laughter disappeared.
+
+It has been twenty years since the last known live birth of a genetically human child. The only new people are mutants whose genetic X-factor seems to make them immune to the Phage. Most of those are clones or hybrids created from genetic material found in strange ‘arks’ hidden around the world. As the mutants rise again, so too do heroes wielding powers beyond the ken of mortal men.
+
+Are these champions the guardians of a new era for Earth, or the harbingers of the final darkness?
+
+The Age of Heroes may yet come again, if the world does not destroy itself first. Whichever happens, though, this much seems true. <a href="https://inheritancegambit.com/">Website</a> ]]></description>
+ <guest connect="connect guest"/>
+</world>
+<world name="Super Robot Wars" host="srwmush.com:2015" encoding="CP1252" keywords="mush|sci-fi">
+ <description><![CDATA[ ages past, the world was full of glories. Mankind strode the Earth like titans both figuratively and literally and reached to the stars, limited only by their imaginations. They erected vast cities, built great machines of war, and shaped the world to their will.
+
+Those glories were lost long ago. The stories of how are countless and meaningless. All anyone truly knows is that once upon a time, mankind was great and powerful, and the heavens themselves feared. The end came, and brought the vast cities low, and buried the great machines in the dust, and time carried on.
+
+Now, the remnants of those vast cities are picked over by scavengers. The great machines, long-buried in the sand, fuel scrapyard towns, their reactors split open for light and heat. The secrets to shape the world have long been lost, trapped in ancient tombs, awaiting the brave and the daring. The old glories form the foundation of the new world.
+
+The modern era is full of dangers. The wasteland has mutants, bandits, and monsters, to say nothing of the Spiral Empire's Beastmen. The Domed Cities of the Innocent are full of secrets of the past, hidden in lost memories and conspiracies. Vultures walk a lonely path through the desert as mercenaries and thieves as much as nomads and do-gooders, while the Earth Militia apes the trappings of the ancient in the modern world. 
+
+The Apocalypse has come and gone, but the world continues on. The age of giant robots has returned again, as the war machines of the past are resurrected by the men of today. Not content merely to dig through the Mountain Cycles of history's passing, the new generation has brought about new machines, new mecha, new titans to forge new legends. Soon, perhaps, the past will live again, and with it, all the dangers of the first era… 
+
+This is SUPER ROBOT WARS. <a href="https://www.srwmush.com/index.php?title=Main_Page">Website</a> ]]></description>
+ <guest connect="connect guest"/>
+</world>
+<world name="Tenebrous Isles" host="tenebrousisles.com port:9001" encoding="CP1252" keywords="mush|sci-fi">
+ <description><![CDATA[The gorgeous island of Oahu, Hawaii is a place of wonder and beauty. Virtually any leisure or fun activity you can imagine can occur here.
+Just as varied as the activities and the multitude of people that visit is the terrain.
+There is the large city of Honolulu, the beautiful mountains of the Waianae and Koolau ranges, Haleiwa Town, lovely valleys, and of course the glorious beaches.
+These wonders are all possible experiences while RPing at Tenebrous Isles. 
+
+Aside from all of these delights, though, there is the darker side of Paradise to be discovered.
+This game makes sure to emphasize just how dark the glorious beauty of Hawaii can be. <a href="http://www.tenebrousisles.com/wiki/Main_Page">Website</a> ]]></description>
+ <guest connect="connect guest"/>
+</world>
+<world name="Mutant Genesis MUX" host="mutantgenesismux.com:2017" encoding="CP1252" keywords="mush|comic">
+ <description><![CDATA[The world still remembers the Battle of Washington when dozens were killed, hundreds injured, and the Avengers were soundly defeated by the Apocalypse and his Four Horsemen. In the end, Mankind watched the X-Men openly take the field for the first time. In millions of homes there were images of Cyclops and Quicksilver, and all stood in silent awe.
+
+In Mutant Genesis MUX mutants are a new development in a world that barely knows their species but already fears it. The disciples of Magneto and believe humanity will draw first blood, while the X-Men believe that homo superior and sapiens can live together as brothers.
+
+Mission Statement: At Mutant Genesis MUX we want to write stories. Arcs will be provided by staff and players, and we want the decisions players make will heavily impact the setting. If the Scarlet Witch fails to stop Nitro from suicide bombing Mutant Town, we will be redescing that area of the grid. If Rogue drains Mr. Sinister's psyche, she will be changed by the experience. What you do matters in Mutant Genesis. (Marvel Universe, mutant-focused) <a href="http://mutantgenesismux.com/index.php/Main_Page">Website</a> ]]></description>
+ <guest connect="connect guest"/>
+</world>
+<world name="Gods and Monsters MUX" host="mutantgenesismux.com:2017" encoding="CP1252" keywords="mush|comic">
+ <description><![CDATA[Superheroes, and supervillains, are a relatively new phenomena. Superman has been active in Metropolis for four years now, and ever since others have showed up, but many of the world-shaking events of comics have not come to pass yet. The world wasn't invaded, cities haven't been wiped off the map and many of the Arkham Asylum fixtures have never seen those padded cells. There is something unknown about being a hero, and there is shock and awe in the reveal of villains.
+ 
+ With the wide array of heroes and villains of the DC universe stories told can be plenty. However, there are some stories that, with the inclusion of characters of a certain power level, become impossible. As such, in Gods and Monsters, there is a division between Gotham stories and the rest. Having god-like characters around trivializes and destroys the gritty feel of Gotham. Outside of staff-plot, people are free to cross-RP, but staff will expect 'super' players to be considerate of others when visiting Gotham. Although Superman can visit Batman in Gotham, he won't stay and he won't meddle. Plots marked as Gotham will see no participation of high-powered characters, unless the Storyteller allows for them.
+ 
+ Some places have been 'sacrificed' for the sake of simplicity. Keystone City or Central City just aren't going to be a focal point of our story, and thus someone like Barry Allen will need to shift his story slightly to fit into Metropolis.
+
+We are going to ask every character to pick one of these hubs as their character's primary area of operation. You can visit other places, do PRPs in other places with other players, but every character needs to be tied one of these three places. As a rule of thumb, no super-powered character will stay in Gotham and PrPs in Gotham are mostly reserved for low-powered characters.
+
+Another ramification of this theme is that, although the grid is composed of Gotham City, Metropolis and Themyscira, super powered characters must choose their base of operations between Themyscira or Metropolis. Gothamites are based on Gotham.  (DC Universe, Justice League focused) <a href="http://godsandmonstersmux.com/index.php/Theme">Website</a> ]]></description>
+ <guest connect="connect guest"/>
+</world>
+<world name="Arx" host="play.arxmush.org port:3000" encoding="CP1252" keywords="mush|fantasy">
+ <description><![CDATA[The common people of Arvum wouldn't really call the last thousand years a 'golden age'. Since the founding of the Compact of Arvum, the five great noble houses of the realm have schemed and warred against one another, locked in a millennium-old struggle for dominance kept only in check by the occasional powerful monarch. But even as the fragile peace frays with the latest dynastic crisis, creating courtly intrigues in the capital city of Arx, ancient foes that took mankind to the brink of extinction a thousand years ago stir once more. <a href="http://play.arxmush.org/">Website</a> ]]></description>
+ <guest connect="connect guest"/>
+</world>
+<world name="Valorous Dominion" host="71.171.93.80:1510" encoding="CP1252" keywords="mush|fantasy|urban">
+ <description><![CDATA[Valorous Dominion is an online role-playing experience in an alternative setting based roughly on the northern Italian city-states in the proto-reniassance period; roughly 13th to 14th Century. The city states have risen in wealth and power through trade, finance banking, and maritime dominance. Having gained their autonomy from foreign influence, they are at a time of war and competition amongst themselves.
+
+Free companies of mercenaries dominate the land scape between cities, employed by the wealthy cities and their nobles to fight their battles for them. And within the the cities, the great noble houses compete with each other in ritualized blood feuds known as Vindicti. Even amidst all this, some still seek the glory of the past, holding onto values and traditions of the old Empire itself, seeking out adventure to restore these old values. <a href="http://valorous.wikidot.com/">Website</a> ]]></description>
  <guest connect="connect guest"/>
 </world>
 
