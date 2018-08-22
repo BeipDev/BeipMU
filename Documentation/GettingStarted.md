@@ -1,4 +1,4 @@
-#Getting Started Guide
+# Getting Started Guide
 
 This guide will introduce you to the main features of BeipMU so that you can get the most out of it.
 
