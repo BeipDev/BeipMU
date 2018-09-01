@@ -1,3 +1,14 @@
+3.00.272
+
+Modified a lot of the html & ansi text parsing (code cleanup)
+All Ansi styles now persist onto the next lines, previously only the colors persisted
+Hyperlink colors are no longer baked in, changing the color will change existing hyperlink colors now
+Fixed when copying a trigger, that the spawn action was not copied
+Fixed a crash when having multiple spawn captures at once. Now if there is an active spawn capture, spawns are ignored
+Added preliminary Pueblo support. Basic styles and clickable links work
+Changed default text encoding to CP1252 since most places are not unicode. Same as pre build 259
+In the connect dialog, if a world isn't in the list, a 'add current world' button appears
+
 3.00.271
 
 Fixed some Tilemap error checking, now tileSize and mapSize are validated (can crash if they're omitted)
