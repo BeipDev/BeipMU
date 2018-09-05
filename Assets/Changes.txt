@@ -1,3 +1,14 @@
+3.00.273
+
+Performance improvements to text layout (over 100x faster!)
+ Don't reformat single lines whose width are less than the new width
+ Switch to custom version of TextExtent, and run the layout across all CPU cores
+ Raised the default history limit from 1,000 to 10,000 lines (though even 100,000 or more is super fast when resizing now)
+Performance improvement to non regex trigger searches (2x faster)
+Performance improvement in receiving new text
+ Helped by above improvments, but profiles showed that a lot of time was spend updating the scrollbars. Now they update once instead of per line.
+Fixed a regression from the previous build where the emoji tip of the day was not showing colorized emojis
+
 3.00.272
 
 Modified a lot of the html & ansi text parsing (code cleanup)
