@@ -8,6 +8,7 @@ Performance improvement to non regex trigger searches (2x faster)
 Performance improvement in receiving new text
  Helped by above improvments, but profiles showed that a lot of time was spend updating the scrollbars. Now they update once instead of per line.
 Fixed a regression from the previous build where the emoji tip of the day was not showing colorized emojis
+Fixed Help->Contents... link to point to Github and not the old Reddit wiki
 
 3.00.272
 
