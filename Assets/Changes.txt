@@ -1,3 +1,11 @@
+3.00.274
+
+Add 'Find...' right click option to Spawn windows to search for text in them
+Increase size limits of aliases, macros, and other misc text fields to 64K (from 256).
+Add split views to all of the text output windows, accessible through right click & middle mouse button
+Add ability to change UI font in preferences dialog (most useful for Linux users to pick a better font match)
+Changed send triggers to be as though the sent text was typed, so commands like '/delay' can be used
+
 3.00.273
 
 Performance improvements to text layout (over 100x faster!)
