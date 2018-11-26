@@ -1,8 +1,18 @@
+3.00.275
+
+Use Chakra JavaScript engine when available (Windows 10+ usually). This enables EcmaScript 6+ support vs ActiveScript's EcmaScript 3
+Modified 'window.titleprefix' to also show up in the taskbar tabs
+Increased length of keyboard macro text to 64K
+Modified multiline edit fields to show a scroll bar and allow for direct enter
+Fixed a bug where the text window's 'Paragraph Spacing' and 'Wrapped line indent' didn't stick properly on relayout
+Fixed a Windows 7 bug introduced in the previous build where the mouse wheel will cause a hang
+Fixed a spelling bug where things like right clicking on "fasle" in "true/fasle" would give suggestions for "true" instead of "false"
+
 3.00.274
 
+Add split views to all of the text output windows, accessible through right click & middle mouse button
 Add 'Find...' right click option to Spawn windows to search for text in them
 Increase size limits of aliases, macros, and other misc text fields to 64K (from 256).
-Add split views to all of the text output windows, accessible through right click & middle mouse button
 Add ability to change UI font in preferences dialog (most useful for Linux users to pick a better font match)
 Changed send triggers to be as though the sent text was typed, so commands like '/delay' can be used
 
