@@ -375,6 +375,8 @@ library BeipMU
       [propget] HRESULT Windows([out, retval] IWindows **retval);
       [propget] HRESULT Triggers([out, retval] ITriggers **retval);
 
+      [propget] HRESULT ConfigPath([out, retval] BSTR *retval);
+
       HRESULT NewTrigger([out, retval] ITrigger **retval);
 
       HRESULT NewWindow_FixedText([in, optional, defaultvalue(80)] int iWidth, [in, optional, defaultvalue(25)] int iHeight, [out, retval] IWindow_FixedText** retval);
@@ -401,6 +403,9 @@ library BeipMU
       // function Lookup(hostip) { window.output.write(hostip); } app.ForwardDNSLookup("www.msn.com", Lookup);
 
       HRESULT IsAddress([in] BSTR bstrIP, [out, retval] BOOL *pResult);
+
+      HRESULT PlaySound([in] BSTR filename, [in, optional, defaultvalue(1.0)] float volume);
+      HRESULT StopSounds();
 
       HRESULT OutputDebugHTML([in] BSTR bstr);
       HRESULT OutputDebugText([in] BSTR bstr);
