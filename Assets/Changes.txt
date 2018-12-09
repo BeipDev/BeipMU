@@ -1,3 +1,12 @@
+3.00.276
+
+Added 'Split on page up' to text window options
+Added 'Description' field to triggers
+Fixed a bug where spawn windows set keyboard focus to window they appear in, even if it's not the active tab
+Fixed Triggers/Aliases/Keyboard Macros so that 'Copy' always works and copies into the right place (previously only worked in triggers and copied in the wrong order)
+Fixed a bug where script hooks would crash when Chakra was in use (it just wasn't hooked up yet)
+Fixed a bug where undocked spawn windows wouldn't repaint
+
 3.00.275
 
 Use Chakra JavaScript engine when available (Windows 10+ usually). This enables EcmaScript 6+ support vs ActiveScript's EcmaScript 3
