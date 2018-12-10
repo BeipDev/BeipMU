@@ -2,11 +2,7 @@
 <worlds>
 
 <world name="LambdaMOO" host="lambda.moo.mud.org:8888" encoding="CP1252" keywords="moo|social">
- <description><![CDATA[MUD stands for multi-user dungeon (or multi-user dimension). It is a term used to describe a group of multi-user, interactive, text based virtual reality systems. MUD's were originally developed as interactive, networked game systems akin to Dungeons & Dragons and other hack-and-slash games. Since the development of the first MUD's in the late 70's, a number of derivations have appeared, and there is now a multitude of systems and acronyms (MUD, MOO, MUSH, 
-
-
-
-, WOO etc.) While these systems all differ in some aspect, they are all MUD's.
+ <description><![CDATA[MUD stands for multi-user dungeon (or multi-user dimension). It is a term used to describe a group of multi-user, interactive, text based virtual reality systems. MUD's were originally developed as interactive, networked game systems akin to Dungeons & Dragons and other hack-and-slash games. Since the development of the first MUD's in the late 70's, a number of derivations have appeared, and there is now a multitude of systems and acronyms (MUD, MOO, MUSH, MUCK, WOO etc.) While these systems all differ in some aspect, they are all MUD's.
 
 MOO's are somewhat different from MUD's under the hood, but the main difference lies in their use. A MUD is a system which is organized as an online game, and which places heavy restrictions on who can contribute to the world (by building new places etc). A MOO is a system that is usually centered around communication instead of gaming, and which invites a large part of its members to extend and contribute to the world (constructivist enviroments). LambdaMOO was the first MOO, and continues to be one of the most active. It is the source for the most popular System releases, and a well established forum for all things related to online communities.
 
