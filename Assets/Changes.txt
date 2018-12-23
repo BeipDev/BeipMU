@@ -1,3 +1,12 @@
+3.00.277
+
+Added 'Limit to once every [x] seconds' trigger cooldown option
+Added redefinable keyboard shortcuts to 'Convert Returns to %R' and 'Convert Tabs to %T'
+Added '\grab' command support for those servers that support it
+Added an overwrite confirmation when exporting a config file
+Fill in the date as the initial filename when logging manually
+Fixed a bug where Chakra.dll was not optional on the x64 build (only applies to pre Windows 10 users)
+
 3.00.276
 
 Added 'Split on page up' to text window options
