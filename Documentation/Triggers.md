@@ -18,19 +18,28 @@ We want to make it more visible.
 Go to Options > Triggers
 
 You now have three options. 
-You can make a trigger just for one Character. (A Local Trigger)
-You can make a trigger that applies to all characters on a server.
-You can make a trigger that applies to all characters on all servers (A Global Trigger)
+
+* You can make a trigger just for one Character. (A Local Trigger)
+* You can make a trigger that applies to all characters on a server.
+* You can make a trigger that applies to all characters on all servers (A Global Trigger)
+
 In this example we will make it a Local trigger - You can change this later.
 
 Select your character name.
+
 Click the New button
+
 In the “Description” text box, add a name that makes sense like “**Highlight Pages To Me**”: This name can be anything you like. Try to keep each trigger named differently, as it will make things easy for editing them later.
-In the Matcheroo text field, we are going to add some text to match on:
+
+In the Matcharoo text field, we are going to add some text to match on:
+
     pages, 
+
 This will make Beipmu match “pages, “.
+
 In the Appearamce tab, tick the check box for “Change Foreground” - You can use the Foreground button to pick a colour if you like or leave it as the default. Optionally you can select **bold**, *Italic*, Underline, Strikeout or Flashing. Or any ***combination*** you like.
 Optionally you can change the background colour, and even the font.
+
 Finally there is an option marked “Whole Line”: Selecting this will apply your colours and styles to the entire line of text, before and after “pages, “.
 
 ## Duplicating a trigger
@@ -40,6 +49,7 @@ Select your trigger “**Highlight Pages To Me**” and copy it.
 ## Editing a Trigger
 In the new trigger, change the empty Description to “Highlight Pages From Me”.
 In the Matcheroo field, change the match text to: 
+
     You page,
 
 Hit the “OK” button and now page yourself hello. Your incoming and out-going page should now be highlighted.
@@ -47,16 +57,24 @@ Hit the “OK” button and now page yourself hello. Your incoming and out-going pag
 # Regular Expressions
 
 ## What is Regular Expression
+
 It’s a way to explain to a computer what you want it to look for. It contains codes for ‘Any of these things’, ‘Not that’, ‘Pretty much anything’, and ‘Only if it’s the start of the line’.
+
 You can use websites like https://regexr.com to test your Regular Expression (RegEx) code on any text you like, as well as use it’s built in reference guide.
+
 ## Why would I need it?
+
 Sometimes a simple match won’t do the job, or you might want to have a trigger match on more than one thing.
 In our example we have:
+
     You page, "hello" to Yourname.
     Somebodyname pages, "hello" to you.
+
 In the simple match we used “pages, ” and “You page,” - But that can lead to the trigger activating incorrectly. For example:
-“Every so often you page through a book and see something amazing”
+
+    “Every so often you page through a book and see something amazing”
 This would cause your trigger to fire.
+
 We can however use RegEx to fix this and combine both triggers into one.
 In your trigger, select the “Regular Epression” option.
 Now we want to tell BeipMu that we only want this trigger to activate if the text is at the start of the line. To do this we use ^.
@@ -67,18 +85,26 @@ This match “You page, “hello!” to Anyname” - But it won’t match “Anyname pages, 
 The reason is that we have told Beip that the text **has to be** the start of the line.
 We can get around this by describing what we expect to see at the beginning of the line: A name.
 In this case we know a name is a bunch of letter (Or even letters and numbers), followed by a space. Sometimes there’s two or more names, and they might even have a hyphen:
+
     Alex
     Alex51
     Alex Smith
     Alex-Smith
+
 So say “We’re looking for a set of things that aren’t spaces or line ending codes (Called White Space), followed by a space. There may be more than one of these.”
-\S means ‘A character that isn’t whitespace’
-. means ‘Any single character - number, letter, punctuation, space.’
-+ means ‘One or more of the thing that was jsut before me’
+
+* \S means ‘A character that isn’t whitespace’
+* . means ‘Any single character - number, letter, punctuation, space.’
+* + means ‘One or more of the thing that was jsut before me’
+
 This means we can say:
+
     \S.+ pages,
+
 And Beip will understand that it should look for “Anyname pages,”. So let’s add it to our trigger:
+
     ^(You page,|\S.+pages,)
+
 This should now match any page that comes in or goes out, with one line.
 
 
