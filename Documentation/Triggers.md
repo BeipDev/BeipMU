@@ -10,8 +10,8 @@ Luckily, this is *very easy.*
 ## Your first trigger
 Here is our text:
 
-You page, "hello" to Yourname.
-Somebodyname pages, "hello" to you.
+    You page, "hello" to Yourname.
+    Somebodyname pages, "hello" to you.
 
 We want to make it more visible.
 
@@ -27,7 +27,7 @@ Select your character name.
 Click the New button
 In the “Description” text box, add a name that makes sense like “**Highlight Pages To Me**”: This name can be anything you like. Try to keep each trigger named differently, as it will make things easy for editing them later.
 In the Matcheroo text field, we are going to add some text to match on:
-pages, 
+    pages, 
 This will make Beipmu match “pages, “.
 In the Appearamce tab, tick the check box for “Change Foreground” - You can use the Foreground button to pick a colour if you like or leave it as the default. Optionally you can select **bold**, *Italic*, Underline, Strikeout or Flashing. Or any ***combination*** you like.
 Optionally you can change the background colour, and even the font.
@@ -40,7 +40,7 @@ Select your trigger “**Highlight Pages To Me**” and copy it.
 ## Editing a Trigger
 In the new trigger, change the empty Description to “Highlight Pages From Me”.
 In the Matcheroo field, change the match text to: 
-You page,
+    You page,
 
 Hit the “OK” button and now page yourself hello. Your incoming and out-going page should now be highlighted.
 
@@ -52,8 +52,8 @@ You can use websites like https://regexr.com to test your Regular Expression (Re
 ## Why would I need it?
 Sometimes a simple match won’t do the job, or you might want to have a trigger match on more than one thing.
 In our example we have:
-You page, "hello" to Yourname.
-Somebodyname pages, "hello" to you.
+    You page, "hello" to Yourname.
+    Somebodyname pages, "hello" to you.
 In the simple match we used “pages, ” and “You page,” - But that can lead to the trigger activating incorrectly. For example:
 “Every so often you page through a book and see something amazing”
 This would cause your trigger to fire.
@@ -62,23 +62,23 @@ In your trigger, select the “Regular Epression” option.
 Now we want to tell BeipMu that we only want this trigger to activate if the text is at the start of the line. To do this we use ^.
 Secondly we want to tell it that we’d like it to fire on one of two matches.
 We can do this by putting ( ) around the text, and adding | between each option.
-^(You page,|pages,)
+    ^(You page,|pages,)
 This match “You page, “hello!” to Anyname” - But it won’t match “Anyname pages, “hello!” to you.”
 The reason is that we have told Beip that the text **has to be** the start of the line.
 We can get around this by describing what we expect to see at the beginning of the line: A name.
 In this case we know a name is a bunch of letter (Or even letters and numbers), followed by a space. Sometimes there’s two or more names, and they might even have a hyphen:
-Alex
-Alex51
-Alex Smith
-Alex-Smith
+    Alex
+    Alex51
+    Alex Smith
+    Alex-Smith
 So say “We’re looking for a set of things that aren’t spaces or line ending codes (Called White Space), followed by a space. There may be more than one of these.”
 \S means ‘A character that isn’t whitespace’
 . means ‘Any single character - number, letter, punctuation, space.’
 + means ‘One or more of the thing that was jsut before me’
 This means we can say:
-\S.+ pages,
+    \S.+ pages,
 And Beip will understand that it should look for “Anyname pages,”. So let’s add it to our trigger:
-^(You page,|\S.+pages,)
+    ^(You page,|\S.+pages,)
 This should now match any page that comes in or goes out, with one line.
 
 
@@ -198,7 +198,7 @@ BeipMu will display the text that was matched with \0
 \0 Means ‘The whole thing that got matched, all of it’.
 
 In a Regular Expression match, each subset that is in brackets is a capture group e.g. 
-(Alex|Betty|Chaz) (has (partially disconnected|disconnected) somewhere on the MUCK!)
+    (Alex|Betty|Chaz) (has (partially disconnected|disconnected) somewhere on the MUCK!)
 Each capture group is automatically numbered. The incoming text is:
 Betty has partially disconnected somewhere on the MUCK!
 \0 would result in “Betty has partially disconnected somewhere on the the MUCK!” as it is all of the groups.
@@ -208,28 +208,29 @@ Betty has partially disconnected somewhere on the MUCK!
 
 We can use these in our text filter:
 Filter is:
-[Message] \1 has \2!
+    [Message] \1 has \2!
 Resulting in:
-[Message] Betty has partially disconnected!
-***Notes on text***
+    [Message] Betty has partially disconnected!
+#### Notes on text
 As BeipMu is a modern client, it supports unicode characters, accented text and Emoji. You can therefore paste in any text you like. If you have enabled a spawn window, the filtered text and all other options will be applied before the output is sent to the window.
 
-**Activate**
+### Activate
 This is a useful option that enables you to decide whether a match to your trigger sends an activity message.
-***Activate window on trigger***
+#### Activate window on trigger
 If your window is behind another app or not focused, this option will make BeipMu pop up in front of you like a needy puppy.
-***Don’t Show as activity***
+#### Don’t Show as activity
 If this option is ticked, there will be no indication that something happened: No flashing icon or tabs.
 
-**Script**
+### Script
 If you have written a script for BeipMu, you can have it run as the result of a trigger.
-***Enabled***
+#### Enabled
 Turns the option on, or off.
-***Name of the function to call***
+#### Name of the function to call
 Some sort of wizardy goes on here. I don’t trust it.
+(All you put here is the function name, not the script. This is so that the scripts can be compiled in advance and execute efficiently.)
 
-**Toast**
+### Toast
 This does not warm some bread into a deliciously crunchy snack suitable as a substrate for jams, preserves, marmalade, scrambled eggs or baked beans. In future versions this may be implemented, but at the present time it makes Windows display a pop-up notification called a ‘Toast notification’.
-***Toast message when trigger hits***
+#### Toast message when trigger hits
 This option just turns the feature on or off.
 There is no other option here - A small notification pops up with the matched text on it. This is most useful for triggers that fire when you are not currently using BeipMu, but it is running in the background. You can create triggers that let you know when people log in, or send you messages or any other event you deem important.
