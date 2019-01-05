@@ -1,15 +1,13 @@
-Title: Beipmu Manual Triggers  
-Author:   
+# Triggers
 
-**Triggers**
-**What is a trigger?**
+## What is a trigger?
 A trigger is a set of actions that is performed when an event occurs that matches it’s criteria.
 For example:
 If you receive a Page from a friend, you might like it to be a different color from the rest of your text.
 To to this you need to have some text for Beipmu to Match, and then an action to perform.
 Luckily, this is *very easy.*
 
-**Your first trigger**
+## Your first trigger
 Here is our text:
 
 You page, "hello" to Yourname.
@@ -35,22 +33,23 @@ In the Appearamce tab, tick the check box for “Change Foreground” - You can use 
 Optionally you can change the background colour, and even the font.
 Finally there is an option marked “Whole Line”: Selecting this will apply your colours and styles to the entire line of text, before and after “pages, “.
 
-**Duplicating a trigger**
+## Duplicating a trigger
 If you now press the “Copy” button, the trigger you have selected will be duplicated. It’s Description will be removed.
 Select your trigger “**Highlight Pages To Me**” and copy it.
 
-**Editing a Trigger**
+## Editing a Trigger
 In the new trigger, change the empty Description to “Highlight Pages From Me”.
 In the Matcheroo field, change the match text to: 
 You page,
 
 Hit the “OK” button and now page yourself hello. Your incoming and out-going page should now be highlighted.
 
-**Regular Expression**
-**What is Regular Expression**
+# Regular Expressions
+
+## What is Regular Expression
 It’s a way to explain to a computer what you want it to look for. It contains codes for ‘Any of these things’, ‘Not that’, ‘Pretty much anything’, and ‘Only if it’s the start of the line’.
 You can use websites like https://regexr.com to test your Regular Expression (RegEx) code on any text you like, as well as use it’s built in reference guide.
-**Why would I need it?**
+## Why would I need it?
 Sometimes a simple match won’t do the job, or you might want to have a trigger match on more than one thing.
 In our example we have:
 You page, "hello" to Yourname.
@@ -83,110 +82,112 @@ And Beip will understand that it should look for “Anyname pages,”. So let’s add 
 This should now match any page that comes in or goes out, with one line.
 
 
-**Advanced ****options**
-**Processing order**
+## Advanced options
+
+### Processing order
 BeipMu will process triggers in heirachy order. Either the Global triggers first, then the Server Triggers then the Character specific triggers, or the other way around, and Character triggers will fire first, then Server, then Global
 ***Processing order of trigger note***
-Triggers are chacked from teh top of the list, then down to the bottom. If you need them to fire in a specific order you can drag them around. It is possible to drag a trigger from Chracter to Server or Global and vice versa if you need to.
-**Description**
+Triggers are chacked from the top of the list, then down to the bottom. If you need them to fire in a specific order you can drag them around. It is possible to drag a trigger from Chracter to Server or Global and vice versa if you need to.
+
+### Description
 Text, for your benefit that lets you describe what this trigger is doing. You can leave it blank - BeipMu doesn’t care that you didn’t put any effort in.
-**Matcheroo**
+### Matcheroo
 This is where you match text or regular expression goes.
-**Match Case**
+### Match Case
 In a simple Matcheroo trigger, this tells Beipmu that if the match text is “Page”, then it should only match “Page” with a capital P, and not “page”. It is off by default.
-**Whole Word**
+### Whole Word
 By default, BeipMu will look for a match, even inside other words. So “page” will also match “pages, paged, empaged’. Tick this box to make sure BeipMu matches what you expect it to match unless you need it to do otherwise.
-**Line Start With**
+### Line Start With
 Exactly what it seems: This makes BeipMu only fire a trigger if the line starts with the match text. It will ignore it otherwise.
-**Line Ends With**
+### Line Ends With
 Fires the trigger only if the line of texts ends with what’s in Matcheroo.
-**Limit to once every…**
+### Limit to once every…
 You can put a cool down timer on your trigger so it won’t fire for X seconds, where X is the number of seconds you type in.
-**Stop Processing**
+### Stop Processing
 If you need it to, you can make BeipMu stop processing any further triggers if this is checked.
-**Once Per Line**
+### Once Per Line
 This tells BeipMu to only run this trigger the first time it sees a match, not every time it sees one in a single line of text.
-**Only When..**
-***Away***
+### Only When..
+* Away
 Only fire this trigger when BeipMu isn’t the window that’s being used.
-***Present***
+* Present
 Only fire this if you’re using BeipMu.
-***Once***
+### Once
 Fire this trigger once and never again.
 
-**The Tabs**
+## The Tabs
 The various tabs control the output of the triggers:
 
-**Appearance**
+### Appearance
 This changes the appearance of text:
-***Font***
+#### Font
 When selected, this enable you to pick a font. Leave this blank to use the default “output window” font. You can select forn as well as size and type, if more than one style is supported. For example Thin, Regular, Black.
-***Foreground***
+#### Foreground
 This selects the font’s colour.
-***Background***
+#### Background
 This changes the background colour for the text. It does not extend to the edge of the screen, it **only** is applied to the area of the text.
-**Font styles**
+#### Font styles
 These may all be selected not at all, singly or in any combination, apart from “Use fast flash” which can only be enabled if “Flashing” is also selected.
-***Bold***
+#### Bold
 Makes the font **Bold.**
-***Italic***
+#### Italic
 Makes fonts *Italic.*
-***Underline***
+#### Underline
 Makes fonts Underlined.
-***Strikeout***
+#### Strikeout
 Puts a line through the text.
-***Flashing***
+#### Flashing
 Makes the text flash.
 “Use fast flash” makes it flash *faster!*
 
-**Sound**
+### Sound
 This enables you to add a sound to your trigger
-***Play sound***
+#### Play sound
 Enables you to turn the audio on or off
-***Browse***
+#### Browse
 Lets you look for a sound file. Any file supported by Windows is available.
-***Play***
+#### Play
 Lets you check you got the right file.
 
-**Gag**
-This panel helps you remove unwanted text  from your screen using a trigger. It does **not** have to eb enabled to remove text form your main window to a spawn panel.
-***Gag this line***
+### Gag
+This panel helps you remove unwanted text  from your screen using a trigger. It does **not** have to be enabled to remove text form your main window to a spawn panel.
+#### Gag this line
 The main event. Tick this and whatever is matched will not be displayed.
-***Gag this line in the log file***
+#### Gag this line in the log file
 This option prevents the text from being logged.
-***Gag messages (For gag testing)***
+#### Gag messages (For gag testing)
 This removes the matched text and then replaces it with a message stating that a line was removed. Used for testing or if you like knowing that the trigger is active.
 
-**Spawn**
+### Spawn
 This option creates a panel on the right of your main window that has the same settings as your main window, but does not have an input bar. Any matched text will be moved to the spawn window.
 Spawn windows can be moved to any edge of the main window or, using ctrl and dragging, pulled off and left as a floating window. They can be re-attached at any time.
 Spawn windows can be re-sized at will
-***Active***
+#### Active
 Simply put, this lets you turn the window on or off. If it’s off, nothing happens - the trigger runs all it’s other options as normal. If this is on, then it will create a spawn window.
-***Window Title***
+#### Window Title
 A title so you can see what window is doing what. This is displayed on the title bar of the spawn window panel.
-***Capture Until***
-If you need to capture more than one line, you can use regular expression to define teh ‘end capture’ scenario:
+#### Capture Until
+If you need to capture more than one line, you can use regular expression to define the ‘end capture’ scenario:
 In this scenario the command “+stare” will generate a list of everyone in the room, their ‘doing’ tags and idle time. The output always starts with “You stare at everyone:” and ends with “All done!”
 Therefore the main Trigger should be “You stare at everyone:” and the ‘Capture until’ match should be “All done!”
 
-**Send**
+### Send
 This enables you to send text back to the MU* if the trigger fires.
-***Send text***
+#### Send text
 Toggles this action on, or off.
-***Text to be sent***
+#### Text to be sent
 The actual text you wish to send
-***Example***
+#### Example
 If you enable the “away” option, and set your main trigger to detect an incoming page, you could set your text to
 Page #R=[Automatic message] sorry I’m not here right now I’ll reply when I get back.
 
-**Filter**
+### Filter
 The Filter option allows you to change the incoming text form the MU* using a set of capture numbers. It optionally lets you use the Pueblo HTML subset.
-***Filter Text***
+#### Filter Text
 Enables or disables this option.
-***Parse HTML Tags on replacement***
+#### Parse HTML Tags on replacement
 Allows use of the PUEBLO HTML subset.
-***Text to replace match text with***
+#### Text to replace match text with
 This is where you type the text you want.
 In a simple match, you can type the text you want. For example
 Match text is: *has disconnected somewhere on the MUCK!*
