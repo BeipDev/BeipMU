@@ -6,11 +6,13 @@ Note! This was started by copying some of the items from our help file, it's pro
 
 [Command Line Commands](CommandLine.md)
 
-Triggers (not written, any volunteers?)
+[Triggers](Triggers.md)
 
 [Aliases](Aliases.md)
 
 [Scripting](Scripting.md)
+
+[Spawn Windows](Spawn Windows.md)
 
 [Change Log](../Assets/Changes.txt)
 

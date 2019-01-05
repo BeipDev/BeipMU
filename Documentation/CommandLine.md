@@ -23,7 +23,9 @@
   - [/rawnetwork](#rawnetwork)
   - [/recall](#recall)
   - [/resetscript](#resetscript)
+  - [/silence](#silence)
   - [/slist](#slist)
+  - [/switchtab](#spawntab)
   - [/ttype](#ttype)
   - [/wall](#wall)
 
@@ -241,6 +243,13 @@ Usage:
 
 Will reset the current scripting engine, removing all currently running scripts and hooks.  This will also switch the scripting language to what is currently set in the preferences dialog, so the language can change after this. 
 
+## /silence
+Usage:
+
+    /silence
+
+Stops all currently playing sounds. Useful to stop a long sound that's playing
+
 ## /slist 
 Usage:
 
@@ -248,16 +257,23 @@ Usage:
 
 Lists all of the server shortcuts, showing the shortcut, host name, and port as a list in the output window 
 
+## /switchtab
+Usage:
+
+    /switchtab <tab group> <tab name>
+
+Makes the 'tab name' in the spawn tab window 'tab group' visible. Useful to see activity just by using the keyboard.
+
 ## /ttype
 Usage:
 
-    /ttype $
+    /ttype <type>
 
 Set telnet terminal type (Default = "Beip"). With this you can pretend to be any other terminal type.
 
 ## /wall
 Usage:
 
-    /wall $
+    /wall <string>
 
 Sends the given string to every connection.
