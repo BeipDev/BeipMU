@@ -1,3 +1,13 @@
+3.00.278
+
+Added spawn tabs! Just specify a 'Tab group' name for a spawn trigger and multiple spawn windows will appear as a single tabbed window.
+Fixed regex search bug, where it wasn't skipping the previous match properly, which caused extra invalid matches (for example quoted text would not match correctly)
+Fixed bug where copy trigger were not copying the new cooldown values (instead it had garbage values)
+Fixed new triggers/aliases/macros appearing at the right location in the list if folders are used
+Fixed a hopefully rare bug where there might be a crash on shutdown due to the OS timer not being reset properly
+Fixed a bug where 'Log from beginning...' would not log as html properly (bug was in the new unicode filename chooser)
+Fixed a Windows 7 bug where bitmap fonts would not layout correctly (like FixedSys)
+
 3.00.277
 
 Added 'Limit to once every [x] seconds' trigger cooldown option
