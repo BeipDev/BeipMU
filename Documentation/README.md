@@ -12,6 +12,10 @@ Note! This was started by copying some of the items from our help file, it's pro
 
 [Scripting](Scripting.md)
 
+[Tips & Tricks](Tips_and_Tricks.md)
+
+[Emoji](Emoji.md)
+
 [Spawn Windows](SpawnWindows.md)
 
 [Change Log](../Assets/Changes.txt)
