@@ -66,3 +66,7 @@ In the Filter tab I can now select 'Activate' and use the following in the text 
 Now every time I see ⭐Bob, he'll definitely stand out. Good old ⭐Bob.
 
 You could also add 💬 to the front of your incoming 'Whisper' or 'Page' highlights. Be creative, find a use for 🍤.
+
+##Swap tabs from the keyboard.
+Now **evryone** knows you can cycle tabs using Ctrl-Tab and Ctrl-Shift-Tab in BeipMu, right? ... right?
+Well you can also use alt-1 for the first tab, alt-2 for the second... and so on.
