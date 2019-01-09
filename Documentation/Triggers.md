@@ -118,7 +118,7 @@ This should now match any page that comes in or goes out, using one trigger.
 ## Advanced options
 Let's have a look at the tab options in a little more detail. Most of the settings are very straightforward and intuitive.
 
-But first we need to know in what order triggers are checked agaisnt the text. Triggers, by default, will stack: You can fire one then have a number of otehrs get applied. In this case you'd want to work out the order of events!
+But first we need to know in what order triggers are checked agaisnt the text. Triggers, by default, will stack: You can fire one then have a number of others get applied. In this case you'd want to work out the order of events!
 
 ### Processing order
 BeipMu will process triggers in heirachy order. Either the Global triggers first, then the Server Triggers then the Character specific triggers, or the other way around, and Character triggers will fire first, then Server, then Global
@@ -145,7 +145,7 @@ If you need it to, you can make BeipMu stop processing any further triggers if t
 This tells BeipMu to only run this trigger the first time it sees a match, not every time it sees one in a single line of text.
 ### Only When..
 * Away
-Only fire this trigger when BeipMu isn’t the window that’s being used. If you have BeipMu open and you're using it, the window is **in focus**. If you ware using anotehr window, then BeipMu is **out of focus**.
+Only fire this trigger when BeipMu isn’t the window that’s being used. If you have BeipMu open and you're using it, the window is **in focus**. If you ware using another window, then BeipMu is **out of focus**.
 * Present
 Only fire this if BeipMu is **in focus**.
 ### Once
