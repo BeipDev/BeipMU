@@ -35,7 +35,7 @@ In the "Matcharoo" text field, we are going to add some text to match on:
 
     pages, 
 
-This will make Beipmu match “pages, “. This is a simple trigger that jsut looks for text, like you'd see in the main window.
+This will make Beipmu match “pages, “. This is a simple trigger that just looks for text, like you'd see in the main window.
 
 In the "Appearance" tab, tick the check box for “Change Foreground” - We'll go through the options in more detail later on - For now, You can use the Foreground button to pick a colour for your text if you like, or leave it as the default. Optionally on the right you can select **bold**, *Italic*, _Underline_, ~Strikeout~ or Flashing. Or any ***combination*** you like.
 Optionally you can change the background colour, and even the font.
@@ -60,7 +60,7 @@ Hit the “OK” button, and now page yourself a friendly "Hello!". Your incomin
 
 It’s a way to explain to a computer what you want it to look for. It contains codes for ‘Any of these specific things things’, ‘Not that’, ‘Pretty much anything’, and ‘Only if it’s the start of the line’ and many other useful concepts.
 
-You can use websites like https://regexr.com to test your Regular Expression (RegEx) code on any text you like (You can jsut copy and paste it from BeipMu), as well as use it’s built in reference guide.
+You can use websites like https://regexr.com to test your Regular Expression (RegEx) code on any text you like (You can just copy and paste it from BeipMu), as well as use it’s built in reference guide.
 
 ## Why would I need it?
 
@@ -78,7 +78,7 @@ This would cause your trigger to fire.
 
 We can however use RegEx to fix this and combine both triggers into one.
 
-In your trigger, select the “Regular Epression” option.
+In your trigger, select the “Regular Expression” option.
 
 Now we want to tell BeipMu that we only want this trigger to activate if the text is at the start of the line. To do this we use ^.
 
@@ -103,7 +103,7 @@ So to explain to BeipMu that “We’re looking for a set of things that aren’
 
 * \S means ‘A character that isn’t whitespace'. E.g a letter, number or punctuation.
 * . means ‘Any single character - number, letter, punctuation, space.’
-* \+ means ‘One, or more of the thing that was jsut before me’
+* \+ means ‘One, or more of the thing that was just before me’
 
 This means we can say:
 
@@ -118,7 +118,7 @@ This should now match any page that comes in or goes out, using one trigger.
 ## Advanced options
 Let's have a look at the tab options in a little more detail. Most of the settings are very straightforward and intuitive.
 
-But first we need to know in what order triggers are checked agaisnt the text. Triggers, by default, will stack: You can fire one then have a number of otehrs get applied. In this case you'd want to work out the order of events!
+But first we need to know in what order triggers are checked agaisnt the text. Triggers, by default, will stack: You can fire one then have a number of others get applied. In this case you'd want to work out the order of events!
 
 ### Processing order
 BeipMu will process triggers in heirachy order. Either the Global triggers first, then the Server Triggers then the Character specific triggers, or the other way around, and Character triggers will fire first, then Server, then Global
@@ -145,7 +145,7 @@ If you need it to, you can make BeipMu stop processing any further triggers if t
 This tells BeipMu to only run this trigger the first time it sees a match, not every time it sees one in a single line of text.
 ### Only When..
 * Away
-Only fire this trigger when BeipMu isn’t the window that’s being used. If you have BeipMu open and you're using it, the window is **in focus**. If you ware using anotehr window, then BeipMu is **out of focus**.
+Only fire this trigger when BeipMu isn’t the window that’s being used. If you have BeipMu open and you're using it, the window is **in focus**. If you ware using another window, then BeipMu is **out of focus**.
 * Present
 Only fire this if BeipMu is **in focus**.
 ### Once
@@ -206,7 +206,7 @@ Ok that was cute the first time but... yeesh! So let's just slip
 
 ### Spawn
 This option creates a panel on the right of your main window that has the same color and font settings as your main window, but does not have an input bar. Any matched text will be moved to the spawn window.
-Spawn windows can be moved to any edge of the main window or, using ctrl, pulled off and left as a floating window. They can be re-attached at any time by jsut dragging them back onto the main window.
+Spawn windows can be moved to any edge of the main window or, using ctrl, pulled off and left as a floating window. They can be re-attached at any time by just dragging them back onto the main window.
 Spawn windows can be re-sized at will, and stacked side-by-side or on top of each other. You can re-arrange the order or get rid of the: They will re-appear next time a trigger is fired that specifies one.
 #### Active
 Simply put, this lets you turn the window on or off. If it’s off, nothing happens - the trigger runs all it’s other options as normal. If this is on, then it will create a spawn window when the trigger fires.
