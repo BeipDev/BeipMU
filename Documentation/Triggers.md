@@ -78,7 +78,7 @@ This would cause your trigger to fire.
 
 We can however use RegEx to fix this and combine both triggers into one.
 
-In your trigger, select the “Regular Epression” option.
+In your trigger, select the “Regular Expression” option.
 
 Now we want to tell BeipMu that we only want this trigger to activate if the text is at the start of the line. To do this we use ^.
 
