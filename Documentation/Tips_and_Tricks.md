@@ -87,4 +87,4 @@ And the command to send text to the channel is:
 
 ... And that means if you open up the connection list, select your character, and hit the **New** button, and make a Puppet window, you can use `[Public]` as the 'Receive Prefix' and and `scream public=` as the "Send Prefix".
 
-Now you have an entire window just for that channel! Don't forget: If you already set up triggers for channels, you might need to exempt any that are being used with a puppet window, or else you might find the conflict causes ingoble and shameful failure.
+Now you have an entire window just for that channel! Don't forget: If you already set up triggers for channels, you might need to exempt any that are being used with a puppet window, or else you might find the conflict causes ignoble and shameful failure.
