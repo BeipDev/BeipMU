@@ -5,7 +5,7 @@ There are many features in BeipMU - Some more obvious than others. This guide le
 ## Clear things down.
 The input window is of course where you type everything you want to send to the MU*.
 Sometimnes you'll want to clear everything out - Luckily there's:
-    `/clear`
+`/clear`
 This removes all the text from your main window.
 
 ## Pause your typing, come back to it.
@@ -29,7 +29,7 @@ You can re-set your default font to anything you like... Or you can mix and matc
 The default font for BeipMU can be set to Consolas. But you can then create a new trigger called 'Quoted text'.
 Tick the Regular Expression option and paste:
 
-    (?:"\S[^"]+\S")
+`(?:"\S[^"]+\S")`
 
 Into Matcheroo.
 
@@ -40,7 +40,7 @@ You may of course choose any font or colour, or only one of these option. But we
 ## Talk to me (Sort of)?
 While BeipMU cannot currently use speech synthesis to tell you what is happening, you can use an online service such as
 
-    http://www.fromtexttospeech.com
+`http://www.fromtexttospeech.com`
 
 To create spoken sound files, such as 'New message', which can be used with your triggers - Especially with the 'Only when... Away' option.
 
@@ -61,14 +61,14 @@ I have created a new trigger called 'My buddy Bob' - "Bob" is the matcheroo text
 
 In the Filter tab I can now select 'Activate' and use the following in the text box:
 
-      ⭐\0
+`⭐\0`
 
 Now every time I see ⭐Bob, he'll definitely stand out. Good old ⭐Bob.
 
 You could also add 💬 to the front of your incoming 'Whisper' or 'Page' highlights. Be creative, find a use for 🍤.
 
-##Swap tabs from the keyboard.
-Now **evryone** knows you can cycle tabs using Ctrl-Tab and Ctrl-Shift-Tab in BeipMu, right? ... right?
+## Swap tabs from the keyboard.
+Now **everyone** knows you can cycle tabs using Ctrl-Tab and Ctrl-Shift-Tab in BeipMu, right? ... right?
 Well you can also use alt-1 for the first tab, alt-2 for the second... and so on.
 
 ## Better Channel Chat
@@ -79,7 +79,7 @@ While it's pretty easy to group your channels into a window, because channels ha
 
 Our channel name is `[Public]` and our command is `Scream` because apparently it's PossumMUCK. All the incoming #Public channel lines look like this:
 
-`[Public] Welcome to the #public channel. Read the rules and stay out of my trash!`
+`[Public] Welcome to the #public channel. Read the rules and stay out of my trash!
 
 And the command to send text to the channel is:
 
@@ -87,4 +87,4 @@ And the command to send text to the channel is:
 
 ... And that means if you open up the connection list, select your character, and hit the **New** button, and make a Puppet window, you can use `[Public]` as the 'Receive Prefix' and and `scream public=` as the "Send Prefix".
 
-Now you have an entire window just for that channel! Don't forget: If you already set up triggers for channels, you might need to exempt any that are being used with a puppet window, or else you might find the conflict causes ingoble and shameful faiulure.
+Now you have an entire window just for that channel! Don't forget: If you already set up triggers for channels, you might need to exempt any that are being used with a puppet window, or else you might find the conflict causes ingoble and shameful failure.
