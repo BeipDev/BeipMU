@@ -70,3 +70,21 @@ You could also add 💬 to the front of your incoming 'Whisper' or 'Page' highli
 ##Swap tabs from the keyboard.
 Now **evryone** knows you can cycle tabs using Ctrl-Tab and Ctrl-Shift-Tab in BeipMu, right? ... right?
 Well you can also use alt-1 for the first tab, alt-2 for the second... and so on.
+
+## Better Channel Chat
+
+While it's pretty easy to group your channels into a window, because channels have a specific prefix for incoming and out-going lines, you can also use a **Puppet Window**.
+
+### Example
+
+Our channel name is `[Public]` and our command is `Scream` because apparently it's PossumMUCK. All the incoming #Public channel lines look like this:
+
+`[Public] Welcome to the #public channel. Read the rules and stay out of my trash!`
+
+And the command to send text to the channel is:
+
+`scream public=`
+
+... And that means if you open up the connection list, select your character, and hit the **New** button, and make a Puppet window, you can use `[Public]` as the 'Receive Prefix' and and `scream public=` as the "Send Prefix".
+
+Now you have an entire window just for that channel! Don't forget: If you already set up triggers for channels, you might need to exempt any that are being used with a puppet window, or else you might find the conflict causes ingoble and shameful faiulure.
