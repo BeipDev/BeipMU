@@ -300,3 +300,68 @@ This option just turns the feature on or off.
 There is no other option here because it's beautifully simple:- A small notification pops up with the matched text on it, and windows plays it's default chime.
 
 This is most useful for triggers that are set to fire when BeipMu is not in focus. For example, you already have a trigger that matches pages and colors them, but you can duplicate it, activate "Toast message when trigger hit" and disable any other outputs that your original trigger had. Then both will run when you're away form BeipMU but only the text highlight versionw ill run when BeipMu is in focus.
+
+## Sub Triggers
+
+Each trigger can have sub-triggers that act on the text that was captured by the primary trigger. To make one, select your primary trigger and jsut hit the "New" button. You cana lso drag an existing trigger onto another to make it a sub-trigger.
+
+## Example
+
+You are capturing text that has a common prefix but the text after that is variable:
+
++ Game> Alex Checked your Stats
++ Game> Alice looked at you
++ Game> Bulletin Board Updated (BBoard 2/34: New rules for IC combat in the Golen Arena)
++ Game> Grognog has placed a bounty for Unpaid Bar Tab on you!
+
+The captured text for the Primary trigger is passed to the sub triggers, so if you used:
+
+`^Game> (.*)`
+
+Then the Sub triggers would be operating on the text that came after "Game>" but would not include it, as (.\*) is the match group. 
+
+You could also match the entire string:
+
+`^Game> .*`
+
+And use a sub trigger to divide the text using:
+
+`^(Game>.)(.*)`
+
+Which would then allow:
+
++ \0 : Game> Alex Checked your Stats
++ \1 : Game> 
++ \2 : Alex Checked your Stats
+
+You could then use the Filter Text option of the sub trigger:
+
+`📈 \2!`
+
+Resulting in...
+
+    📈 Alex Checked your Stats!
+    
+### Sub Sub Triggers.
+
+This is a thing. Let's look at your unfortunate lapse of memory for paying your bar tab (Hey, goats milk ain't cheap!):
+
+    Primary trigger:    ^Game> .*
+    Captures:           Game> Grognog has placed a bounty for Unpaid Bar Tab on you!
+     Sub Trigger1:      ^(Game>.)(.*bounty.*)
+        Capture     \0  Game> Grognog has placed a bounty for Unpaid Bar Tab on you!
+        Capture     \1  Game>
+        Capture     \2  Grognog has placed a bounty for Unpaid Bar Tab on you!
+      Sub Sub Trigger:  (\w+\s){1,3}has placed a bounty for (.*) on you!
+                        We want to capture the name, and the reason. In this case I'm assuming that the name may be up to three words                           long, seperated by a space or punctuation. Eg. Grognor, Grognor-half-Hobbit, El'rick, Fae O'Bannon.
+        Filter:         ⚠ There was a bounty on you for \2 from \1!
+        Send Text:      $pay/bounty \1
+        Capture     \0  Grognog has placed a bounty for Unpaid Bar Tab on you!
+        Capture     \1  Grognog
+        Capture     \2  Unpaid Bar Tab
+        Result:         ⚠ There was a bounty on you for Unpaid Bar Tab from Grognor!
+                        You attempt to pay Grognor your bounty price.
+                        Insufficient funds. Grognor is coming for your knees.
+                        
+And so the wheels of justice roll on, you monster.
+        
