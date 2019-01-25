@@ -303,7 +303,7 @@ This is most useful for triggers that are set to fire when BeipMu is not in focu
 
 ## Sub Triggers
 
-Each trigger can have sub-triggers that act on the text that was captured by the primary trigger. To make one, select your primary trigger and jsut hit the "New" button. You cana lso drag an existing trigger onto another to make it a sub-trigger.
+Each trigger can have sub-triggers that act on the text that was captured by the primary trigger. To make one, select your primary trigger and just hit the "New" button. You can also drag an existing trigger onto another to make it a sub-trigger.
 
 ## Example
 
