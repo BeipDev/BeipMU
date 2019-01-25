@@ -353,7 +353,8 @@ This is a thing. Let's look at your unfortunate lapse of memory for paying your 
         Capture     \1  Game>
         Capture     \2  Grognog has placed a bounty for Unpaid Bar Tab on you!
       Sub Sub Trigger:  (\w+\s){1,3}has placed a bounty for (.*) on you!
-                        We want to capture the name, and the reason. In this case I'm assuming that the name may be up to three words                           long, seperated by a space or punctuation. Eg. Grognor, Grognor-half-Hobbit, El'rick, Fae O'Bannon.
+                        We want to capture the name, and the reason. In this case I'm assuming that the name may be up to three words
+                        long, seperated by a space or punctuation. Eg. Grognor, Grognor-half-Hobbit, El'rick, Fae O'Bannon.
         Filter:         ⚠ There was a bounty on you for \2 from \1!
         Send Text:      $pay/bounty \1
         Capture     \0  Grognog has placed a bounty for Unpaid Bar Tab on you!
