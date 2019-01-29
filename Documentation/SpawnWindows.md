@@ -13,7 +13,7 @@ Then set the 'Capture Until' to:
 # To group chat channels together:
 
 With chat channel lines resembling something like '[public] text' the regex is this:
-    ^\\[([^\\]]+)\\]
+    `^\[([^\]]+)\]`
 
 Then to have the window title be the name of the channel set 'Window Title' to
     \1
