@@ -149,7 +149,7 @@ Examples:
     /grab me/desc
     /grab frank/name
 
-On servers that support the @pemit command, it will send a command to the server so that the input window will be filled in with a command that lets you edit and update the existing value. It works by sending '@pemit me=<prefix> &<property> <object>=[get(<object>/<property>)]' to the server. The server will then respond with '<prefix> &<property> <object>=<existing value>'. BeipMU will look for a line starting with <prefix> and then place the rest of the line into the input window. Prefix is an 8-digit hex value generated each time the command is used, only one line starting with <prefix> is looked for.
+On servers that support the @pemit command, it will send a command to the server so that the input window will be filled in with a command that lets you edit and update the existing value. It works by sending `'@pemit me=<prefix> &<property> <object>=[get(<object>/<property>)]'` to the server. The server will then respond with `'<prefix> &<property> <object>=<existing value>'`. BeipMU will look for a line starting with `<prefix>` and then place the rest of the line into the input window. Prefix is an 8-digit hex value generated each time the command is used, only one line starting with <prefix> is looked for.
 
 ## /help 
 Usage:
