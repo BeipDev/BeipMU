@@ -19,6 +19,7 @@
   - [/log](#log)
   - [/logall](#logall)
   - [/new](#new)
+  - [/newinput](#newinput)
   - [/puppet](#puppet)
   - [/puppets](#puppets)
   - [/quit](#quit)
@@ -196,6 +197,13 @@ Usage:
     /new 
 
 Opens a new window. 
+
+## /newinput
+Usage:
+
+    /newinput <prefix>
+
+Opens a new input pane. If a prefix is specified, this will be sent on every line sent by the input box. Note that input panes can be docked anywhere.
 
 ## /puppet 
 Usage:
