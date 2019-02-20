@@ -8,6 +8,8 @@
   - [/clear](#clear)
   - [/close](#close)
   - [/connect](#connect)
+  - [/debugnetwork](#debugnetwork)
+  - [/debugtriggers](#debugtriggers)
   - [/disconnect](#disconnect)
   - [/echo](#echo)
   - [/gag](#gag)
@@ -20,7 +22,6 @@
   - [/puppet](#puppet)
   - [/puppets](#puppets)
   - [/quit](#quit)
-  - [/rawnetwork](#rawnetwork)
   - [/recall](#recall)
   - [/resetscript](#resetscript)
   - [/silence](#silence)
@@ -97,16 +98,17 @@ Closes the current window
 ## /connect
 Usage:
 
-    /connect <hostname> <port>
-    /connect <server shortcut>
+    /connect <hostname:port>
+    /connect <server name> <optional character name>
 
 Examples:
 
     /connect fluffmuck.org:8888
     /connect 12.23.34.45:8890
     /connect fluff
+    /connect fluff bennet
 
-This connects to the given server, in the form of hostname and port, or server shortcut.  The shortcut name is the name shown in the tree view of the edit worlds/connect dialog.  Hostnames can be a standard DNS name or just an IP address. 
+This connects to the given server, in the form of hostname:port, or server name.  The name is the name shown in the tree view of the edit worlds/connect dialog.  Hostnames can be a standard DNS name or just an IP address.
 
 ## /disconnect 
 Usage:
@@ -217,12 +219,19 @@ Shows a list of all of the available puppets for the current character.
 ## /quit
 Same as /close
 
-## /rawnetwork
+## /debugnetwork
 Usage:
 
-    /rawnetwork
+    /debugnetwork
 
 Opens up a window to show raw network traffic for the current window. Useful to figure out what's going on with prompts/telnet codes/etc!
+
+## /debugtriggers
+Usage:
+
+    /debugtriggers
+
+Opens up a window to show what triggers are being applied and what their results are. Useful to debug each step when multiple triggers are active.
 
 ## /recall 
 Usage:

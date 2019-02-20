@@ -1,4 +1,4 @@
-# Triggers
+﻿# Triggers
 
 ## What is a trigger?
 A trigger is a set of actions that is performed when an event occurs that matches it’s criteria. This is called "firing".
@@ -176,6 +176,23 @@ Puts a ~line through the text~.
 Makes the text flash.
 “Use fast flash” makes it flash *faster!* - For when you relly need to see something!
 
+### Paragraph
+These settings apply to the entire wrapped line of text, not the part that was matched
+#### Background
+If enabled, changes the background color of the paragraph
+#### Stroke (px)
+If enabled, draws a line with the provided with and the provided color around the border of the paragraph.
+#### Border (px)
+Size of the border around the paragraph
+#### Border Style
+Change the shape of the border
+#### Alignment
+Changes the alignment of the text on each line of the paragraph
+#### Indent Left & Right %
+Indents the left/right of the paragraph by a % of the line width
+#### Padding Top & Bottom
+Adds a gap above/below the paragraph
+
 ### Sound
 This enables you to add a sound to your trigger.
 #### Play sound
@@ -184,25 +201,12 @@ Enables you to turn the this feature on or off.
 Lets you look for a sound file. Any file supported by Windows is available.
 #### Play
 Lets you check you got the right file.
-
-### Gag
-This panel helps you remove unwanted text from your screen using a trigger. It does **not** have to be enabled to remove text frem your main window to a spawn panel.
-#### Gag this line
-The main event. Tick this and whatever is matched will not be displayed.
-#### Gag this line in the log file
-This option prevents the text from being logged. This means you can have it show onyour main window but not inyour log file, if you have logging turned on.
-#### Gag messages (For gag testing)
-This removes the matched text and then replaces it with a message stating that a line was removed. Used for testing, or if you like knowing that the trigger is activated.
-### Example
-You would like to gag the exit message in one of your favorite hangouts:
-
-    The huge oak doors that have stood the test of a thousand year's creak open ponderously, letting the harsh and unforgiving light of the outer realms into the snug and cozy bar (Don't for get to pay your tab or Grognog the Half Orc hobbit will come for your knees: 17% sales tax pplies and a 15% house gratuity for service. We do not accept personal cheques or cursed daggers. Please quaff responsibly.)
-    
-Ok that was cute the first time but... yeesh! So let's just slip 
-
-    The huge oak doors
-    
-...into Matcheroo, set it as "Line starts with", turn Gag on and also select "Gag in the log file". And there. Now you never have to see that message again.
+#### Speak
+Enables the text to speech options
+#### Say whole line
+Says the entire incoming line of text
+#### Say only this
+Says only the provided text
 
 ### Spawn
 This option creates a panel on the right of your main window that has the same color and font settings as your main window, but does not have an input bar. Any matched text will be moved to the spawn window.
@@ -272,6 +276,24 @@ Resulting in:
 #### Notes on text
 As BeipMu is a modern client, it supports unicode characters, accented text and Emoji. You can therefore paste in any text you like. If you have enabled a spawn window, the filtered text and all other options will be applied before the output is sent to the window.
 
+#### Gag this line
+The main event. Tick this and whatever is matched will not be displayed.
+
+Gagging helps you trivially remove unwanted text from your screen using a trigger. It does **not** have to be enabled to remove text frem your main window to a spawn panel.
+#### Gag this line in the log file
+This option prevents the text from being logged. This means you can have it show onyour main window but not inyour log file, if you have logging turned on.
+### Gag Example
+You would like to gag the exit message in one of your favorite hangouts:
+
+    The huge oak doors that have stood the test of a thousand year's creak open ponderously, letting the harsh and unforgiving light of the outer realms into the snug and cozy bar (Don't for get to pay your tab or Grognog the Half Orc hobbit will come for your knees: 17% sales tax pplies and a 15% house gratuity for service. We do not accept personal cheques or cursed daggers. Please quaff responsibly.)
+    
+Ok that was cute the first time but... yeesh! So let's just slip 
+
+    The huge oak doors
+    
+...into Matcheroo, set it as "Line starts with", turn Gag on and also select "Gag in the log file". And there. Now you never have to see that message again.
+
+
 ### Activate
 This is a useful option that enables you to decide whether a match to your trigger sends an activity message.
 #### Activate window on trigger
@@ -280,6 +302,16 @@ If your window is behind another app or not focused, this option will make BeipM
 If this option is ticked, there will be no indication that something happened: No flashing icon or tabs.
 ### Example
 While you might like to have BeipMu flash for attention when someone you know logs on, you might not care when they log off. You could therefore set disconnect messages to "Don't show activity".
+
+### Toast
+This does not warm some bread into a deliciously crunchy snack suitable as a substrate for jams, preserves, marmalade, scrambled eggs or baked beans. In future versions this may be implemented, but at the present time it makes Windows display a pop-up, called a ‘Toast notification’.
+#### Toast message when trigger hits
+This option just turns the feature on or off.
+### Example
+There is no other option here because it's beautifully simple:- A small notification pops up with the matched text on it, and windows plays it's default chime.
+
+This is most useful for triggers that are set to fire when BeipMu is not in focus. For example, you already have a trigger that matches pages and colors them, but you can duplicate it, activate "Toast message when trigger hit" and disable any other outputs that your original trigger had. Then both will run when you're away form BeipMU but only the text highlight versionw ill run when BeipMu is in focus.
+
 
 ### Script
 If you have written a script for BeipMu, you can have it run as the result of a trigger by calling its function name.
@@ -291,15 +323,6 @@ Some sort of wizardy goes on here. I don’t trust it. our wizard says:
 "All you put here is the function name, not the script. This is so that the scripts can be compiled in advance and execute efficiently."
 
 But you know wizards. Shifty lot. The best thing to do would be to have a look at the documentation for scripting.
-
-### Toast
-This does not warm some bread into a deliciously crunchy snack suitable as a substrate for jams, preserves, marmalade, scrambled eggs or baked beans. In future versions this may be implemented, but at the present time it makes Windows display a pop-up, called a ‘Toast notification’.
-#### Toast message when trigger hits
-This option just turns the feature on or off.
-### Example
-There is no other option here because it's beautifully simple:- A small notification pops up with the matched text on it, and windows plays it's default chime.
-
-This is most useful for triggers that are set to fire when BeipMu is not in focus. For example, you already have a trigger that matches pages and colors them, but you can duplicate it, activate "Toast message when trigger hit" and disable any other outputs that your original trigger had. Then both will run when you're away form BeipMU but only the text highlight versionw ill run when BeipMu is in focus.
 
 ## Sub Triggers
 

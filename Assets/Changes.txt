@@ -1,3 +1,26 @@
+4.00.279
+
+Large rewrite of text window to handle new formatting possibilities
+Added a description of the error when a log file can't be created
+Improved perf of large text copies from output window (copying 10,000 lines could take seconds, now it's a tiny fraction of a second)
+Improved replacement trigger action to correctly handle tabs and newlines
+Added "New Content" banners to see what the new activity is
+Added unread counts in the window tabs (using the above feature)
+Added support for ansi colors 90-97 and 100-107 (bright foreground & background colors, not really standard but used by some mu*s)
+Added 'copy' button to worlds & characters in the worlds dialog
+Added Text to speech trigger option, see the 'sound' tab in triggers
+Added trigger debugging window, to see what triggers hit and each one's effects (Help->Debuggers->Trigger)
+Added 'Help->Debuggers->Network' to make the /rawnetwork command easier to find
+Added time ago to line time tooltip, to make it easy to know the relative time of a line
+Changed the Triggers/Keyboard Macros/Aliases dialogs to be non modal
+Merged Toast + Activity tabs in triggers
+Merged Gag + Filter tabs in triggers
+Improved trigger tabs to disable/enable controls properly in all tabs to be more intuitive
+Fixed emojis in HTML logging, they were not being written out at all.
+Fixed a bad bug where shutting down windows doesn't save the config file (this regression started a few versions ago)
+Fixed a bug where the keyboard macro text length would let you paste 64k but it wouldn't persist it
+Fixed some Wine issues on Linux where there'd be multiple disconnect messages and an error message
+
 3.00.278
 
 Added spawn tabs! Just specify a 'Tab group' name for a spawn trigger and multiple spawn windows will appear as a single tabbed window.
