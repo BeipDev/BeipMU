@@ -24,6 +24,7 @@
   - [/puppets](#puppets)
   - [/quit](#quit)
   - [/recall](#recall)
+  - [/receive](#receive)
   - [/resetscript](#resetscript)
   - [/silence](#silence)
   - [/slist](#slist)
@@ -252,6 +253,13 @@ Examples:
     /recall 100 Joe* 
 
 Searches the output buffer for the given string and displays it in a list in the output window.  Wildcards are allowed, but only at the beginning or end of the search string.  For example, Joe* would indicate that the line starts with "Joe", *Joe would mean the line ends with "Joe".  No stars just means the line contains the given string. 
+
+## /receive
+Usage:
+
+    /receive <text>
+    
+Acts like whatever text after "/receieve " was received from the server (plus a cr-lf after). Useful for testing triggers or even initializing spawn windows on connect.
 
 ## /resetscript 
 Usage:
