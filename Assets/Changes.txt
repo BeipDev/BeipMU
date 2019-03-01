@@ -1,9 +1,42 @@
+4.00.280
+
+Added paragraph stroke outline/top/bottom option to make nice horizontal dividers
+Added /setinput command to set the text of the active input pane
+Added 'Send on click of matched text' to trigger send action
+Added /unique parameter to /newinput command to only create the window if one with that prefix doesn't already exist
+Added ` as a delimiter in command line arguments in addition to ' and "
+Added a 'Help' button in triggers/aliases/keyboard macros
+Added option to put the taskbar at the top of the window vs the bottom
+Added the ability to set spawn text options separately from the main output window. Right click the spawn windows to do it
+Added regex option to puppet prefix handling. If 'hide prefix' is set and ( )'s are used, the first ( )'d part of the regex is hidden.
+Added 'New Input Window' File menu option
+Added %date% variable for log file names that uses the log date file format
+Changed 'New Content' to use 'bottom' stroke style
+Changed Date/Time output window tooltip to be on by default
+Changed regex triggers to only color/style the ()'d areas if they are there, otherwise it uses the whole match
+Changed hyperlink send triggers to turn the first ()'d area if it exists, otherwise it uses the whole match
+Changed 'Stop processing if hit' to still execute child triggers just no further triggers after this
+Changed 'Paragraph Spacing' so that it's centered around the text line versus at the bottom (noticeable with fan fold on)
+Improved trigger dialog to disable options that have no effect, like when actions are disabled for a folder
+Improved text window 'Split on page up' to merge on ctrl+end, previously only merged on page+down
+Improved spawn capture triggers so that editing the Capture Until on the current capture trigger applies immediately
+  Plus made it so that the trigger that starts the capture sets the end capture, not the one to open the spawn window
+Improved 'Send the last line in history' to process commands (aka act exactly as it did when it was first sent)
+Improved mouse wheel handling, now works on spawn windows on Windows 7 (and with both windows 10 mouse wheel options)
+Fixed mouse wheel scrolling to handle fractional amounts (some laptop touch pads would scroll wildly before)
+Fixed bug where multiple triggers setting paragraph options wouldn't always take effect
+Fixed bug where rearranging spawn tabs resulted in incorrect activity hilighting
+Fixed bug where new input windows would cause tab that created them to steal focus (not fun if done through a trigger)
+Fixed bug where if /receive is used in a send trigger and recurses into itself, BeipMU would crash (infinite recursion)
+
 4.00.279
 
 Large rewrite of text window to handle new formatting possibilities
 Added a description of the error when a log file can't be created
 Improved perf of large text copies from output window (copying 10,000 lines could take seconds, now it's a tiny fraction of a second)
 Improved replacement trigger action to correctly handle tabs and newlines
+Added /newinput to create additional input windows with optional prefixes
+Added /receive command to act like the given line was sent by the server, very handy for testing triggers or opening spawn windows
 Added "New Content" banners to see what the new activity is
 Added unread counts in the window tabs (using the above feature)
 Added support for ansi colors 90-97 and 100-107 (bright foreground & background colors, not really standard but used by some mu*s)
@@ -35,7 +68,7 @@ Fixed a Windows 7 bug where bitmap fonts would not layout correctly (like FixedS
 
 Added 'Limit to once every [x] seconds' trigger cooldown option
 Added redefinable keyboard shortcuts to 'Convert Returns to %R' and 'Convert Tabs to %T'
-Added '\grab' command support for those servers that support it
+Added '/grab' command support for those servers that support it
 Added an overwrite confirmation when exporting a config file
 Fill in the date as the initial filename when logging manually
 Fixed a bug where Chakra.dll was not optional on the x64 build (only applies to pre Windows 10 users)

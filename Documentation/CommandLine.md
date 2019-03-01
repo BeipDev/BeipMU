@@ -36,14 +36,14 @@
 
 This is a list of the standard command line / commands that are included with BeipMU.  Scripts and plug-ins can extend and even replace the built in commands.
 
-To see a short summary of the commands, simply type /help in the BeipMU input window.
+To see a short summary of the commands, simply type /help in the BeipMU input window. To jump to online help on a specific command, type '/help <command>'
 
-The symbols after the command name are the type of parameters.  $ is a string, which is just a single word with no spaces, or multiple words with spaces surrounded with quotes (Ex: "This is a test").  # is a number in decimal.  Parameters in ( ) are optional.  See below for a detailed description of each command. 
+If a parameter has spaces it must be put in quotes (', " or ` work). Parameters in ( ) are optional. Some commands like /@ and /receive don't need quoted parameters as they just take everything after the command itself.
 
 ## /@
 Usage:
 
-    /@ $
+    /@ <multiline script>
 
 Runs a script immediately
 
@@ -202,9 +202,11 @@ Opens a new window.
 ## /newinput
 Usage:
 
-    /newinput <prefix>
+    /newinput (/unique) (<prefix>)
 
 Opens a new input pane. If a prefix is specified, this will be sent on every line sent by the input box. Note that input panes can be docked anywhere.
+
+/unique - This will not create the input window if one with the given prefix already exists for this window.
 
 ## /puppet 
 Usage:
