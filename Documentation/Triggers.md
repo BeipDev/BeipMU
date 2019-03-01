@@ -139,8 +139,8 @@ Exactly what it seems: This makes BeipMu only fire a trigger if the line starts 
 Fires the trigger only if the line of texts ends with what’s in Matcheroo.
 ### Limit to once every…
 You can put a cool down timer on your trigger so it won’t fire for X seconds, where X is the number of seconds you type in.
-### Stop Processing
-If you need it to, you can make BeipMu stop processing any further triggers if this is checked.
+### Stop Processing if hit
+If you need it to, you can make BeipMu stop processing any further triggers if this is checked. Note that child triggers are still run, since this is very useful in doing 'if hit, run child triggers, then stop' style logic.
 ### Once Per Line
 This tells BeipMu to only run this trigger the first time it sees a match, not every time it sees one in a single line of text.
 ### Only When..
@@ -182,6 +182,7 @@ These settings apply to the entire wrapped line of text, not the part that was m
 If enabled, changes the background color of the paragraph
 #### Stroke (px)
 If enabled, draws a line with the provided with and the provided color around the border of the paragraph.
+Stroke style lets you do underlines or overlines of the whole paragraph (the 'New Content' marker uses this)
 #### Border (px)
 Size of the border around the paragraph
 #### Border Style

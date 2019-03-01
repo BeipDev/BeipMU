@@ -1,17 +1,6 @@
 Version=265
 Connections
 {
-  KeyboardMacros
-  {
-    ""=NumPad1,"southwest"
-    ""=NumPad2,"south"
-    ""=NumPad3,"southeast"
-    ""=NumPad4,"west"
-    ""=NumPad6,"east"
-    ""=NumPad7,"northwest"
-    ""=NumPad8,"north"
-    ""=NumPad9,"northeast"
-  }
   Shortcuts
   {
     LambdaMOO
