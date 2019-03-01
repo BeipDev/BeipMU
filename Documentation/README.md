@@ -20,3 +20,4 @@ Note! This was started by copying some of the items from our help file, it's pro
 
 [Change Log](../Assets/Changes.txt)
 
+[Keyboard Shortcuts](Shortcuts.md)
