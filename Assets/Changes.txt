@@ -1,3 +1,12 @@
+4.00.281
+
+Added ability to export/import triggers!
+Added 'Input Window - Push to History' keyboard shortcut to explicitly just push to history, similar to Ctrl+Down
+Fixed glitch when copying triggers with regexes that can cause them not to hit in certain situations
+Fixed a hang if you pause a window, select some of the 'New Content' banner, then switch to another window
+Fixed a hang if the "New Content" marker goes beyond the window text limit then you switch to another window.
+Fixed a bug with 'Invisible MUD Prompt Handling' that could lead to problems if text was selected and a prompt comes in
+
 4.00.280
 
 Added paragraph stroke outline/top/bottom option to make nice horizontal dividers
