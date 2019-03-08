@@ -26,6 +26,7 @@
   - [/recall](#recall)
   - [/receive](#receive)
   - [/resetscript](#resetscript)
+  - [/setinput](#setinput)
   - [/silence](#silence)
   - [/slist](#slist)
   - [/switchtab](#spawntab)
@@ -269,6 +270,13 @@ Usage:
     /resetscript 
 
 Will reset the current scripting engine, removing all currently running scripts and hooks.  This will also switch the scripting language to what is currently set in the preferences dialog, so the language can change after this. 
+
+## /setinput
+Usage:
+
+    /setinput <text>
+
+Sets <text> into the active input window. Seems pointless but it can be used in a trigger's send action to fill in the input window with parts of the received text.
 
 ## /silence
 Usage:
