@@ -1,3 +1,13 @@
+4.00.282
+
+Enhanced Aliases to allow nested aliases without using a folder. Nested aliases only are applied if the parent alias is applied
+Enhanced Alt+# handling so that Control adds 10, so Alt+Ctrl+4 = tab 14
+Change relative path logging location to be the documents folder if the store app, or the config file location otherwise
+Fixed a bug where ansi color settings would not carry over to the next line if a blank line is between them
+Fixed a crash if you set bold, underline, strikeout, and italics at the same time (caught by output stress test, surprisingly this bug has existed forever)
+Fixed a bug where closed spawn tabs were not actually closed, just made not visible in a buggy way
+Fixed a crash where with the right combination of text and multiple wrapped lines, the line layout code would go out of bounds ( = instead of a += in the text index)
+
 4.00.281
 
 Added ability to export/import triggers!
