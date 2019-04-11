@@ -1,3 +1,10 @@
+4.00.283
+
+Added 'Default Font/Foreground/Background' trigger appearance options
+Added Description field to aliases similar to triggers
+Auto save configuration when closing a trigger/aliases/macros/worlds dialog box
+Fixed a hang (will unhang after many seconds) in find if what you're looking for doesn't exist 
+
 4.00.282
 
 Enhanced Aliases to allow nested aliases without using a folder. Nested aliases only are applied if the parent alias is applied
