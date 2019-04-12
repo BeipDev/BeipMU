@@ -1,6 +1,10 @@
 //
 // Telnet Processing
 //
+// https://tools.ietf.org/html/rfc854 - Telnet Protocol Specification
+// https://tools.ietf.org/html/rfc855 - Telnet Option Specification
+// https://tools.ietf.org/html/rfc2066 - Telnet Charset
+// http://www.zuggsoft.com/zmud/mxp.htm - MXP
 
 #include "Main.h"
 #include "Telnet.h"
@@ -199,8 +203,50 @@ void TelnetParser::Parse(Array<const char> buffer)
                break;
 
             case State::SB_CHARSET:
-               m_state=State::Normal;
+               if(c==0x01) // Request
+               {
+                  m_state=State::SB_CHARSET_Request_List;
+                  m_charset_start=m_buffer.Count();
+                  continue;
+               }
+               break;
+            case State::SB_CHARSET_Request_List:
+               if(c==TELNET_IAC)
+                  m_state=State::SB_CHARSET_Request_IAC;
+               else
+                  m_buffer.Push(char(c));
                continue;
+            case State::SB_CHARSET_Request_IAC:
+               if(c==TELNET_SE)
+               {
+                  if(m_buffer.Count()<m_charset_start+1)
+                  {
+                     Assert(false);
+                     break; // No charsets?
+                  }
+
+                  char separator=m_buffer[m_charset_start];
+                  auto charsets=GetPartial().WithoutFirst(m_charset_start+1);
+
+                  while(charsets)
+                  {
+                     unsigned end=charsets.FindFirstOf(separator, charsets.Count());
+                     auto charset=charsets.First(end); charsets=charsets.WithoutFirst(end);
+
+                     if(charset=="UTF-8")
+                     {
+                        m_notify.OnTelnet(FixedStringBuilder<256>(MakeString<TELNET_IAC, TELNET_SB, TELOPT_CHARSET, 1>, charset, MakeString<TELNET_IAC, TELNET_SE>));
+                        m_notify.OnEncoding(Prop::Server::Encoding::UTF8);
+                        break;
+                     }
+                     Assert(false); // If this hits, add it to the list
+                  }
+
+                  m_buffer.Pop(m_buffer.Count()-m_charset_start);
+                  m_state=State::Normal;
+                  continue;
+               }
+               break;
 
             case State::SB_TTYPE:
                if(c==TELQUAL_SEND)
