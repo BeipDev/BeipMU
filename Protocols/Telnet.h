@@ -8,6 +8,7 @@ struct TelnetParser
       virtual void OnTelnet(ConstString string)=0; // Telnet code received, string is the response
       virtual void OnLine(ConstString string)=0;
       virtual void OnPrompt(ConstString string)=0;
+      virtual void OnEncoding(Prop::Server::Encoding encoding)=0;
    };
 
    TelnetParser(INotify &notify);
@@ -20,6 +21,8 @@ struct TelnetParser
 private:
    INotify &m_notify;
 
+   void HandleCharset();
+
    enum class State
    {
       Normal,
@@ -30,6 +33,8 @@ private:
       Will,
       SB,
       SB_CHARSET,
+      SB_CHARSET_Request_List,
+      SB_CHARSET_Request_IAC,
       SB_TTYPE,
       SB_WaitForIAC, // Should be done, eat until we see IAC
       SB_IAC,
@@ -38,4 +43,5 @@ private:
 
    State m_state{State::Normal};
    Collection<char> m_buffer;
+   unsigned m_charset_start; // Index in buffer where charset table starts
 };
