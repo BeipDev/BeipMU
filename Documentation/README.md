@@ -8,6 +8,8 @@ This was started by copying some of the items from our help file, it's probably 
 
 [Triggers](Triggers.md)
 
+[Trigger Packs](..\Examples\Ws_highlighting.md)
+
 [Aliases](Aliases.md)
 
 [Scripting](Scripting.md)
