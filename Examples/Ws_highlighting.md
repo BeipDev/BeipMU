@@ -1,3 +1,5 @@
+![Example](Ws_highlighting.png)
+
 [Download](Ws_highlighting.txt)
 
 Adds a paragraph background and text colour to each line, then each sub trigger colours the gender text and changes the paragraph background to match. Finally it alters idle or sleeping character's backgrounds to grey or black.
