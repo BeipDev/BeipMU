@@ -1,3 +1,14 @@
+4.00.284
+
+Added Telnet CHARSET negotiation so UTF-8 encoding is enabled automatically
+Added 'Clear spawn' action for spawn triggers
+Added 'Gag from Log' action for spawn triggers (so a single spawn or an entire capture can be easily gagged from the log)
+Added error display for trigger importing (to explain why it failed vs just 'error')
+Changed 'Explorer' dialog into 'Character Statistics', and added a lot of refinements to it
+Added 'Connection Count' 'Connected Time' 'Total Bytes' as character statistics
+Improved internal time code to avoid connect time wraparounds after 49.7 days
+Fixed a glitch where if you change the font, if the time & date column is visible it doesn't resize to match
+
 4.00.283
 
 Added 'Default Font/Foreground/Background' trigger appearance options
