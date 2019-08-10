@@ -1,9 +1,9 @@
 # BeipMU
 Windows MU* Client
 
-Feel free to ask any questions on our subreddit, or to log any issues here.
+Feel free to ask any questions on our Discord channel, or to log any issues here.
 
-Our Subreddit: https://reddit.com/r/BeipMU
+Invite to the Discord: https://discord.gg/3A5quTU
 
 # Documentation
 
