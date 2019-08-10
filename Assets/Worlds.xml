@@ -358,5 +358,14 @@ Free companies of mercenaries dominate the land scape between cities, employed b
 <a href="http://valorous.wikidot.com/">Website</a> ]]></description>
  <guest connect="connect guest"/>
 </world>
+<world name="TwistedMUCK" host="charis.servegame.com:4240" encoding="CP1252" keywords="muck|multiverse">
+ <description><![CDATA[Twisted is a text-based role playing game where anything can happen. Players find themselves in a world where anime, video game, and comic book characters can live and interact. The world of Twisted was created as a safe haven from the chaotic wastelands that surround it and acts as a multiverse hub where people and places have been taken from their original worlds and connected as a large multi-themed location. Ever wanted to escape from reality behind the eyes of your favorite character or live out fantastical adventures with characters you've created yourself? Now's your chance.
 
+Recently a terrible disaster rocked the core of Twisted, destroying it's landscape and scattering pieces of it's world into the darkness of space surrounding it. Gathered together in a new hub area called Mabase players can choose to help rediscover lost pieces of the world, collect bounties hunting monsters, or generally try to live day to day lives in the main city. There are several large worlds that can be accessed from the city, some of them fully fleshed out themselves from other former MU*s which have graciously allowed us to host them on our grid. 
+
+For more details about the places and people of Twisted simply visit our website or log on and speak with any of our helpful staff. Remember, there's a million stories to be told. It's up to you to write yours... 
+
+<a href="http://marrowproductions.com/Twisted/">http://marrowproductions.com/Twisted/</a> ]]></description>
+</world>
+ 
 </worlds>
