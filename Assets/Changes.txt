@@ -1,3 +1,15 @@
+4.00.286 - 2019-9-6
+
+Added a dockable image viewer window that downloads and displays the last image URLs seen in the output
+  Note: Dockable image viewer will automatically appear on image links unless disabled in options
+Added restore of minimized/maximized state of every window (also fixes a bug where panes shrink gradually if you closed it while maximized)
+Fixed regression from build 285 where new windows would always have two tabs
+Fixed annoyance where if you connect from a connect dialog, a reconnected tab in a different window won't get the focus
+Fixed a bug where puppets would prevent window configurations from being saved to their characters (the puppet one would overwrite it then be ignored)
+Fixed annoyance where if you restore a configuration from another computer and any of the windows/panes are off screen, they are moved to the primary monitor
+Improved hyperlink parsing so that a ')' at the end is included if there's an unmatched '(' before it (doesn't handle nested ('s though)
+Improved Log filename %server%/%character% substitutions to allow multiple substitutions of each
+
 4.00.285 - 2019-8-1
 
 Spawns, input windows, and input history now have their layouts and content restored per character (and on exit/reopen)
