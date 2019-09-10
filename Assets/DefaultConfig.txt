@@ -23,6 +23,23 @@ Connections
             Title="WHO"
             CaptureUntil="^Total: [0-9]+ players"
           }
+          {
+          Description="Activity sound"
+          Disabled=true
+          AwayPresent=true
+          AwayPresentOnce=true
+          FindString
+          {
+            MatchText="(.+)"
+            RegularExpression=true
+          }
+          Sound
+          {
+            Active=true
+            Sound="c:\\windows\\media\\chord.wav"
+          }
+          
+          }
         }
       }
     }
