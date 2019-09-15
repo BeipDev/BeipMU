@@ -7,7 +7,7 @@
   - [/unchar](#unchar)
   - [/chars](#chars)
   - [/clear](#clear)
-  - [/close](#close)I am,
+  - [/close](#close)
   - [/connect](#connect)
   - [/debugnetwork](#debugnetwork)
   - [/debugtriggers](#debugtriggers)
