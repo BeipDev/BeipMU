@@ -2,6 +2,14 @@
 
 Stat windows are a way to display information in the form of `name = value`. So for example a health bar, your number of gold coins, or your character attributes.
 
+![Sample](/images/Stats_Sample1.png)
+
+![Sample](/images/Stats_Sample2.png)
+
+Stats are just another trigger action, which means that two different triggers could update the same stat. Or with regex, one trigger could update multiple stats! The trigger that updates the stat is the one that decides the style (color/font/etc). So if you want a stat to change appearance, just setup multiple triggers to do it.
+
+If you can't figure out how to get a stat to work, please just ask on our discord and we can add it as a new example below!
+
 ## There are three types of stats:
 
 * String - The regex for the value is displayed exactly as it is.
@@ -30,6 +38,8 @@ Min:`0` Simple default, health's lowest value is zero
 Max:`\2` The second regex term is the max health value
 
 ## Character attributes
+
+
 Server sends: `Dexterity 12/20` (also Strength, Intelligence, Constitution, etc..)
 
 Matcharoo: `(Strength|Intelligence|Dexterity|Constitution|Charisma|Wisdom) (\d+)/(\d+)`
