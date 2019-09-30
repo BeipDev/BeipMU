@@ -25,9 +25,10 @@ Stats are sorted alphabetically, with the 'Invisible Prefix' prefixed on the nam
 # Sample stats:
 
 ## Health bar
-Server sends: `Health 174/200`
 
 ![Sample](/images/Stat_HealthBar.png)
+
+Server sends: `Health 174/200`
 
 Matcharoo: `Health (\d+)/(\d+)`
 
@@ -45,9 +46,9 @@ Max:`\2` The second regex term is the max health value
 
 ## Character attributes
 
-Server sends: `Dexterity 22/25` (also Strength, Intelligence, Constitution, etc..)
-
 ![Sample](/images/Stat_Dexterity.png)
+
+Server sends: `Dexterity 22/25` (also Strength, Intelligence, Constitution, etc..)
 
 Matcharoo: `(Strength|Intelligence|Dexterity|Constitution|Charisma|Wisdom) (\d+)/(\d+)`
 
