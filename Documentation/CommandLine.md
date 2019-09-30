@@ -34,6 +34,7 @@
   - [/silence](#silence)
   - [/slist](#slist)
   - [/switchtab](#spawntab)
+    [/tabcolor](#tabcolor)
   - [/ttype](#ttype)
   - [/wall](#wall)
 
@@ -342,6 +343,19 @@ Usage:
     /switchtab <tab group> <tab name>
 
 Makes the 'tab name' in the spawn tab window 'tab group' visible. Useful to see activity just by using the keyboard.
+
+## /tabcolor
+Usage:
+
+    /tabcolor <optional HTML style color>
+
+Examples:
+
+    /tabcolor #80FF80
+    /tabcolor
+
+Sets the current tab color to the given color. You can also right click a tab to choose a color in the GUI. This command makes it possible to change tab colors through a trigger (using a send action).
+
 
 ## /ttype
 Usage:
