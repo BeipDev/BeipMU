@@ -20,7 +20,7 @@ This was started by copying some of the items from our help file, it's probably 
 
 [Spawn Windows](SpawnWindows.md)
 
-[Stat Windows](Stat Windows.md)
+[Stat Windows](Stat%20Windows.md)
 
 [Keyboard Shortcuts](Shortcuts.md)
 
