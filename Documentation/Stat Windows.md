@@ -18,6 +18,10 @@ If you can't figure out how to get a stat to work, please just ask on our discor
 
 * Range - The regex for the value is interpreted as an integer, plus there is a lower and upper value for the range and this enables showing it as a progress bar. Mostly useful for attributes with known maximums (or also minimums).
 
+## Sorting
+
+Stats are sorted alphabetically, with the 'Invisible Prefix' prefixed on the name field. This lets you prefix with an invisible number to enforce a sort ordering.
+
 # Sample stats:
 
 ## Health bar
