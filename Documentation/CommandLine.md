@@ -34,7 +34,7 @@
   - [/silence](#silence)
   - [/slist](#slist)
   - [/switchtab](#spawntab)
-    [/tabcolor](#tabcolor)
+  - [/tabcolor](#tabcolor)
   - [/ttype](#ttype)
   - [/wall](#wall)
 
