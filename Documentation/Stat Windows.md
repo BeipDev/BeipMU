@@ -6,6 +6,8 @@ Stat windows are a way to display information in the form of `name = value`. So 
 
 ![Sample](/images/Stats_Sample2.png)
 
+![Sample](/images/Stats_Sample3.png)
+
 Stats are just another trigger action, which means that two different triggers could update the same stat. Or with regex, one trigger could update multiple stats! The trigger that updates the stat is the one that decides the style (color/font/etc). So if you want a stat to change appearance, just setup multiple triggers to do it.
 
 Note that a stat is uniquely identified by it's prefix + name (plus the name of the stat window its in!). So if you have a stat called 'Health' with no prefix and another called 'Health' with '1' as the prefix, they will both appear as 'Health' in the stat window.
