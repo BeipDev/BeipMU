@@ -1,3 +1,15 @@
+4.00.287 - 2019-10-3
+
+Added Stat Panes, shows integers, strings, or ranges to show character stats/attributes/etc. Values updated through trigger stat actions
+Added 'Content restored' messages to every spawn window, along with 'Connected' and 'Disconnected' messages to make things clearer
+Added /tabcolor command, sets the tab to the given HTML style color (#RRGGBB or a name)
+Changed the look of the taskbar & splitter bars, tabs now drag rearrange a lot nicer now
+Changed window titles to reverse the order of the items from server - character - puppet to puppet - character - server.
+Improved image viewer so it doesn't use a case sensitive search for images (for example, .jpg worked, but .JPG did not)
+Fixed a bug when docking windows where they would take up the entire client space, instead limit them to at most half of the space
+Fixed a bug when docking windows where they could not be docked on the outside edge, they'd always go to the next inner pane
+Fixed minor glitch where during Find in the output window, the scrollbar wouldn't move to match the shown text
+
 4.00.286 - 2019-9-6
 
 Added a dockable image viewer window that downloads and displays the last image URLs seen in the output
