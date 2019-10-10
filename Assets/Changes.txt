@@ -1,8 +1,15 @@
+4.00.288 - 2019-10-10
+
+Added tab completion, just press tab to search input history/output/spawns for words to autocomplete with.
+  Pressing tab after a space will suggest a next word in the same way
+  You can disable this behavior by setting the 'Input Window - Autocomplete' keyboard shortcut to nothing
+Fixed Alt+# display to not get stuck on after Alt+Tab/etc
+
 4.00.287 - 2019-10-3
 
 Added Stat Panes, shows integers, strings, or ranges to show character stats/attributes/etc. Values updated through trigger stat actions
 Added 'Content restored' messages to every spawn window, along with 'Connected' and 'Disconnected' messages to make things clearer
-Added /tabcolor command, sets the tab to the given HTML style color (#RRGGBB or a name)
+Added colored tabs. You can set the color by right clicking on a tab, or by using the /tabcolor command (uses HTML style color #RRGGBB or a name)
 Changed the look of the taskbar & splitter bars, tabs now drag rearrange a lot nicer now
 Changed window titles to reverse the order of the items from server - character - puppet to puppet - character - server.
 Improved image viewer so it doesn't use a case sensitive search for images (for example, .jpg worked, but .JPG did not)
