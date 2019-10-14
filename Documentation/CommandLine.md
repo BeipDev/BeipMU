@@ -23,6 +23,7 @@
   - [/logall](#logall)
   - [/new](#new)
   - [/newinput](#newinput)
+  - [/ping](#ping)
   - [/puppet](#puppet)
   - [/puppets](#puppets)
   - [/quit](#quit)
@@ -246,6 +247,17 @@ Usage:
 Opens a new input pane. If a prefix is specified, this will be sent on every line sent by the input box. Note that input panes can be docked anywhere.
 
 /unique - This will not create the input window if one with the given prefix already exists for this window.
+
+## /ping
+Usage:
+
+    /ping <text to send>
+
+Examples:
+
+    /ping w me=Latency test
+
+Sends the given text to the server and times how long it takes for the server to send a reply. Useful in benchmarking or testing network latency. Note that if lots of data is being received that a /ping won't know which data is from the text being sent, so it will give incorrect results in this case.
 
 ## /puppet 
 Usage:

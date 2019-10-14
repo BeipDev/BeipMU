@@ -1,3 +1,12 @@
+4.00.289 - 2019-10-13
+
+Added /ping command to measure time from command send to server response (useful to measure network latency and server perf)
+Added 'Test Text' field in the triggers dialog to allow easy testing of what the Matcharoo will match on (with regex variable hilighting too!)
+Added File->'Load backup configuration...' to load the last backup configuration made (backup configs are made each time the app is updated)
+Added 'History Window - Toggle' to keyboard shortcuts
+Added 'Imaging Window - Toggle' to keyboard shortcuts
+Fixed extra 100ms network send/receive latency issue on the store version (not sure when this started, but it's gone now)
+
 4.00.288 - 2019-10-10
 
 Added tab completion, just press tab to search input history/output/spawns for words to autocomplete with.
