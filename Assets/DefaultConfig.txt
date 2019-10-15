@@ -15,14 +15,6 @@ Connections
       Triggers
       {
         {
-          FindString.MatchText="^Player name +Connected +Idle time +Location"
-          FindString.RegularExpression=true
-          Spawn
-          {
-            Active=true
-            Title="WHO"
-            CaptureUntil="^Total: [0-9]+ players"
-          }
           {
           Description="Activity sound"
           Disabled=true
