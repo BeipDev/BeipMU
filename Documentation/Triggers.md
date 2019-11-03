@@ -123,12 +123,14 @@ But first we need to know in what order triggers are checked agaisnt the text. T
 ### Processing order
 BeipMu will process triggers in heirachy order. Either the Global triggers first, then the Server Triggers then the Character specific triggers, or the other way around, and Character triggers will fire first, then Server, then Global
 ***Processing order of trigger note***
-Triggers are chacked from the top of the list, then down to the bottom, per type. So The list of global triggers from top to bottom, then moving on to the Server list then the Character list. If you need re-arrange them... you can just drag them around! It is possible to drag a trigger from Chracter to Server or Global and vice versa if you need to.
+Triggers are chacked from the top of the list, then down to the bottom, per type. So The list of global triggers from top to bottom, then moving on to the Server list then the Character list. If you need re-arrange them... you can just drag them around! It is possible to drag a trigger from Character to Server or Global and vice versa if you need to.
 
 ### Description
 Text, for your benefit, that lets you describe what this trigger is doing. You can leave it blank - BeipMu doesn’t care that you didn’t put any effort in. BeipMu will just feel disappointment.
 ### Matcheroo
 This is where you match text or regular expression goes.
+### Test String
+Type some text that you want to test matching against the matcheroo. The parts that match will hilight and if using a regular expression, the ()'d sub expressions will be colored differently. This is very useful when first creating a trigget to easily test if it matches properly, and also to provide an example of what it's supposed to match.
 ### Match Case
 In a Simple Matcheroo trigger, this tells Beipmu that if the match text is “Page”, then it should only match “Page” with a capital P, and not “page”. It is off by default.
 ### Whole Word
