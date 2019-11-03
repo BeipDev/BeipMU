@@ -54,6 +54,9 @@ In the Matcheroo field, change the match text to:
 
 Hit the “OK” button, and now page yourself a friendly "Hello!". Your incoming and out-going page should now be highlighted using the options you chose.
 
+## Samples list
+Below the Global trigger tree is a separate tree of sample triggers, you can use 'Copy' or just drag & drop out of the samples. Any changes made to the samples won't persist after changing to a different trigger.
+
 # Regular Expressions
 
 ## What is Regular Expression
