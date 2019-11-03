@@ -1,3 +1,7 @@
+Scripting is by default using JavaScript (and on Windows 10 it will use the Chakra engine vs the old ActiveScript version). The startup script in the 'Preferences' window is the filename of the script to run at startup (vs having to enter your scripts every time you launch manually).
+
+Scripting isn't used by many folks so this documentation doesn't get much activity. If you any questions or suggestions please let us know!
+
 ## API Reference
 
 [API Reference](ScriptingAPI.md)
