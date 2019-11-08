@@ -1,3 +1,20 @@
+4.00.290 - 2019-11-7
+
+Added sample pane to triggers/aliases/macros!
+Added regex syntax error messages while editing regexes
+Added test strings & test result to aliases (similar to triggers, but with the test result too)
+Added bringing current tab's floating panes to the top when switching tabs.
+Added auto scrolling of the trigger/aliases/macros views when dragging above/below the tree
+Improved Stat triggers to that \1 \2, etc.. works in the window title field
+Fixed drag image not appearing while dragging triggers/aliases/macros. Before fix it only worked on certain fonts/OSes (using OS function to draw them too)
+Fixed an issue with mouse wheel scrolling in a split text window, where it'd scroll by the wrong amount (bug was that the scrollbar wasn't updating properly)
+Fixed the keyboard macro dialog to not show typed letters unless it's replacing the key
+Fixed a minor annoyance where the imaging window might flicker briefly when restoring the window layout
+Fixed a bug where when editing triggers, having a blank Matcharoo regex caused the test string to stop updating properly
+Fixed a crash with aliases where a blank Matcharoo regex would crash!
+Fixed a minor glitch in the Trigger/Alias test string displays being hilighted wrong with multibyte characters
+Fixed a crash where if BeipMU.exe is launched by itself without a config.txt or Assets/DefaultConfig.txt it crashes at launch instead of using defaults
+
 4.00.289 - 2019-10-13
 
 Added /ping command to measure time from command send to server response (useful to measure network latency and server perf)
