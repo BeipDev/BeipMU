@@ -319,7 +319,7 @@ Usage:
 
     /receive <text>
     
-Acts like whatever text after "/receieve " was received from the server (plus a cr-lf after). Useful for testing triggers or even initializing spawn windows on connect.
+Acts like whatever text after "/receive " was received from the server (plus a cr-lf after). Useful for testing triggers or even initializing spawn windows on connect.
 
 ## /resetscript 
 Usage:
