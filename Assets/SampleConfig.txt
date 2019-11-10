@@ -1,0 +1,569 @@
+Version=290
+Windows
+{
+  MDIPosition=(8,1149,1495,943)
+  Positions
+  {
+    {
+      Position=(8,1149,1495,943)
+      ActiveTab=0
+      Tabs
+      {
+        {
+          Server="LambdaMOO"
+        }
+      }
+    }
+  }
+}
+Connections
+{
+  Logging.RestoreBufferSizeCurrent=256
+  KeyboardMacros
+  {
+    ""=NumPad1,"SW"
+    ""=NumPad2,"S"
+    ""=NumPad3,"SE"
+    ""=NumPad4,"W"
+    ""=NumPad6,"E"
+    ""=NumPad7,"NW"
+    ""=NumPad8,"N"
+    ""=NumPad9,"NE"
+  }
+  Shortcuts
+  {
+    LambdaMOO
+    {
+      Host="lambda.moo.mud.org:8888"
+      Info="Website: https://www.cc.gatech.edu/classes/cs8113e_99_winter/lambda.html"
+      Characters
+      {
+        Guest.Connect="connect guest"
+      }
+      Triggers
+      {
+        {
+          Description="WHO List Spawn Window"
+          Example="Player name  Connected  Idle time  Location"
+          FindString
+          {
+            MatchText="^Player name +Connected +Idle time +Location"
+            RegularExpression=true
+          }
+          Spawn
+          {
+            Active=true
+            Title="WHO"
+            CaptureUntil="^Total: [0-9]+ players"
+          }
+        }
+      }
+    }
+  }
+  Triggers
+  {
+    {
+      Description="Activity Sound"
+      OncePerLine=true
+      AwayPresent=true
+      FindString
+      {
+        MatchText="(.+)"
+        RegularExpression=true
+      }
+      Sound
+      {
+        Active=true
+        Sound="C:\\Windows\\Media\\chord.wav"
+      }
+    }
+    {
+      Description="Speak all text"
+      OncePerLine=true
+      FindString
+      {
+        MatchText="(.+)"
+        RegularExpression=true
+      }
+      Speech
+      {
+        Active=true
+        WholeLine=true
+      }
+    }
+    {
+      Description="Censor bad words"
+      Example="This is a very naughty sentence."
+      FindString
+      {
+        MatchText="(naughty|words|to|censor)"
+        RegularExpression=true
+      }
+      Filter
+      {
+        Active=true
+        Replace="****"
+      }
+    }
+    {
+      Description="Modify quoted text"
+      Example="Frank says, \"I'm speaking!\", then laughs."
+      Disabled=true
+      FindString.RegularExpression=true
+      Triggers
+      {
+        {
+          Description="Make it bold"
+          Example="This is \"Testing\""
+          FindString
+          {
+            MatchText="(\"(?:[^\"]+)\")"
+            RegularExpression=true
+          }
+          Style
+          {
+            Bold=true
+            SetBold=true
+          }
+        }
+        {
+          Description="Change quotes into “smart quotes”"
+          Example="Frank says, \"I'm speaking!\", then laughs, \"Muhaha\". "
+          FindString
+          {
+            MatchText="(\"(?:[^\"]+)\")"
+            RegularExpression=true
+          }
+          Color
+          {
+            ForeColor=RGB(220,56,61)
+            BackColor=RGB(113,193,232)
+          }
+          Filter
+          {
+            Active=true
+            Replace="“\\1”"
+          }
+          Speech.Say="\\1"
+        }
+        {
+          Description="Highlight with a foreground color"
+          Example="Frank says, “I'm quoted!”, then laughs."
+          FindString
+          {
+            MatchText="(“(?:[^\"]+)”)"
+            RegularExpression=true
+          }
+          Color
+          {
+            ForeColor=RGB(254,252,207)
+            UseForeColor=true
+            BackColor=RGB(113,193,232)
+          }
+          Speech.Say="\\1"
+        }
+      }
+    }
+    {
+      Description="Markdown"
+      Disabled=true
+      FindString.RegularExpression=true
+      Triggers
+      {
+        {
+          Description="_Underline_"
+          Example="I am _Underline_"
+          FindString
+          {
+            MatchText="(\\s_([^_]+)_)"
+            RegularExpression=true
+          }
+          Filter
+          {
+            Active=true
+            HTML=true
+            Replace=" <U>\\2</U>"
+          }
+          Triggers.Active=false
+        }
+        {
+          Description="*Bold*"
+          Example="I am *Bold*."
+          FindString
+          {
+            MatchText="(\\s\\*([^\\*]+)\\*)"
+            RegularExpression=true
+          }
+          Color.UseForeColor=true
+          Filter
+          {
+            Active=true
+            HTML=true
+            Replace=" <b>\\2</b>"
+          }
+          Triggers.Active=false
+        }
+        {
+          Description="/Italic/"
+          Example="This is /italic/."
+          FindString
+          {
+            MatchText="\\s/([^/]+)/\\s?"
+            RegularExpression=true
+          }
+          Filter
+          {
+            Active=true
+            HTML=true
+            Replace=" <i>\\1</i> "
+          }
+          Triggers.Active=false
+        }
+      }
+    }
+    {
+      Description="Text bubbles"
+      Disabled=true
+      Triggers
+      {
+        {
+          Description="You page"
+          Example="You paged Frank with \"Hello!\""
+          OncePerLine=true
+          FindString
+          {
+            MatchText="You paged (.+) with \"(.+)\""
+            RegularExpression=true
+          }
+          Paragraph
+          {
+            "UseIndent_Left"=true
+            "Indent_Left"=10
+            "UseIndent_Right"=true
+            "Indent_Right"=1
+            "UsePadding_Top"=true
+            "Padding_Top"=2
+            "UsePadding_Bottom"=true
+            "Padding_Bottom"=2
+            UseBorder=true
+            Border=6
+            UseBorderStyle=true
+            BorderStyle=1
+            UseStroke=true
+            StrokeWidth=2
+            UseBackgroundColor=true
+            Background=RGB(1,113,167)
+          }
+          Filter
+          {
+            Active=true
+            Replace="\\1: \\2"
+          }
+        }
+        {
+          Description="They page"
+          Example="Frank pages: \"Hello back!\""
+          OncePerLine=true
+          FindString
+          {
+            MatchText="(.+) pages: \"(.+)\""
+            RegularExpression=true
+          }
+          Paragraph
+          {
+            "UseIndent_Left"=true
+            "Indent_Left"=1
+            "UseIndent_Right"=true
+            "Indent_Right"=10
+            "UsePadding_Top"=true
+            "Padding_Top"=2
+            "UsePadding_Bottom"=true
+            "Padding_Bottom"=2
+            UseBorder=true
+            Border=6
+            UseBorderStyle=true
+            BorderStyle=1
+            UseStroke=true
+            StrokeWidth=2
+            UseBackgroundColor=true
+            Background=RGB(143,0,191)
+          }
+          Filter
+          {
+            Active=true
+            Replace="\\1: \\2"
+          }
+        }
+        {
+          Description="Whisper (Outbound)"
+          Example="You whisper, \"holy cow!\" to Bob"
+          StopProcessing=true
+          FindString
+          {
+            MatchText="^(?:You whisper.|\\w+ senses)(.*) to (\\w+)"
+            RegularExpression=true
+            StartsWith=true
+          }
+          Paragraph
+          {
+            "UseIndent_Left"=true
+            "Indent_Left"=5
+            "Indent_Right"=1
+            "UsePadding_Top"=true
+            "Padding_Top"=2
+            "UsePadding_Bottom"=true
+            "Padding_Bottom"=2
+            UseBorder=true
+            Border=6
+            UseStroke=true
+            StrokeWidth=2
+            Stroke=RGB(255,47,156)
+            StrokeStyle=2
+            UseBackgroundColor=true
+            Background=RGB(45,45,45)
+          }
+          Color
+          {
+            ForeColor=RGB(79,0,0)
+            WholeLine=true
+          }
+          Style.WholeLine=true
+          Spawn
+          {
+            Title="💭 Psst!"
+            TabGroup="Chatter"
+          }
+          Activate.NoActivity=true
+          Filter
+          {
+            Active=true
+            Replace="💬 \\0"
+          }
+          Stat
+          {
+            Name="Last Whisper:"
+            Prefix="2"
+            Value="\\2"
+            UseColor=true
+            Color=RGB(255,223,223)
+            NameAlignment=2
+            Type=1
+            Int.Add=true
+          }
+        }
+        {
+          Description="OOC poses"
+          Example="(OOC) Frank says \"Whose pose is it?\""
+          CooldownTime=5
+          FindString
+          {
+            MatchText="^[(\\[<]OOC[)\\]>](.+)"
+            RegularExpression=true
+            StartsWith=true
+          }
+          Paragraph
+          {
+            "UseIndent_Left"=true
+            "Indent_Left"=10
+            "UseIndent_Right"=true
+            "Indent_Right"=10
+            "UsePadding_Top"=true
+            "Padding_Top"=2
+            "UsePadding_Bottom"=true
+            "Padding_Bottom"=2
+            UseBorder=true
+            Border=4
+            UseBorderStyle=true
+            BorderStyle=1
+            UseBackgroundColor=true
+            Background=RGB(33,46,103)
+          }
+          Color
+          {
+            ForeColor=RGB(230,232,240)
+            UseForeColor=true
+            WholeLine=true
+          }
+          Style.WholeLine=true
+          Spawn
+          {
+            Title="OOC"
+            TabGroup="Chatter"
+          }
+          Sound.Sound="C:\\Users\\cupro\\Documents\\Beip Beiper\\ooc.mp3"
+          Filter
+          {
+            Active=true
+            Replace=" \\1"
+          }
+          Speech.Say="Out of Character"
+        }
+      }
+    }
+    {
+      Description="[Channel] Spawn Tabs"
+      Example="[Public] Hi everybody!"
+      FindString
+      {
+        MatchText="^\\[([^\\]]+)\\]"
+        RegularExpression=true
+      }
+      Spawn
+      {
+        Active=true
+        Title="\\1"
+        TabGroup="Channels"
+      }
+    }
+    {
+      Disabled=true
+      FindString.MatchText="Connection Messages in a Spawn"
+      Triggers
+      {
+        {
+          Description="Someone connected"
+          Example="Frank has connected"
+          FindString
+          {
+            MatchText="(.+) has connected"
+            RegularExpression=true
+          }
+          Spawn
+          {
+            Active=true
+            Title="Connections"
+          }
+        }
+        {
+          Description="Someone disconnected"
+          Example="Frank has disconnected"
+          FindString
+          {
+            MatchText="(.+) has disconnected"
+            RegularExpression=true
+          }
+          Spawn
+          {
+            Active=true
+            Title="Connections"
+          }
+        }
+      }
+    }
+    {
+      Description="Stat Panes"
+      Disabled=true
+      Triggers
+      {
+        {
+          Description="Character Attributes"
+          Disabled=true
+          Triggers
+          {
+            {
+              Description="Character Attribute Values"
+              Example="Strength: 12/23    Dexterity: 234/345"
+              FindString
+              {
+                MatchText="(Strength|Intelligence|Dexterity): (\\d+)\\/(\\d+)"
+                RegularExpression=true
+              }
+              Stat
+              {
+                Name="\\1"
+                Value="\\2/\\3"
+                NameAlignment=2
+                Type=1
+              }
+            }
+            {
+              Description="Health Bar"
+              Example="Health: 123/234"
+              FindString
+              {
+                MatchText="Health: (\\d+)\\/(\\d+)"
+                RegularExpression=true
+              }
+              Stat
+              {
+                Name="Health"
+                Value="\\1"
+                Color=RGB(0,255,0)
+                NameAlignment=2
+                Type=2
+                Range
+                {
+                  Lower="0"
+                  Upper="\\2"
+                  Color=RGB(0,230,0)
+                }
+              }
+            }
+          }
+        }
+        {
+          Description="Count how often people say Woo"
+          FindString.MatchText="Woo"
+          Stat
+          {
+            Name="Woos"
+            Value="1"
+            NameAlignment=2
+            Int.Add=true
+          }
+        }
+        {
+          Description="Count how often *any* word is used"
+          Example="123 234 These are each different words"
+          FindString
+          {
+            MatchText="([a-z]+)"
+            RegularExpression=true
+          }
+          Stat
+          {
+            Title="Word Counters"
+            Name="\\1"
+            Value="1"
+            NameAlignment=2
+            Int.Add=true
+          }
+        }
+      }
+    }
+  }
+  Aliases
+  {
+    {
+      Description="Nicknames for Friends"
+      Folder=true
+      Aliases
+      {
+        {
+          Description="Mag -> Magdalena"
+          Example="page Mag=Testing"
+          Replace="Magdalena"
+          FindString.MatchText="Mag"
+        }
+        {
+          Description="Gwen -> Gwendolyn"
+          Example="page Gwen=Testing"
+          Replace="Gwendolyn"
+          FindString.MatchText="Gwen"
+        }
+        {
+          Description="Rump -> Rumplestiltskin"
+          Example="page Rump=Testing"
+          Replace="Rumplestiltskinhead"
+          FindString.MatchText="Rump"
+        }
+        {
+          Description="Jac -> Jacqueline"
+          Example="page Jac=Testing"
+          Replace="Jacqueline"
+          FindString.MatchText="Jac"
+        }
+      }
+    }
+  }
+}
