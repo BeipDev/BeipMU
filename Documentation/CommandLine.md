@@ -134,7 +134,7 @@ Usage:
 Usage - To list current pending commands
     /delay list
 
-Usage - To kill a pending command
+Usage - To kill a pending command (not implemented yet, as <ids> haven't been figured out yet)
     /delay kill <id>
 
 Examples:
