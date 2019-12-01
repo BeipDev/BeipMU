@@ -1,18 +1,12 @@
 Version=290
 Windows
 {
-  MDIPosition=(8,1149,1495,943)
+  MDIPosition=(151,1059,1495,943)
   Positions
   {
     {
-      Position=(8,1149,1495,943)
+      Position=(151,1059,1495,943)
       ActiveTab=0
-      Tabs
-      {
-        {
-          Server="LambdaMOO"
-        }
-      }
     }
   }
 }
@@ -21,6 +15,7 @@ Connections
   Logging.RestoreBufferSizeCurrent=256
   KeyboardMacros
   {
+    ""=Control+Alt+A,"OOC Quick Message: Something's come up in RL. I'll be back momentarily"
     ""=NumPad1,"SW"
     ""=NumPad2,"S"
     ""=NumPad3,"SE"
@@ -563,6 +558,24 @@ Connections
           Replace="Jacqueline"
           FindString.MatchText="Jac"
         }
+      }
+    }
+    {
+      Description="Smart Quote Fixer “ or ” -> \""
+      Replace="\""
+      FindString
+      {
+        MatchText="“|”"
+        RegularExpression=true
+      }
+    }
+    {
+      Description="Smart Quote Fixer ‘ or ’ -> '"
+      Replace="'"
+      FindString
+      {
+        MatchText="‘|’"
+        RegularExpression=true
       }
     }
   }

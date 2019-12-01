@@ -1,3 +1,10 @@
+4.00.291 - 2019-11-30
+
+Added 'Only process child triggers during capture' to spawn triggers (very useful for things like WHO lists)
+Added 'Force IPv4' host address lookup to server pane
+Fixed bug where rearranging tabbed spawns causes activity notifications to be on the wrong tab
+Fixed time bug where December causes an invalid date to be used (was using modulo 12 math for the month, but the month started at 1 vs 0)
+
 4.00.290 - 2019-11-7
 
 Added sample pane to triggers/aliases/macros!
