@@ -1,3 +1,19 @@
+4.00.292 - 2020-1-1
+
+Found a way to disable the os default beep sound when going out of bounds in the input window (either delete or with the cursor)
+Switched to the modern OS visual themes, dialogs shouldn't look like they're from Windows 95 anymore!
+Added '/newedit' to create a dedicated editing window (with a few options for it, like being dockable or having spellcheck enabled)
+Added character notes window (Options->Show Character Notes Window) to easily edit existing character info field
+Added crash detector that gives the option to generate a mini dump to send in (to make it much easier to share crashes)
+Added spawn trigger option 'Copy line instead of move' so that a copy can be left in the main output instead of only moving
+Added 'Set Background Color' option to stat windows
+Added Logging->'Starting From Top of Window...' menu item to start a log from anywhere in the output history
+Changed tab colors to be saved per character, not per tab visible at shutdown (behavior with puppets might be weird, let me know what it should do)
+Fixed spawn tab triggers to now honor the "Don't show as activity" setting
+Fixed a bug in smart paste where it was adding an extra line feed per line, resulting in LF CR LF sequences instead of the correct CR LF.
+Fixed the tiny drag image in the Worlds dialog, same issue that the trigger/macros/aliases had when dragging an image, forgot to fix this one too
+Fixed a hang when sending enormous blocks of text (>64K) and using restore logs (if what is sent is larger than the restore log size it would get stuck trying to make room forever)
+
 4.00.291 - 2019-11-30
 
 Added 'Only process child triggers during capture' to spawn triggers (very useful for things like WHO lists)
