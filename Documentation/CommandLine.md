@@ -4,7 +4,6 @@
   - [/@](#@)
   - [/autolog](#autolog)
   - [/char](#char)
-  - [/unchar](#unchar)
   - [/chars](#chars)
   - [/clear](#clear)
   - [/close](#close)
@@ -22,6 +21,7 @@
   - [/log](#log)
   - [/logall](#logall)
   - [/new](#new)
+  - [/newedit](#newedit)
   - [/newinput](#newinput)
   - [/ping](#ping)
   - [/puppet](#puppet)
@@ -77,18 +77,6 @@ Examples:
 
 When you are connected to a server from the world list but did not connect a character yet, this will send the character's connect string and BeipMU will show you as connected to that character.  At this point it will be as though you connected through that character initially, as all of that characters triggers/macros/etc will apply. 
 This is a separate command because it was frequently the case where someone would /connect to a world, do a WHO to see if their friends were there, and if they were, then do a /char to connect and say hi.  Rather than connecting as their char and disconnecting afterwards.  
-
-## /unchar
-Usage:
-
-    /unchar
-
-Examples:
-
-    /char Alpha
-    /unchar
-
-Useful when you are connected to a character but you'd like BeipMU to think you're not connected to a character.  For example if your password was wrong, or if the server lets you switch characters without reconnecting.  As BeipMU has no way of knowing what character you really are, this gives you more manual control. 
 
 ## /chars
 Usage:
@@ -238,6 +226,15 @@ Usage:
     /new 
 
 Opens a new window. 
+
+## /newedit
+Usage:
+
+    /newedit title='string' capture='#' capture_skip='#' spellcheck='t/f'
+
+Opens a new editor window. All attributes are optional, and are in XML style syntax (so ' or " works to surround one). When you click 'Send' there is no alias or command processing done to what is sent. The content is sent directly.
+
+The capture attribute is useful to populate the editor window with the last # of lines in the output window. The capture_skip lets you skip over a certain # of lines before capturing.
 
 ## /newinput
 Usage:
