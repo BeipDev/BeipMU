@@ -1,8 +1,14 @@
+4.00.293 - 2020-1-1
+
+Added '/ansireset' command to reset the current ansi state
+Fixed a docking layout restore bug, where horizontal windows could shift slightly
+Fixed a crash when using Find in the main output window
+
 4.00.292 - 2020-1-1
 
 Found a way to disable the os default beep sound when going out of bounds in the input window (either delete or with the cursor)
 Switched to the modern OS visual themes, dialogs shouldn't look like they're from Windows 95 anymore!
-Added '/newedit' to create a dedicated editing window (with a few options for it, like being dockable or having spellcheck enabled)
+Added '/newedit' to create a dedicated editing window (with a few options for it, like a title or having spellcheck enabled)
 Added character notes window (Options->Show Character Notes Window) to easily edit existing character info field
 Added crash detector that gives the option to generate a mini dump to send in (to make it much easier to share crashes)
 Added spawn trigger option 'Copy line instead of move' so that a copy can be left in the main output instead of only moving
