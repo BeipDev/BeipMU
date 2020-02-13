@@ -24,6 +24,8 @@ You can select rooms/rectangles/exits with clicks or by dragging (and shift drag
 
 When only one item is selected the adjust handles will appear and you can drag them around to resize or move things.
 
+When a single room is selected clicking in the top half (with the box) will edit the room's name. The font will auto shrink to fit if the room name text gets too large to fit at its default size.
+
 To set options like colors for multiple objects, just select them all, then right click on any of them. The color will apply to everything selected.
 
 ## Create Room (Blue circle)
