@@ -3,8 +3,11 @@
 ## All modes
 
 Mouse Wheel - Zooms in/out to the location of the cursor
+
 Middle Click - Pans the map
+
 Smooth movement - If something snaps to the grid, holding down Control will disable snapping. 
+
 Shift - Stickies an action, for example to create multiple rooms just hold shift while doing it and it'll stay in room create mode
 
 ## Navigate Mode (Compass icon)
