@@ -10,7 +10,7 @@ Smooth movement - If something snaps to the grid, holding down Control will disa
 
 Shift - Stickies an action, for example to create multiple rooms just hold shift while doing it and it'll stay in room create mode
 
-Note: The grid isn't a limit for anything, it simply draws around the bounds of your current rooms. You can draw rooms outside the grid bounds and drag them outside. The grid will then grow to fit whatever you do!
+Note: The grid isn't a limit for anything, it simply draws around the bounds of your current rooms. You can draw rooms outside the grid bounds and drag them outside. The grid will then grow to fit whatever you do! It just exists to help align things, it can be disabled in the options.
 
 ## Navigate Mode (Compass icon)
 
