@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<atlas version='1'>
+<font_rooms name='Arial' size='9.0'/>
+<font_exits name='Arial' size='5.0'/>
+<map name='Main'>
+<room name='Fluff Park' rect='70,200,190,280' color='#810D84'/>
+<room name='Along Feline Avenue' rect='90,30,170,90'/>
+<room name='Lynx Lane' rect='220,210,300,270'/>
+<room name='West Park' rect='-40,210,40,270'/>
+<room name='Cobblestone Lane' rect='-150,210,-70,270'/>
+<room name='Cobblestone Intersection' rect='-260,210,-180,270'/>
+<room name='Grassy Field' rect='-260,120,-180,180'/>
+<room name='Shady Path' rect='-260,300,-180,360'/>
+<room name='Secret Place' rect='-150,300,-70,360'/>
+<room name='In front of the WizTower' rect='-370,210,-290,270'/>
+<room name='In front of ACME LABS' rect='-370,120,-290,180'/>
+<room name='Inside ACME LABS' rect='-370,30,-290,90'/>
+<room name='Winding Path' rect='-540,310,-460,370'/>
+<room name='The Wall of Faith' rect='-650,440,-570,500'/>
+<room name='The Forests of Sorrow' rect='-490,430,-410,490'/>
+<room name='The Weeping Halls' rect='-490,520,-410,580'/>
+<room name='The Peaceful Glade' rect='-650,350,-570,410'/>
+<room name='Narrow path of gravel' rect='-760,440,-680,500'/>
+<room name='Gravel path' rect='-870,440,-790,500'/>
+<room name='Fork in the path' rect='-980,440,-900,500'/>
+<room name='Along the ridge' rect='-980,350,-900,410'/>
+<room name='Waterfall' rect='-980,260,-900,320'/>
+<room name='Stone Bridge' rect='-880,260,-800,320'/>
+<room name='Clearing' rect='-980,170,-900,230'/>
+<room name='Chickaree Keep' rect='-880,170,-800,230'/>
+<room name='Small Courtyard' rect='-880,80,-800,140'/>
+<room name='Stable' rect='-780,80,-700,140'/>
+<room name='Entry Hall' rect='-880,-10,-800,50'/>
+<room name='Main Hall' rect='-880,-90,-800,-30'/>
+<room name='Library' rect='-980,-90,-900,-30'/>
+<room name='Upstairs Hall' rect='-880,-260,-800,-200'/>
+<room name='Dining Room' rect='-780,-90,-700,-30'/>
+<room name='Kitchen' rect='-780,-180,-700,-120'/>
+<room name='Lakeside' rect='90,680,170,740'/>
+<room name='Lush Forest' rect='520,680,600,740'/>
+<room name='Deep Forest Glade' rect='620,680,700,740'/>
+<room name='Kerchee&apos;s Foxden' rect='520,590,600,650'/>
+<room name='Kerchee&apos;s beddin den' rect='620,590,700,650'/>
+<room name='Deep in the Forest' rect='520,770,600,830'/>
+<room name='Thick Forest' rect='520,860,600,920'/>
+<room name='Mountain Range' rect='520,950,600,1010'/>
+<room name='Northeast Shore' rect='200,780,280,840'/>
+<room name='Forest Path' rect='200,620,280,680'/>
+<room name='The Forest' rect='200,520,280,580'/>
+<room name='The Dens' rect='200,430,280,490'/>
+<room name='East Shore' rect='290,880,370,940'/>
+<room name='The Guardian' rect='310,780,390,840'/>
+<room name='In Front of the Sunset Rose' rect='400,880,480,940'/>
+<room name='Southeast Shore' rect='190,990,270,1050'/>
+<room name='South Shore' rect='90,1100,170,1160'/>
+<room name='Forest Path' rect='90,1190,170,1250'/>
+<room name='Northwest Shore' rect='-10,780,70,840'/>
+<room name='The Gate' rect='-120,780,-40,840'/>
+<room name='In the Lake' rect='90,880,170,940'/>
+<room name='The Mist' rect='-10,590,70,650'/>
+<room name='Grassy Hills' rect='-40,120,40,180'/>
+<room name='Fluff Pool Area' rect='-150,120,-70,180'/>
+<room name='Parkview Place' rect='-40,300,40,360'/>
+<room name='Sky Diving School' rect='220,120,300,180'/>
+<room name='Zorin&apos;s Ice Cream Parlor' rect='220,300,300,360'/>
+<room name='East Lynx Lane' rect='330,210,410,270'/>
+<room name='Mustelid Marina Boardwalk, South' rect='440,210,520,270'/>
+<room name='Pattaya Beach' rect='530,120,610,180'/>
+<room name='Lobby' rect='-20,30,60,90'/>
+<room name='Guest Room' rect='-20,-60,60,0'/>
+<exit from='0' to='1' name_from='north' name_to='south'/>
+<exit from='0' to='2' name_from='east' name_to='west'/>
+<exit from='3' to='0' name_from='east' name_to='west'/>
+<exit from='4' to='3' name_from='east' name_to='west'/>
+<exit from='4' to='5' name_from='west' name_to='east'/>
+<exit from='5' to='9' name_from='west' name_to='east'/>
+<exit from='9' to='10' name_from='north' name_to='south'/>
+<exit from='10' to='11' name_from='north' name_to='out'/>
+<exit from='0' name_from='board' points='80,280|80,390|50,390'/>
+<exit from='0' to='33' name_from='south' name_to='north'/>
+<exit from='0' name_from='coffeehouse' points='100,280|100,360'/>
+<exit from='1' name_from='northeast' points='210,0'/>
+<exit from='1' name_from='north' points='130,-10'/>
+<exit from='1' to='63' name_from='west' name_to='e'/>
+<exit from='2' to='58' name_from='north' name_to='south'/>
+<exit from='2' to='59' name_from='south' name_to='north'/>
+<exit from='2' to='60' name_from='east' name_to='west'/>
+<exit from='2' name_from='pp' points='370,310'/>
+<exit from='3' to='57' name_from='south' name_to='north'/>
+<exit from='3' to='55' name_from='north' name_to='south'/>
+<exit from='5' to='6' name_from='north' name_to='south'/>
+<exit from='5' to='7' name_from='south' name_to='north'/>
+<exit from='7' to='8' name_from='east' name_to='west'/>
+<exit from='9' to='12' name_from='wp' name_to='3'/>
+<exit from='13' to='12' name_from='4' name_to='1' points='-540,410'/>
+<exit from='12' to='14' name_from='2' name_to='1'/>
+<exit from='14' to='15' name_from='2' name_to='1'/>
+<exit from='16' to='13' name_from='south' name_to='north'/>
+<exit from='17' to='13' name_from='east' name_to='west'/>
+<exit from='18' to='17' name_from='e' name_to='w'/>
+<exit from='19' to='18' name_from='e' name_to='w'/>
+<exit from='20' to='19' name_from='s' name_to='n'/>
+<exit from='21' to='20' name_from='s' name_to='n'/>
+<exit from='22' to='21' name_from='s' name_to='b'/>
+<exit from='21' to='23' name_from='n' name_to='s'/>
+<exit from='24' to='23' name_from='f' name_to='e'/>
+<exit from='25' to='24' name_from='o' name_to='c'/>
+<exit from='25' to='27' name_from='k' name_to='o'/>
+<exit from='25' to='26' name_from='s' name_to='o'/>
+<exit from='28' to='27' name_from='o' name_to='i'/>
+<exit from='28' to='30' name_from='s' name_to='s'/>
+<exit from='28' to='31' name_from='d' name_to='m'/>
+<exit from='28' to='29' name_from='li' name_to='m'/>
+<exit from='30' points='-710,-230'/>
+<exit from='30' points='-930,-230'/>
+<exit from='30' points='-890,-280'/>
+<exit from='31' to='32' name_from='k' name_to='d'/>
+<exit from='33' to='34' name_from='east' name_to='west'/>
+<exit from='33' to='51' name_from='southwest' name_to='northeast'/>
+<exit from='33' to='41' name_from='southeast' name_to='northwest'/>
+<exit from='35' to='34' name_from='b' name_to='east'/>
+<exit from='34' to='36' name_from='foxhole' name_to='out'/>
+<exit from='34' to='38' name_from='south' name_to='north'/>
+<exit from='35' points='750,640'/>
+<exit from='35' points='750,810'/>
+<exit from='37' to='36' name_from='out' name_to='east'/>
+<exit from='38' points='450,800'/>
+<exit from='39' to='38' name_from='n' name_to='south' points='560,830'/>
+<exit from='40' to='39' name_from='n' name_to='s'/>
+<exit from='40' points='560,1040'/>
+<exit from='40' points='630,980'/>
+<exit from='33' to='54' name_from='the mist' name_to='la'/>
+<exit from='41' to='45' name_from='southeast' name_to='northwest'/>
+<exit from='41' to='42' name_from='north' name_to='south'/>
+<exit from='43' to='42' name_from='south' name_to='north'/>
+<exit from='44' to='43' name_from='out' name_to='north'/>
+<exit from='44' points='340,460'/>
+<exit from='41' to='46' name_from='g' name_to='out'/>
+<exit from='46' points='350,750'/>
+<exit from='47' to='45' name_from='out' name_to='sr'/>
+<exit from='47' points='440,850'/>
+<exit from='48' to='45' name_from='northeast' name_to='southwest'/>
+<exit from='49' to='48' name_from='northeast' name_to='southwest'/>
+<exit from='50' to='49' name_from='north' name_to='forest'/>
+<exit from='51' to='52' name_from='tg' name_to='ls'/>
+<exit from='52' points='-80,740'/>
+<exit from='33' to='53' name_from='lake' name_to='out'/>
+<exit from='54' points='30,550'/>
+<exit from='54' points='100,620'/>
+<exit from='56' to='55' name_from='east' name_to='west'/>
+<exit from='56' to='6' name_from='west' name_to='east'/>
+<exit from='57' points='0,360'/>
+<exit from='58' points='260,90'/>
+<exit from='60' points='370,290'/>
+<exit from='60' to='61' name_from='east' name_to='west'/>
+<exit from='60' points='370,190'/>
+<exit from='61' to='62' name_from='ne' name_to='sw'/>
+<exit from='61' points='480,300'/>
+<exit from='61' points='480,190'/>
+<exit from='62' points='660,150'/>
+<exit from='64' to='63' name_from='s' name_to='n'/>
+<exit from='54' points='-50,620'/>
+</map>
+<map name='The Wiztower'>
+<room name='WizTower, Lobby' rect='-270,90,-170,170'/>
+<room name='FluffMUCK Museum' rect='-400,100,-320,160'/>
+<room name='Conference Room' rect='-260,-30,-180,30'/>
+<room name='Programmer&apos;s Den' rect='-400,-30,-320,30'/>
+<room name='New Fluffsters Welcome Area' rect='-60,-30,20,30'/>
+<room name='Inside an Elevator' rect='-260,230,-180,290'/>
+<room name='Hallway, 50th Floor' rect='-120,230,-40,290'/>
+<room name='Mediators Reception Area' rect='-20,230,60,290'/>
+<room name='100th Floor: Wizard&apos;s Offices' rect='-120,340,-40,400'/>
+<room name='WizTower: On the Roof' rect='-20,340,60,400'/>
+<exit from='0' to='4' name_from='wel' name_to='out'/>
+<exit from='0' to='5' name_from='ele' name_to='lob'/>
+<exit from='0' to='3' name_from='den' name_to='out'/>
+<exit from='0' to='2' name_from='con' name_to='out'/>
+<exit from='0' to='1' name_from='mus' name_to='out'/>
+<exit from='3' name_from='door' points='-360,-70'/>
+<exit from='5' to='6' name_from='050' name_to='e'/>
+<exit from='7' to='6' name_from='o' name_to='m'/>
+<exit from='7' points='20,200'/>
+<exit from='7' points='20,320'/>
+<exit from='7' points='100,260'/>
+<exit from='5' to='8' name_from='100' name_to='ele' points='-190,290|-190,370'/>
+<exit from='9' to='8' name_from='down' name_to='up'/>
+</map>
+<map name='Space Station Celeste'>
+<room name='Observation Room' rect='70,90,150,150'/>
+<room name='HoloDeck' rect='70,180,150,240'/>
+<room name='Hot Tub Room' rect='-40,0,40,60'/>
+<room name='The Hot Tub' rect='-40,-90,40,-30'/>
+<room name='Corridor' rect='180,90,260,150'/>
+<room name='Further down the Corridor' rect='290,90,370,150'/>
+<room name='Station Engineering' rect='400,90,480,150'/>
+<room name='Inside a Turbolift' rect='70,0,150,60'/>
+<room name='Zorin&apos;s Bedroom' rect='70,-230,150,-170'/>
+<room name='Zorin&apos;s Living Room' rect='180,-90,260,-30'/>
+<room name='Dome Room' rect='180,-180,260,-120'/>
+<room name='Zorin&apos;s Home Office' rect='300,-230,380,-170'/>
+<room name='Storage Closet' rect='-40,-230,40,-170'/>
+<room name='Space Station Celeste: Transporter Room' rect='-40,90,40,150'/>
+<room name='Space Station Celeste: Landing Bay' rect='180,0,260,60'/>
+<room name='Brightie&apos;s Haunt' rect='180,370,260,430'/>
+<room name='Stego&apos;s Den' rect='230,280,310,340'/>
+<room name='Stego&apos;s Bunk' rect='330,280,410,340'/>
+<room name='Ronnie&apos;s Bunk' rect='330,370,410,430'/>
+<room name='Caeron&apos;s Place' rect='130,280,210,340'/>
+<room name='Prof.Badgerton&apos;s Quarters' rect='290,0,370,60'/>
+<exit from='1' to='0' name_from='north' name_to='south' points='110,150'/>
+<exit from='2' to='0' name_from='exit' name_to='northwest'/>
+<exit from='3' to='2' name_from='exit' name_to='enter'/>
+<exit from='0' to='4' name_from='east' name_to='out'/>
+<exit from='4' to='19' name_from='cp' name_to='out'/>
+<exit from='4' to='15' name_from='br' name_to='out'/>
+<exit from='4' to='5' name_from='east' name_to='west'/>
+<exit from='5' to='20' name_from='pb' name_to='out'/>
+<exit from='5' name_from='rq' points='330,190'/>
+<exit from='5' to='6' name_from='east' name_to='out'/>
+<exit from='7' to='0' name_from='00' name_to='turbo'/>
+<exit from='7' to='10' name_from='02' name_to='turbo'/>
+<exit from='7' to='13' name_from='03' name_to='turbo'/>
+<exit from='7' to='8' name_from='01' name_to='turbo'/>
+<exit from='7' to='14' name_from='04' name_to='turbo'/>
+<exit from='9' to='8' name_from='zor' name_to='out'/>
+<exit from='10' to='9' name_from='down' name_to='up'/>
+<exit from='11' to='9' name_from='out' name_to='office'/>
+<exit from='11' to='8' name_from='bed'/>
+<exit from='12' to='8' name_from='out' name_to='closet'/>
+<exit from='13' to='0' name_from='in'/>
+<exit from='0' to='9' name_from='up' name_to='down' points='160,60|160,-10'/>
+<exit from='14' to='0' name_from='in'/>
+<exit from='14' name_from='out' points='310,-50'/>
+<exit from='4' to='16' name_from='st' name_to='out'/>
+<exit from='16' to='17' name_from='s' name_to='dybob'/>
+<exit from='18' to='16' name_from='o' name_to='r'/>
+</map>
+<far_exits>
+<exit map_from='1' map_to='0' points_split='2' from='0' to='9' name_from='out' name_to='west' points='-130,130|-550,190|-550,240'/>
+<exit map_from='0' map_to='2' points_split='2' from='0' to='0' name_from='pad' name_to='out' points='180,280|180,390|-20,260|-20,210'/>
+</far_exits>
+</atlas>
