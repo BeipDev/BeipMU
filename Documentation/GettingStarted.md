@@ -57,6 +57,8 @@ The Character Info field is the same as the Server Info in the previous example 
 
 If you would like BeipMU to automatically save a log of your session every time you connect your character then click on Log File and browse to the location to save the log(s). You can also just manually type the filename into the text box beside the button as pictured above. Our logs will be saved to a file located at "C:\logs\beip.txt".
 
+Environment variables are processed in the log filename, so if you use Dropbox and want to save your files relative to it, you'd save a log as "%HOMEPATH%\Dropbox (Personal)\MU Stuff\%server% - %character% - %date%.html" (crazy example just to show what you can do).
+
 If you would prefer BeipMU to include the current date in the log file name, select Append Current Date. Otherwise all logs for this character will be saved to the same file.
 
 Note that automated logging only works if you connect to your character as described in the next section.
