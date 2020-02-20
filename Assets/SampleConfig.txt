@@ -24,6 +24,7 @@ Connections
     ""=NumPad7,"NW"
     ""=NumPad8,"N"
     ""=NumPad9,"NE"
+    ""=Control+T,"/@window.input.Set(\"@emit \"+window.input.get().replace(/\\n/g, \"\\n@emit \"));"
   }
   Shortcuts
   {
