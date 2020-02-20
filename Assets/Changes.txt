@@ -1,3 +1,17 @@
+4.00.294 - 2020-2-20
+
+Added 'Clear' Edit menu item for edit windows
+Added Tab Colors for Puppets
+Added 'Delay between lines (seconds)' for Smart Paste sends
+Changed Log file picker to remember the file extension after closing it
+Changed puppets to not see the Connected/Disconnected messages as it'd cause activity in their windows that wasn't useful
+Switched to PCRE 10.34 (from PCRE 8.x, exe grew by about 100k so hopefully regexes works a lot better!)
+Fixed Logging->'Starting from Top of Window' to be more reliable, as it was previously using the 'mouse cursor over' code to work.
+Fixed a glitch where right clicking in the input window/char notes/editor pane causes the window to scroll and selection to change
+Fixed a glitch when docking windows larger than the available space. Now they shrink down to fit
+Fixed hang/crash bug with the find dialog that happens if you have a 'New Content' marker visible, the output window is at maximum, and new text comes in
+Fixed a hang when || is in a regex (probably mid edit due to preview). 'a||b' is seen as 'a or nothing or b' and the nothing results in an infinite loop of nothing matches.
+
 4.00.293 - 2020-1-1
 
 Added '/ansireset' command to reset the current ansi state
@@ -201,7 +215,7 @@ Fixed a bad bug where shutting down windows doesn't save the config file (this r
 Fixed a bug where the keyboard macro text length would let you paste 64k but it wouldn't persist it
 Fixed some Wine issues on Linux where there'd be multiple disconnect messages and an error message
 
-3.00.278 - 2019-1-6
+3.00.278 - 2019-1-6If yo
 
 Added spawn tabs! Just specify a 'Tab group' name for a spawn trigger and multiple spawn windows will appear as a single tabbed window.
 Fixed regex search bug, where it wasn't skipping the previous match properly, which caused extra invalid matches (for example quoted text would not match correctly)
