@@ -74,6 +74,10 @@ Edit the colors used on the map (any changes can be undone with undo/redo).
 
 Search for rooms through a partial name. Clicking on the rooms will center them in the view
 
+### 😢 Help
+
+Opens this page
+
 ### 🗺 Maps
 
 Create/delete/switch between maps.
