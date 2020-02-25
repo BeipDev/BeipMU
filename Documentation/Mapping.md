@@ -102,11 +102,11 @@ To route exits around things, just select an exit by clicking, then right click 
 
 ## /map_addroom
 
-   /map_addroom <room name> <how to get there> <how to get back>
+    /map_addroom <room name> <how to get there> <how to get back>
 
 Example:
 
-   /map_addroom "Crossroads Hotelry" east west
+    /map_addroom "Crossroads Hotelry" east west
 
 Used to easily create a room + exit. If you have a current room, this will create a new room matching the size of it with the given name, plus the exit already hooked up. Just drag to position the room how you want!
    
