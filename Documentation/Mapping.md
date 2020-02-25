@@ -97,3 +97,16 @@ Options lets you change the room/exit fonts, etc..
 To create an exit, just select a room, then click and drag on the circle at the center. To create an exit to a room on a different map, right click the room and choose 'Set as exit target room' then go to the other map and right click on the destination room and say 'Create exit to room'. Exit endpoints can be attached to other rooms and also the edges of a room (to make the routes look nicer).
 
 To route exits around things, just select an exit by clicking, then right click somewhere on the line and 'add point'. You can delete existing points by right clicking on them and choosing 'delete point'.
+
+# Console Commands
+
+## /map_addroom
+
+   /map_addroom <room name> <how to get there> <how to get back>
+
+Example:
+
+   /map_addroom "Crossroads Hotelry" east west
+
+Used to easily create a room + exit. If you have a current room, this will create a new room matching the size of it with the given name, plus the exit already hooked up. Just drag to position the room how you want!
+   
