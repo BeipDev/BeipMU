@@ -1,6 +1,6 @@
 # How to Map!
 
-## All modes
+## Common Controls
 
 Mouse Wheel - Zooms in/out to the location of the cursor
 
@@ -12,15 +12,37 @@ Shift - Stickies an action, for example to create multiple rooms just hold shift
 
 Note: The grid isn't a limit for anything, it simply draws around the bounds of your current rooms. You can draw rooms outside the grid bounds and drag them outside. The grid will then grow to fit whatever you do! It just exists to help align things, it can be disabled in the options.
 
-## Navigate Mode (Compass icon)
+## Navigation Pane
 
-Clicking and dragging on anywhere that isn't a room will pan
+Clicking and dragging on anywhere that isn't a room will pan with the navigation actions
 
-Right click to set your current room
+### Push Pin (Set Current Room)
+
+Click on any room to set your current room
+
+### Crosshair (Center on current room)
+
+If your current room isn't visible (or on another map) it switches to that map and center it on screen.
+
+### Play (By Click)
 
 Left click to set a destination room, which will hilight the shortest path if it's possible to reach the room. Once the path is shown, keep clicking in the destination room to move one step closer to it.
 
-## Selecting Mode (Arrow icon)
+### Fast Forward (Speed Run)
+
+Left click to get to the destination room as fast as possible (sends all the exits immediately with no delay).
+
+### Compass (Try to determine current location)
+
+If the current room isn't set, this will look through your output history to see if it can find a known room name. If one is found it will set it as your current room. This isn't guaranteed to work!
+
+### Eyes (Try to live track the current location)
+
+If you like having the map show where you are, but still want to type exits in the input window, try enabling this. It will watch for rooms reachable from your current room and move to them if it sees one.
+
+## Editing Pane
+
+### Hand with finger (Selecting Mode)
 
 You can select rooms/rectangles/exits with clicks or by dragging (and shift dragging or clicking to modify an existing selection).
 
@@ -30,25 +52,35 @@ When a single room is selected clicking in the top half (with the box) will edit
 
 To set options like colors for multiple objects, just select them all, then right click on any of them. The color will apply to everything selected.
 
-## Create Room (Blue circle)
+### Blue Square (Create Room)
 
 Left click to create one of default size or click and drag to set the exact area
 
-## Draw Rectangle (Green square)
+### Green Square (Draw Rectangle)
 
 Left click and drag to create background color rectangles. Useful to mark out areas on the map.
 
-## Pan (hand)
+### Pan (hand)
 
 Left click and drag to pan the map. You can also use the middle mouse button/hold down space to pan at any time.
 
-## Maps
+## Misc options
+
+### Palette
+
+Edit the colors used on the map (any changes can be undone with undo/redo).
+
+### Find
+
+Search for rooms through a partial name. Clicking on the rooms will center them in the view
+
+### Maps
 
 Create/delete/switch between maps.
 
 The map name to the right is editable, just click on it to rename it.
 
-## Menu options
+## Menu commands (the left hamburger menu)
 
 File -  open/save/etc...
 
