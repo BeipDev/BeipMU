@@ -169,7 +169,6 @@
 <room name='Commons Courts' rect='960,960,1010,980' color='#27D5F'/>
 <room name='Back Alley' rect='1220,1010,1270,1030' color='#27D5F'/>
 <room name='The Unkindness' rect='1120,-240,1170,-220' color='#694E03'/>
-<room name='Inns / Bars' rect='500,-1250,590,-1210' color='#694E03'/>
 <room name='Grayson Mansion' rect='-970,40,-920,60' color='#808080' color_outline='#FFFF80'/>
 <room name='Ward of the Compact' rect='-470,-690,-320,-650' color='#8000' color_outline='#0'/>
 <exit from='1' to='0' name_from='south' name_to='north'/>
@@ -486,7 +485,7 @@
 <exit from='163' to='64' name_from='o' name_to='co'/>
 <exit from='164' to='66' name_from='o' name_to='ba'/>
 <exit from='165' to='72' name_from='o' name_to='tu'/>
-<exit from='167' to='89' name_from='o' name_to='gm'/>
+<exit from='166' to='89' name_from='o' name_to='gm'/>
 <rectangle rect='-520,-620,820,720' color='#3500'/>
 <rectangle rect='-920,-1020,-580,-680' color='#3C'/>
 <rectangle rect='-920,-220,-580,320' color='#4B4B4B'/>
