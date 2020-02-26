@@ -109,4 +109,15 @@ Example:
     /map_addroom "Crossroads Hotelry" east west
 
 Used to easily create a room + exit. If you have a current room, this will create a new room matching the size of it with the given name, plus the exit already hooked up. Just drag to position the room how you want!
-   
+
+If the exit names are a known direction (like n/east/nw/southwest) it will place the room in that direction relative to the current room.
+
+## /map_addexit
+
+    /map_addexit <how to get there> <how to get back>
+    
+Example:
+
+    /map_addexit north south
+    
+Will look for a room in the direction the exit names imply and if it sees one nearby it will create an exit to it.
