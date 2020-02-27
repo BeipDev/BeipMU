@@ -1,0 +1,495 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<atlas version='1' color_background='#F0F0F' color_exit='#FF5922'>
+<font_rooms name='Arial' size='9.0'/>
+<font_exits name='Arial' size='5.0'/>
+<map name='FurryMUCK'>
+<room name='Tavern Vestibule' rect='0,200,100,300' color='#610C85'/>
+<room name='The Emerald City Tavern' rect='-100,-30,120,180' color='#610C85'/>
+<room name='Restroom' rect='-250,-30,-160,40' color='#610C85'/>
+<room name='Under the couch' rect='-250,100,-160,170' color='#610C85'/>
+<room name='Salon' rect='-250,220,-160,290' color='#610C85'/>
+<room name='Along the Yellow Brick Road' rect='200,400,300,500'/>
+<room name='West Road' rect='-450,430,50,500'/>
+<room name='Along the Yellow Brick Road' rect='600,800,700,900'/>
+<room name='North Walk' text_angle='270' rect='-450,-50,-370,350'/>
+<room name='Canyon View' rect='-520,-250,-290,-140'/>
+<room name='Park' rect='-770,50,-580,220'/>
+<room name='Temple' rect='-550,50,-470,120'/>
+<room name='Far End of Canyon Bridge' rect='-520,-420,-290,-360'/>
+<room name='Woodgate Forest' rect='1850,-480,1950,-380'/>
+<room name='Emerald Beach' rect='-940,-460,-740,-330'/>
+<room name='Beach Hut' rect='-800,-280,-740,-220'/>
+<room name='Jetty' rect='-1100,-370,-960,-330'/>
+<room name='Emerald Rock' rect='-1050,-460,-1000,-410'/>
+<room name='Caballo Isle South Docks' rect='-2690,-330,-2380,-60'/>
+<room name='Cougar Boulevard' rect='800,1000,900,1100'/>
+<room name='The Inferno Mall parking lot' rect='800,800,900,900'/>
+<room name='Cougar Boulevard Intersection' rect='1000,1000,1100,1100'/>
+<room name='Cougar Boulevard' rect='1200,1000,1300,1100'/>
+<room name='Wolf-Byte Computer Center' rect='1200,800,1300,900' color='#610C85'/>
+<room name='Cougar Boulevard e4' rect='1400,1000,1500,1100'/>
+<room name='East Cougar Boulevard' rect='1600,1000,1700,1100'/>
+<room name='FurryMUCK Krystals' rect='1600,800,1700,900' color='#610C85'/>
+<room name='West Corner of The Park' rect='2000,1000,2100,1100' color='#166400'/>
+<room name='Bandstand' rect='2000,860,2040,900' color='#610C85'/>
+<room name='Behind the Bulletin Board, at the Park' rect='2000,1250,2050,1300' color='#610C85'/>
+<room name='South Corner of The Park' rect='2200,1200,2300,1300' color='#166400'/>
+<room name='East Corner of The Park' rect='2400,1000,2500,1100' color='#166400'/>
+<room name='North Corner of The Park' rect='2200,800,2300,900' color='#166400'/>
+<room name='Pond' rect='2200,1000,2300,1100'/>
+<room name='North Furry Avenue' rect='2200,1400,2300,1500' color_outline='#F717E0'/>
+<room name='Along Furry Avenue' rect='2200,1600,2300,1700' color_outline='#F717E0'/>
+<room name='On Furry Avenue' rect='2200,1800,2300,1900' color_outline='#F717E0'/>
+<room name='Along Furry Avenue' rect='2200,2000,2300,2100'/>
+<room name='The Vanilla Club' rect='2400,2000,2500,2100' color='#610C85'/>
+<room name='Furry Avenue Intersection' rect='2200,2200,2300,2300' color_outline='#F717E0'/>
+<room name='Along South Furry Avenue' rect='2200,2400,2300,2500'/>
+<room name='Along South Furry Avenue' rect='2200,2600,2300,2700'/>
+<room name='Southern Gate' rect='2200,2800,2300,2900'/>
+<room name='Lionman&apos;s areas' rect='2200,2910,2300,2940' color='#484848'/>
+<room name='Jazmyn&apos;s Puma Pad' rect='800,1200,900,1300' color='#610C85' under_construction='t'/>
+<room name='Cougar Boulevard' rect='400,1000,500,1100' under_construction='t'/>
+<room name='Wyld Park' rect='400,800,500,900' under_construction='t'/>
+<room name='Ken_Cougar&apos;s house' rect='400,1200,500,1300' color='#610C85' under_construction='t'/>
+<room name='Cougar Boulevard Intersection' rect='200,1000,300,1100'/>
+<room name='Access Road' rect='200,800,300,900' under_construction='t'/>
+<room name='Feather Heights Boulevard, 100 Block' rect='200,1200,300,1300' color_outline='#F717E0'/>
+<room name='WELSH FARM' rect='200,600,300,700' color='#610C85' under_construction='t'/>
+<room name='West end of Cougar Boulevard' rect='-200,1000,-100,1100'/>
+<room name='Woods' rect='0,800,100,900' under_construction='t'/>
+<room name='Ranalir&apos;s Front Yard' rect='-200,800,-100,900' color='#610C85' under_construction='t'/>
+<room name='Rolling Hills' rect='-400,1000,-300,1100'/>
+<room name='Forest.' rect='-600,1000,-500,1100'/>
+<room name='Red Wolfe Road.' rect='1000,600,1100,700' under_construction='t'/>
+<room name='Tiger&apos;s Den Drive - North End' rect='1000,1200,1100,1300' under_construction='t'/>
+<room name='Iconograph Art Gallery.' rect='1130,920,1180,970' color='#610C85' under_construction='t'/>
+<room name='Kris T&apos;s Gym' rect='1200,1150,1300,1200' color='#610C85' under_construction='t'/>
+<room name='Oasis street' rect='1000,400,1100,500' under_construction='t'/>
+<room name='Kiyomi&apos;s' rect='800,600,900,700' color='#610C85' under_construction='t'/>
+<room name='The House of Expression' rect='1200,600,1300,700' color='#610C85' under_construction='t'/>
+<room name='Oasis Street, West' rect='1200,400,1300,500' under_construction='t'/>
+<room name='Oasis Street, West Central' rect='1400,400,1500,500' under_construction='t'/>
+<room name='Oasis Street, Central' rect='1600,400,1700,500' under_construction='t'/>
+<room name='Oasis Street, East Central' rect='1800,400,1900,500' under_construction='t'/>
+<room name='Oasis Street, East End' rect='2000,400,2100,500' under_construction='t'/>
+<room name='Not Frank&apos;s Place' rect='1400,800,1500,900' color='#610C85' under_construction='t'/>
+<room name='Storm Tower - the courtyard' rect='1400,1200,1500,1300' color='#610C85' under_construction='t'/>
+<room name='the Dancing Unicorn Inn' rect='1600,1200,1700,1300' color='#610C85' under_construction='t'/>
+<room name='South Sable Street' rect='2200,600,2300,700' under_construction='t'/>
+<room name='The Jungle' rect='2400,600,2500,700' color='#610C85' under_construction='t'/>
+<room name='FurryMUCK lost and found' rect='2400,400,2500,500' color='#610C85' under_construction='t'/>
+<room name='The Cafe Rose' rect='2000,600,2100,700' color='#610C85' under_construction='t'/>
+<room name='Along Sable Street' rect='2200,200,2300,300' under_construction='t'/>
+<room name='Purple Nurple' rect='2400,200,2500,300' color='#610C85' under_construction='t'/>
+<room name='Oasis street' rect='2000,200,2100,300' under_construction='t'/>
+<room name='Further down Sable Street' rect='2200,0,2300,100' under_construction='t'/>
+<room name='Rifkin&apos;s Clockworks Tinkershop' rect='2000,0,2100,100' color='#610C85' under_construction='t'/>
+<room name='Sable Street Intersection' rect='2200,-200,2300,-100' under_construction='t'/>
+<room name='Jester&apos;s Lane (Bells)' rect='2400,-200,2500,-100' color_outline='#F717E0' under_construction='t'/>
+<room name='North end of Sable Street' rect='2200,-400,2300,-300' under_construction='t'/>
+<room name='Furry Arms apartments' rect='2000,-200,2100,-100' color='#610C85' under_construction='t'/>
+<room name='Itza Castle' rect='2120,-80,2180,-20' color='#610C85'/>
+<room name='Sy&apos;s Lantana store' rect='2320,-80,2380,-20' color='#610C85' under_construction='t'/>
+<room name='The Room Temperature Banana Detective Agency' rect='2320,-280,2380,-220' color='#610C85' under_construction='t'/>
+<room name='South Side of the Point' rect='2200,-600,2300,-500'/>
+<room name='MOS Ottersley Spaceport' rect='2400,-400,2500,-300' under_construction='t'/>
+<room name='Ferry Landing' rect='2000,-600,2100,-500' under_construction='t'/>
+<room name='Adventureland' rect='2400,-600,2500,-500' under_construction='t'/>
+<room name='Unicorn Point' rect='2200,-800,2300,-700'/>
+<room name='High Field' rect='2400,-800,2500,-700'/>
+<room name='Topiary' rect='2000,-800,2100,-700' under_construction='t'/>
+<room name='Serendipity Hill' rect='2600,-800,2700,-700' under_construction='t'/>
+<room name='South Shore of Henson Lake' rect='2400,-1000,2500,-900' under_construction='t'/>
+<room name='Swinging bridge' rect='2400,-1200,2500,-1100' under_construction='t'/>
+<room name='Furry Island' rect='2400,-1400,2500,-1300' under_construction='t'/>
+<room name='Under Unicorn Point' rect='2200,-1000,2300,-900' under_construction='t'/>
+<room name='Long tunnel, section 23' rect='2320,-850,2380,-800' color='#484848'/>
+<room name='Tunnel Junction' rect='2320,-680,2380,-620' color='#484848'/>
+<room name='Tight Underground Passage' rect='2320,-580,2380,-520' color='#484848' under_construction='t'/>
+<room name='Woodgate Forest - Campfire Clearing' rect='1850,-880,1950,-780' under_construction='t'/>
+<room name='TundraWolf&apos;s House' rect='1650,-1080,1750,-980' under_construction='t'/>
+<room name='Woodgate Forest: Stream' rect='1850,-1680,1950,-1580' under_construction='t'/>
+<room name='Woodgate Forest: Foxy Glade(#189994RJA)' rect='1650,-1280,1750,-1180' under_construction='t'/>
+<room name='Yenx&apos;s Den' rect='1770,-1260,1840,-1200' color='#610C85' under_construction='t'/>
+<room name='Woodgate Forest: The far bank.' rect='1850,-2080,1950,-1980' under_construction='t'/>
+<room name='Along the Stream' rect='1650,-1680,1750,-1580' under_construction='t'/>
+<room name='North Bank(#149938RCJ)' rect='1650,-2080,1750,-1980'/>
+<room name='The Orchard' rect='1650,-1480,1750,-1380' under_construction='t'/>
+<room name='Before the bridge' rect='1450,-1680,1550,-1580' under_construction='t'/>
+<room name='Tree' rect='1760,-1550,1840,-1510' color='#610C85' under_construction='t'/>
+<room name='Aimless&apos; Clearing(#117875RLJA' rect='1250,-1680,1350,-1580' under_construction='t'/>
+<room name='On the wooden footbridge' rect='1450,-1880,1550,-1780' under_construction='t'/>
+<room name='Outside the Cabins' rect='1450,-2080,1550,-1980' under_construction='t'/>
+<room name='West Cabin' rect='1360,-2050,1420,-2010' under_construction='t'/>
+<room name='East Cabin' rect='1580,-2050,1640,-2010' under_construction='t'/>
+<room name='Deeper into the woods' rect='1050,-1680,1150,-1580' under_construction='t'/>
+<room name='Tree' rect='1350,-1550,1430,-1510' color='#610C85' under_construction='t'/>
+<room name='Tent' rect='1170,-1550,1250,-1510' color='#610C85' under_construction='t'/>
+<room name='Barjlvania' rect='850,-1480,950,-1380' under_construction='t'/>
+<room name='Along the path to the lake' rect='850,-1880,950,-1780' under_construction='t'/>
+<room name='The Wooded Dock' rect='650,-1480,750,-1380' under_construction='t'/>
+<room name='A dark forest path' rect='650,-1880,750,-1780' under_construction='t'/>
+<room name='The shore of Lake Meer(#92889RJA)' rect='850,-2080,950,-1980' under_construction='t'/>
+<room name='Cabin' rect='650,-2080,750,-1980' color='#610C85' under_construction='t'/>
+<room name='The Jetty' rect='1050,-2080,1150,-1980' under_construction='t'/>
+<room name='The Waters of Lake Meer' rect='1050,-1950,1150,-1910' color='#793DE' color_outline='#180DEE' under_construction='t'/>
+<room name='Woodgate East Station' rect='450,-1880,550,-1780' under_construction='t'/>
+<room name='Station foyer' rect='250,-1880,350,-1780' under_construction='t'/>
+<room name='Platform 1a' rect='250,-2080,350,-1980' under_construction='t'/>
+<room name='  Platform 1b' rect='250,-2280,350,-2180' under_construction='t'/>
+<room name='Platform 2b' rect='450,-2280,550,-2180' under_construction='t'/>
+<room name='Platform 2a' rect='450,-2080,550,-1980' under_construction='t'/>
+<room name='Feather Heights Boulevard, 200 Block' rect='200,1400,300,1500' color_outline='#F717E0'/>
+<room name='LearFox&apos;s House' rect='0,1200,100,1300' color='#610C85' under_construction='t'/>
+<room name='Feather Heights Boulevard, 300 Block' rect='200,1600,300,1700' color_outline='#F717E0'/>
+<room name='FurryMUCK 2020' rect='310,-290,1090,-240' color='#0'/>
+<room name='Mapped by Cuprohastes, for BeipMU: "Bro do you even Beip?"' rect='310,100,1090,190'/>
+<room name='A Street.' rect='510,-130,610,-30'/>
+<room name='Street containing references to places that no longer have connecting exits.' rect='510,-20,610,80' color_outline='#F717E0'/>
+<room name='Water.' rect='630,-120,740,-60' color='#2DBBFF' color_outline='#2DBBFF'/>
+<room name='Background indicating a region. Can be any colour.' rect='770,-120,880,-60' color='#82480F' color_outline='#82480F'/>
+<room name='A private room.' rect='900,-130,1000,-30' color='#610C85'/>
+<room name='An unmapped private room.' rect='900,-20,1000,80' color='#610C85' under_construction='t'/>
+<room name='A street with incomplete mapping.' rect='400,-130,500,-30' under_construction='t'/>
+<room name='Example Road(#12345RJ) - A room with a publically visible Database Ref' rect='400,-20,500,80'/>
+<room name='This legend is provided to aid in understanding the map. The map is subject to change. Some places are not connected to the play grid and can only be reached by teleport. Some places indicated in room text no longer exist or have no doors. Their rooms have not been added to the map. Some rooms may have been added, but have been since deleted or were not checked for access.' rect='400,-230,1000,-150'/>
+<room name='Feather Heights Intersection(#375RLSJ)' rect='200,1800,300,1900'/>
+<room name='The summit of Squirrel Hill' rect='0,1800,100,1900'/>
+<room name='The New and Improved Jubatus Run' rect='400,1800,500,1900'/>
+<room name='Feather Heights Square' rect='200,2200,300,2300'/>
+<room name='Archteryx&apos;s Roost' rect='0,2400,100,2500' color='#610C85' under_construction='t'/>
+<room name='Another part of Jubatus Run' rect='600,1800,700,1900'/>
+<room name='Tiger&apos;s Den Drive - South Intersection' rect='1000,1800,1100,1900'/>
+<room name='Tiger&apos;s Den Drive - Central' rect='1000,1600,1100,1700' color_outline='#F717E0' under_construction='t'/>
+<room name='Jubatus Run - Hill Crest' rect='1200,1800,1300,1900'/>
+<room name='Tiger&apos;s Den Drive - South End' rect='1000,2000,1100,2100' under_construction='t'/>
+<room name='Fur-Le-Dance' rect='800,1600,900,1700' color='#610C85' under_construction='t'/>
+<room name='Tiger&apos;s Den Drive - North' rect='1000,1400,1100,1500'/>
+<room name='Tiger&apos;s Claw Mall' rect='800,1400,900,1500' color='#610C85' under_construction='t'/>
+<room name='Residential Commons(#149487RLJ)' rect='1200,1400,1300,1500'/>
+<room name='Trillian&apos;s Library' rect='1150,1200,1200,1300' color='#610C85' under_construction='t'/>
+<room name='Snifter&apos;s Home Sweet Home' rect='1000,2150,1100,2200' color='#610C85' under_construction='t'/>
+<room name='Further Along the Path.(#26604RLJ)' rect='1120,2120,1180,2180' color='#F717E0' under_construction='t'/>
+<room name='Trap room. There is an entry, but no exit.' rect='630,-20,740,80' color='#F717E0'/>
+<room name='Feather Heights Park' rect='200,2400,300,2500'/>
+<room name='West Shiner Street' rect='600,2200,700,2300'/>
+<room name='IAMH Hospital' rect='600,2340,700,2390' color='#610C85' under_construction='t'/>
+<room name='Cuddlers Club' rect='600,2110,700,2150' color='#610C85' under_construction='t'/>
+<room name='Further Along Shiner Street' rect='1400,2200,1500,2300'/>
+<room name='Radio Shack' rect='1400,2110,1500,2150' color='#610C85' under_construction='t'/>
+<room name='The Playful Panther' rect='1500,2110,1600,2150' color='#F717E0' under_construction='t'/>
+<room name='Along Shiner Street' rect='1800,2200,1900,2300'/>
+<room name='Shiner Street' rect='2000,2200,2100,2300'/>
+<room name='Furry Adoption Agency and Family Center' rect='2000,2100,2100,2150' color='#610C85' under_construction='t'/>
+<room name='Lynn Onyx&apos; Panda Palace and Donut Shop' rect='2010,2350,2090,2390' color='#610C85' under_construction='t'/>
+<room name='Shady Street' rect='2400,2200,2500,2300' under_construction='t'/>
+<room name='RATINOX&apos;s Body Shop' rect='2400,2110,2500,2160' color='#610C85' under_construction='t'/>
+<room name='McThulhu&apos;s' rect='2310,2110,2400,2160' color='#F717E0' under_construction='t'/>
+<room name='Further down Shady Street' rect='2600,2200,2700,2300' color_outline='#F717E0' under_construction='t'/>
+<room name='The end of Shady Avenue' rect='2800,2200,2900,2300' under_construction='t'/>
+<room name='pool hall' rect='2600,2400,2700,2500' under_construction='t'/>
+<room name='Shady Hill Cemetary(#23518RLJA)' rect='3000,2400,3100,2500' color_outline='#F717E0' under_construction='t'/>
+<room name='The Mortal Coil' rect='2800,2000,2900,2100' color='#610C85' under_construction='t'/>
+<room name='BAYOU DE LA NUIT(#127647RLJ)' rect='3000,3200,3100,3300' under_construction='t'/>
+<room name='FRENCH QUARTER(#88497RLJ)' rect='3000,3400,3100,3500' under_construction='t'/>
+<room name='BAYOU BONEYARD(#125514RLJ)' rect='2800,3200,2900,3300' under_construction='t'/>
+<room name='HALLOWEEN HOLLOW(#50790RLJ)' rect='2800,3000,2900,3100' under_construction='t'/>
+<room name='NEW ENGLAND COVERED BRIDGE' rect='2800,2800,2900,2900' under_construction='t'/>
+<room name='OUTSIDE -NEW ENGLAND NEXUS(#121629RLJ)' rect='2800,2600,2900,2700' under_construction='t'/>
+<room name='NEW ENGLAND NEXUS' rect='2800,2400,2900,2500' color='#610C85' under_construction='t'/>
+<room name='On the hill' rect='0,2600,100,2700'/>
+<room name='Atop the rise' rect='200,2800,300,2900'/>
+<room name='TKI And I Clothiers and Jewelers' rect='2400,1400,2500,1500' color='#610C85' under_construction='t'/>
+<room name='The Running Fur Studios' rect='2110,1710,2190,1750' color='#610C85' under_construction='t'/>
+<room name='Coffee-Fox Cafe' rect='2310,1510,2390,1550' color='#610C85' under_construction='t'/>
+<room name='Rings of Saturn Training Center' rect='2310,1710,2390,1750' color='#610C85' under_construction='t'/>
+<room name='First Furry Bank' text_angle='270' rect='2110,1810,2160,1890' color='#610C85' under_construction='t'/>
+<room name='Albedo' rect='2340,1810,2390,1890' color='#610C85' under_construction='t'/>
+<room name='TW&apos;s Pizzeria' rect='2310,1750,2390,1790' color='#610C85' under_construction='t'/>
+<room name='Pale Moon Books' rect='2110,1750,2190,1790' color='#610C85' under_construction='t'/>
+<room name='ConFed Mission Foyer(#35354RLJ)' rect='2000,2400,2100,2500' color='#610C85' under_construction='t'/>
+<room name='The Refuge(#160020RLJ)' rect='2400,2400,2500,2500' color='#610C85' under_construction='t'/>
+<room name='NeoSpace Visitor Center: OOC INFO(#181787RLJA)' rect='2000,2600,2100,2700' under_construction='t'/>
+<room name='Room at resort(#196226RLJ)' rect='2310,2510,2390,2550' color='#F717E0' under_construction='t'/>
+<room name='Water' rect='2820,-1180,2880,-1120' under_construction='t'/>
+<room name='Furry Island Beach(#6396RLJ)' rect='2600,-1400,2700,-1300' under_construction='t'/>
+<room name='Furry Island Grass Hut and Convention Center' rect='2400,-1600,2500,-1500' color='#610C85' under_construction='t'/>
+<room name='Clearing' rect='2200,-1400,2300,-1300' under_construction='t'/>
+<room name='Underwater In Henson Lake' rect='2800,-1400,2900,-1300' under_construction='t'/>
+<room name='In The Octopus&apos;s Garden (In The Shade)' rect='3000,-1400,3100,-1300' color='#610C85' under_construction='t'/>
+<room name='Water' rect='2820,-1580,2880,-1520' under_construction='t'/>
+<room name='Jester&apos;s Lane (Trinkets)' rect='2600,-200,2700,-100' color_outline='#F717E0' under_construction='t'/>
+<room name='Jester&apos;s Lane (Stars)' rect='2800,-200,2900,-100' under_construction='t'/>
+<room name='Jester&apos;s Lane (Moons)' rect='3000,-200,3100,-100' under_construction='t'/>
+<room name='?' rect='3000,-400,3100,-300' under_construction='t'/>
+<room name='Jester&apos;s Lane (Poetry)' rect='3400,-200,3500,-100' under_construction='t'/>
+<room name='Floating In The Forest.' rect='3300,800,3400,900' under_construction='t'/>
+<room name='Front Yard' rect='3200,-400,3300,-300' color='#610C85' under_construction='t'/>
+<room name='Craigalee' rect='3400,-400,3500,-300' color='#610C85' under_construction='t'/>
+<room name='Forest Path' rect='3600,-400,3700,-300' under_construction='t'/>
+<room name='A Muddy Pond' rect='3000,800,3100,900' under_construction='t'/>
+<room name='Mineshaft' rect='2800,600,2900,700' under_construction='t'/>
+<room name='Clearing at the Base of a Huge Tree' rect='3100,600,3200,700' under_construction='t'/>
+<room name='ARU Headquarters' rect='3600,-600,3700,-500' color='#610C85' under_construction='t'/>
+<room name='Bend in the Path' rect='3000,200,3100,300' under_construction='t'/>
+<room name='Small clearing, next to a well' rect='2800,200,2900,300' under_construction='t'/>
+<room name='?' rect='2800,400,2900,500' under_construction='t'/>
+<room name='Wide, grassy clearing.(#20656RLJ)' rect='2600,0,2700,100' under_construction='t'/>
+<exit from='1' to='0' name_from='out' name_to='Enter' points='10,-30|50,300'/>
+<exit from='2' to='1' name_from='Wash Hands' name_to='Restroom' points='-160,0|-100,0'/>
+<exit from='3' to='1' name_from='out' name_to='under' points='-160,140|-100,140'/>
+<exit from='4' to='0' name_from='out' name_to='Salon' points='-160,250|0,250'/>
+<exit from='5' to='0' name_from='Tavern ' name_to='out' points='200,400|100,300'/>
+<exit from='7' to='5' name_from='Northwest' name_to='Southeast' points='600,800|300,500'/>
+<exit from='6' to='5' name_from='East' name_to='West' points='50,460|200,460'/>
+<exit from='8' to='6' name_from='West Road' name_to='North' points='-410,350|-410,430'/>
+<exit from='8' to='9' name_from='North' name_to='South' points='-410,-50|-410,-140'/>
+<exit from='10' to='8' name_from='out' name_to='Park' points='-580,130|-450,130'/>
+<exit from='11' to='10' name_from='West' name_to='Temple' points='-550,80|-580,80'/>
+<exit to='12' points='-310,-60|-405,-360'/>
+<exit from='12' to='9' name_from='Canyon View' name_to='Bridge' points='-410,-360|-410,-250'/>
+<exit from='12' to='13' name_from='Forest Road' name_to='West' points='-290,-400|1850,-380'/>
+<exit from='14' to='12' name_from='Canyon Bridge' name_to='emerald Beach' points='-740,-390|-520,-390'/>
+<exit from='15' to='14' name_from='The beach' name_to='Beach Hut' points='-770,-280|-770,-330'/>
+<exit from='17' to='14' name_from='Beach' name_to='Emerald rock' points='-1000,-440|-940,-440'/>
+<exit from='16' to='14' name_from='Beach' name_to='Jetty' points='-995,-330|-1000,-300|-900,-300|-900,-330'/>
+<exit from='18' to='16' name_from='F' name_to='Ferry' points='-2380,-150|-1100,-350'/>
+<exit from='7' to='19' name_from='SE' name_to='NW' points='700,900|800,1000'/>
+<exit from='19' to='20' name_from='N' name_to='S' points='850,1000|850,900'/>
+<exit from='19' to='21' name_from='e' name_to='w' points='900,1050|1000,1050'/>
+<exit from='21' to='22' name_from='e' name_to='w' points='1100,1050|1200,1050'/>
+<exit from='22' to='23' name_from='N' points='1250,1000|1250,900'/>
+<exit from='22' to='24' name_from='e' name_to='w' points='1300,1050|1400,1050'/>
+<exit from='26' to='25' name_from='out' name_to='N' points='1650,900|1650,1000'/>
+<exit from='25' to='27' name_from='e' name_to='w' points='1700,1050|2000,1050'/>
+<exit from='27' to='32' name_from='n' name_to='w' points='2080,1000|2100,900|2200,880'/>
+<exit from='27' to='30' name_from='s' name_to='w' points='2080,1100|2090,1150|2100,1200|2200,1220'/>
+<exit from='27' to='28' name_from='Under' name_to='Out' points='2020,1000|2020,900'/>
+<exit from='29' to='27' name_from='Out' name_to='Behind' points='2020,1250|2020,1100'/>
+<exit from='30' to='31' name_from='e' name_to='s' points='2300,1250|2300,1220|2400,1200|2420,1100'/>
+<exit from='32' to='31' name_from='e' name_to='n' points='2300,880|2400,900|2420,1000'/>
+<exit from='32' to='33' name_from='s' name_to='n' points='2253,900|2253,1000'/>
+<exit from='33' to='30' name_from='s' name_to='n' points='2253,1100|2253,1200'/>
+<exit from='27' to='33' name_from='e' name_to='w' points='2100,1050|2200,1050'/>
+<exit from='33' to='31' name_from='e' name_to='w' points='2300,1050|2400,1050'/>
+<exit from='30' to='34' name_from='s' name_to='n' points='2250,1300|2250,1400'/>
+<exit from='34' to='35' name_from='s' name_to='n' points='2250,1500|2250,1600'/>
+<exit from='35' to='36' name_from='s' name_to='n' points='2250,1700|2250,1800'/>
+<exit from='36' to='37' name_from='s' name_to='n' points='2250,1900|2250,2000'/>
+<exit from='37' to='38' name_from='e' points='2300,2050|2400,2050'/>
+<exit from='37' to='39' name_from='s' name_to='n' points='2250,2100|2250,2200'/>
+<exit from='39' to='40' name_from='s' name_to='n' points='2250,2300|2250,2400'/>
+<exit from='41' to='40' name_from='n' name_to='s' points='2250,2600|2250,2500'/>
+<exit from='41' to='42' points='2250,2700|2250,2800'/>
+<exit from='42' to='43' points='2250,2900|2250,2910'/>
+<exit from='19' to='44' name_from='South' name_to='North'/>
+<exit from='19' to='45' name_from='West' name_to='East'/>
+<exit from='45' to='46' name_from='North' name_to='South' points='455,1000|455,900'/>
+<exit from='45' to='47' name_from='South' name_to='North'/>
+<exit from='45' to='48' name_from='West' name_to='East'/>
+<exit from='48' to='49' name_from='North' name_to='South'/>
+<exit from='48' to='50' name_from='South' name_to='North'/>
+<exit from='49' to='51' name_from='North' name_to='South'/>
+<exit from='48' to='52' name_from='West' name_to='East'/>
+<exit from='48' to='53' name_from='Northwest' name_to='SouthEast'/>
+<exit from='48' name_from='Southwest' name_to='Northeast' points='50,1150|-90,1090'/>
+<exit from='52' to='54' name_from='north' name_to='South'/>
+<exit from='52' to='55' name_from='West' name_to='east' points='-200,1050|-300,1050'/>
+<exit from='56' to='55' name_from='East' name_to='West' points='-500,1050|-400,1050'/>
+<exit from='21' to='57' name_from='North' name_to='South'/>
+<exit from='21' to='58' name_from='South' name_to='North'/>
+<exit from='21' to='59' name_from='NE' name_to='Out'/>
+<exit from='22' to='60' name_from='South' name_to='Out' points='1250,1100'/>
+<exit from='57' to='61' name_from='North' name_to='South'/>
+<exit from='57' to='62' name_from='K' name_to='Out'/>
+<exit from='57' to='63' name_from='E' name_to='Out'/>
+<exit from='61' to='64' name_from='E' name_to='W'/>
+<exit from='64' to='65' name_from='E' name_to='W' points='1300,450'/>
+<exit from='65' to='66' name_from='E' name_to='W'/>
+<exit from='66' to='67' name_from='E' name_to='W'/>
+<exit from='67' to='68' name_from='E' name_to='W'/>
+<exit from='24' to='69' name_from='North' name_to='out'/>
+<exit from='24' to='70' name_from='South' name_to='Out'/>
+<exit from='24' to='25' name_from='East' name_to='West' points='1500,1050|1600,1050'/>
+<exit from='25' to='71' name_from='South' name_to='Out'/>
+<exit from='32' to='72' name_from='North' name_to='South'/>
+<exit from='72' to='73' name_from='East' name_to='Out'/>
+<exit from='73' to='74' name_from='North' name_to='South' points='2450,600|2450,500'/>
+<exit from='72' to='75' name_from='W' name_to='out'/>
+<exit from='72' to='76' name_from='North' name_to='South'/>
+<exit from='76' to='77' name_from='East' name_to='Out' points='2300,250|2400,250'/>
+<exit from='76' to='78' name_from='West' name_to='East' points='2200,250|2100,250'/>
+<exit from='76' to='79' name_from='North' name_to='South'/>
+<exit from='79' to='80' name_from='West' name_to='Out'/>
+<exit from='79' to='81' name_from='North' name_to='South'/>
+<exit from='81' to='82' name_from='East' name_to='West'/>
+<exit from='81' to='83' name_from='North' name_to='South' points='2250,-200|2250,-300'/>
+<exit from='81' to='84' name_from='West' name_to='Out'/>
+<exit from='81' to='85' name_from='SW' name_to='Out'/>
+<exit from='81' to='86' name_from='SE' name_to='Out'/>
+<exit from='81' to='87' name_from='NE' name_to='Out'/>
+<exit from='83' to='88' name_from='North' name_to='South'/>
+<exit from='83' to='89' name_from='East' name_to='West'/>
+<exit from='83' to='90' name_from='NW' name_to='southeast'/>
+<exit from='83' to='91' name_from='NE' name_to='SW'/>
+<exit from='88' to='92' name_from='North' name_to='South'/>
+<exit from='92' to='93' name_from='East' name_to='west'/>
+<exit from='92' to='94' name_from='West' name_to='East'/>
+<exit from='91' to='93' name_from='North' name_to='South' points='2450,-600|2450,-700'/>
+<exit from='93' to='95' name_from='East' name_to='West'/>
+<exit from='93' to='96' name_from='North' name_to='South'/>
+<exit from='96' to='97' name_from='North' name_to='South'/>
+<exit from='97' to='98' name_from='North' name_to='South'/>
+<exit from='96' to='99' name_from='West' name_to='East'/>
+<exit from='99' to='100' name_from='South' name_to='North' points='2250,-900|2250,-870|2350,-870|2350,-850'/>
+<exit from='100' to='101' name_from='South' name_to='North'/>
+<exit from='101' to='102' name_from='South' name_to='North'/>
+<exit from='13' to='103' name_from='North' name_to='South'/>
+<exit from='103' to='104' name_from='NorthWest' name_to='SE'/>
+<exit from='103' to='105' name_from='North' name_to='South'/>
+<exit from='104' to='106' name_from='North' name_to='South'/>
+<exit from='106' to='107' name_from='East' name_to='West'/>
+<exit from='105' to='108' name_from='North' name_to='South'/>
+<exit from='105' to='109' name_from='West' name_to='East'/>
+<exit from='109' to='110' name_from='North' name_to='South'/>
+<exit from='109' to='111' name_from='South' name_to='North'/>
+<exit from='109' to='112' name_from='West' name_to='East'/>
+<exit from='109' to='113' name_from='Tree' name_to='Down'/>
+<exit from='112' to='114' name_from='West' name_to='East'/>
+<exit from='112' to='115' name_from='Bridge' name_to='South'/>
+<exit from='115' to='116' name_from='North' name_to='Bridge'/>
+<exit from='116' to='117' name_from='West' name_to='out'/>
+<exit from='116' to='118' name_from='East' name_to='Out'/>
+<exit from='114' to='119' name_from='West' name_to='East'/>
+<exit from='114' to='120' name_from='Tree' name_to='Out'/>
+<exit from='114' to='121' name_from='Tent' name_to='out'/>
+<exit from='119' to='122' name_from='Southwest' name_to='NorthEast'/>
+<exit from='119' to='123' name_from='NorthWest' name_to='SouthEast'/>
+<exit from='122' to='124' name_from='Cleared Path' name_to='Lit Trail'/>
+<exit from='123' to='125' name_from='West' name_to='East'/>
+<exit from='123' to='126' name_from='North' name_to='South'/>
+<exit from='126' to='127' name_from='Cabin' name_to='Out' points='850,-2030'/>
+<exit from='126' to='128' name_from='Jetty' name_to='Shore'/>
+<exit from='128' to='129' name_from='Water' name_to='Jetty'/>
+<exit to='126' name_from='Shore' name_to='Water' points='-410,-1950|-460,-1950|-460,-2030|950,-2010'/>
+<exit from='125' to='130' name_from='West' name_to='East'/>
+<exit from='130' to='131' name_from='Inside' name_to='out'/>
+<exit from='131' to='132' name_from='  Platform 1a' name_to='Foyer'/>
+<exit from='132' to='133' name_from='  Platform 1b' name_to='  Platform 1a'/>
+<exit from='133' to='134' name_from='East' name_to='West'/>
+<exit from='134' to='135' name_from='SPlatform 2a' name_to='Platform 2b'/>
+<exit from='50' to='136' name_from='South' name_to='North'/>
+<exit from='50' to='137' name_from='West' name_to='East'/>
+<exit from='136' to='138' name_from='South' name_to='North'/>
+<exit from='138' to='150' name_from='South' name_to='North'/>
+<exit from='150' to='151' name_from='West' name_to='East'/>
+<exit from='150' to='152' name_from='East' name_to='West'/>
+<exit from='150' to='153' name_from='South' name_to='North'/>
+<exit from='151' to='154' name_from='South' name_to='North'/>
+<exit from='151' to='138' name_from='North' points='50,1730|220,1730|220,1700'/>
+<exit from='152' to='155' name_from='East' name_to='West'/>
+<exit from='155' to='156' name_from='East' name_to='West'/>
+<exit from='156' to='157' name_from='North' name_to='South'/>
+<exit from='156' to='158' name_from='East' name_to='West'/>
+<exit from='156' to='159' name_from='South' name_to='North'/>
+<exit from='157' to='160' name_from='West' name_to='East'/>
+<exit from='157' to='161' name_from='North' name_to='South'/>
+<exit from='161' to='58' name_from='North' name_to='South'/>
+<exit from='161' to='162' name_from='West' name_to='East'/>
+<exit from='161' to='163' name_from='East' name_to='West'/>
+<exit from='58' to='164' name_from='East' name_to='West'/>
+<exit from='159' to='165' name_from='Sweet' name_to='Out'/>
+<exit from='159' to='166' name_from='Path'/>
+<exit from='153' to='168' name_from='South' name_to='North'/>
+<exit from='153' to='169' name_from='East' name_to='West'/>
+<exit from='169' to='170' name_from='South' name_to='North'/>
+<exit from='169' to='171' name_from='North' name_to='South'/>
+<exit from='169' to='172' name_from='East' name_to='West'/>
+<exit from='172' to='173' name_from='North' name_to='South'/>
+<exit from='172' to='174' name_from='NorthEast' name_to='SouthWest'/>
+<exit from='172' to='175' name_from='East' name_to='West'/>
+<exit from='175' to='176' name_from='East' name_to='West'/>
+<exit from='176' to='177' name_from='North' name_to='South'/>
+<exit from='176' to='178' name_from='South' name_to='North'/>
+<exit from='176' to='39' name_from='East' name_to='West'/>
+<exit from='39' to='179' name_from='East' name_to='West'/>
+<exit from='179' to='180' name_from='North' name_to='out'/>
+<exit from='179' to='181' name_from='NorthWest' name_to='SouthEast'/>
+<exit from='179' to='182' name_from='East' name_to='West'/>
+<exit from='182' to='183' name_from='East' name_to='West'/>
+<exit from='182' to='184' name_from='South' name_to='Out'/>
+<exit from='183' to='185' name_from='SouthEast' name_to='NorthWest'/>
+<exit from='183' to='186' name_from='North'/>
+<exit from='186' to='182' name_from='out' points='2830,2100|2830,2150|2650,2150|2650,2200'/>
+<exit from='185' to='187' name_from='South' name_to='SL'/>
+<exit from='187' to='188' name_from='South' name_to='North'/>
+<exit from='187' to='189' name_from='West' name_to='East'/>
+<exit from='189' to='190' name_from='HH' name_to='BB'/>
+<exit from='190' to='191' name_from='North' name_to='South'/>
+<exit from='191' to='192' name_from='North' name_to='South'/>
+<exit from='192' to='193' name_from='North' name_to='Out'/>
+<exit from='168' to='194' name_from='Southwest' name_to='NorthEast'/>
+<exit from='194' to='195' name_from='SouthEast' name_to='NorthWest'/>
+<exit from='168' to='195' name_from='South' name_to='North'/>
+<exit from='34' to='196' name_from='East' name_to='out'/>
+<exit from='35' to='197' name_from='Southwest' name_to='Out'/>
+<exit from='35' to='198' name_from='NorthEast' name_to='Out'/>
+<exit from='35' to='199' name_from='SouthEast' name_to='out'/>
+<exit from='36' to='200' name_from='West' name_to='out'/>
+<exit from='36' to='201' name_from='East' name_to='out'/>
+<exit from='36' to='202' name_from='NorthEast' name_to='SouthWest'/>
+<exit from='36' to='203' name_from='NorthWest' name_to='Out'/>
+<exit from='40' to='204' name_from='West' name_to='Out' points='2200,2450'/>
+<exit from='40' to='205' name_from='East' name_to='out' points='2300,2450'/>
+<exit from='41' to='206' name_from='West' name_to='East'/>
+<exit from='41' to='207' name_from='NorthEast'/>
+<exit from='97' to='208' name_from='D' name_to='Shore'/>
+<exit from='98' to='209' name_from='East' name_to='West'/>
+<exit from='98' to='210' name_from='North' name_to='South'/>
+<exit from='98' to='211' name_from='West' name_to='East'/>
+<exit from='209' to='212' name_from='East' name_to='West'/>
+<exit from='212' to='213' name_from='East' name_to='West'/>
+<exit from='212' to='208' name_from='South' name_to='North'/>
+<exit from='214' to='212' name_from='South' name_to='North' points='2850,-1400'/>
+<exit from='82' to='215' name_from='East' name_to='West'/>
+<exit from='215' to='216' name_from='East' name_to='West'/>
+<exit from='216' to='217' name_from='East' name_to='West'/>
+<exit from='217' to='218' name_from='North' name_to='South'/>
+<exit from='217' to='219' name_from='East' name_to='West'/>
+<exit from='219' to='220' name_from='Southwest' name_to='North' points='3400,-100|3360,-50|3340,0|3350,800'/>
+<exit from='219' to='221' name_from='NorthWest' name_to='SouthEast'/>
+<exit from='219' to='222' name_from='North' name_to='Out'/>
+<exit from='219' to='223' name_from='NorthEast' name_to='SouthWest'/>
+<exit from='220' to='224' name_from='West' name_to='East'/>
+<exit from='224' to='225' name_from='NorthWest' name_to='SouthEast'/>
+<exit from='220' to='226' name_from='NorthWest' name_to='SouthEast'/>
+<exit from='223' to='227' name_from='North' name_to='South'/>
+<exit from='224' to='228' name_from='North' name_to='South'/>
+<exit from='228' to='229' name_from='West' name_to='East'/>
+<exit from='229' to='230' name_from='South' name_to='North'/>
+<exit from='229' to='231' name_from='NorthWest' name_to='SouthEast'/>
+<rectangle rect='-1100,-640,300,500' color='#148400'/>
+<rectangle rect='-620,-340,-190,-270' color='#3A3A3A'/>
+<rectangle rect='2200,-1600,3100,-1020' color='#2DBBFF'/>
+<rectangle rect='250,-2280,1950,-390' color='#643E2D'/>
+<rectangle rect='300,-300,1100,200' color='#484848'/>
+<rectangle rect='620,-130,750,80' color='#2DBBFF'/>
+<rectangle rect='760,-130,890,80' color='#82480F'/>
+</map>
+<map name='Grotto Industries'>
+<room name='Grotto Industries Entrance Lobby' rect='100,100,200,200' color='#610C85' under_construction='t'/>
+<room name='Grotto Industries Reception' rect='-100,-100,0,0' color='#610C85' under_construction='t'/>
+<room name='Club hOtter' rect='-100,100,0,200' color='#610C85' under_construction='t'/>
+<room name='Grotto Industries Jump Room' rect='-300,-100,-200,0' color='#610C85' under_construction='t'/>
+<room name='Offices' rect='100,-100,200,0' color='#610C85' under_construction='t'/>
+<exit from='0' to='2' name_from='Club' name_to='Out'/>
+<exit from='0' to='1' name_from='reception' name_to='Out'/>
+<exit from='0' to='1' name_from='Reception' name_to='SE' points='100,100|0,0'/>
+<exit from='0' to='2' name_from='Club' name_to='Out' points='100,150|0,150'/>
+<exit from='1' to='3' name_from='East' name_to='out'/>
+<exit from='1' to='4' name_from='West' name_to='Out'/>
+</map>
+<far_exits>
+<exit map_from='1' map_to='0' points_split='2' from='0' to='76' name_from='Out' name_to='NW' points='200,190|290,260|2150,150|2200,200'/>
+</far_exits>
+</atlas>
