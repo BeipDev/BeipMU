@@ -1,0 +1,498 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<atlas version='1'>
+<font_rooms name='Arial' size='9.0'/>
+<font_exits name='Arial' size='5.0'/>
+<map name='Arx'>
+<room name='Arx - Ward of the Compact - The City Center' rect='100,0,200,100' color='#B571'/>
+<room name='Arx - Ward of the Compact - Honor Walk South' rect='100,-200,200,-100' color='#9F1C'/>
+<room name='Arx - Ward of the Compact - Crown Way North&#13;&#10;' rect='100,200,200,300' color='#9F1C'/>
+<room name='Lachance Mercantile ' rect='160,130,210,150' color='#9F1C'/>
+<room name='Decus Votorum ' rect='90,150,140,170' color='#9F1C'/>
+<room name='Blackstone Forge' rect='90,130,140,150' color='#9F1C'/>
+<room name='Arx - Ward of the Compact - Grayson Path East' rect='-100,0,0,100' color='#9F1C'/>
+<room name='Lavender and Lodestones' rect='-40,-70,10,-50' color='#27D5F'/>
+<room name='Nature&apos;s Bounty' rect='-110,-50,-60,-30' color='#27D5F'/>
+<room name='The Painted Muse' rect='20,-20,70,0' color='#27D5F'/>
+<room name='Threads of Beauty' rect='20,0,70,20' color='#27D5F'/>
+<room name='Sew What' rect='-40,-50,10,-30' color='#27D5F'/>
+<room name='Whitehawk Charity' rect='20,20,70,40' color='#27D5F'/>
+<room name='Artist&apos;s Armor' rect='-110,-70,-60,-50' color='#C0C0C0'/>
+<room name='Arx - Ward of the Compact - Lyceum Way North&#13;&#10;' rect='-100,200,0,300' color='#9F1C'/>
+<room name='Arx - Ward of the Compact - Judgment Green' rect='-100,400,0,500' color='#9F1C'/>
+<room name='Arx - Ward of the Compact - Crown Way' rect='100,400,200,500' color='#9F1C'/>
+<room name='Arx - Ward of the Compact - Sanctum of Genesis' rect='300,400,400,500' color='#9F1C'/>
+<room name='Arx - Ward of the Compact - Visitor Road North' rect='300,200,400,300' color='#9F1C'/>
+<room name='Arx - Ward of the Compact - Merchant West' rect='300,0,400,100' color='#9F1C'/>
+<room name='Arx - Ward of the Compact - Thrax Row South ' rect='300,-200,400,-100' color='#9F1C'/>
+<room name='Arx - Ward of the Compact - Valardin Way South ' rect='-100,-200,0,-100' color='#9F1C'/>
+<room name='Arx - Ward of the Compact - Honor Place' rect='-100,-400,0,-300' color='#9F1C'/>
+<room name='Arx - Ward of the Compact - Honor Walk' rect='100,-400,200,-300' color='#9F1C'/>
+<room name='Arx - Ward of the Compact - Plaza of Coin' rect='300,-400,400,-300' color='#9F1C'/>
+<room name='Arx - Ward of the Compact - Thrax Row' rect='500,-400,600,-300' color='#9F1C'/>
+<room name='Arx - Ward of the Compact - Merchant Meet' rect='500,-200,600,-100' color='#9F1C'/>
+<room name='Arx - Ward of the Compact - Merchant Road' rect='500,0,600,100' color='#9F1C'/>
+<room name='Arx - Ward of the Compact - The Pantheon&apos;s Path' rect='500,200,600,300' color='#9F1C'/>
+<room name='Arx - Ward of the Compact - Visitor Road' rect='500,400,600,500' color='#9F1C'/>
+<room name='Arx - Ward of the Compact - Lyceum Way' rect='-300,400,-200,500' color='#9F1C'/>
+<room name='Arx - Ward of the Compact - Lords Lane North' rect='-300,200,-200,300' color='#9F1C'/>
+<room name='Arx - Ward of the Compact - Grayson Path' rect='-300,0,-200,100' color='#9F1C'/>
+<room name='Arx - Ward of the Compact - Solace Square' rect='-300,-200,-200,-100' color='#9F1C'/>
+<room name='Arx - Ward of the Compact - Valardin Way ' rect='-300,-400,-200,-300' color='#9F1C'/>
+<room name='Arx - Ward of the Compact - Valardin Way North' rect='-500,-600,-400,-500' color='#9F1C'/>
+<room name='Arx - Ward of the Compact - Heroes Home' rect='-500,-400,-400,-300' color='#9F1C'/>
+<room name='Arx - Ward of the Compact - The Proving Grounds' rect='-500,-200,-400,-100' color='#9F1C'/>
+<room name='Arx - Ward of the Compact - Grayson Path West' rect='-500,0,-400,100' color='#9F1C'/>
+<room name='Arx - Ward of the Compact - Baron Street North' rect='-500,200,-400,300' color='#9F1C'/>
+<room name='Arx - Ward of the Compact - Baron Street South' rect='-500,400,-400,500' color='#9F1C'/>
+<room name='Arx - Ward of the Compact - Lyceum Way South' rect='-500,600,-400,700' color='#9F1C'/>
+<room name='Arx - Ward of the Compact - Lords Lane South' rect='-300,600,-200,700' color='#9F1C'/>
+<room name='Arx - Ward of the Compact - Place of Peers' rect='-100,600,0,700' color='#9F1C'/>
+<room name='Arx - Ward of the Compact - Crown Way South' rect='100,600,200,700' color='#9F1C'/>
+<room name='Arx - Ward of the Compact - Sanctum of Dignity' rect='300,600,400,700' color='#9F1C'/>
+<room name='Arx - Ward of the Compact - Sanctum of the Lost' rect='500,600,600,700' color='#9F1C'/>
+<room name='Arx - Ward of the Compact - Iron Plaza' rect='-300,-600,-200,-500' color='#9F1C'/>
+<room name='Arx - Ward of the Compact - The Inquest' rect='-100,-600,0,-500' color='#9F1C'/>
+<room name='Arx - Ward of the Compact - Honor Walk North' rect='100,-600,200,-500' color='#9F1C'/>
+<room name='Arx - Ward of the Compact - The Golden Path' rect='300,-600,400,-500' color='#9F1C'/>
+<room name='Arx - Ward of the Compact - Traders Haven' rect='500,-600,600,-500' color='#9F1C'/>
+<room name='Arx - Ward of the Compact - Visitor Road South' rect='700,600,800,700' color='#9F1C'/>
+<room name='Arx - Ward of the Compact - Sanctum of Reflection' rect='700,400,800,500' color='#9F1C'/>
+<room name='Arx - Ward of the Compact - Sanctum of Nature' rect='700,200,800,300' color='#9F1C'/>
+<room name='Arx - Ward of the Compact - Merchant Road East' rect='700,0,800,100' color='#9F1C'/>
+<room name='Arx - Ward of the Compact - Peddlers Path South' rect='700,-200,800,-100' color='#9F1C'/>
+<room name='Arx - Ward of the Compact - Peddlers Path North' rect='700,-400,800,-300' color='#9F1C'/>
+<room name='Arx - Ward of the Compact - Thrax Row North ' rect='700,-600,800,-500' color='#9F1C'/>
+<room name='Arx - Lower Boroughs - Visitors Gate' rect='900,800,1000,900' color='#4000'/>
+<room name='Arx - Lower Boroughs - Cemetery Row' rect='700,800,800,900' color='#4000'/>
+<room name='Arx - Lower Boroughs - Crows Lane' rect='700,1000,800,1100' color='#4000'/>
+<room name='Arx - Lower Boroughs - Rivers Edge' rect='700,1200,800,1300' color='#4000'/>
+<room name='Arx - Lower Boroughs - Dockyard' rect='900,1200,1000,1300' color='#4000'/>
+<room name='Arx - Lower Boroughs - Commons Square' rect='900,1000,1000,1100' color='#4000'/>
+<room name='Arx - Between the Boroughs' rect='1150,470,1250,850' color='#4000'/>
+<room name='Arx - Lower Boroughs - Beach Walk' rect='1100,1000,1200,1100' color='#4000'/>
+<room name='Arx - Lower Boroughs - River Mouth' rect='1100,1200,1200,1300' color='#4000'/>
+<room name='Arx - Upper Boroughs - Seawatch South' rect='1300,200,1400,300' color='#8000'/>
+<room name='Arx - Upper Boroughs - Courtiers Pride' rect='1100,200,1200,300' color='#8000'/>
+<room name='Arx - Upper Boroughs - Traders Home' rect='1100,0,1200,100' color='#8000'/>
+<room name='Arx - Upper Boroughs - Merchant Gate' rect='900,0,1000,100' color='#8000'/>
+<room name='Arx - Upper Boroughs - The Outrage' rect='1100,-200,1200,-100' color='#8000'/>
+<room name='Arx - Upper Boroughs - Seawatch North' rect='1300,-200,1400,-100' color='#8000'/>
+<room name='Arx - Upper Boroughs - Seawatch Gate' rect='1300,0,1400,100' color='#8000'/>
+<room name='Arx - Ward of House Thrax - Thrax Gate' rect='900,-800,1000,-700' color='#8080'/>
+<room name='Arx - Ward of House Thrax - Crimson Square' rect='1100,-800,1200,-700' color='#8080'/>
+<room name='Arx - Ward of House Thrax - Thralls Lament' rect='900,-1000,1000,-900' color='#8080'/>
+<room name='Arx - Ward of House Thrax - Thrax Courtyard' rect='1100,-1000,1200,-900' color='#8080'/>
+<room name='Arx - Ward of House Redrain - Redrain Gate' rect='100,-800,200,-700' color='#800000'/>
+<room name='Arx - Ward of House Redrain - Shaman Walk' rect='-100,-1000,0,-900' color='#800000'/>
+<room name='Arx - Ward of House Redrain - Wall of Names' rect='300,-1000,400,-900' color='#800000'/>
+<room name='Arx - Ward of House Redrain - Redrain Grounds' rect='100,-1000,200,-900' color='#800000'/>
+<room name='Arx - Ward of House Valardin - Cavalier Place' rect='-700,-1000,-600,-900' color='#D4284'/>
+<room name='Arx - Ward of House Valardin - Valardin Gate' rect='-700,-800,-600,-700' color='#D4284'/>
+<room name='Arx - Ward of House Valardin - Valardin Grounds' rect='-900,-1000,-800,-900' color='#D4284'/>
+<room name='Arx - Ward of House Valardin - Cairn Valardin' rect='-900,-800,-800,-700' color='#D4284'/>
+<room name='Arx - Ward of House Grayson - Grayson Gate' rect='-700,0,-600,100' color='#808080'/>
+<room name='Arx - Ward of House Grayson - Defiance Hill' rect='-900,200,-800,300' color='#808080'/>
+<room name='Arx - Ward of House Grayson - Grayson Grounds' rect='-900,0,-800,100' color='#808080'/>
+<room name='Arx - Ward of House Grayson - Triumph Plaza' rect='-900,-200,-800,-100' color='#808080'/>
+<room name='Arx - Ward of the Lyceum - Lyceum Gate' rect='-700,800,-600,900' color='#400080'/>
+<room name='Arx - Ward of the Lyceum - Velenosa Grounds' rect='-900,1000,-800,1100' color='#400080'/>
+<room name='Arx - Ward of the Lyceum - Reflection Square' rect='-700,1000,-600,1100' color='#400080'/>
+<room name='Arx - Ward of the Lyceum - Silk Row' rect='-900,800,-800,900' color='#400080'/>
+<room name='Arx - Ward of the Crown - Sovereign Bridge' rect='100,800,200,900' color='#808040'/>
+<room name='Arx - Ward of the Crown - Alarice Plaza' rect='100,1200,200,1300' color='#808040'/>
+<room name='Arx - Ward of the Crown - Sovereign Way' rect='100,1000,200,1100' color='#808040'/>
+<room name='Arx - Ward of the Crown - Alarice Row South' rect='-100,1400,0,1500' color='#808040'/>
+<room name='Arx - Ward of the Crown - Palace Gates' rect='100,1400,200,1500' color='#808040'/>
+<room name='Arx - Ward of the Crown - Alarice Row' rect='-100,1200,0,1300' color='#808040'/>
+<room name='Arx - Ward of the Crown - Alarice Row North' rect='-100,1000,0,1100' color='#808040'/>
+<room name='Arx - Ward of the Crown - Legate Row' rect='300,1000,400,1100' color='#808040'/>
+<room name='Arx - Ward of the Crown - Guardian Square' rect='300,1400,400,1500' color='#808040'/>
+<room name='Arx - Ward of the Crown - Grace Way' rect='300,1200,400,1300' color='#808040'/>
+<room name='Arx Grid -- Mapped Out by Precisi (Magpie/Mason) ' rect='500,-1340,940,-1310'/>
+<room name='Use as you like...' rect='500,-1300,940,-1270'/>
+<room name='Outside Arx - Eastern Approach - Path Outside the Walls' rect='1800,400,1900,500' color='#804040'/>
+<room name='Outside Arx - Eastern Approach - Beaches' rect='2200,800,2300,900' color='#804040'/>
+<room name='Outside Arx - Eastern Approach - Gray Forest Outskirts' rect='2150,350,2250,450' color='#804040'/>
+<room name='House of Solace' rect='-310,-250,-260,-230' color='#27D5F'/>
+<room name='Society of Explorers' rect='-310,-450,-260,-430' color='#27D5F'/>
+<room name='Iron Guard Barracks' rect='-310,-630,-260,-610' color='#27D5F'/>
+<room name='Iron Jail' rect='-240,-630,-190,-610' color='#27D5F'/>
+<room name='House of Questions' rect='-110,-630,-60,-610' color='#27D5F'/>
+<room name='Badger Boardinghouse' rect='-770,210,-720,230' color='#694E03'/>
+<room name='Training Center' rect='-440,-250,-390,-230' color='#27D5F'/>
+<room name='Champions Guildhall' rect='-510,-250,-460,-230' color='#27D5F'/>
+<room name='Hall of Heroes' rect='-510,-440,-460,-420' color='#27D5F'/>
+<room name='The Ambassador Salon' rect='-310,560,-260,580' color='#694E03'/>
+<room name='Assembly of Peers' rect='-110,560,-60,580' color='#27D5F'/>
+<room name='The Great Tournament Grounds of Alarice' rect='-110,-450,-60,-430' color='#27D5F'/>
+<room name='Shrine of Limerance' rect='280,540,330,560' color='#27D5F'/>
+<room name='Shrine of the Sentinel' rect='290,560,340,580' color='#27D5F'/>
+<room name='Shrine of Gild' rect='360,560,410,580' color='#27D5F'/>
+<room name='Shrine of Gloria' rect='280,340,330,360' color='#27D5F'/>
+<room name='Shrine of Vellichor' rect='290,360,340,380' color='#27D5F'/>
+<room name='Shrine of Jayus' rect='370,340,420,360' color='#27D5F'/>
+<room name='Archive of Vellichor' rect='360,360,410,380' color='#27D5F'/>
+<room name='Traders Tavern' rect='290,-440,340,-420' color='#27D5F'/>
+<room name='Bank of Arx' rect='290,-640,340,-620' color='#27D5F'/>
+<room name='Auction House' rect='360,-640,410,-620' color='#27D5F'/>
+<room name='The Great Cathedral of the Pantheon' rect='490,150,540,170' color='#27D5F'/>
+<room name='Shrine of the Lost' rect='480,540,530,560' color='#27D5F'/>
+<room name='Shrine of the First Choice' rect='490,560,540,580' color='#27D5F'/>
+<room name='Shrine of the Queen of Endings' rect='570,540,620,560' color='#27D5F'/>
+<room name='Saving Grace' rect='680,540,730,560' color='#27D5F'/>
+<room name='Shrine of Mangata' rect='680,140,730,160' color='#27D5F'/>
+<room name='Shrine of the Thirteenth' rect='690,360,740,380' color='#27D5F'/>
+<room name='Shrine of Petrichor' rect='690,160,740,180' color='#27D5F'/>
+<room name='Shrine of Lagoma' rect='760,160,810,180' color='#27D5F'/>
+<room name='Commoners Court' rect='680,-260,730,-240' color='#27D5F'/>
+<room name='Ebb and Flow Inn' rect='1090,-850,1140,-830' color='#694E03'/>
+<room name='Thrax Estate' rect='1200,-1040,1250,-1020' color='#8080' color_outline='#FFFF80'/>
+<room name='Confessional of the Waves' rect='890,-1040,940,-1020' color='#27D5F'/>
+<room name='The Spirits' rect='-110,-1040,-60,-1020' color='#694E03'/>
+<room name='Redrain Villa' rect='120,-1060,170,-1040' color='#800000' color_outline='#FFFF80'/>
+<room name='Stone Grove' rect='90,-1040,140,-1020' color='#27D5F'/>
+<room name='Sleepless Knights' rect='-710,-1040,-660,-1020' color='#694E03'/>
+<room name='Valardin Grounds' rect='-950,-1030,-900,-1010' color='#D4284' color_outline='#FFFF80'/>
+<room name='Velenosa Estate' rect='-950,1110,-900,1130' color='#400080' color_outline='#FFFF80'/>
+<room name='Hundred Cities Inn' rect='-880,760,-830,780' color='#694E03'/>
+<room name='Queensrest Inn' rect='-110,960,-60,980' color='#694E03'/>
+<room name='The Palace' rect='130,1530,180,1550' color='#808040' color_outline='#FFFF80'/>
+<room name='Crownguard Tower' rect='350,1530,400,1550' color='#27D5F'/>
+<room name='Nefer&apos;khat Embassy' rect='420,1250,470,1270' color='#27D5F'/>
+<room name='Nox&apos;alfar Embassy' rect='420,1210,470,1230' color='#27D5F'/>
+<room name='The Rectory' rect='420,1010,470,1030' color='#27D5F'/>
+<room name='Graveyard of Arx' rect='630,800,680,820' color='#27D5F'/>
+<room name='Murder of Crows' rect='630,1000,680,1020' color='#694E03'/>
+<room name='Nightingale Park' rect='880,940,930,960' color='#27D5F'/>
+<room name='The Tragedy' rect='890,960,940,980' color='#27D5F'/>
+<room name='The Commons Medical Clinic' rect='970,940,1020,960' color='#27D5F'/>
+<room name='Commons Courts' rect='960,960,1010,980' color='#27D5F'/>
+<room name='Back Alley' rect='1220,1010,1270,1030' color='#27D5F'/>
+<room name='The Unkindness' rect='1120,-240,1170,-220' color='#694E03'/>
+<room name='Grayson Mansion' rect='-970,40,-920,60' color='#808080' color_outline='#FFFF80'/>
+<room name='Ward of the Compact' rect='-470,-690,-320,-650' color='#8000' color_outline='#0'/>
+<exit from='1' to='0' name_from='south' name_to='north'/>
+<exit from='0' to='2' name_from='south' name_to='north'/>
+<exit from='3' to='2' name_from='Out' name_to='LM'/>
+<exit from='4' to='2' name_from='Out' name_to='DV'/>
+<exit from='5' to='2' name_from='O' name_to='BF'/>
+<exit from='0' to='6' name_from='west' name_to='east'/>
+<exit from='8' to='6' name_from='Out' name_to='NB'/>
+<exit from='7' to='6' name_from='Out' name_to='LS'/>
+<exit from='9' to='6' name_from='Out' name_to='PM'/>
+<exit from='10' to='6' name_from='Out' name_to='TB'/>
+<exit from='11' to='6' name_from='Out' name_to='Sew'/>
+<exit from='12' to='6' name_from='Out' name_to='WC'/>
+<exit from='13' to='6' name_from='Out' name_to='AA'/>
+<exit from='14' to='6' name_from='north' name_to='south'/>
+<exit from='14' to='2' name_from='east' name_to='west'/>
+<exit from='15' to='14' name_from='north' name_to='south'/>
+<exit from='16' to='15' name_from='west' name_to='east'/>
+<exit from='16' to='2' name_from='north' name_to='south'/>
+<exit from='16' to='17' name_from='east' name_to='west'/>
+<exit from='17' to='2' name_from='northwest' name_to='southeast'/>
+<exit from='2' to='15' name_from='southwest' name_to='northeast'/>
+<exit from='14' to='16' name_from='southeast' name_to='northwest'/>
+<exit from='2' to='6' name_from='northwest' name_to='southeast'/>
+<exit from='0' to='14' name_from='southwest' name_to='northeast'/>
+<exit from='18' to='2' name_from='west' name_to='east'/>
+<exit from='18' to='16' name_from='southwest' name_to='northeast'/>
+<exit from='17' to='18' name_from='north' name_to='south'/>
+<exit from='1' to='6' name_from='southwest' name_to='northeast'/>
+<exit from='19' to='0' name_from='west' name_to='east'/>
+<exit from='0' to='18' name_from='southeast' name_to='northwest'/>
+<exit from='19' to='2' name_from='southwest' name_to='northeast'/>
+<exit from='18' to='19' name_from='north' name_to='south'/>
+<exit from='19' to='1' name_from='northwest' name_to='southeast'/>
+<exit from='19' to='20' name_from='north' name_to='south'/>
+<exit from='20' to='1' name_from='west' name_to='east'/>
+<exit from='20' to='0' name_from='southwest' name_to='northeast'/>
+<exit from='21' to='1' name_from='east' name_to='west'/>
+<exit from='21' to='6' name_from='south' name_to='north'/>
+<exit from='21' to='0' name_from='southeast' name_to='northwest'/>
+<exit from='22' to='1' name_from='southeast' name_to='northwest'/>
+<exit from='21' to='22' name_from='north' name_to='south'/>
+<exit from='23' to='1' name_from='south' name_to='north'/>
+<exit from='23' to='21' name_from='southwest' name_to='northeast'/>
+<exit from='22' to='23' name_from='east' name_to='west'/>
+<exit from='23' to='24' name_from='east' name_to='west'/>
+<exit from='24' to='20' name_from='south' name_to='north'/>
+<exit from='20' to='23' name_from='northwest' name_to='southeast'/>
+<exit from='24' to='1' name_from='southwest' name_to='northeast'/>
+<exit from='24' to='25' name_from='east' name_to='west'/>
+<exit from='25' to='20' name_from='southwest' name_to='northeast'/>
+<exit from='26' to='20' name_from='west' name_to='east'/>
+<exit from='24' to='26' name_from='southeast' name_to='northwest'/>
+<exit from='25' to='26' name_from='south' name_to='north'/>
+<exit from='26' to='27' name_from='south' name_to='north'/>
+<exit from='27' to='19' name_from='west' name_to='east'/>
+<exit from='20' to='27' name_from='southeast' name_to='northwest'/>
+<exit from='19' to='26' name_from='northeast' name_to='southwest'/>
+<exit from='27' to='28' name_from='south' name_to='north'/>
+<exit from='28' to='18' name_from='west' name_to='east'/>
+<exit from='28' to='19' name_from='northwest' name_to='southeast'/>
+<exit from='27' to='18' name_from='southwest' name_to='northeast'/>
+<exit from='28' to='29' name_from='south' name_to='north'/>
+<exit from='29' to='17' name_from='west' name_to='east'/>
+<exit from='18' to='29' name_from='southeast' name_to='northeast'/>
+<exit from='17' to='28' name_from='northeast' name_to='southwest'/>
+<exit from='15' to='30' name_from='west' name_to='east'/>
+<exit from='30' to='31' name_from='north' name_to='south'/>
+<exit from='31' to='32' name_from='north' name_to='south'/>
+<exit from='32' to='33' name_from='north' name_to='south'/>
+<exit from='34' to='22' name_from='east' name_to='west'/>
+<exit from='33' to='34' name_from='north' name_to='south'/>
+<exit from='33' to='21' name_from='east' name_to='west'/>
+<exit from='6' to='32' name_from='west' name_to='east'/>
+<exit from='33' to='6' name_from='southeast' name_to='northwest'/>
+<exit from='32' to='21' name_from='northeast' name_to='southwest'/>
+<exit from='15' to='31' name_from='northwest' name_to='southeast'/>
+<exit from='30' to='14' name_from='northeast' name_to='southwest'/>
+<exit from='31' to='6' name_from='northeast' name_to='southwest'/>
+<exit from='32' to='14' name_from='southeast' name_to='northwest'/>
+<exit from='31' to='14' name_from='east' name_to='west'/>
+<exit from='33' to='22' name_from='northeast' name_to='southwest'/>
+<exit from='21' to='34' name_from='northwest' name_to='southeast'/>
+<exit from='35' to='47' name_from='east' name_to='west'/>
+<exit from='47' to='48' name_from='east' name_to='west'/>
+<exit from='48' to='49' name_from='east' name_to='west'/>
+<exit from='49' to='50' name_from='east' name_to='west'/>
+<exit from='50' to='51' name_from='east' name_to='west'/>
+<exit from='51' to='58' name_from='east' name_to='west'/>
+<exit from='36' to='34' name_from='east' name_to='west'/>
+<exit from='25' to='57' name_from='east' name_to='west'/>
+<exit from='37' to='33' name_from='east' name_to='west'/>
+<exit from='26' to='56' name_from='east' name_to='west'/>
+<exit from='38' to='32' name_from='east' name_to='west'/>
+<exit from='27' to='55' name_from='east' name_to='west'/>
+<exit from='28' to='54' name_from='east' name_to='west'/>
+<exit from='31' to='39' name_from='west' name_to='east'/>
+<exit from='40' to='30' name_from='east' name_to='west'/>
+<exit from='41' to='42' name_from='east' name_to='west'/>
+<exit from='42' to='43' name_from='east' name_to='west'/>
+<exit from='43' to='44' name_from='east' name_to='west'/>
+<exit from='44' to='45' name_from='east' name_to='west'/>
+<exit from='45' to='46' name_from='east' name_to='west'/>
+<exit from='46' to='52' name_from='east' name_to='west'/>
+<exit from='53' to='29' name_from='west' name_to='east'/>
+<exit from='52' to='53' name_from='north' name_to='south'/>
+<exit from='46' to='29' name_from='north' name_to='south'/>
+<exit from='45' to='17' name_from='north' name_to='south'/>
+<exit from='44' to='16' name_from='north' name_to='south'/>
+<exit from='43' to='15' name_from='north' name_to='south'/>
+<exit from='42' to='30' name_from='north' name_to='south'/>
+<exit from='41' to='40' name_from='north' name_to='south'/>
+<exit from='52' to='29' name_from='northwest' name_to='southeast'/>
+<exit from='46' to='17' name_from='northwest' name_to='southeast'/>
+<exit from='45' to='16' name_from='northwest' name_to='southeast'/>
+<exit from='44' to='15' name_from='northwest' name_to='southeast'/>
+<exit from='43' to='30' name_from='northwest' name_to='southeast'/>
+<exit from='42' to='40' name_from='northwest' name_to='southeast'/>
+<exit from='30' to='39' name_from='northwest' name_to='southeast'/>
+<exit from='53' to='28' name_from='northwest' name_to='southeast'/>
+<exit from='54' to='27' name_from='northwest' name_to='southeast'/>
+<exit from='31' to='38' name_from='northwest' name_to='southeast'/>
+<exit from='32' to='37' name_from='northwest' name_to='southeast'/>
+<exit from='55' to='26' name_from='northwest' name_to='southeast'/>
+<exit from='56' to='25' name_from='northwest' name_to='southeast'/>
+<exit from='33' to='36' name_from='northwest' name_to='southeast'/>
+<exit from='34' to='35' name_from='northwest' name_to='southeast'/>
+<exit from='22' to='47' name_from='northwest' name_to='southeast'/>
+<exit from='23' to='48' name_from='northwest' name_to='southeast'/>
+<exit from='24' to='49' name_from='northwest' name_to='southeast'/>
+<exit from='25' to='50' name_from='northwest' name_to='southeast'/>
+<exit from='57' to='51' name_from='northwest' name_to='southeast'/>
+<exit from='46' to='53' name_from='northeast' name_to='southwest'/>
+<exit from='45' to='29' name_from='northeast' name_to='southwest'/>
+<exit from='44' to='17' name_from='northeast' name_to='southwest'/>
+<exit from='43' to='16' name_from='northeast' name_to='southwest'/>
+<exit from='42' to='15' name_from='northeast' name_to='southwest'/>
+<exit from='41' to='30' name_from='northeast' name_to='southwest'/>
+<exit from='40' to='31' name_from='northeast' name_to='southwest'/>
+<exit from='29' to='54' name_from='northeast' name_to='southwest'/>
+<exit from='28' to='55' name_from='northeast' name_to='southwest'/>
+<exit from='39' to='32' name_from='northeast' name_to='southwest'/>
+<exit from='38' to='33' name_from='northeast' name_to='southwest'/>
+<exit from='27' to='56' name_from='northeast' name_to='southwest'/>
+<exit from='26' to='57' name_from='northeast' name_to='southwest'/>
+<exit from='37' to='34' name_from='northeast' name_to='southwest'/>
+<exit from='36' to='47' name_from='northeast' name_to='southwest'/>
+<exit from='34' to='48' name_from='northeast' name_to='southwest'/>
+<exit from='22' to='49' name_from='northeast' name_to='southwest'/>
+<exit from='23' to='50' name_from='northeast' name_to='southwest'/>
+<exit from='24' to='51' name_from='northeast' name_to='southwest'/>
+<exit from='25' to='58' name_from='northeast' name_to='southwest'/>
+<exit from='53' to='54' name_from='north' name_to='south'/>
+<exit from='54' to='55' name_from='north' name_to='south'/>
+<exit from='55' to='56' name_from='north' name_to='south'/>
+<exit from='56' to='57' name_from='north' name_to='south'/>
+<exit from='57' to='58' name_from='north' name_to='south'/>
+<exit from='25' to='51' name_from='north' name_to='south' points='550,-500'/>
+<exit from='24' to='50' name_from='north' name_to='south'/>
+<exit from='23' to='49' name_from='north' name_to='south'/>
+<exit from='22' to='48' name_from='north' name_to='south'/>
+<exit from='34' to='47' name_from='north' name_to='south'/>
+<exit from='36' to='35' name_from='north' name_to='south' points='-450,-500'/>
+<exit from='37' to='36' name_from='north' name_to='south'/>
+<exit from='38' to='37' name_from='north' name_to='south'/>
+<exit from='39' to='38' name_from='north' name_to='south'/>
+<exit from='40' to='39' name_from='north' name_to='south'/>
+<exit from='52' to='59' name_from='southeast' name_to='northwest'/>
+<exit from='60' to='61' name_from='south' name_to='north'/>
+<exit from='61' to='62' name_from='south' name_to='north'/>
+<exit from='64' to='63' name_from='south' name_to='north'/>
+<exit from='59' to='64' name_from='south' name_to='north'/>
+<exit from='65' to='66' name_from='south' name_to='north' points='1200,850|1200,900|1180,1000'/>
+<exit from='66' to='67' name_from='south' name_to='north'/>
+<exit from='72' to='70' name_from='south' name_to='north'/>
+<exit from='73' to='74' name_from='south' name_to='north'/>
+<exit from='70' to='69' name_from='south' name_to='north'/>
+<exit from='74' to='68' name_from='south' name_to='north'/>
+<exit from='68' to='65' name_from='south' name_to='north' points='1350,300|1350,410|1240,410|1240,470'/>
+<exit from='55' to='71' name_from='east' name_to='west'/>
+<exit from='71' to='70' name_from='east' name_to='west'/>
+<exit from='72' to='73' name_from='east' name_to='west'/>
+<exit from='70' to='74' name_from='east' name_to='west'/>
+<exit from='69' to='68' name_from='east' name_to='west'/>
+<exit from='60' to='59' name_from='east' name_to='west' points='900,850'/>
+<exit from='59' to='65' name_from='east' name_to='west' points='1100,850|1160,850'/>
+<exit from='61' to='64' name_from='east' name_to='west'/>
+<exit from='64' to='66' name_from='east' name_to='west'/>
+<exit from='62' to='63' name_from='east' name_to='west'/>
+<exit from='63' to='67' name_from='east' name_to='west'/>
+<exit from='70' to='73' name_from='northeast' name_to='southwest'/>
+<exit from='69' to='74' name_from='northeast' name_to='southwest'/>
+<exit from='64' to='65' name_from='northeast' name_to='southwest' points='1180,850'/>
+<exit from='61' to='59' name_from='northeast' name_to='southwest'/>
+<exit from='62' to='64' name_from='northeast' name_to='southwest'/>
+<exit from='63' to='66' name_from='northeast' name_to='southwest'/>
+<exit from='72' to='74' name_from='southeast' name_to='northwest'/>
+<exit from='70' to='68' name_from='southeast' name_to='northwest'/>
+<exit from='59' to='66' name_from='southeast' name_to='northwest'/>
+<exit from='60' to='64' name_from='southeast' name_to='northwest'/>
+<exit from='61' to='63' name_from='southeast' name_to='northwest'/>
+<exit from='64' to='67' name_from='southeast' name_to='northwest'/>
+<exit from='75' to='76' name_from='east' name_to='west'/>
+<exit from='75' to='78' name_from='northeast' name_to='southwest'/>
+<exit from='77' to='75' name_from='south' name_to='north'/>
+<exit from='77' to='78' name_from='east' name_to='west'/>
+<exit from='77' to='76' name_from='southeast' name_to='northwest'/>
+<exit from='78' to='76' name_from='south' name_to='north'/>
+<exit from='75' to='58' name_from='southwest' name_to='northeast'/>
+<exit from='79' to='80' name_from='northwest' name_to='southeast'/>
+<exit from='79' to='81' name_from='northeast' name_to='southwest'/>
+<exit from='79' to='82' name_from='north' name_to='south' points='150,-900'/>
+<exit from='80' to='82' name_from='east' name_to='west'/>
+<exit from='82' to='81' name_from='east' name_to='west'/>
+<exit from='79' to='49' name_from='south' name_to='north'/>
+<exit from='84' to='85' name_from='northwest' name_to='southeast'/>
+<exit from='84' to='83' name_from='north' name_to='south'/>
+<exit from='85' to='83' name_from='east' name_to='west'/>
+<exit from='86' to='84' name_from='east' name_to='west'/>
+<exit from='86' to='83' name_from='northeast' name_to='southwest'/>
+<exit from='86' to='85' name_from='north' name_to='south' points='-850,-900'/>
+<exit from='84' to='35' name_from='southeast' name_to='northwest'/>
+<exit from='87' to='90' name_from='northwest' name_to='southeast'/>
+<exit from='88' to='87' name_from='northeast' name_to='southwest'/>
+<exit from='88' to='89' name_from='north' name_to='south'/>
+<exit from='89' to='87' name_from='east' name_to='west'/>
+<exit from='89' to='90' name_from='north' name_to='south'/>
+<exit from='38' to='87' name_from='west' name_to='east'/>
+<exit from='92' to='93' name_from='east' name_to='west'/>
+<exit from='92' to='94' name_from='north' name_to='south'/>
+<exit from='92' to='91' name_from='northeast' name_to='southwest'/>
+<exit from='93' to='91' name_from='north' name_to='south'/>
+<exit from='93' to='94' name_from='northwest' name_to='southeast'/>
+<exit from='94' to='91' name_from='east' name_to='west'/>
+<exit from='41' to='91' name_from='southwest' name_to='northeast'/>
+<exit from='95' to='97' name_from='south' name_to='north'/>
+<exit from='96' to='100' name_from='west' name_to='east'/>
+<exit from='96' to='102' name_from='northeast' name_to='southwest'/>
+<exit from='97' to='101' name_from='west' name_to='east'/>
+<exit from='97' to='96' name_from='south' name_to='north'/>
+<exit from='97' to='102' name_from='east' name_to='west'/>
+<exit from='98' to='99' name_from='east' name_to='west'/>
+<exit from='98' to='100' name_from='north' name_to='south'/>
+<exit from='98' to='96' name_from='northeast' name_to='southwest'/>
+<exit from='99' to='103' name_from='east' name_to='west'/>
+<exit from='99' to='96' name_from='north' name_to='south'/>
+<exit from='99' to='100' name_from='northwest' name_to='southeast'/>
+<exit from='99' to='104' name_from='northeast' name_to='southwest'/>
+<exit from='100' to='101' name_from='north' name_to='south'/>
+<exit from='100' to='97' name_from='northeast' name_to='southwest'/>
+<exit from='101' to='96' name_from='southeast' name_to='northeast'/>
+<exit from='103' to='104' name_from='north' name_to='south'/>
+<exit from='103' to='96' name_from='northwest' name_to='southeast'/>
+<exit from='104' to='96' name_from='west' name_to='east'/>
+<exit from='104' to='97' name_from='northwest' name_to='southeast'/>
+<exit from='104' to='102' name_from='north' name_to='south'/>
+<exit from='95' to='44' name_from='north' name_to='south'/>
+<exit from='107' to='74' name_from='arx' name_to='gate' points='1780,250|1650,160|1520,120'/>
+<exit from='108' to='107' name_from='up' name_to='b'/>
+<exit from='109' to='107' name_from='Path' name_to='GF' points='2040,400'/>
+<exit from='110' to='33' name_from='o' name_to='hs' points='-280,-200'/>
+<exit from='111' to='34' name_from='o' name_to='soe' points='-280,-400'/>
+<exit from='112' to='47' name_from='o' name_to='ig' points='-280,-600'/>
+<exit from='113' to='47' name_from='o' name_to='ij' points='-230,-600'/>
+<exit from='114' to='48' name_from='o' name_to='hq'/>
+<exit from='115' to='88' name_from='b' name_to='b'/>
+<exit from='116' to='37' name_from='o' name_to='tc'/>
+<exit from='117' to='37' name_from='o' name_to='cg'/>
+<exit from='118' to='36' name_from='o' name_to='h'/>
+<exit from='119' to='42' name_from='o' name_to='as'/>
+<exit from='120' to='43' name_from='o' name_to='ap'/>
+<exit from='121' to='22' name_from='o' name_to='tg'/>
+<exit from='122' to='45' name_from='o' name_to='sl'/>
+<exit from='123' to='45' name_from='o' name_to='ss'/>
+<exit from='124' to='45' name_from='o' name_to='sg'/>
+<exit from='125' to='17' name_from='o' name_to='sg'/>
+<exit from='126' to='17' name_from='o' name_to='sv'/>
+<exit from='127' to='17' name_from='o' name_to='sj'/>
+<exit from='128' to='17' name_from='o' name_to='av'/>
+<exit from='129' to='24' name_from='o' name_to='t'/>
+<exit from='130' to='50' name_from='o' name_to='ba'/>
+<exit from='131' to='50' name_from='o' name_to='ah'/>
+<exit from='132' to='28' name_from='o' name_to='gc'/>
+<exit from='133' to='46' name_from='o' name_to='sl'/>
+<exit from='134' to='46' name_from='o' name_to='fc'/>
+<exit from='135' to='46' name_from='o' name_to='qe'/>
+<exit from='136' to='52' name_from='o' name_to='sg'/>
+<exit from='137' to='54' name_from='o' name_to='sm'/>
+<exit from='139' to='54' name_from='o' name_to='sp'/>
+<exit from='140' to='54' name_from='o' name_to='sl'/>
+<exit from='141' to='56' name_from='o' name_to='cc'/>
+<exit from='142' to='76' name_from='o' name_to='ef'/>
+<exit from='143' to='78' name_from='o' name_to='te'/>
+<exit from='144' to='77' name_from='o' name_to='cw'/>
+<exit from='145' to='80' name_from='o' name_to='ts'/>
+<exit from='146' to='82' name_from='o' name_to='rv'/>
+<exit from='147' to='82' name_from='o' name_to='sg'/>
+<exit from='148' to='83' name_from='o' name_to='sk'/>
+<exit from='149' to='85' name_from='o' name_to='fg'/>
+<exit from='150' to='92' name_from='o' name_to='ve'/>
+<exit from='151' to='94' name_from='o' name_to='hc'/>
+<exit from='152' to='101' name_from='o' name_to='qi'/>
+<exit from='153' to='99' name_from='pe' name_to='o'/>
+<exit from='154' to='103' name_from='cgt' name_to='o'/>
+<exit from='156' to='104' name_from='o' name_to='nx'/>
+<exit from='155' to='104' name_from='o' name_to='nk'/>
+<exit from='157' to='102' name_from='o' name_to='tr'/>
+<exit from='158' to='60' name_from='o' name_to='gy'/>
+<exit from='159' to='61' name_from='o' name_to='mc'/>
+<exit from='160' to='64' name_from='o' name_to='np'/>
+<exit from='161' to='64' name_from='o' name_to='t'/>
+<exit from='162' to='64' name_from='o' name_to='cc'/>
+<exit from='163' to='64' name_from='o' name_to='co'/>
+<exit from='164' to='66' name_from='o' name_to='ba'/>
+<exit from='165' to='72' name_from='o' name_to='tu'/>
+<exit from='166' to='89' name_from='o' name_to='gm'/>
+<rectangle rect='-520,-620,820,720' color='#3500'/>
+<rectangle rect='-920,-1020,-580,-680' color='#3C'/>
+<rectangle rect='-920,-220,-580,320' color='#4B4B4B'/>
+<rectangle rect='-920,780,-580,1120' color='#240048'/>
+<rectangle rect='-120,780,420,1520' color='#303018'/>
+<rectangle rect='-120,-1020,420,-680' color='#350000'/>
+<rectangle rect='880,-1020,1220,-680' color='#172F2F'/>
+</map>
+<far_exits/>
+</atlas>
