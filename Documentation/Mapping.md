@@ -1,5 +1,7 @@
 # How to Map!
 
+[Map library](../Maps)  (Just right click on a map and 'save target as', then load it in the map pane)
+
 ## Common Controls
 
 Mouse Wheel - Zooms in/out to the location of the cursor

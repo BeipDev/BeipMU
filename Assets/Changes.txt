@@ -1,3 +1,10 @@
+4.00.295 - 2020-2-28
+
+Maps, load/save/edit maps in a new map window. Lots of features! Options->'Show Map Window' to check it out
+Added system menu option "Don't dock while moving" for dockable windows.
+Fixed '/exit' command, previously it'd just crash at exit
+Fixed glitch where a saved stats window would randomly change background colors on restart
+
 4.00.294 - 2020-2-20
 
 Added 'Clear' Edit menu item for edit windows
