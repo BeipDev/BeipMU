@@ -6,17 +6,17 @@
 <room name='Arx - Ward of the Compact - The City Center' rect='100,0,200,100' color='#B571'/>
 <room name='Arx - Ward of the Compact - Honor Walk South' rect='100,-200,200,-100' color='#9F1C'/>
 <room name='Arx - Ward of the Compact - Crown Way North&#13;&#10;' rect='100,200,200,300' color='#9F1C'/>
-<room name='Lachance Mercantile ' rect='160,130,210,150' color='#9F1C'/>
-<room name='Decus Votorum ' rect='90,150,140,170' color='#9F1C'/>
-<room name='Blackstone Forge' rect='90,130,140,150' color='#9F1C'/>
+<room name='Lachance Mercantile ' rect='160,150,210,170' color='#0'/>
+<room name='Decus Votorum ' rect='90,150,140,170' color='#0'/>
+<room name='Blackstone Forge (Locked)' rect='90,130,140,150' color='#27D5F'/>
 <room name='Arx - Ward of the Compact - Grayson Path East' rect='-100,0,0,100' color='#9F1C'/>
-<room name='Lavender and Lodestones' rect='-40,-70,10,-50' color='#27D5F'/>
-<room name='Nature&apos;s Bounty' rect='-110,-50,-60,-30' color='#27D5F'/>
-<room name='The Painted Muse' rect='20,-20,70,0' color='#27D5F'/>
-<room name='Threads of Beauty' rect='20,0,70,20' color='#27D5F'/>
-<room name='Sew What' rect='-40,-50,10,-30' color='#27D5F'/>
-<room name='Whitehawk Charity' rect='20,20,70,40' color='#27D5F'/>
-<room name='Artist&apos;s Armor' rect='-110,-70,-60,-50' color='#C0C0C0'/>
+<room name='Lavender and Lodestones' rect='-40,-70,10,-50' color='#0'/>
+<room name='Nature&apos;s Bounty' rect='-110,-50,-60,-30' color='#0'/>
+<room name='The Painted Muse' rect='20,-20,70,0' color='#0'/>
+<room name='Threads of Beauty' rect='20,0,70,20' color='#0'/>
+<room name='Sew What' rect='-40,-50,10,-30' color='#0'/>
+<room name='Whitehawk Charity' rect='20,20,70,40' color='#0'/>
+<room name='Artist&apos;s Armor' rect='-110,-70,-60,-50' color='#0'/>
 <room name='Arx - Ward of the Compact - Lyceum Way North&#13;&#10;' rect='-100,200,0,300' color='#9F1C'/>
 <room name='Arx - Ward of the Compact - Judgment Green' rect='-100,400,0,500' color='#9F1C'/>
 <room name='Arx - Ward of the Compact - Crown Way' rect='100,400,200,500' color='#9F1C'/>
@@ -109,81 +109,310 @@
 <room name='Arx - Ward of the Crown - Guardian Square' rect='300,1400,400,1500' color='#808040'/>
 <room name='Arx - Ward of the Crown - Grace Way' rect='300,1200,400,1300' color='#808040'/>
 <room name='Arx Grid -- Mapped Out by Precisi (Magpie/Mason) ' rect='500,-1340,940,-1310'/>
-<room name='Use as you like...' rect='500,-1300,940,-1270'/>
+<room name='Use as you like!' rect='500,-1260,940,-1230'/>
 <room name='Outside Arx - Eastern Approach - Path Outside the Walls' rect='1800,400,1900,500' color='#804040'/>
 <room name='Outside Arx - Eastern Approach - Beaches' rect='2200,800,2300,900' color='#804040'/>
 <room name='Outside Arx - Eastern Approach - Gray Forest Outskirts' rect='2150,350,2250,450' color='#804040'/>
 <room name='House of Solace' rect='-310,-250,-260,-230' color='#27D5F'/>
 <room name='Society of Explorers' rect='-310,-450,-260,-430' color='#27D5F'/>
-<room name='Iron Guard Barracks' rect='-310,-630,-260,-610' color='#27D5F'/>
-<room name='Iron Jail' rect='-240,-630,-190,-610' color='#27D5F'/>
-<room name='House of Questions' rect='-110,-630,-60,-610' color='#27D5F'/>
+<room name='Iron Guard Barracks' rect='-310,-650,-260,-630' color='#27D5F'/>
+<room name='Iron Jail' rect='-250,-650,-200,-630' color='#27D5F'/>
+<room name='House of Questions' rect='-110,-650,-60,-630' color='#27D5F'/>
 <room name='Badger Boardinghouse' rect='-770,210,-720,230' color='#694E03'/>
 <room name='Training Center' rect='-440,-250,-390,-230' color='#27D5F'/>
-<room name='Champions Guildhall' rect='-510,-250,-460,-230' color='#27D5F'/>
-<room name='Hall of Heroes' rect='-510,-440,-460,-420' color='#27D5F'/>
-<room name='The Ambassador Salon' rect='-310,560,-260,580' color='#694E03'/>
-<room name='Assembly of Peers' rect='-110,560,-60,580' color='#27D5F'/>
+<room name='Champions Guildhall' rect='-520,-250,-470,-230' color='#27D5F'/>
+<room name='Hall of Heroes' rect='-510,-450,-460,-430' color='#27D5F'/>
+<room name='The Ambassador Salon' rect='-310,550,-260,570' color='#694E03'/>
+<room name='Assembly of Peers' rect='-110,550,-60,570' color='#27D5F'/>
 <room name='The Great Tournament Grounds of Alarice' rect='-110,-450,-60,-430' color='#27D5F'/>
-<room name='Shrine of Limerance' rect='280,540,330,560' color='#27D5F'/>
-<room name='Shrine of the Sentinel' rect='290,560,340,580' color='#27D5F'/>
-<room name='Shrine of Gild' rect='360,560,410,580' color='#27D5F'/>
-<room name='Shrine of Gloria' rect='280,340,330,360' color='#27D5F'/>
-<room name='Shrine of Vellichor' rect='290,360,340,380' color='#27D5F'/>
-<room name='Shrine of Jayus' rect='370,340,420,360' color='#27D5F'/>
-<room name='Archive of Vellichor' rect='360,360,410,380' color='#27D5F'/>
-<room name='Traders Tavern' rect='290,-440,340,-420' color='#27D5F'/>
-<room name='Bank of Arx' rect='290,-640,340,-620' color='#27D5F'/>
-<room name='Auction House' rect='360,-640,410,-620' color='#27D5F'/>
+<room name='Shrine of Limerance' rect='290,530,340,550' color='#9E9E9E'/>
+<room name='Shrine of the Sentinel' rect='280,550,330,570' color='#9E9E9E'/>
+<room name='Shrine of Gild' rect='360,550,410,570' color='#9E9E9E'/>
+<room name='Shrine of Gloria' rect='370,350,420,370' color='#9E9E9E'/>
+<room name='Shrine of Vellichor' rect='280,350,330,370' color='#9E9E9E'/>
+<room name='Shrine of Jayus' rect='360,330,410,350' color='#9E9E9E'/>
+<room name='Archive of Vellichor' rect='290,330,340,350' color='#27D5F'/>
+<room name='Traders Tavern' rect='290,-450,340,-430' color='#694E03'/>
+<room name='Bank of Arx' rect='260,-640,310,-620' color='#27D5F'/>
+<room name='Auction House' rect='390,-640,440,-620' color='#27D5F'/>
 <room name='The Great Cathedral of the Pantheon' rect='490,150,540,170' color='#27D5F'/>
-<room name='Shrine of the Lost' rect='480,540,530,560' color='#27D5F'/>
-<room name='Shrine of the First Choice' rect='490,560,540,580' color='#27D5F'/>
-<room name='Shrine of the Queen of Endings' rect='570,540,620,560' color='#27D5F'/>
-<room name='Saving Grace' rect='680,540,730,560' color='#27D5F'/>
-<room name='Shrine of Mangata' rect='680,140,730,160' color='#27D5F'/>
-<room name='Shrine of the Thirteenth' rect='690,360,740,380' color='#27D5F'/>
-<room name='Shrine of Petrichor' rect='690,160,740,180' color='#27D5F'/>
-<room name='Shrine of Lagoma' rect='760,160,810,180' color='#27D5F'/>
-<room name='Commoners Court' rect='680,-260,730,-240' color='#27D5F'/>
+<room name='Shrine of the Lost' rect='490,530,540,550' color='#9E9E9E'/>
+<room name='Shrine of the First Choice' rect='480,550,530,570' color='#9E9E9E'/>
+<room name='Shrine of the Queen of Endings' rect='570,550,620,570' color='#9E9E9E'/>
+<room name='Saving Grace' rect='690,550,740,570' color='#27D5F'/>
+<room name='Shrine of Mangata' rect='690,130,740,150' color='#9E9E9E'/>
+<room name='Shrine of the Thirteenth' rect='690,350,740,370' color='#9E9E9E'/>
+<room name='Shrine of Petrichor' rect='680,150,730,170' color='#9E9E9E'/>
+<room name='Shrine of Lagoma' rect='760,150,810,170' color='#9E9E9E'/>
+<room name='Commoners Court' rect='690,-250,740,-230' color='#27D5F'/>
 <room name='Ebb and Flow Inn' rect='1090,-850,1140,-830' color='#694E03'/>
 <room name='Thrax Estate' rect='1200,-1040,1250,-1020' color='#8080' color_outline='#FFFF80'/>
 <room name='Confessional of the Waves' rect='890,-1040,940,-1020' color='#27D5F'/>
-<room name='The Spirits' rect='-110,-1040,-60,-1020' color='#694E03'/>
-<room name='Redrain Villa' rect='120,-1060,170,-1040' color='#800000' color_outline='#FFFF80'/>
-<room name='Stone Grove' rect='90,-1040,140,-1020' color='#27D5F'/>
-<room name='Sleepless Knights' rect='-710,-1040,-660,-1020' color='#694E03'/>
+<room name='The Spirits' rect='-110,-1050,-60,-1030' color='#694E03'/>
+<room name='Redrain Villa' rect='115,-1120,185,-1100' color='#800000' color_outline='#FFFF80'/>
+<room name='Stone Grove' rect='80,-1050,130,-1030' color='#27D5F'/>
+<room name='Sleepless Knights' rect='-720,-1040,-670,-1020' color='#694E03'/>
 <room name='Valardin Grounds' rect='-950,-1030,-900,-1010' color='#D4284' color_outline='#FFFF80'/>
 <room name='Velenosa Estate' rect='-950,1110,-900,1130' color='#400080' color_outline='#FFFF80'/>
-<room name='Hundred Cities Inn' rect='-880,760,-830,780' color='#694E03'/>
+<room name='Hundred Cities Inn' rect='-900,730,-850,750' color='#694E03'/>
 <room name='Queensrest Inn' rect='-110,960,-60,980' color='#694E03'/>
-<room name='The Palace' rect='130,1530,180,1550' color='#808040' color_outline='#FFFF80'/>
-<room name='Crownguard Tower' rect='350,1530,400,1550' color='#27D5F'/>
-<room name='Nefer&apos;khat Embassy' rect='420,1250,470,1270' color='#27D5F'/>
-<room name='Nox&apos;alfar Embassy' rect='420,1210,470,1230' color='#27D5F'/>
-<room name='The Rectory' rect='420,1010,470,1030' color='#27D5F'/>
-<room name='Graveyard of Arx' rect='630,800,680,820' color='#27D5F'/>
-<room name='Murder of Crows' rect='630,1000,680,1020' color='#694E03'/>
-<room name='Nightingale Park' rect='880,940,930,960' color='#27D5F'/>
-<room name='The Tragedy' rect='890,960,940,980' color='#27D5F'/>
-<room name='The Commons Medical Clinic' rect='970,940,1020,960' color='#27D5F'/>
-<room name='Commons Courts' rect='960,960,1010,980' color='#27D5F'/>
-<room name='Back Alley' rect='1220,1010,1270,1030' color='#27D5F'/>
-<room name='The Unkindness' rect='1120,-240,1170,-220' color='#694E03'/>
+<room name='The Palace' rect='130,1540,180,1560' color='#808040' color_outline='#FFFF80'/>
+<room name='Crownguard Tower' rect='340,1520,390,1540' color='#27D5F'/>
+<room name='Nefer&apos;khat Embassy' rect='290,1160,340,1180' color='#27D5F'/>
+<room name='Nox&apos;alfar Embassy' rect='350,1160,400,1180' color='#27D5F'/>
+<room name='The Rectory' rect='320,960,370,980' color='#27D5F'/>
+<room name='Graveyard of Arx' rect='690,760,740,780' color='#27D5F'/>
+<room name='Murder of Crows' rect='630,1040,680,1060' color='#694E03'/>
+<room name='Nightingale Park' rect='890,940,940,960' color='#27D5F'/>
+<room name='The Tragedy' rect='880,960,930,980' color='#27D5F'/>
+<room name='The Commons Medical Clinic' rect='960,940,1010,960' color='#27D5F'/>
+<room name='Commons Courts' rect='970,960,1020,980' color='#27D5F'/>
+<room name='Back Alley' rect='1030,1020,1070,1040' color='#27D5F'/>
+<room name='The Unkindness' rect='1124,-271,1174,-251' color='#694E03'/>
 <room name='Grayson Mansion' rect='-970,40,-920,60' color='#808080' color_outline='#FFFF80'/>
+<room name='Elegant Impressions' rect='80,-250,130,-230' color='#0'/>
+<room name='The Gilded Cage Boutique' rect='170,-250,220,-230' color='#0'/>
+<room name='The Lair' rect='90,-450,140,-430' color='#27D5F'/>
+<room name='Stormwalls Haven' rect='90,-470,140,-450' color='#27D5F'/>
+<room name='White Wolf Apothecary and Infirmary' rect='160,-450,210,-430' color='#0'/>
+<room name='Museum of Nature and History' rect='90,-650,140,-630' color='#27D5F'/>
+<room name='Stormbird&apos;s Roost' rect='160,-650,210,-630' color='#27D5F'/>
+<room name='Bear Threads Clothier' rect='370,-660,420,-640' color='#0'/>
+<room name='Arvum Botanical Gardens' rect='360,-680,410,-660' color='#27D5F'/>
+<room name='The Golden Hart Gaming House' rect='270,-660,320,-640' color='#694E03'/>
+<room name='Redwood Mercenary Headquarters' rect='290,-680,340,-660' color='#27D5F'/>
+<room name='Crafter&apos;s Hall' rect='490,-660,540,-640' color='#27D5F'/>
+<room name='Mercier Shelter' rect='490,-640,540,-620' color='#27D5F'/>
+<room name='Elysian Redolence' rect='490,-680,540,-660' color='#0'/>
+<room name='Renee&apos;s Shop' rect='560,-640,610,-620' color='#27D5F'/>
+<room name='Bright Forge' rect='560,-660,610,-640' color='#0'/>
+<room name='Coldrain Hall' rect='730,-640,780,-620' color='#27D5F'/>
+<room name='The Morgue' rect='-50,-650,0,-630' color='#27D5F'/>
+<room name='Bold Espressions' rect='-310,-470,-260,-450' color='#694E03'/>
+<room name='The Leather Paean' rect='-240,-470,-190,-450' color='#0'/>
+<room name='Fang&apos;s Dwelling' rect='-240,-450,-190,-430' color='#27D5F'/>
+<room name='Nova&apos;s Home' rect='160,-470,210,-450' color='#27D5F'/>
+<room name='Silver Consortium Center' rect='290,-470,340,-450' color='#27D5F'/>
+<room name='Spirit Leathers' rect='360,-490,410,-470' color='#0'/>
+<room name='Gilded Dreams' rect='360,-470,410,-450' color='#0'/>
+<room name='Caravan Mercantile Exchange' rect='360,-450,410,-430' color='#0'/>
+<room name='Stormward Exports' rect='490,-440,540,-420' color='#0'/>
+<room name='The Fixation' rect='490,-460,540,-440' color='#0'/>
+<room name='Order of East Light' rect='560,-470,610,-450' color='#27D5F'/>
+<room name='Muse of Mourning' rect='560,-450,610,-430' color='#27D5F'/>
+<room name='Shot in the Dark (Closed)' rect='490,-480,540,-460' color='#694E03'/>
+<room name='Eidolon Gallery (Closed)' rect='690,-440,740,-420' color='#27D5F'/>
+<room name='Vellichorian Academy' rect='690,-460,740,-440' color='#27D5F'/>
+<room name='Books and Scribing Supplies' rect='760,-460,810,-440' color='#0'/>
+<room name='A Taste of Champagne' rect='760,-440,810,-420' color='#0'/>
+<room name='Mourning Isles Emporium' rect='-510,-270,-460,-250' color='#0'/>
+<room name='Out of the Woods' rect='280,-250,330,-230' color='#0'/>
+<room name='Eclectic Elixirium' rect='290,-270,340,-250' color='#0'/>
+<room name='The Brazen Serpent' rect='360,-250,410,-230' color='#0'/>
+<room name='Sellswords Guild' rect='480,-250,530,-230' color='#27D5F'/>
+<room name='Crimson Blades Headquarters' rect='490,-270,540,-250' color='#27D5F'/>
+<room name='Valorous Few' rect='560,-270,610,-250' color='#27D5F'/>
+<room name='Isles Canines Headquarters' rect='570,-250,620,-230' color='#27D5F'/>
+<room name='Grenaldo and Tiazza&apos;s' rect='760,-250,810,-230' color='#0'/>
+<room name='Leather &amp; Tradegoods' rect='690,-40,740,-20' color='#0'/>
+<room name='Ferron Arms &amp; Armor' rect='690,-60,740,-40' color='#0'/>
+<room name='Atelier Joscelin' rect='630,0,680,20' color='#27D5F'/>
+<room name='Seaborn Weaponry' rect='690,-80,740,-60' color='#0'/>
+<room name='Beauty In You' rect='820,60,870,80' color='#0'/>
+<room name='Corsetina Mercantile' rect='760,-80,810,-60' color='#0'/>
+<room name='Salon HQ' rect='630,20,680,40' color='#27D5F'/>
+<room name='Ethereal Elixirs' rect='760,-60,810,-40' color='#0'/>
+<room name='Clearwater Concoctions' rect='760,-40,810,-20' color='#0'/>
+<room name='Aerwyna&apos;s Fashions' rect='820,10,870,30' color='#0'/>
+<room name='Sew Civilized' rect='820,-20,870,0' color='#0'/>
+<room name='Harry&apos;s Jewelry &amp; Gift Shop' rect='280,-60,330,-40' color='#0'/>
+<room name='The Singing Stones' rect='290,-40,340,-20' color='#0'/>
+<room name='Oakheart Woodworks' rect='300,-20,350,0' color='#0'/>
+<room name='Fire and Brimstone' rect='370,-60,420,-40' color='#0'/>
+<room name='The Tangled Skein' rect='290,-80,340,-60' color='#0'/>
+<room name='The Bakery' rect='360,-40,410,-20' color='#0'/>
+<room name='Cuts and Stitches' rect='360,-80,410,-60' color='#0'/>
+<room name='Ironfoot Cabin' rect='350,-20,400,0' color='#0'/>
+<room name='Reed&apos;s Timbercrafts' rect='500,-20,550,0' color='#0'/>
+<room name='Dream Creations (Locked)' rect='560,-40,610,-20' color='#0'/>
+<room name='Matessi Law Firm' rect='560,-80,610,-60' color='#27D5F'/>
+<room name='Lotties Place' rect='490,-80,540,-60' color='#0'/>
+<room name='Kaine&apos;s Captivating Crafts' rect='570,-60,620,-40' color='#0'/>
+<room name='The Hag&apos;s Stir' rect='490,-40,540,-20' color='#0'/>
+<room name='Anvil&apos;s Song' rect='480,-60,530,-40' color='#0'/>
+<room name='Pins and Needles (Locked)' rect='550,-20,600,0' color='#0'/>
+<room name='The Menagerie' rect='-510,150,-460,170' color='#27D5F'/>
+<room name='Blackrose Theater' rect='-310,160,-260,180' color='#0'/>
+<room name='Costumer&apos;s Closet' rect='-310,140,-260,160' color='#0'/>
+<room name='Storied Treasures' rect='-310,120,-260,140' color='#0'/>
+<room name='Physical Refinement Center' rect='-240,160,-190,180' color='#27D5F'/>
+<room name='379 Carriage Way (Locked)' rect='-240,140,-190,160' color='#27D5F'/>
+<room name='The Grotto' rect='-110,160,-60,180' color='#0'/>
+<room name='Works Obscura' rect='-120,140,-70,160' color='#0'/>
+<room name='Gilded Page' rect='-40,160,10,180' color='#0'/>
+<room name='The Golden Spindle' rect='-30,140,20,160' color='#0'/>
+<room name='Freedom Gallery' rect='-40,120,10,140' color='#0'/>
+<room name='Tilted Anvil' rect='-110,120,-60,140' color='#27D5F'/>
+<room name='...With help from Riley (Sydney!)' rect='500,-1300,940,-1270'/>
+<room name='Imperial Innovations' rect='290,170,340,190' color='#0'/>
+<room name='Kenemir Leather' rect='280,150,330,170' color='#0'/>
+<room name='The Storied Blade' rect='280,130,330,150' color='#0'/>
+<room name='Hammer Down' rect='290,110,340,130' color='#0'/>
+<room name='The Dragon&apos;s Hearth' rect='370,150,420,170' color='#0'/>
+<room name='The Dragon&apos;s Hearth Courtyard (Locked)' rect='370,130,420,150' color='#27D5F'/>
+<room name='Swirl of Silk' rect='360,170,410,190' color='#0'/>
+<room name='Bell Bookcases and Cabinets' rect='560,150,610,170' color='#0'/>
+<room name='Tranquil Abode' rect='490,350,540,370' color='#27D5F'/>
+<room name='Hushed Haven (Locked)' rect='90,350,140,370' color='#27D5F'/>
+<room name='Judgment Statuary' rect='-310,350,-260,370' color='#27D5F'/>
+<room name='The Red Villa' rect='-240,350,-190,370' color='#27D5F'/>
+<room name='Jayus Gallery of Art' rect='-510,350,-460,370' color='#27D5F'/>
+<room name='Thorn and Scale' rect='-440,550,-390,570' color='#0'/>
+<room name='Raconteur Brewing' rect='-510,550,-460,570' color='#27D5F'/>
+<room name='Lasting Hope Observatory' rect='560,530,610,550' color='#27D5F'/>
+<room name='Small Brick Manse (Locked)' rect='760,550,810,570' color='#27D5F'/>
+<room name='Halfshav Hall' rect='-110,-1070,-60,-1050' color='#27D5F'/>
+<room name='Blackwood Estate' rect='-110,-1090,-60,-1070' color='#27D5F'/>
+<room name='Ravnsholm' rect='-110,-1110,-60,-1090' color='#27D5F'/>
+<room name='Sanna Manor' rect='-110,-1130,-60,-1110' color='#27D5F'/>
+<room name='Spirit Walker&apos;s Hall' rect='-50,-1050,0,-1030' color='#27D5F'/>
+<room name='Stahl Hall' rect='-50,-1070,0,-1050' color='#27D5F'/>
+<room name='Clearlake Lodge' rect='-50,-1090,0,-1070' color='#27D5F'/>
+<room name='Whitehold Brews' rect='-50,-1110,0,-1090' color='#694E03'/>
+<room name='Blackwood Training Grounds' rect='-50,-1130,0,-1110' color='#FF0000'/>
+<room name='Redrain Gardens' rect='170,-1050,220,-1030' color='#27D5F'/>
+<room name='Northlands Arena' rect='160,-1070,210,-1050' color='#FF0000'/>
+<room name='Nightgold Mansion' rect='280,-1050,330,-1030' color='#27D5F'/>
+<room name='Acheron Domain' rect='290,-1070,340,-1050' color='#27D5F'/>
+<room name='Black Hall of Axes' rect='360,-1070,410,-1050' color='#27D5F'/>
+<room name='Hawkeye Cottage (Locked)' rect='370,-1050,420,-1030' color='#27D5F'/>
 <room name='Ward of the Compact' rect='-470,-690,-320,-650' color='#8000' color_outline='#0'/>
+<room name='Mercier Warehouse (Locked)' rect='1240,-720,1290,-700' color='#27D5F'/>
+<room name='Darkwater Manse' rect='1250,-740,1300,-720' color='#27D5F'/>
+<room name='Grimhall Longhouse' rect='1240,-880,1290,-860' color='#27D5F'/>
+<room name='Kennex Kay' rect='1230,-900,1280,-880' color='#27D5F'/>
+<room name='Tyde Tower' rect='1260,-760,1310,-740' color='#27D5F'/>
+<room name='Redreef Estate' rect='1260,-780,1310,-760' color='#27D5F'/>
+<room name='Navegant Redoubt' rect='1260,-800,1310,-780' color='#27D5F'/>
+<room name='Melaeris Fasthold' rect='1260,-820,1310,-800' color='#27D5F'/>
+<room name=' Redtyde Villa' rect='1260,-840,1310,-820' color='#27D5F'/>
+<room name='Wavehowler Wearh' rect='1160,-850,1210,-830' color='#0'/>
+<room name='Blackshore Manor' rect='1250,-860,1300,-840' color='#27D5F'/>
+<room name='Mercier Tea Shop' rect='-720,-840,-670,-820' color='#27D5F'/>
+<room name='Westrock Commons' rect='-630,-840,-580,-820' color='#27D5F'/>
+<room name='Bertram&apos;s Simple Seams' rect='-710,-860,-660,-840' color='#0'/>
+<room name='Keaton Hall' rect='-710,-1060,-660,-1040' color='#27D5F'/>
+<room name='Moore Estate' rect='-650,-1080,-600,-1060' color='#27D5F'/>
+<room name='Blanchard Stables' rect='-640,-1060,-590,-1040' color='#27D5F'/>
+<room name='Clement House' rect='-630,-1040,-580,-1020' color='#27D5F'/>
+<room name='Blanchard Stables' rect='-880,-1040,-830,-1020' color='#27D5F'/>
+<room name='Wyrmguard Estate' rect='-910,-840,-860,-820' color='#27D5F'/>
+<room name='Greenmarch Lodge' rect='-970,-730,-920,-710' color='#27D5F'/>
+<room name='Telmar Tower' rect='-840,-840,-790,-820' color='#27D5F'/>
+<room name='Laurent Estate' rect='-910,-680,-860,-660' color='#27D5F'/>
+<room name='Lyonesse Chateau' rect='-970,-700,-920,-680' color='#27D5F'/>
+<room name='Blackram Fasthold' rect='-840,-680,-790,-660' color='#27D5F'/>
+<room name='Chevalle Manor' rect='-970,-820,-920,-800' color='#27D5F'/>
+<room name='Rivenshari Gate' rect='-970,-790,-920,-770' color='#27D5F'/>
+<room name='Steelheart Mansion' rect='-970,-760,-920,-740' color='#27D5F'/>
+<room name='Deepwood Manor' rect='-970,-120,-920,-100' color='#27D5F'/>
+<room name='Mercier Garden' rect='-970,-150,-920,-130' color='#27D5F'/>
+<room name='Bisland Manor' rect='-970,-180,-920,-160' color='#27D5F'/>
+<room name='Whitehawk Manor (Locked)' rect='-900,-240,-850,-220' color='#27D5F'/>
+<room name='Heron Hall' rect='-960,-240,-910,-220' color='#27D5F'/>
+<room name='Seliki Manor' rect='-970,-210,-920,-190' color='#27D5F'/>
+<room name='The Brandishing Shield' rect='-840,-240,-790,-220' color='#0'/>
+<room name='Ashford Square' rect='-770,240,-720,260' color='#27D5F'/>
+<room name='Stonewood Keep Gates' rect='-770,280,-720,300' color='#27D5F'/>
+<room name='Byrne Manor' rect='-840,330,-790,350' color='#27D5F'/>
+<room name='Shepherd Manor' rect='-910,330,-860,350' color='#27D5F'/>
+<room name='Kennels' rect='-920,-40,-870,-20' color='#27D5F'/>
+<room name='Black Fox' rect='-710,750,-660,770' color='#694E03'/>
+<room name='Hall of the Hundred Cities' rect='-640,750,-590,770' color='#27D5F'/>
+<room name='Mirrorguard Tower' rect='-675,730,-625,750' color='#27D5F'/>
+<room name='Mercier Glass and Labeling (Locked)' rect='-910,750,-860,770' color='#27D5F'/>
+<room name='Whyne&apos;s Wine Shope' rect='-840,750,-790,770' color='#0'/>
+<room name='Donatti&apos;s Imports &amp; Exports' rect='-850,730,-800,750' color='#0'/>
+<room name='The Silken Symphony' rect='-840,950,-790,970' color='#27D5F'/>
+<room name='De Lire Manor (Locked)' rect='-910,950,-860,970' color='#27D5F'/>
+<room name='Tor Plaza' rect='-720,950,-670,970' color='#27D5F'/>
+<room name='Southport Square' rect='-630,960,-580,980' color='#27D5F'/>
+<room name='Plaza Unita' rect='-710,930,-660,950' color='#27D5F'/>
+<room name='Setarco Commons' rect='-640,930,-590,950' color='#27D5F'/>
+<room name='Stone Watchtower' rect='1360,-60,1410,-40' color='#27D5F'/>
+<room name='Moonlight Hollow' rect='1420,-60,1470,-40' color='#27D5F'/>
+<room name='Cozy Cabin' rect='1290,-60,1340,-40' color='#27D5F'/>
+<room name='FHDCE Tree-House' rect='1430,-30,1480,-10' color='#27D5F'/>
+<room name='Seawatch Villa' rect='1430,0,1480,20' color='#27D5F'/>
+<room name='Sonder Lodge' rect='1430,30,1480,50' color='#27D5F'/>
+<room name='Copper Gated Manor (Locked)' rect='1230,-180,1280,-160' color='#27D5F'/>
+<room name='Lighthouse' rect='1400,-270,1450,-250' color='#27D5F'/>
+<room name='Seawatch Manor (Locked)' rect='1230,-210,1280,-190' color='#27D5F'/>
+<room name='Vanha Manor (Locked)' rect='1240,-240,1290,-220' color='#27D5F'/>
+<room name='Seawatch Cottage(Locked)' rect='1280,-270,1330,-250' color='#27D5F'/>
+<room name='Fieldstone Cottage' rect='1340,-270,1390,-250' color='#27D5F'/>
+<room name='Crossroads Casino' rect='1160,-240,1210,-220' color='#27D5F'/>
+<room name='Cibola Manor' rect='1090,-240,1140,-220' color='#27D5F'/>
+<room name='Crown Apartments' rect='1090,160,1140,180' color='#27D5F'/>
+<room name='Grayhope Manor' rect='1160,160,1210,180' color='#27D5F'/>
+<room name='Finance Offices' rect='1030,190,1080,210' color='#27D5F'/>
+<room name='Wild House (Locked)' rect='1030,220,1080,240' color='#27D5F'/>
+<room name='Arcuri Manor' rect='1030,250,1080,270' color='#27D5F'/>
+<room name='Mercier Manor (Locked)' rect='1090,-40,1140,-20' color='#27D5F'/>
+<room name='Thistle Home (Locked)' rect='1090,-60,1140,-40' color='#27D5F'/>
+<room name='112 Candleway Lane' rect='1160,-40,1210,-20' color='#27D5F'/>
+<room name='Casa de Corsetina (Locked)' rect='1160,-80,1210,-60' color='#27D5F'/>
+<room name='Hyacinth Cottage (Locked)' rect='1090,-80,1140,-60' color='#27D5F'/>
+<room name='Stone and Ivy House (Locked)' rect='1160,-60,1210,-40' color='#27D5F'/>
+<room name='Wilkerson Estate(Locked)' rect='1030,-80,1080,-60' color='#27D5F'/>
+<room name='Silversong Manor (Locked)' rect='1030,-60,1080,-40' color='#27D5F'/>
+<room name='Venerable Townhouse (Locked)' rect='1030,-40,1080,-20' color='#27D5F'/>
+<room name='The Safe Harbor House' rect='1080,950,1120,970' color='#27D5F'/>
+<room name='Second Chances' rect='1130,950,1170,970' color='#27D5F'/>
+<room name='Culler Den (Locked)' rect='1100,1160,1140,1180' color='#27D5F'/>
+<room name='Nightingale House (Locked)' rect='1160,1160,1200,1180' color='#27D5F'/>
+<room name='Converted Warehouse' rect='700,1160,740,1180' color='#27D5F'/>
+<room name='River&apos;s Strand' rect='650,1170,690,1190' color='#0'/>
+<room name='Elysium Hospice' rect='760,1160,800,1180' color='#27D5F'/>
+<room name='Treasured Trinkets' rect='640,1200,680,1220' color='#0'/>
+<room name=' ' rect='950,1330,960,1360' color='#804000'/>
+<room name='Grave Thoughts' rect='760,760,810,780' color='#27D5F'/>
+<room name='Community Garden' rect='930,760,980,780' color='#27D5F'/>
+<room name='Lowers Leather' rect='890,920,940,940' color='#0'/>
+<room name='Nemesis Weaponry' rect='960,920,1010,940' color='#0'/>
+<room name='Ignoble Steep' rect='840,1010,890,1030' color='#694E03'/>
+<room name='Highway Robbery' rect='690,960,740,980' color='#0'/>
+<room name='Smoke and Spirits (Locked)' rect='760,940,810,960' color='#27D5F'/>
+<room name='Harrowed Ground' rect='760,960,810,980' color='#27D5F'/>
+<room name='Black Cauldron' rect='690,940,740,960' color='#0'/>
+<room name='Brigand&apos;s Brigandine' rect='690,920,740,940' color='#0'/>
+<room name='Flat Above a Cobbler&apos;s Shop (Locked)' rect='760,920,810,940' color='#27D5F'/>
+<room name=' ' rect='980,1330,1000,1380' color='#804000'/>
+<room name=' ' rect='910,1300,920,1350' color='#694E03'/>
+<room name=' ' rect='820,1410,920,1450' color='#804000'/>
+<room name=' ' rect='890,1340,910,1390' color='#804000'/>
+<room name=' ' rect='930,1360,940,1400' color='#804000'/>
+<room name=' ' rect='940,1300,950,1380' color='#694E03'/>
+<room name=' ' rect='1020,1360,1060,1460' color='#804000'/>
+<room name=' ' rect='880,1310,910,1330' color='#804000'/>
+<room name=' ' rect='930,1310,940,1340' color='#804000'/>
+<room name=' ' rect='980,1310,1010,1320' color='#804000'/>
+<room name=' ' rect='970,1300,980,1350' color='#694E03'/>
+<room name=' ' rect='850,1350,880,1360' color='#804000'/>
+<room name=' ' rect='990,1400,1000,1430' color='#804000'/>
 <exit from='1' to='0' name_from='south' name_to='north'/>
 <exit from='0' to='2' name_from='south' name_to='north'/>
-<exit from='3' to='2' name_from='Out' name_to='LM'/>
-<exit from='4' to='2' name_from='Out' name_to='DV'/>
-<exit from='5' to='2' name_from='O' name_to='BF'/>
+<exit from='3' to='2' name_from='o' name_to='LM'/>
+<exit from='4' to='2' name_from='o' name_to='DV'/>
+<exit from='5' to='2' name_from='o' name_to='BF'/>
 <exit from='0' to='6' name_from='west' name_to='east'/>
-<exit from='8' to='6' name_from='Out' name_to='NB'/>
-<exit from='7' to='6' name_from='Out' name_to='LS'/>
-<exit from='9' to='6' name_from='Out' name_to='PM'/>
-<exit from='10' to='6' name_from='Out' name_to='TB'/>
-<exit from='11' to='6' name_from='Out' name_to='Sew'/>
-<exit from='12' to='6' name_from='Out' name_to='WC'/>
-<exit from='13' to='6' name_from='Out' name_to='AA'/>
+<exit from='8' to='6' name_from='o' name_to='NB'/>
+<exit from='7' to='6' name_from='o' name_to='LS'/>
+<exit from='9' to='6' name_from='o' name_to='PM'/>
+<exit from='10' to='6' name_from='o' name_to='TB'/>
+<exit from='11' to='6' name_from='o' name_to='Sew'/>
+<exit from='12' to='6' name_from='o' name_to='WC'/>
+<exit from='13' to='6' name_from='o' name_to='AA'/>
 <exit from='14' to='6' name_from='north' name_to='south'/>
 <exit from='14' to='2' name_from='east' name_to='west'/>
 <exit from='15' to='14' name_from='north' name_to='south'/>
@@ -432,9 +661,9 @@
 <exit from='109' to='107' name_from='Path' name_to='GF' points='2040,400'/>
 <exit from='110' to='33' name_from='o' name_to='hs' points='-280,-200'/>
 <exit from='111' to='34' name_from='o' name_to='soe' points='-280,-400'/>
-<exit from='112' to='47' name_from='o' name_to='ig' points='-280,-600'/>
-<exit from='113' to='47' name_from='o' name_to='ij' points='-230,-600'/>
-<exit from='114' to='48' name_from='o' name_to='hq'/>
+<exit from='112' to='47' name_from='o' name_to='ig' points='-285,-600'/>
+<exit from='113' to='47' name_from='o' name_to='ij' points='-225,-600'/>
+<exit from='114' to='48' name_from='o' name_to='HQ' points='-85,-600'/>
 <exit from='115' to='88' name_from='b' name_to='b'/>
 <exit from='116' to='37' name_from='o' name_to='tc'/>
 <exit from='117' to='37' name_from='o' name_to='cg'/>
@@ -461,7 +690,7 @@
 <exit from='139' to='54' name_from='o' name_to='sp'/>
 <exit from='140' to='54' name_from='o' name_to='sl'/>
 <exit from='141' to='56' name_from='o' name_to='cc'/>
-<exit from='142' to='76' name_from='o' name_to='ef'/>
+<exit from='142' to='76' name_from='o' name_to='EF'/>
 <exit from='143' to='78' name_from='o' name_to='te'/>
 <exit from='144' to='77' name_from='o' name_to='cw'/>
 <exit from='145' to='80' name_from='o' name_to='ts'/>
@@ -483,16 +712,235 @@
 <exit from='161' to='64' name_from='o' name_to='t'/>
 <exit from='162' to='64' name_from='o' name_to='cc'/>
 <exit from='163' to='64' name_from='o' name_to='co'/>
-<exit from='164' to='66' name_from='o' name_to='ba'/>
-<exit from='165' to='72' name_from='o' name_to='tu'/>
+<exit from='164' to='66' name_from='o' name_to='ba' points='1100,1030'/>
+<exit from='165' to='72' name_from='o' name_to='TU'/>
 <exit from='166' to='89' name_from='o' name_to='gm'/>
-<rectangle rect='-520,-620,820,720' color='#3500'/>
-<rectangle rect='-920,-1020,-580,-680' color='#3C'/>
-<rectangle rect='-920,-220,-580,320' color='#4B4B4B'/>
-<rectangle rect='-920,780,-580,1120' color='#240048'/>
-<rectangle rect='-120,780,420,1520' color='#303018'/>
-<rectangle rect='-120,-1020,420,-680' color='#350000'/>
-<rectangle rect='880,-1020,1220,-680' color='#172F2F'/>
+<exit from='167' to='1' name_from='o' name_to='EI' points='120,-200'/>
+<exit from='168' to='1' name_from='o' name_to='GC' points='170,-200'/>
+<exit from='172' to='49' name_from='o' name_to='M' points='120,-600'/>
+<exit from='173' to='49' name_from='o' name_to='SR' points='180,-600'/>
+<exit from='169' to='23' name_from='o' name_to='TL' points='120,-400'/>
+<exit from='176' to='50' name_from='o' name_to='GH' points='340,-600'/>
+<exit from='177' to='50' name_from='o' name_to='rmh' points='350,-600'/>
+<exit from='174' to='50' name_from='o' name_to='BT' points='360,-600'/>
+<exit from='175' to='50' name_from='o' name_to='AG' points='353,-600'/>
+<exit from='179' to='51' name_from='o' name_to='MS' points='530,-600'/>
+<exit from='181' to='51' name_from='o' name_to='RS' points='580,-600'/>
+<exit from='182' to='51' name_from='o' name_to='BF' points='570,-600'/>
+<exit from='178' to='51' name_from='o' name_to='CH' points='540,-600'/>
+<exit from='180' to='51' name_from='o' name_to='ER' points='560,-600'/>
+<exit from='183' to='58' name_from='o' name_to='CH' points='760,-600'/>
+<exit from='184' to='48' name_from='o' name_to='MRG' points='-25,-600'/>
+<exit from='185' to='34' name_from='o' name_to='BE' points='-270,-400'/>
+<exit from='186' to='34' name_from='o' name_to='LP' points='-230,-400'/>
+<exit from='187' to='34' name_from='o' name_to='FD' points='-220,-400'/>
+<exit from='170' to='23' name_from='o' name_to='SH' points='140,-400'/>
+<exit from='171' to='23' name_from='o' name_to='WWA' points='180,-400'/>
+<exit from='188' to='23' name_from='o' name_to='NH' points='170,-400'/>
+<exit from='189' to='24' name_from='o' name_to='SC' points='340,-400'/>
+<exit from='190' to='24' name_from='o' name_to='SL' points='370,-400'/>
+<exit from='192' to='24' name_from='o' name_to='CM' points='380,-400'/>
+<exit from='191' to='24' name_from='o' name_to='GD' points='390,-400'/>
+<exit from='193' to='25' name_from='o' name_to='SX' points='520,-400'/>
+<exit from='194' to='25' name_from='o' name_to='FI' points='530,-400'/>
+<exit from='195' to='25' name_from='o' name_to='EL' points='560,-400'/>
+<exit from='196' to='25' name_from='o' name_to='MM' points='570,-400'/>
+<exit from='197' to='25' name_from='o' name_to='SD' points='540,-400'/>
+<exit from='199' to='57' name_from='o' name_to='VA' points='730,-400'/>
+<exit from='198' to='57' name_from='EG' name_to='o' points='720,-400'/>
+<exit from='200' to='57' name_from='o' name_to='BSS' points='760,-400'/>
+<exit from='201' to='57' name_from='o' name_to='TC' points='780,-400'/>
+<exit from='202' to='37' name_from='o' name_to='ME' points='-460,-200'/>
+<exit from='203' to='20' name_from='o' name_to='OW' points='320,-200'/>
+<exit from='204' to='20' name_from='o' name_to='EE' points='330,-200'/>
+<exit from='205' to='20' name_from='o' name_to='TBS' points='370,-200'/>
+<exit from='206' to='26' name_from='o' name_to='SG' points='520,-200'/>
+<exit from='207' to='26' name_from='o' name_to='CBH' points='530,-200'/>
+<exit from='209' to='26' name_from='o' name_to='ICH' points='590,-200'/>
+<exit from='208' to='26' name_from='o' name_to='VF' points='570,-200'/>
+<exit from='210' to='56' name_from='o' name_to='GT' points='770,-200'/>
+<exit from='211' to='55' name_from='o' name_to='LT' points='710,0'/>
+<exit from='212' to='55' name_from='o' name_to='FA' points='720,0'/>
+<exit from='213' to='55' name_from='o' name_to='AJ' points='700,10'/>
+<exit from='214' to='55' name_from='o' name_to='SB' points='730,0'/>
+<exit from='215' to='55' name_from='o' name_to='BY' points='800,70'/>
+<exit from='216' to='55' name_from='o' name_to='CM' points='770,0'/>
+<exit from='217' to='55' name_from='o' name_to='SH' points='800,30'/>
+<exit from='218' to='55' name_from='o' name_to='EE' points='780,0'/>
+<exit from='219' to='55' name_from='o' name_to='CC' points='790,0'/>
+<exit from='220' to='55' name_from='o' name_to='AF' points='800,20'/>
+<exit from='221' to='55' name_from='o' name_to='SC' points='800,0'/>
+<exit from='229' to='19' name_from='o' name_to='2-ic'/>
+<exit from='224' to='19' name_from='o' name_to='OW'/>
+<exit from='223' to='19' name_from='o' name_to='TSS'/>
+<exit from='223' to='19' name_from='o' name_to='TSS'/>
+<exit from='222' to='19' name_from='o' name_to='HJ'/>
+<exit from='226' to='19' name_from='o' name_to='TK'/>
+<exit from='227' to='19' name_from='o' name_to='TB'/>
+<exit from='225' to='19' name_from='o' name_to='FB'/>
+<exit from='228' to='19' name_from='o' name_to='CS'/>
+<exit from='237' to='27' name_from='o' name_to='PN'/>
+<exit from='231' to='27' name_from='o' name_to='DC'/>
+<exit from='234' to='27' name_from='o' name_to='KC'/>
+<exit from='230' to='27' name_from='o' name_to='RT'/>
+<exit from='235' to='27' name_from='o' name_to='HS'/>
+<exit from='236' to='27' name_from='o' name_to='AS'/>
+<exit from='233' to='27' name_from='o' name_to='LP'/>
+<exit from='232' to='27' name_from='o' name_to='ML'/>
+<exit from='238' to='39' name_from='o' name_to='TM'/>
+<exit from='239' to='31' name_from='o' name_to='BT'/>
+<exit from='240' to='31' name_from='o' name_to='CC'/>
+<exit from='241' to='31' name_from='o' name_to='ST'/>
+<exit from='242' to='31' name_from='o' name_to='PR'/>
+<exit from='243' to='31' name_from='o' name_to='379'/>
+<exit from='244' to='14' name_from='o' name_to='TG'/>
+<exit from='245' to='14' name_from='o' name_to='WO'/>
+<exit from='246' to='14' name_from='o' name_to='GP'/>
+<exit from='247' to='14' name_from='o' name_to='GS'/>
+<exit from='248' to='14' name_from='o' name_to='FG'/>
+<exit from='249' to='14' name_from='o' name_to='TA'/>
+<exit from='251' to='18' name_from='o' name_to='II'/>
+<exit from='252' to='18' name_from='o' name_to='KL'/>
+<exit from='253' to='18' name_from='o' name_to='SB'/>
+<exit from='254' to='18' name_from='o' name_to='HD'/>
+<exit from='255' to='18' name_from='o' name_to='DH'/>
+<exit from='256' to='18' name_from='o' name_to='DHC'/>
+<exit from='257' to='18' name_from='o' name_to='SOS'/>
+<exit from='258' to='28' name_from='o' name_to='BC'/>
+<exit from='138' to='53' name_from='o' name_to='ST'/>
+<exit from='259' to='29' name_from='o' name_to='TA'/>
+<exit from='260' to='16' name_from='o' name_to='HH'/>
+<exit from='262' to='30' name_from='o' name_to='RV'/>
+<exit from='261' to='30' name_from='o' name_to='JS'/>
+<exit from='263' to='40' name_from='o' name_to='JG'/>
+<exit from='265' to='41' name_from='o' name_to='RB'/>
+<exit from='264' to='41' name_from='o' name_to='TS'/>
+<exit from='266' to='46' name_from='o' name_to='LH'/>
+<exit from='267' to='52' name_from='o' name_to='BM'/>
+<exit from='276' to='80' name_from='SW' name_to='BTG'/>
+<exit from='268' to='80' name_from='o' name_to='HH'/>
+<exit from='269' to='80' name_from='oo' name_to='BE'/>
+<exit from='270' to='80' name_from='o' name_to='RH'/>
+<exit from='271' to='80' name_from='o' name_to='SM'/>
+<exit from='272' to='80' name_from='o' name_to='SW'/>
+<exit from='273' to='80' name_from='o' name_to='SH'/>
+<exit from='274' to='80' name_to='CL'/>
+<exit from='275' to='80' name_from='o' name_to='WB'/>
+<exit from='277' to='82' name_from='o' name_to='RG'/>
+<exit from='278' to='82' name_from='o' name_to='NA'/>
+<exit from='282' to='81' name_from='o' name_to='HC'/>
+<exit from='279' to='81' name_from='o' name_to='NM'/>
+<exit from='280' to='81' name_from='o' name_to='AD'/>
+<exit from='281' to='81' name_from='o' name_to='BH'/>
+<exit from='284' to='76' name_from='o' name_to='MW'/>
+<exit from='285' to='76' name_from='o' name_to='DM'/>
+<exit from='286' to='76' name_from='o' name_to='GL'/>
+<exit from='287' to='76' name_from='o' name_to='KK'/>
+<exit from='293' to='76' name_from='o' name_to='WW'/>
+<exit from='288' to='76' name_from='o' name_to='TT'/>
+<exit from='289' to='76' name_from='o' name_to='RE'/>
+<exit from='290' to='76' name_from='o' name_to='NR'/>
+<exit from='291' to='76' name_from='o' name_to='MF'/>
+<exit from='292' to='76' name_from='o' name_to='RV'/>
+<exit from='294' to='76' name_from='o' name_to='BM'/>
+<exit from='297' to='84' name_from='o' name_to='BS'/>
+<exit from='295' to='84' name_to='MT'/>
+<exit from='296' to='84' name_from='o' name_to='WC'/>
+<exit from='298' to='83' name_from='o' name_to='KH'/>
+<exit from='299' to='83' name_from='o' name_to='ME'/>
+<exit from='300' to='83' name_from='o' name_to='BS'/>
+<exit from='301' to='83' name_from='o' name_to='CH'/>
+<exit from='302' to='85' name_from='o' name_to='BS'/>
+<exit from='305' to='86' name_from='o' name_to='TT'/>
+<exit from='303' to='86' name_from='o' name_to='WE'/>
+<exit from='309' to='86' name_from='o' name_to='CM'/>
+<exit from='310' to='86' name_from='o' name_to='RG'/>
+<exit from='311' to='86' name_from='o' name_to='SM'/>
+<exit from='304' to='86' name_from='o' name_to='GL'/>
+<exit from='307' to='86' name_from='o' name_to='LC'/>
+<exit from='306' to='86' name_from='o' name_to='LE'/>
+<exit from='308' to='86' name_from='o' name_to='BF'/>
+<exit from='318' to='90' name_from='o' name_to='BS'/>
+<exit from='317' to='90' name_from='SM' name_to='o'/>
+<exit from='316' to='90' name_from='o' name_to='HH'/>
+<exit from='315' to='90' name_from='o' name_to='WM'/>
+<exit from='312' to='90' name_from='o' name_to='DM'/>
+<exit from='313' to='90' name_from='o' name_to='MG'/>
+<exit from='314' to='90' name_from='o' name_to='BM'/>
+<exit from='319' to='88' name_from='o' name_to='AS'/>
+<exit from='320' to='88' name_from='o' name_to='SK' points='-800,280'/>
+<exit from='321' to='88' name_from='o' name_to='BM'/>
+<exit from='322' to='88' name_from='o' name_to='SM'/>
+<exit from='323' to='89' name_from='o' name_to='K'/>
+<exit from='324' to='91' name_from='o' name_to='BF' points='-670,800'/>
+<exit from='325' to='91' name_from='o' name_to='HH'/>
+<exit from='326' to='91' name_from='o' name_to='MT'/>
+<exit from='327' to='94' name_from='o' name_to='MGL'/>
+<exit from='328' to='94' name_from='o' name_to='WWS'/>
+<exit from='329' to='94' name_from='o' name_to='DIE'/>
+<exit from='330' to='92' name_from='o' name_to='SS'/>
+<exit from='331' to='92' name_from='o' name_to='DL'/>
+<exit from='333' to='93' name_from='o' name_to='SQ'/>
+<exit from='335' to='93' name_from='o' name_to='SC'/>
+<exit from='332' to='93' name_from='o' name_to='TP'/>
+<exit from='334' to='93' name_from='o' name_to='PU'/>
+<exit from='341' to='74' name_from='o' name_to='SL'/>
+<exit from='340' to='74' name_from='o' name_to='SWV'/>
+<exit from='339' to='74' name_from='o' name_to='FHDCE'/>
+<exit from='338' to='74' name_from='o' name_to='CC'/>
+<exit from='337' to='74' name_from='o' name_to='MH'/>
+<exit from='336' to='74' name_from='o' name_to='SW'/>
+<exit from='342' to='73' name_from='o' name_to='CM'/>
+<exit from='343' to='73' name_from='o' name_to='LH'/>
+<exit from='344' to='73' name_from='o' name_to='SM'/>
+<exit from='345' to='73' name_from='o' name_to='VM'/>
+<exit from='346' to='73' name_from='o' name_to='SC'/>
+<exit from='347' to='73' name_from='o' name_to='FC'/>
+<exit from='348' to='72' name_from='o' name_to='CC'/>
+<exit from='349' to='72' name_from='o' name_to='CM'/>
+<exit from='351' to='69' name_from='o' name_to='GM'/>
+<exit from='350' to='69' name_from='o' name_to='CA' points='1120,200'/>
+<exit from='352' to='69' name_from='o' name_to='FO'/>
+<exit from='353' to='69' name_from='o' name_to='WH'/>
+<exit from='354' to='69' name_from='o' name_to='AM'/>
+<exit from='357' to='70' name_from='o' name_to='112'/>
+<exit from='360' to='70' name_from='o' name_to='SI'/>
+<exit from='358' to='70' name_from='o' name_to='CDC'/>
+<exit from='355' to='70' name_from='oo' name_to='MM'/>
+<exit from='356' to='70' name_from='o' name_to='TH'/>
+<exit from='359' to='70' name_from='o' name_to='HC'/>
+<exit from='363' to='70' name_from='o' name_to='VT'/>
+<exit from='362' to='70' name_from='o' name_to='SM'/>
+<exit from='361' to='70' name_from='o' name_to='WE'/>
+<exit from='364' to='66' name_from='o' name_to='SH'/>
+<exit from='365' to='66' name_from='o' name_to='SC'/>
+<exit from='366' to='67' name_from='o' name_to='CD'/>
+<exit from='367' to='67' name_from='o' name_to='NH'/>
+<exit from='368' to='62' name_from='o' name_to='CV'/>
+<exit from='369' to='62' name_from='o' name_to='RS'/>
+<exit from='370' to='62' name_from='o' name_to='EH'/>
+<exit from='371' to='62' name_from='o' name_to='TT'/>
+<exit from='373' to='60' name_from='o' name_to='GT'/>
+<exit from='59' to='374' name_from='CG' name_to='o'/>
+<exit from='375' to='64' name_from='o' name_to='LL'/>
+<exit from='376' to='64' name_from='o' name_to='NS'/>
+<exit from='377' to='64' name_from='o' name_to='IS'/>
+<exit from='378' to='61' name_from='o' name_to='HR'/>
+<exit from='381' to='61' name_from='o' name_to='BC'/>
+<exit from='382' to='61' name_from='o' name_to='BIB'/>
+<exit from='383' to='61' name_from='o' name_to='FCS'/>
+<exit from='379' to='61' name_from='o' name_to='SS'/>
+<exit from='380' to='61' name_from='o' name_to='HG'/>
+<rectangle rect='-970,-1090,-570,-650' color='#3C'/>
+<rectangle rect='-970,-250,-570,360' color='#4B4B4B'/>
+<rectangle rect='-970,720,-570,1140' color='#240048'/>
+<rectangle rect='-120,780,420,1560' color='#303018'/>
+<rectangle rect='-120,-1140,430,-690' color='#350000'/>
+<rectangle rect='880,-1050,1320,-690' color='#172F2F'/>
+<rectangle rect='1310,830,1310,830'/>
+<rectangle rect='1320,1190,1320,1190'/>
+<rectangle rect='600,1300,1400,1560' color='#13A8F'/>
+<rectangle rect='1200,1000,1400,1560' color='#13A8F'/>
 </map>
 <far_exits/>
 </atlas>
