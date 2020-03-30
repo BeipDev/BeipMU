@@ -1,6 +1,6 @@
 # How to Map!
 
-[Map library](../Maps)  (Just right click on a map and 'save target as', then load it in the map pane)
+[Map library](../Maps)  (Not sure the best way to download the maps besides opening in raw view on github and saving as a .atlas file, will need to figure this out at some point)
 
 ## Common Controls
 
