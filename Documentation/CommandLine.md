@@ -35,7 +35,7 @@
   - [/setinput](#setinput)
   - [/silence](#silence)
   - [/slist](#slist)
-  - [/switchtab](#spawntab)
+  - [/switchtab](#switchtab)
   - [/tabcolor](#tabcolor)
   - [/ttype](#ttype)
   - [/wall](#wall)
