@@ -3,7 +3,7 @@ Windows MU* Client
 
 Feel free to ask any questions on our Discord channel, or to log any issues here.
 
-Invite to the Discord: https://discord.gg/3A5quTU
+Invite link to join our Discord: https://discord.gg/3A5quTU
 
 # Documentation
 
