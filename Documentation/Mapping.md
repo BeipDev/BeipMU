@@ -123,3 +123,23 @@ Example:
     /map_addexit north south
     
 Will look for a room in the direction the exit names imply and if it sees one nearby it will create an exit to it.
+
+# Customization
+
+## Trigger/Alias Automation
+
+Tested on MUX, but could be adapted to other codebases (using '@pemit me=' instead of 'think', or other methods)
+
+Add an alias with these settings:
+    
+    Alias regex match: ^/map (.+) (.+)
+    Alias send text: think MAP> Exit: <\1> - Room: <[name(room(\1))]> - Return: <\2>
+    
+Add a trigger with these settings:
+    
+    Trigger regex match: ^MAP> Exit: <(.+)> - Room: <(.+)> - Return: <(.+)> 
+    Trigger action Send: /map_addroom "\2" \1 \3 
+
+Usage: 
+    
+    /map <exit to target room> <return exit>
