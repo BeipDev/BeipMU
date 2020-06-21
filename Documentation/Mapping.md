@@ -6,19 +6,28 @@
 
 Mouse Wheel - Zooms in/out to the location of the cursor
 
-Middle Click - Pans the map
+Middle Click & Drag - Pans the map
 
-Smooth movement - If something snaps to the grid, holding down Control will disable snapping. 
+Control - Smooth movement, if something snaps to the grid, holding down Control will disable snapping.
 
 Shift - Stickies an action, for example to create multiple rooms just hold shift while doing it and it'll stay in room create mode
+      - When resizing, sizes around center vs moving the point selected
 
-Note: The grid isn't a limit for anything, it simply draws around the bounds of your current rooms. You can draw rooms outside the grid bounds and drag them outside. The grid will then grow to fit whatever you do! It just exists to help align things, it can be disabled in the options.
+Note: The grid isn't a limit for anything, it simply draws around the bounds of the map objects. You can draw rooms outside the grid bounds and drag them outside. The grid will then grow to fit whatever you do! It just exists to help align things, it can be disabled in the options.
+
+## Menu
+
+File -  open/save/save as/etc...
+
+  If PNG is chosen in Save As... it'll generate a PNG of the current map at the current scale
+
+Edit - All the typical goodies, undo/redo/cut/copy/paste/find/etc...
 
 ## Navigation Pane
 
 Clicking and dragging on anywhere that isn't a room will pan with the navigation actions
 
-### 📍 Push Pin (Set Current Room)
+### 📌 Push Pin (Set Current Room)
 
 Click on any room to set your current room
 
@@ -42,57 +51,71 @@ If the current room isn't set, this will look through your output history to see
 
 If you like having the map show where you are, but still want to type exits in the input window, try enabling this. It will watch for rooms reachable from your current room and move to them if it sees one.
 
-## Editing Pane
+## Create Pane
 
-### 👆 Hand with finger (Selecting Mode)
+### 🔵 Blue Circle (Create Room)
+
+Left click to create one of default size or click and drag to set the exact area
+
+### 🟩 Green Square (Create Rectangle)
+
+Left click and drag to create background color rectangles. Useful to mark out areas on the map.
+
+### 🖼 Picture (Create Image)
+
+Left click and drag to insert an image bounded by the area selected. Can also drag & drop image files directly into the map window
+
+### 🏷 Label (Create Label)
+
+Left click and drag to create a label.
+
+## Select Pane
+
+### 👆 Hand with finger (Select)
 
 You can select rooms/rectangles/exits with clicks or by dragging (and shift dragging or clicking to modify an existing selection).
 
 When only one item is selected the adjust handles will appear and you can drag them around to resize or move things.
 
-When a single room is selected clicking in the top half (with the box) will edit the room's name. The font will auto shrink to fit if the room name text gets too large to fit at its default size.
-
 To set options like colors for multiple objects, just select them all, then right click on any of them. The color will apply to everything selected.
 
-### 🟦 Blue Square (Create Room)
+### 🔵🟩🖼🏷 Selection Filters
 
-Left click to create one of default size or click and drag to set the exact area
+To have certain objects be ignored when selecting on the map, just unselect them from the selection filter. Very handy to work with only rooms when there are many background objects (or foreground ones).
 
-### 🟩 Green Square (Draw Rectangle)
-
-Left click and drag to create background color rectangles. Useful to mark out areas on the map.
+## View Pane
 
 ### 🤚 Pan (hand)
 
 Left click and drag to pan the map. You can also use the middle mouse button/hold down space to pan at any time.
 
+### ➕ Zoom In
+### ➖ Zoom Out
+### 💯 Zoom 100%
+
 ## Misc options
-
-### 🎨 Palette
-
-Edit the colors used on the map (any changes can be undone with undo/redo).
-
-### 🔍 Find
-
-Search for rooms through a partial name. Clicking on the rooms will center them in the view
-
-### 😢 Help
-
-Opens this page
 
 ### 🗺 Maps
 
 Create/delete/switch between maps.
 
-The map name to the right is editable, just click on it to rename it.
+### 🎨 Palette
 
-## Menu commands (the left hamburger menu)
+Edit the colors & fonts used on the map (any changes can be undone with undo/redo).
 
-File -  open/save/etc...
+### 🔍 Find
 
-Edit - All the typical goodies, undo/redo/cut/copy/paste/find/etc...
+Search for rooms through a partial name. Clicking on the rooms will center them in the view
 
-Options lets you change the room/exit fonts, etc..
+### ❔ Help
+
+Opens this page
+
+# Right Click Menu
+
+Lets you do fancier things based on the object selected (which will apply to everything selected when possible).
+
+Sent to Front/Back is handy for putting rooms on top of each other or in front of or behind images. Note that exits are always behind the lowest room they're attached to.
 
 # Exits
 
@@ -100,7 +123,7 @@ To create an exit, just select a room, then click and drag on the circle at the 
 
 To route exits around things, just select an exit by clicking, then right click somewhere on the line and 'add point'. You can delete existing points by right clicking on them and choosing 'delete point'.
 
-# Console Commands
+# Console Commands for Maps
 
 ## /map_addroom
 

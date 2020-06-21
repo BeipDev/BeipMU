@@ -1,3 +1,27 @@
+4.00.296 - 2020-6-20
+
+Lots of mapping improvements (images, labels, rotation, z-ordering, easier exit naming, save as png, and more!)
+Changed input window to allow applying bold & italic font styles to the display font
+Changed Triggers/Macros/Aliases to allow all to be open at once (instead of just one of them)
+Changed pueblo processing to eat xch_page and img xch_graph tags
+Changed disconnect due to network error to connect again after connect timeout
+Improved spawn 'Copy Line instead of move' to also work during a spawn capture
+Added animated gif support in the image viewer pane
+Added new option 'send unrecognized commands' to bypass needing to use the // prefix to send a line starting with / directly to a server
+Added Hash text coloring option to triggers (colors the text based on a hash value of the matched words)
+Added global shutoff for restore logs (Options->Logging->Restore Logs->Enabled)
+Added auto folder creation to logging (if a log filename has folders that don't exist, they're created automatically)
+Added global logging default (with variables to auto generate nice folder structures)
+  For example: %userprofile%\Documents\Logs\%server%\%character%\%date%.txt
+Added margin settings for the input window
+Added 'null spawn', if a spawn has an empty window title it starts a spawn capture to the main window (useful to stop other spawns between two match texts)
+Fixed bug where docked windows in a new tab don't relayout properly until closing and reopening tab
+Fixed bug where output windows don't update with new content when an OS dialog is up (file picker, font picker, color picker, etc..)
+Fixed crash when resizing from tiny window size on boot (not sure how it can get into that state though)
+Fixed crash in maps when creating zero sized rooms
+Fixed crash in maps when trying to speedru without a current room
+Fixed hang when using 'log from beginning' on a full output window
+
 4.00.295 - 2020-2-28
 
 Maps, load/save/edit maps in a new map window. Lots of features! Options->'Show Map Window' to check it out
