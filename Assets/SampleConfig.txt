@@ -1,4 +1,4 @@
-Version=290
+Version=296
 Windows
 {
   MDIPosition=(151,1059,1495,943)
@@ -88,6 +88,20 @@ Connections
       }
     }
     {
+      Description="Highlight words"
+      Example="Alice asked Bob about Chris and Debbie"
+      FindString
+      {
+        MatchText="(Alice|Bob|Chris|Debbie)"
+        RegularExpression=true
+      }
+      Color
+      {
+        BackColor=RGB(0,128,0)
+        UseBackColor=true
+      }
+    }
+    {
       Description="Censor bad words"
       Example="This is a very naughty sentence."
       FindString
@@ -99,6 +113,19 @@ Connections
       {
         Active=true
         Replace="****"
+      }
+    }
+    {
+      Description="Rainbow Text (Hash coloring)"
+      FindString
+      {
+        MatchText="\\w+"
+        RegularExpression=true
+      }
+      Color
+      {
+        UseForeColor=true
+        ForeHash=true
       }
     }
     {
