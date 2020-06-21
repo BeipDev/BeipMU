@@ -10,8 +10,9 @@ Middle Click & Drag - Pans the map
 
 Control - Smooth movement, if something snaps to the grid, holding down Control will disable snapping.
 
-Shift - Stickies an action, for example to create multiple rooms just hold shift while doing it and it'll stay in room create mode
-      - When resizing, sizes around center vs moving the point selected
+Shift
+* When creating, stickies the action, for example to create multiple rooms just hold shift while doing it and it'll stay in room create mode.
+* When resizing, sizes around center vs moving the point selected
 
 Note: The grid isn't a limit for anything, it simply draws around the bounds of the map objects. You can draw rooms outside the grid bounds and drag them outside. The grid will then grow to fit whatever you do! It just exists to help align things, it can be disabled in the options.
 
