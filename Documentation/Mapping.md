@@ -1,6 +1,12 @@
 # How to Map!
 
-[Map library](../Maps)  (Not sure the best way to download the maps besides opening in raw view on github and saving as a .atlas file, will need to figure this out at some point)
+## Map Library
+
+Here's some existing maps. Right click, save link as... (you should get a .atlas file if it works properly)
+
+[Arx](https://raw.githubusercontent.com/BeipDev/BeipMU/master/Maps/Arx_Map_by_Precisi.atlas)
+[FluffMuck](https://raw.githubusercontent.com/BeipDev/BeipMU/master/Maps/Fluff.atlas)
+[FurryMuck](https://raw.githubusercontent.com/BeipDev/BeipMU/master/Maps/FurryMUCK.atlas)
 
 ## Common Controls
 
