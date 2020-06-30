@@ -129,10 +129,17 @@ void TelnetParser::Parse(Array<const char> buffer)
             }
 
             case State::Will:
-               if(c==TELOPT_EOR)
+               switch(c)
                {
-                  m_notify.OnTelnet(MakeString<TELNET_IAC, TELNET_DO, TELOPT_EOR>);
-                  m_state=State::Normal; continue;
+                  case TELOPT_EOR:
+                     m_notify.OnTelnet(MakeString<TELNET_IAC, TELNET_DO, TELOPT_EOR>);
+                     m_state=State::Normal;
+                     continue;
+
+                  case TELOPT_SGA:
+                     m_notify.OnTelnet(MakeString<TELNET_IAC, TELNET_DO, TELOPT_SGA>);
+                     m_state=State::Normal;
+                     continue;
                }
                #if _DEBUG
                OutputDebugString(FixedStringBuilder<256>("Unsupported Will Telnet option:", (int)(c), " ", char(c), '\n'));
@@ -141,34 +148,36 @@ void TelnetParser::Parse(Array<const char> buffer)
 
             case State::Do:
             {
-               if(c==TELOPT_CHARSET)
+               switch(c)
                {
-                  m_notify.OnTelnet(MakeString<TELNET_IAC, TELNET_WILL, TELOPT_CHARSET>);
-                  m_state=State::Normal; continue;
-               }
-               if(c==TELOPT_NAWS)
-               {
-                  m_notify.OnTelnet(MakeString<TELNET_IAC, TELNET_WILL, TELOPT_NAWS,
-                                               TELNET_IAC, TELNET_SB, TELOPT_NAWS,
-                                               0, 80,
-                                               0, 25,
-                                               TELNET_IAC, TELNET_SE>);
-                  m_state=State::Normal; continue;
-               }
-               if(c==TELOPT_TTYPE)
-               {
-                  m_notify.OnTelnet(MakeString<TELNET_IAC, TELNET_WILL, TELOPT_TTYPE>);
-                  m_state=State::Normal; continue;
-               }
-               if(c==TELOPT_EOR)
-               {
-                  m_notify.OnTelnet(MakeString<TELNET_IAC, TELNET_WILL, TELOPT_EOR>);
-                  m_state=State::Normal; continue;
-               }
-               if(c==TELOPT_SGA)
-               {
-                  m_notify.OnTelnet(MakeString<TELNET_IAC, TELNET_WILL, TELOPT_SGA>);
-                  m_state=State::Normal; continue;
+                  case TELOPT_CHARSET:
+                     m_notify.OnTelnet(MakeString<TELNET_IAC, TELNET_WILL, TELOPT_CHARSET>);
+                     m_state=State::Normal;
+                     continue;
+
+                  case TELOPT_NAWS:
+                     m_notify.OnTelnet(MakeString<TELNET_IAC, TELNET_WILL, TELOPT_NAWS,
+                                                  TELNET_IAC, TELNET_SB, TELOPT_NAWS,
+                                                  0, 80, // These values are arbitrary as the window size can change dynamically
+                                                  0, 100,
+                                                  TELNET_IAC, TELNET_SE>);
+                     m_state=State::Normal;
+                     continue;
+
+                  case TELOPT_TTYPE:
+                     m_notify.OnTelnet(MakeString<TELNET_IAC, TELNET_WILL, TELOPT_TTYPE>);
+                     m_state=State::Normal;
+                     continue;
+
+                  case TELOPT_EOR:
+                     m_notify.OnTelnet(MakeString<TELNET_IAC, TELNET_WILL, TELOPT_EOR>);
+                     m_state=State::Normal;
+                     continue;
+
+                  case TELOPT_SGA:
+                     m_notify.OnTelnet(MakeString<TELNET_IAC, TELNET_WILL, TELOPT_SGA>);
+                     m_state=State::Normal;
+                     continue;
                }
                #if _DEBUG
                OutputDebugString(FixedStringBuilder<256>("Unsupported Do Telnet option:", (int)(c), '\n'));
