@@ -1,3 +1,12 @@
+4.00.297 - 2020-6-28
+
+Merged About and Welcome windows to just the About window
+Added Donate link on About screen, plus Help->Donate... menu item
+Added 'all' parameter to disconnect and reconnect to make things consistent and flexible
+Fixed a maps bug where 'Set Text Color...' didn't work on labels
+Fixed a glitch where zero sizing a docked pane makes it lose its title bar
+Fixed a crash if docking a zero height window
+
 4.00.296 - 2020-6-20
 
 Lots of mapping improvements (images, labels, rotation, z-ordering, easier exit naming, save as png, and more!)
@@ -19,7 +28,7 @@ Fixed bug where docked windows in a new tab don't relayout properly until closin
 Fixed bug where output windows don't update with new content when an OS dialog is up (file picker, font picker, color picker, etc..)
 Fixed crash when resizing from tiny window size on boot (not sure how it can get into that state though)
 Fixed crash in maps when creating zero sized rooms
-Fixed crash in maps when trying to speedru without a current room
+Fixed crash in maps when trying to speedrun without a current room
 Fixed hang when using 'log from beginning' on a full output window
 
 4.00.295 - 2020-2-28
