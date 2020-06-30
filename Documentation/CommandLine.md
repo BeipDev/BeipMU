@@ -21,6 +21,8 @@
   - [/idle](#idle)
   - [/log](#log)
   - [/logall](#logall)
+  - [/map_addroom](#map_addroom)
+  - [/map_addexit](#map_addexit)
   - [/new](#new)
   - [/newedit](#newedit)
   - [/newinput](#newinput)
@@ -229,6 +231,20 @@ Usage:
     /logall <filename> 
 
 Identical to the /log command except that it also logs all of the existing text in the output window.  Useful if you forget to start logging when you first connect and don't want to miss what was already said. 
+
+## /map_addroom
+Usage:
+
+    /map_addroom <room name> <exit to get there> <exit to get back>
+
+Creates a new room the same size as the current room and links it with the given exit commands. If the exit direction is a known direction (like north, south, n, s, northwest, nw, etc..) it will place the room physically in that direction on the map.
+
+## /map_addexit
+Usage:
+
+    /map_addexit  <exit to get there> <exit to get back>
+
+Using the exit direction logic as /map_addroom, it will look for a room in the given direction and create this exit to it.
 
 ## /new 
 Usage:
