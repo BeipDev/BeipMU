@@ -176,3 +176,7 @@ Add a trigger with these settings:
 Usage: 
     
     /map <exit to target room> <return exit>
+
+# File Format
+
+The .atlas file format is a .zip file with a single atlas.xml file plus an optional images folder holding any images used on the map. There's nothing secret about the format, so if you have any questions just ask (I didn't do it because it takes work to keep updated documentation on something nobody is interested in!).
