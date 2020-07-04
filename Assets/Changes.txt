@@ -1,8 +1,9 @@
-4.00.297 - 2020-6-28
+4.00.297 - 2020-7-4
 
-Merged About and Welcome windows to just the About window
 Added Donate link on About screen, plus Help->Donate... menu item
+Merged About and Welcome windows to just the About window
 Added 'all' parameter to disconnect and reconnect to make things consistent and flexible
+Fixed a bug in Pueblo tag parsing where relative font sizes were treated as absolute (so <font size=+2> was size=2). They're ignored now.
 Fixed a maps bug where 'Set Text Color...' didn't work on labels
 Fixed a glitch where zero sizing a docked pane makes it lose its title bar
 Fixed a crash if docking a zero height window
