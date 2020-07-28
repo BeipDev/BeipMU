@@ -1,3 +1,12 @@
+4.00.298 - 2020-7-28
+
+Added GMCP protocol support
+Added subset of MCSP protocol support (Mud Client Sound Protocol) Just the basic load/play/stop commands
+Added WebP image link detection for the image viewer
+Fixed potential race condition in async downloads (Might explain some image viewer glitches/crashes)
+Fixed bug with puppets on startup, where puppets might not link with their character and will not function
+Fixed crash in maps when undo/redo an operation that is not on the map that is currently visible
+
 4.00.297 - 2020-7-4
 
 Added Donate link on About screen, plus Help->Donate... menu item
