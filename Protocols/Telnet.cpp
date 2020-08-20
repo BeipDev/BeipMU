@@ -78,6 +78,7 @@ const BYTE TELOPT_AUTHENTICATION = 37;        /* Authenticate */
 const BYTE TELOPT_ENCRYPT        = 38;        /* Encryption option */
 const BYTE TELOPT_NEW_ENVIRON    = 39;        /* New - Environment variables */
 const BYTE TELOPT_CHARSET        = 42;
+const BYTE TELOPT_GMCP           = 201;       // C9
 const BYTE TELOPT_EXOPL         = 255;        /* extended-options-list */
 
 const BYTE TELQUAL_IS        = 0;        /* option is... */
@@ -105,26 +106,28 @@ void TelnetParser::Parse(Array<const char> buffer)
          {
             case State::IAC:
             {
-               if(c==TELNET_GA || c==TELNET_EOR)
+               switch(c)
                {
-                  auto prompt=GetPartial();
-                  if(prompt)
-                     m_notify.OnPrompt(prompt); // (don't reset the buffer because we continue)
-                  m_state=State::Normal;
-                  continue;
+                  case TELNET_GA:
+                  case TELNET_EOR:
+                  {
+                     auto prompt=GetPartial();
+                     if(prompt)
+                        m_notify.OnPrompt(prompt); // (don't reset the buffer because we continue)
+                     m_state=State::Normal;
+                     continue;
+                  }
+
+                  case TELNET_DONT: m_state=State::Dont; continue;
+                  case TELNET_DO:   m_state=State::Do; continue;
+                  case TELNET_WONT: m_state=State::Wont; continue;
+                  case TELNET_WILL: m_state=State::Will; continue;
+
+                  case TELNET_NOP:  m_state=State::Normal; continue;
+                  case TELNET_IAC:  m_state=State::Normal; m_buffer.Push(char(c)); continue;
+                  case TELNET_SE:   m_state=State::Normal; continue;
+                  case TELNET_SB:   m_state=State::SB; continue;
                }
-
-               if(c==TELNET_DONT) { m_state=State::Dont; continue; }
-               if(c==TELNET_DO)   { m_state=State::Do; continue; }
-               if(c==TELNET_WONT) { m_state=State::Wont; continue; }
-               if(c==TELNET_WILL) { m_state=State::Will; continue; }
-
-               if(c==TELNET_NOP) { m_state=State::Normal; continue; }
-               if(c==TELNET_IAC) { m_state=State::Normal; m_buffer.Push(char(c)); continue; }
-               if(c==TELNET_SE)
-               { m_state=State::Normal; continue; }
-               if(c==TELNET_SB) { m_state=State::SB; continue; }
-
                break;
             }
 
@@ -138,6 +141,11 @@ void TelnetParser::Parse(Array<const char> buffer)
 
                   case TELOPT_SGA:
                      m_notify.OnTelnet(MakeString<TELNET_IAC, TELNET_DO, TELOPT_SGA>);
+                     m_state=State::Normal;
+                     continue;
+
+                  case TELOPT_GMCP:
+                     m_notify.OnTelnet(MakeString<TELNET_IAC, TELNET_DO, TELOPT_GMCP>);
                      m_state=State::Normal;
                      continue;
                }
@@ -168,7 +176,7 @@ void TelnetParser::Parse(Array<const char> buffer)
                      m_notify.OnTelnet(MakeString<TELNET_IAC, TELNET_WILL, TELOPT_TTYPE>);
                      m_state=State::Normal;
                      continue;
-
+#if 0
                   case TELOPT_EOR:
                      m_notify.OnTelnet(MakeString<TELNET_IAC, TELNET_WILL, TELOPT_EOR>);
                      m_state=State::Normal;
@@ -178,6 +186,7 @@ void TelnetParser::Parse(Array<const char> buffer)
                      m_notify.OnTelnet(MakeString<TELNET_IAC, TELNET_WILL, TELOPT_SGA>);
                      m_state=State::Normal;
                      continue;
+#endif
                }
                #if _DEBUG
                OutputDebugString(FixedStringBuilder<256>("Unsupported Do Telnet option:", (int)(c), '\n'));
@@ -196,13 +205,14 @@ void TelnetParser::Parse(Array<const char> buffer)
                if(c==TELOPT_CHARSET) { m_state=State::SB_CHARSET; continue; }
                if(c==TELOPT_TTYPE) { m_state=State::SB_TTYPE; continue; }
                if(c==TELNET_IAC) { m_state=State::SB_IAC; continue; }
+               if(c==TELOPT_GMCP) { m_state=State::SB_GMCP; m_sb_start=m_buffer.Count(); continue; }
 
-               m_state=State::SB_WaitForIAC;
+               m_state=State::SB_WaitForIAC; // Unknown sideband, wait for the IAC and ignore it
                continue;
 
             case State::SB_WaitForIAC:
                if(c==TELNET_IAC) { m_state=State::SB_IAC; continue; }
-               continue; // Eat it
+               continue; // Eat unknown chars until se see the IAC
 
             case State::SB_IAC:
                if(c==TELNET_SE) { m_state=State::Normal; continue; }
@@ -211,14 +221,29 @@ void TelnetParser::Parse(Array<const char> buffer)
                #endif
                break;
 
+            case State::SB_GMCP:
+               if(c==TELNET_IAC)
+                  m_state=State::SB_GMCP_Request_IAC;
+               else
+                  m_buffer.Push(char(c));
+               continue;
+            case State::SB_GMCP_Request_IAC:
+               if(c==TELNET_SE)
+               {
+                  m_notify.OnGMCP(ConstString(&m_buffer[m_sb_start], m_buffer.Count()-m_sb_start));
+                  m_buffer.Pop(m_buffer.Count()-m_sb_start);
+               }
+               break;
+
             case State::SB_CHARSET:
                if(c==0x01) // Request
                {
                   m_state=State::SB_CHARSET_Request_List;
-                  m_charset_start=m_buffer.Count();
+                  m_sb_start=m_buffer.Count();
                   continue;
                }
                break;
+
             case State::SB_CHARSET_Request_List:
                if(c==TELNET_IAC)
                   m_state=State::SB_CHARSET_Request_IAC;
@@ -228,14 +253,14 @@ void TelnetParser::Parse(Array<const char> buffer)
             case State::SB_CHARSET_Request_IAC:
                if(c==TELNET_SE)
                {
-                  if(m_buffer.Count()<m_charset_start+1)
+                  if(m_buffer.Count()<m_sb_start+1)
                   {
                      Assert(false);
                      break; // No charsets?
                   }
 
-                  char separator=m_buffer[m_charset_start];
-                  auto charsets=GetPartial().WithoutFirst(m_charset_start+1);
+                  char separator=m_buffer[m_sb_start];
+                  auto charsets=GetPartial().WithoutFirst(m_sb_start+1);
 
                   while(charsets)
                   {
@@ -251,7 +276,7 @@ void TelnetParser::Parse(Array<const char> buffer)
                      Assert(false); // If this hits, add it to the list
                   }
 
-                  m_buffer.Pop(m_buffer.Count()-m_charset_start);
+                  m_buffer.Pop(m_buffer.Count()-m_sb_start);
                   m_state=State::Normal;
                   continue;
                }
