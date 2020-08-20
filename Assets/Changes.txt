@@ -1,3 +1,10 @@
+4.00.299 - 2020-8-11
+
+Fixed a small annoyance with spawn captures, by killing any on disconnect and after a restore log replay
+Fixed store issue where the configuration can't be saved if the app is installed on a different drive (thank you Dranyth!)
+Fixed a bug where MCSP sounds can hang when disconnecting
+Fixed a bug where // to bypass command processing both sends and processes the command (which doesn't recognize it, so you get an error)
+
 4.00.298 - 2020-7-28
 
 Added GMCP protocol support
