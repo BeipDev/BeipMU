@@ -148,9 +148,9 @@ For the time, the format is: number(h,m,s). 3m = 3 minutes, 10s = 10 seconds, et
 ## /disconnect 
 Usage:
 
-    /disconnect 
+    /disconnect (all)
 
-Disconnects from the current server. 
+Disconnects from the current server. If 'all' is specified, disconnects all tabs in all windows.
 
 ## /echo 
 Usage:
@@ -333,9 +333,9 @@ Searches the output buffer for the given string and displays it in a list in the
 ## /reconnect
 Usage:
 
-    /reconnect
+    /reconnect (all)
 
-Will reconnect all disconnected tabs in every window. Useful to reconnect to everything after restarting the app.
+Reconnects to the last connection in the current tab. If 'all' is specified it applies to all disconnected tabs in every window. Useful to reconnect to everything after restarting the app.
 
 ## /receive
 Usage:
