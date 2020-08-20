@@ -9,6 +9,7 @@ struct TelnetParser
       virtual void OnLine(ConstString string)=0;
       virtual void OnPrompt(ConstString string)=0;
       virtual void OnEncoding(Prop::Server::Encoding encoding)=0;
+      virtual void OnGMCP(ConstString string)=0;
    };
 
    TelnetParser(INotify &notify);
@@ -32,6 +33,8 @@ private:
       Wont,
       Will,
       SB,
+      SB_GMCP,
+      SB_GMCP_Request_IAC,
       SB_CHARSET,
       SB_CHARSET_Request_List,
       SB_CHARSET_Request_IAC,
@@ -43,5 +46,5 @@ private:
 
    State m_state{State::Normal};
    Collection<char> m_buffer;
-   unsigned m_charset_start; // Index in buffer where charset table starts
+   unsigned m_sb_start; // Index in buffer where subnegotation starts
 };
