@@ -1,6 +1,6 @@
 # GMCP Packages 
 
-beip.stats.<Pane title> package lets you update stats in a stat window.
+beip.stats.[Pane title] package lets you update stats in a stat window.
 
 ```
 beip.stats.Player
@@ -25,7 +25,7 @@ The values inside are a collection of name/value pairs where the name is the nam
 **min** - If present, implies the value is a range and this is the minimum value of the range
 
 **max** - If present, implies the value is a range and this is the maximum value of the range
-* To show as a range, **value** must be a number and **max** must have a number value (if value is a string, it will just show as a string)
+* To show as a range, **value** must be a number and **max** must have a number value (if **value** is a string, it will just show as a string)
 
 **bar-color** - When drawing as a range, this is the color used to draw the range bar
 
@@ -37,15 +37,34 @@ The values inside are a collection of name/value pairs where the name is the nam
 
 **value-color** - The color to draw the value
 
-**prefix** - The outermost names are sorted alphabetically. To make things sort in a desired order this string value is prefixed to the name for sorting purposes.
+**prefix** - The stat entries are sorted alphabetically by name. To make things sort in a desired order this string value is prefixed to the name for sorting purposes.
+
+## Updating values
+
+Only values that are changing need to be set, and only the properties changing need to be specified. For ranges, **value** **min** **max** and **bar-color** must all be sent again.
+
+## Deleting values
+
+Simply send an empty object for that value. For example, this will delete "Name" and "Money" if they exist:
+
+
+```
+beip.stats.Player
+{
+   "Name": {},
+   "Money": {}
+}
+```
 
 ## Colors
 
-Colors are string values in the format of #RRGGBB or ansi256(<decimal number from 0-255>).
+Colors are string values in the format of #RRGGBB or ansi256([decimal number from 0-255]).
 
 Ansi256 is to simplify porting colors from 256-color ansi to colors here.
 
 Examples:
 
-```"#8080FF"```
-```"ansi256(34)"```
+```
+"#8080FF"
+"ansi256(34)"
+```
