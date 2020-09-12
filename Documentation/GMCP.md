@@ -1,15 +1,21 @@
 # GMCP Packages 
 
-beip.stats.[Pane title] package lets you update stats in a stat window.
+beip.stats package lets you update stats in a stat window.
 
 ```
-beip.stats.Player
+beip.stats
 {
-   "Name": { "prefix": "00", "value": "Bennet", "name-color":"Ansi256(56)" },
-   "Hit Points": { "prefix": "10", "value": 823, "max": 1000, "value-color": "#345678", "bar-color": "#00FF00" },
-   "Energy Points": { "prefix": "20", "value": 60, "max": 100, "color":"#FF0000", "bar-color": "#8080FF" },
-   "PP": { "prefix":"30", "value":"30/60" },
-   "Money": { "prefix": "40", "value":123, "color":"#FFFF00", "name-alignment":"right" }
+   "Player":
+   {
+      "values":
+      {
+         "Name": { "prefix": "00", "value": "Bennet", "name-color":"Ansi256(56)" },
+         "Hit Points": { "prefix": "10", "value": 823, "max": 1000, "value-color": "#345678", "bar-color": "#00FF00" },
+         "Energy Points": { "prefix": "20", "value": 60, "max": 100, "color":"#FF0000", "bar-color": "#8080FF" },
+         "PP": { "prefix":"30", "value":"30/60" },
+         "Money": { "prefix": "40", "value":123, "color":"#FFFF00", "name-alignment":"right" }
+      }
+   }
 }
 ```
 
@@ -17,7 +23,24 @@ beip.stats.Player
 
 ## JSON Structure
 
-The values inside are a collection of name/value pairs where the name is the name (obviously) and the value is another object that holds settings on how to display the whole name/value stat in the window.
+```
+beip.stats
+{
+   "<window pane title>":
+   {
+     "values": { <JSON object that is the list of stats to update }
+   }
+   
+   "<more window pane titles>":
+   {
+     ... same as above
+   }
+}
+```
+
+## The values object
+
+The "values" are a collection of name/value pairs where the name is the name (obviously) and the value is another object that holds settings on how to display the whole name/value stat in the window.
 
 **value** - A string or number value that is the value to display
 * Only number values can be used with a ranged value display
@@ -47,12 +70,17 @@ Only values that are changing need to be set, and only the properties changing n
 
 Simply send an empty object for that value. For example, this will delete "Name" and "Money" if they exist:
 
-
 ```
-beip.stats.Player
+beip.stats
 {
-   "Name": {},
-   "Money": {}
+   "Player":
+   {
+      "values":
+      {
+         "Name": {},
+         "Money": {}
+      }
+   }
 }
 ```
 
