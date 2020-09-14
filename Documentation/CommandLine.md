@@ -4,6 +4,7 @@
   - [/@](#@)
   - [/ansireset](#ansireset)
   - [/autolog](#autolog)
+  - [/capturecancel](#capturecancel)
   - [/char](#char)
   - [/chars](#chars)
   - [/clear](#clear)
@@ -16,6 +17,7 @@
   - [/echo](#echo)
   - [/exit](#exit)
   - [/gag](#gag)
+  - [/gmcp](#gmcp)
   - [/grab](#grab)
   - [/help](#help)
   - [/idle](#idle)
@@ -77,6 +79,13 @@ Usage:
 
 If there is an autolog setup for the puppet/character that was stopped, this will start the autolog again.
 
+## /capturecancel
+Usage:
+
+    /capturecancel
+    
+Cancel any spawn capture in the current window. Useful if your spawn gets stuck capturing and your 'stop capture' trigger isn't working properly yet.
+
 ## /char
 Usage:
 
@@ -134,6 +143,9 @@ Usage:
 Usage - To list current pending commands
     /delay list
 
+Usage - To kill all upcoming commands
+    /delay killall
+
 Usage - To kill a pending command (not implemented yet, as <ids> haven't been figured out yet)
     /delay kill <id>
 
@@ -182,6 +194,17 @@ Examples:
     /gag "it is now nighttime" 
 
 Adds a global trigger whose match string is the gag text and it's action is to gag that line of text.  If a trigger already exists with this string, gag is enabled on it if it wasn't already set to gag.  Added as a quick and simple way to gag something easily, for more power see the trigger dialog. 
+
+## /gmcp
+Usage:
+
+    /gmcp <options>
+    
+Options:
+
+* dump_on / dump_off - Will dump any incoming GMCP messages to the debug console for easier debugging of what's going on with GMCP
+
+GMCP protocol options
 
 ## /grab
 Usage:
