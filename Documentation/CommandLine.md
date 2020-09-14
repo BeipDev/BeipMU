@@ -138,21 +138,26 @@ This connects to the given server, in the form of hostname:port, or server name.
 ## /delay
 Usage:
 
-    /delay <time> <command>
+    /delay <option> <time> <command>
 
-Usage - To list current pending commands
+Current option is only 'every' to make it a repeating timer (be familiar with how to kill timers before using this!)
+
+* To list current pending commands:
     /delay list
 
-Usage - To kill all upcoming commands
+* To kill all upcoming commands
     /delay killall
 
-Usage - To kill a pending command (not implemented yet, as <ids> haven't been figured out yet)
+* To kill a pending command
     /delay kill <id>
 
 Examples:
 
     /delay 3m "WHO"
     (sends WHO after 3 minutes)
+    
+    /delay every 30s "status"
+    (sends status every 30 seconds)
 
 This is used to delay a send to the server by a given amount of time. Multiple delayed commands can be queued up.
 For the time, the format is: number(h,m,s). 3m = 3 minutes, 10s = 10 seconds, etc.
