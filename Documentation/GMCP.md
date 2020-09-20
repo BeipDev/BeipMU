@@ -23,7 +23,7 @@ beip.stats
          "Strength": { "int": 10 },
          "Dexterity": { "int": 5 },
          "Charisma": { "int": 1 },
-         "Stamina": { "int" 15 }
+         "Stamina": { "int": 15 }
       }
    }
 }
