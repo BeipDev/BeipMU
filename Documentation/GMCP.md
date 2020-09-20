@@ -13,8 +13,7 @@ beip.stats
          "1_Hit Points": { "prefix-length": 2, "range": { "value": 823, "max": 1000, "bar-fill": "#00FF00" }, "value-color": "#345678" },
          "2_Energy Points": { "prefix-length": 2, "range": { "value": 60, "max": 100, "bar-fill": "#8080FF" }, "color":"#FF0000" },
          "3_PP": { "prefix-length":2, "string":"30/60" },
-         "4_Money": { "prefix-length": 2, "int":123, "color":"#FFFF00", "name-alignment":"right" },
-         "Status": { "string": "Doing fine" },
+         "4_Money": { "prefix-length": 2, "int":123, "color":"#FFFF00", "name-alignment":"right" }
       }
    }
 }
