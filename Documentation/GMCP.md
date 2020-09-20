@@ -9,11 +9,21 @@ beip.stats
    {
       "values":
       {
-         "0_Name": { "prefix-length": 2, "value": "Bennet", "name-color":"Ansi256(56)" },
+         "0_Name": { "prefix-length": 2, "string": "Bennet", "name-color":"Ansi256(56)" },
          "1_Hit Points": { "prefix-length": 2, "range": { "value": 823, "max": 1000, "bar-fill": "#00FF00" }, "value-color": "#345678" },
          "2_Energy Points": { "prefix-length": 2, "range": { "value": 60, "max": 100, "bar-fill": "#8080FF" }, "color":"#FF0000" },
          "3_PP": { "prefix-length":2, "string":"30/60" },
          "4_Money": { "prefix-length": 2, "int":123, "color":"#FFFF00", "name-alignment":"right" }
+      }
+   }
+   "Attributes":
+   {
+      "values":
+      {
+         "Strength": { "int": 10 },
+         "Dexterity": { "int": 5 },
+         "Charisma": { "int": 1 },
+         "Stamina": { "int" 15 }
       }
    }
 }
@@ -75,7 +85,7 @@ Only values that are changing need to be set, and only the properties changing n
 
 ## Deleting values
 
-Simply send an empty object for that value. For example, this will delete "Name" and "Money" if they exist:
+Simply send an empty object for that value. For example, this will delete "0_Name" and "4_Money" if they exist:
 
 ```
 beip.stats
@@ -84,8 +94,8 @@ beip.stats
    {
       "values":
       {
-         "Name": {},
-         "Money": {}
+         "0_Name": {},
+         "4_Money": {}
       }
    }
 }
