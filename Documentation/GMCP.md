@@ -7,6 +7,7 @@ beip.stats
 {
    "Player":
    {
+      "background-color": "#002040",
       "values":
       {
          "0_Name": { "prefix-length": 2, "string": "Bennet", "name-color":"Ansi256(56)" },
@@ -38,7 +39,8 @@ beip.stats
 {
    "<window pane title>":
    {
-     "values": { <JSON object that is the list of stats to update }
+     "background-color": "Optional window background color"
+     "values": { JSON object that is the list of stats to update }
    }
    
    "<another window pane title>":
