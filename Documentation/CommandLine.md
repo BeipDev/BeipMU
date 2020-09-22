@@ -25,6 +25,7 @@
   - [/logall](#logall)
   - [/map_addroom](#map_addroom)
   - [/map_addexit](#map_addexit)
+  - [/naws](#naws)
   - [/new](#new)
   - [/newedit](#newedit)
   - [/newinput](#newinput)
@@ -273,6 +274,18 @@ Usage:
     /map_addexit  <exit to get there> <exit to get back>
 
 Using the exit direction logic as /map_addroom, it will look for a room in the given direction and create this exit to it.
+
+## /naws
+Usage:
+
+    /naws auto
+    /naws {width} {height}
+
+Examples
+
+    /naws 80 25
+    
+Sends a telnet NAWS command to the server with an auto calculated size (based on font & output window size), or the user specified size.
 
 ## /new 
 Usage:
