@@ -1,3 +1,21 @@
+4.00.300 - 2020-9-24
+
+Added Important Activity notification in trigger actions (number in red box on the tab)
+Added screen reader support for the output window (one big step towards visually impaired usability)
+Added 'beip.stats' GMCP package (see documentation)
+Added '/repeat' command to easily repeat something multiple times
+Added '/naws' command to send a telnet NAWS (Negotiate About Window Size)
+Added repeating timer support to '/delay' plus ability to kill individual timers
+Added imgur link handling to the image preview window (it's a hack but it works)
+Tweaked hash trigger coloring to be on the text being replaced, not just the first subexpression matched
+Changed tab control to have a modern flat look (mostly visible with tabbed spawn windows)
+Changed tabbed spawn windows to have no outer padding
+Changed Pueblo links to show what will be sent, and to add it to the input history when sent
+Fixed bug with restore log repair, when deleting unused restore log entries it would change the order of existing entries
+Fixed a bug copying a server in the connection dialog, it would copy the restore log entries and cause a repair leading to the previous bug
+Fixed a bug in ansi code parsing with ansi reverse, any color changes within the reversed block had foreground/background swapped
+Fixed a crash when closing a window with splitters in the text windows
+
 4.00.299 - 2020-8-11
 
 Fixed a small annoyance with spawn captures, by killing any on disconnect and after a restore log replay
