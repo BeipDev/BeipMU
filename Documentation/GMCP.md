@@ -1,15 +1,39 @@
 # GMCP Packages 
 
-beip.stats.[Pane title] package lets you update stats in a stat window.
+On connect, if the server sends the telnet 'WILL GMCP' BeipMU will reply with these two GMCP messages:
+
+    Core.Hello {"client":"Beip", "version":"build number"}
+    Core.Supports.Set [ "Beip.Stats 1", "Client.Media 1" ]
+
+# beip.stats
+
+This package lets you display and update stats in multiple stat windows.
 
 ```
-beip.stats.Player
+beip.stats
 {
-   "Name": { "prefix": "00", "value": "Bennet", "name-color":"Ansi256(56)" },
-   "Hit Points": { "prefix": "10", "value": 823, "max": 1000, "value-color": "#345678", "bar-color": "#00FF00" },
-   "Energy Points": { "prefix": "20", "value": 60, "max": 100, "color":"#FF0000", "bar-color": "#8080FF" },
-   "PP": { "prefix":"30", "value":"30/60" },
-   "Money": { "prefix": "40", "value":123, "color":"#FFFF00", "name-alignment":"right" }
+   "Player":
+   {
+      "background-color": "#002040",
+      "values":
+      {
+         "0_Name": { "prefix-length": 2, "string": "Bennet", "name-color":"Ansi256(56)" },
+         "1_Hit Points": { "prefix-length": 2, "range": { "value": 823, "max": 1000, "bar-fill": "#00FF00" }, "value-color": "#345678" },
+         "2_Energy Points": { "prefix-length": 2, "range": { "value": 60, "max": 100, "bar-fill": "#8080FF" }, "color":"#FF0000" },
+         "3_PP": { "prefix-length":2, "string":"30/60" },
+         "4_Money": { "prefix-length": 2, "int":123, "color":"#FFFF00", "name-alignment":"right" }
+      }
+   }
+   "Attributes":
+   {
+      "values":
+      {
+         "Strength": { "int": 10 },
+         "Dexterity": { "int": 5 },
+         "Charisma": { "int": 1 },
+         "Stamina": { "int": 15 }
+      }
+   }
 }
 ```
 
@@ -17,17 +41,27 @@ beip.stats.Player
 
 ## JSON Structure
 
-The values inside are a collection of name/value pairs where the name is the name (obviously) and the value is another object that holds settings on how to display the whole name/value stat in the window.
+```
+beip.stats
+{
+   "<window pane title>":
+   {
+     "background-color": "Optional window background color"
+     "values": { JSON object that is the list of stats to update }
+   }
+   
+   "<another window pane title>":
+   {
+     ... same as above
+   }
+   
+   etc...
+}
+```
 
-**value** - A string or number value that is the value to display
-* Only number values can be used with a ranged value display
+## The values object
 
-**min** - If present, implies the value is a range and this is the minimum value of the range
-
-**max** - If present, implies the value is a range and this is the maximum value of the range
-* To show as a range, **value** must be a number and **max** must have a number value (if **value** is a string, it will just show as a string)
-
-**bar-color** - When drawing as a range, this is the color used to draw the range bar
+"values" is a JSON object where the name is the name (obviously) and the value is another object that holds settings on how to display the whole name/value stat in the window.
 
 **name-alignment** - A string with the value of left/right/center for how to align the name
 
@@ -37,22 +71,42 @@ The values inside are a collection of name/value pairs where the name is the nam
 
 **value-color** - The color to draw the value
 
-**prefix** - The stat entries are sorted alphabetically by name. To make things sort in a desired order this string value is prefixed to the name for sorting purposes.
+**prefix-length** - The stat entries are sorted alphabetically by name. An easy way to change the sorting order is to prefix your names to change how they sort, but you might want to hide that prefix when displaying the name. This length is the number of starting characters to ignore when displaying the name.
+
+### The three types of values that can be displayed:
+
+A single stat can be one of three types, an int, a string, or a range. The presence of the values below determines the type. If multiple values are listed, the last is the one that wins. To change the type, just send a new value for the desired type.
+
+**int** - A signed integer
+
+**string** - A string
+
+**range** - A range, defined by an object with the following values:
+
+* **value** - A signed integer that is the current range value
+* **min** - The minimum value of the range (default is 0)
+* **max** - The maximum value of the range (default is 0)
+* **bar-fill** - This is the color used to fill the range bar
 
 ## Updating values
 
-Only values that are changing need to be set, and only the properties changing need to be specified. For ranges, **value** **min** **max** and **bar-color** must all be sent again.
+Only values that are changing need to be set, and only the properties changing need to be specified.
 
 ## Deleting values
 
-Simply send an empty object for that value. For example, this will delete "Name" and "Money" if they exist:
-
+Simply send an empty object for that value. For example, this will delete "0_Name" and "4_Money" if they exist:
 
 ```
-beip.stats.Player
+beip.stats
 {
-   "Name": {},
-   "Money": {}
+   "Player":
+   {
+      "values":
+      {
+         "0_Name": {},
+         "4_Money": {}
+      }
+   }
 }
 ```
 
