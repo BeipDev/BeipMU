@@ -1,6 +1,13 @@
 # GMCP Packages 
 
-beip.stats package lets you update stats in a stat window.
+On connect, if the server sends the telnet 'WILL GMCP' BeipMU will reply with these two GMCP messages:
+
+    Core.Hello {"client":"Beip", "version":"build number"}
+    Core.Supports.Set [ "Beip.Stats 1", "Client.Media 1" ]
+
+# beip.stats
+
+This package lets you display and update stats in multiple stat windows.
 
 ```
 beip.stats
