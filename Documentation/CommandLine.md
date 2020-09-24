@@ -4,6 +4,7 @@
   - [/@](#@)
   - [/ansireset](#ansireset)
   - [/autolog](#autolog)
+  - [/capturecancel](#capturecancel)
   - [/char](#char)
   - [/chars](#chars)
   - [/clear](#clear)
@@ -16,6 +17,7 @@
   - [/echo](#echo)
   - [/exit](#exit)
   - [/gag](#gag)
+  - [/gmcp](#gmcp)
   - [/grab](#grab)
   - [/help](#help)
   - [/idle](#idle)
@@ -23,6 +25,7 @@
   - [/logall](#logall)
   - [/map_addroom](#map_addroom)
   - [/map_addexit](#map_addexit)
+  - [/naws](#naws)
   - [/new](#new)
   - [/newedit](#newedit)
   - [/newinput](#newinput)
@@ -77,6 +80,13 @@ Usage:
 
 If there is an autolog setup for the puppet/character that was stopped, this will start the autolog again.
 
+## /capturecancel
+Usage:
+
+    /capturecancel
+    
+Cancel any spawn capture in the current window. Useful if your spawn gets stuck capturing and your 'stop capture' trigger isn't working properly yet.
+
 ## /char
 Usage:
 
@@ -129,18 +139,26 @@ This connects to the given server, in the form of hostname:port, or server name.
 ## /delay
 Usage:
 
-    /delay <time> <command>
+    /delay <option> <time> <command>
 
-Usage - To list current pending commands
+Current option is only 'every' to make it a repeating timer (be familiar with how to kill timers before using this!)
+
+* To list current pending commands:
     /delay list
 
-Usage - To kill a pending command (not implemented yet, as <ids> haven't been figured out yet)
+* To kill all upcoming commands
+    /delay killall
+
+* To kill a pending command
     /delay kill <id>
 
 Examples:
 
     /delay 3m "WHO"
     (sends WHO after 3 minutes)
+    
+    /delay every 30s "status"
+    (sends status every 30 seconds)
 
 This is used to delay a send to the server by a given amount of time. Multiple delayed commands can be queued up.
 For the time, the format is: number(h,m,s). 3m = 3 minutes, 10s = 10 seconds, etc.
@@ -182,6 +200,17 @@ Examples:
     /gag "it is now nighttime" 
 
 Adds a global trigger whose match string is the gag text and it's action is to gag that line of text.  If a trigger already exists with this string, gag is enabled on it if it wasn't already set to gag.  Added as a quick and simple way to gag something easily, for more power see the trigger dialog. 
+
+## /gmcp
+Usage:
+
+    /gmcp <options>
+    
+Options:
+
+* dump_on / dump_off - Will dump any incoming GMCP messages to the debug console for easier debugging of what's going on with GMCP
+
+GMCP protocol options
 
 ## /grab
 Usage:
@@ -245,6 +274,18 @@ Usage:
     /map_addexit  <exit to get there> <exit to get back>
 
 Using the exit direction logic as /map_addroom, it will look for a room in the given direction and create this exit to it.
+
+## /naws
+Usage:
+
+    /naws auto
+    /naws {width} {height}
+
+Examples
+
+    /naws 80 25
+    
+Sends a telnet NAWS command to the server with an auto calculated size (based on font & output window size), or the user specified size.
 
 ## /new 
 Usage:
