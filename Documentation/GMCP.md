@@ -126,7 +126,9 @@ Examples:
 "ansi256(34)"
 ```
 
-# client.media (MCMP Mud Client Media Protocol)
+# client.media
+
+Aka "MCMP" Aka "Mud Client Media Protocol"
 
 BeipMU supports a subset of MCMP that still allows the server full functionality. With this the server can still play any number of sounds, have them loop as needed, and stop them when needed. Instead of relying on the *type* *tag* *priority* *continue* and *key* values to play and stop sounds, the server can just do it directly by name.
 
