@@ -5,8 +5,8 @@ On connect, if the server sends the telnet 'WILL GMCP' BeipMU will reply with th
     Core.Hello {"client":"Beip", "version":"build number"}
     Core.Supports.Set [ "Beip.Stats 1", "Client.Media 1" ]
     
-* [beip.stats](#beip.stats)
-* [client.media](#client.media)
+* [beip.stats](#beipstats)
+* [client.media](#clientmedia)
 
 # beip.stats
 
