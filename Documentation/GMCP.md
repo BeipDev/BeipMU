@@ -4,6 +4,9 @@ On connect, if the server sends the telnet 'WILL GMCP' BeipMU will reply with th
 
     Core.Hello {"client":"Beip", "version":"build number"}
     Core.Supports.Set [ "Beip.Stats 1", "Client.Media 1" ]
+    
+* [beip.stats](#beip.stats)
+* [client.media](#client.media)
 
 # beip.stats
 
@@ -122,3 +125,23 @@ Examples:
 "#8080FF"
 "ansi256(34)"
 ```
+
+# client.media (MCMP Mud Client Media Protocol)
+
+BeipMU supports a subset of MCMP that still allows the server full functionality. With this the server can still play any number of sounds, have them loop as needed, and stop them when needed. Instead of relying on the *type* *tag* *priority* *continue* and *key* values to play and stop sounds, the server can just do it directly by name.
+
+## Client.Media.Default
+
+Fully supported
+
+## Client.Media.Load
+
+Fully supported
+
+## Client.Media.Play
+
+Only *name*, *url*, *volume*, and *loops* are supported
+
+## Client.Media.Stop
+
+Only *name* is supported
