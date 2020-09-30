@@ -1,3 +1,13 @@
+4.00.301 - 2020-9-30
+
+Added actions to the trigger debugger, so much easier to see what's happening when
+Added right click menu option to easily create/select a trigger on a word/selection of text in the output/spawn windows
+Added right click menu in trigger & network debugger windows (to pause/split/clear them easily)
+Improved consistency of right click menus for text windows (& spawn windows)
+Fixed a bug with hash coloring in triggers when applied to the whole line
+Fixed a minor bug with pause handling in all windows, hopefully I didn't cause another
+Fixed crash with using '/delay kill' and not passing a timer ID
+
 4.00.300 - 2020-9-24
 
 Added Important Activity notification in trigger actions (number in red box on the tab)
@@ -7,7 +17,7 @@ Added '/repeat' command to easily repeat something multiple times
 Added '/naws' command to send a telnet NAWS (Negotiate About Window Size)
 Added repeating timer support to '/delay' plus ability to kill individual timers
 Added imgur link handling to the image preview window (it's a hack but it works)
-Tweaked hash trigger coloring to be on the text being replaced, not just the first subexpression matched
+Tweaked hash trigger coloring to be on the text being recolored, not just the first subexpression matched
 Changed tab control to have a modern flat look (mostly visible with tabbed spawn windows)
 Changed tabbed spawn windows to have no outer padding
 Changed Pueblo links to show what will be sent, and to add it to the input history when sent
@@ -20,13 +30,13 @@ Fixed a crash when closing a window with splitters in the text windows
 
 Fixed a small annoyance with spawn captures, by killing any on disconnect and after a restore log replay
 Fixed store issue where the configuration can't be saved if the app is installed on a different drive (thank you Dranyth!)
-Fixed a bug where MCSP sounds can hang when disconnecting
+Fixed a bug where MCMP sounds can hang when disconnecting
 Fixed a bug where // to bypass command processing both sends and processes the command (which doesn't recognize it, so you get an error)
 
 4.00.298 - 2020-7-28
 
 Added GMCP protocol support
-Added subset of MCSP protocol support (Mud Client Sound Protocol) Just the basic load/play/stop commands
+Added subset of MCMP protocol support (Mud Client Media Protocol) Just the basic load/play/stop commands
 Added WebP image link detection for the image viewer
 Fixed potential race condition in async downloads (Might explain some image viewer glitches/crashes)
 Fixed bug with puppets on startup, where puppets might not link with their character and will not function

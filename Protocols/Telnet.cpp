@@ -147,6 +147,8 @@ void TelnetParser::Parse(Array<const char> buffer)
                   case TELOPT_GMCP:
                      m_notify.OnTelnet(MakeString<TELNET_IAC, TELNET_DO, TELOPT_GMCP>);
                      m_state=State::Normal;
+                     m_notify.OnTelnet("\xFF\xFA\xC9" R"(Core.Hello {"client":"Beip", "version":")" STRINGIZE(BUILD_NUMBER) R"("})" "\xFF\xF0"
+                        "\xFF\xFA\xC9" R"(Core.Supports.Set [ "Beip.Stats 1", "Client.Media 1" ])" "\xFF\xF0");
                      continue;
                }
                #if _DEBUG
@@ -176,6 +178,7 @@ void TelnetParser::Parse(Array<const char> buffer)
                      m_notify.OnTelnet(MakeString<TELNET_IAC, TELNET_WILL, TELOPT_TTYPE>);
                      m_state=State::Normal;
                      continue;
+
 #if 0
                   case TELOPT_EOR:
                      m_notify.OnTelnet(MakeString<TELNET_IAC, TELNET_WILL, TELOPT_EOR>);
