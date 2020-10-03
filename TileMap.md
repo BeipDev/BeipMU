@@ -19,7 +19,11 @@ beip.tilemap.data { "Map1":"0123456701234567012345670123456701234567" }
 
 ## beip.tilemap.info
 
-A JSON object that holds any number of info objects. The name is the title of the map window.
+This message will cause the map window to appear and describes all of the properties of it. It is needed before the data message is sent. If a map already exists and a new info message is received, it will change any properties that change (new tileset, etc..) if the map size is modified then the map data is initialized to tile '0' of the new size.
+
+## beip.tilemap.data
+
+This message holds the map data itself, and must match what the info message has described (more/less data will result in an error). Note that any number of data messages can be sent without a new info message. This makes it easier to update map content when nothing else changes.
 
 ### JSON Structure
 
