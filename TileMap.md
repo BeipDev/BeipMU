@@ -1,28 +1,59 @@
-# TileMap Tags
+Tilemaps let you encode any single layer 2D tile map in a compact JSON format.
 
-Tilemaps let you encode any single layer 2D tile map in a compact and simple XML based format. This spec is still in development, and some issues (like spoofing and asking the user before downloading random links) are still being decided upon. Feedback is welcome!
+# beip.tilemap
 
 ```
-<tilemap name='Map1' tiles='http://wiki.ultimacodex.com/images/5/55/Ultima_5_-_Tiles-pc.png' tileSize='16,16' mapSize='10,4' enc='hex_4'>0123456701234567012345670123456701234567</tilemap>
+beip.tilemap.info {
+  "Map1":
+  {
+     "tile-url":"http://wiki.ultimacodex.com/images/5/55/Ultima_5_-_Tiles-pc.png",
+     "tile-size":"16,16",
+     "map-size":"10,4",
+     "encoding":"Hex_4"
+  }
+}
+beip.tilemap.data { "Map1":"0123456701234567012345670123456701234567" }
 ```
 
 ![Image of Map1](/images/TileMap1.png)
 
-## Tag Attributes
+## beip.tilemap.info
 
-**name='string'** - The name to show in the map window
+A JSON object that holds any number of info objects. The name is the title of the map window.
 
-**tiles='string'** - The URL of the tilemap file, can be any size and format
+### JSON Structure
+
+```
+beip.tilemap.info {
+  "<map name>":
+  {
+    "tile-url":"<URL to download tile graphics from>",
+    "tile-size":"<size of tiles in the tile image>",
+    "map-size":"<size of the map in tiles>",
+    "encoding":"<format of the map data>"
+  }
+  <repeats optionally for more windows...>
+}
+
+beip.tilemap.data {
+  "<map name>":"<string of map data, content depends on encoding>"
+  <repeats optionally for more windows...>
+}
+```
+
+**map name** - The name to show in the map window, also how maps are identified by the GMCP messages
+
+**tile-url "url string"** - The URL of the tilemap file, can be any size and format
 * The tiles are assumed to be stored left to right, top to bottom without gaps. There is no restriction on the aspect ratio of the tilemap. If a tile map holds fewer tiles than are referenced by the map data, the wrong graphics might be drawn (or none at all). If a tile map holds more tiles, then it's just being wasteful.
 
-**tileSize='width,height'** - The size in pixels of the tiles in the tilemap
-* tileSize is currently restricted to at most 256 in each dimension (tileSize='256,256') most tiles are probably 32 by 32 or 16 by 16.
+**tile-size "width,height"** - The size in pixels of the tiles in the tilemap
+* tile-size is currently restricted to at most 256 in each dimension ("tile-size":"256,256") most tiles are probably 32 by 32 or 16 by 16.
 
-**mapSize='width,height'** - The size of the map in tiles
-* mapSize is currently restricted to a maximum size of 256 by 256 (mapSize='256,256'). That is a huge maximum and most maps are expected to be much smaller, like mapsize='32,32'.
+**map-size "width,height"** - The size of the map in tiles
+* map-size is currently restricted to a maximum size of 256 by 256 ("map-size":"256,256"). That is a huge maximum and most maps are expected to be much smaller, like "map-size":"32,32".
 
-**enc='string'** - Encoding format of the content data (the 012345... part between the tags)
- enc has multiple possibilities to make it easy to use or as compact as possible:
+**encoding "string"** - Encoding format of the content data (the 012345... part between the tags)
+ encoding has multiple possibilities to make it easy to use or as compact as possible:
 
 * hex_4 - Hexadecimal with 4 bits per tile (16 tiles possible). In this format a single hex character is a single tile.
 ** The tilemap tag at the start of this document uses hex_4 encoding
@@ -39,13 +70,15 @@ The map data itself is just a binary block of data with the ordering being from 
 ## Map examples
 
 ```
-<tilemap name='Lighthouse 1' tiles='http://wiki.ultimacodex.com/images/5/55/Ultima_5_-_Tiles-pc.png' tileSize='16,16' mapSize='32,32' enc='zbase64_8'>eJytkkEKwjAQRVe5TrB6hVn7D6DeqWhxXRBEaHXdhejWYzltEjrWGbpoPjT54f2ZDiHO5ZPXrFeCi3pnajjbK+N/EGT1BYiAq8j8YfoMmSekEmdMQ2hLl/2hN2/c6SZ5rCjZdhSXCU+IzZHQtArn73ECVa8zJvVB7Mq4NO0Ocv4wIzpl/hQACj5s9PvrC53FE1jEVyzBvdyLMarXr4Ms/juGpVrl4r0Ebj/Mmf4a/wJ4Ll9p</tilemap>
+beip.tilemap.info { "Lighthouse 1":{ "tile-url":"https://github.com/BeipDev/BeipMU/raw/master/images/Ultima5.png", "tile-size":"16,16", "map-size":"32,32", "encoding":"zbase64_8" }}
+beip.tilemap.data { "Lighthouse 1": "tZBBCsIwEEVXuc5g9Qqz9h9AvVNRcS0URGh13YXo1mM5bRI6xsmiWj80/eHNHz5xbjqRZWnq3fSfxqPYSMErtxdgBk5q5gPzs5+5QStywdwPLblabzrzwIXPmodEKbblcCQ8IjFbRt0YXL7rDry/H5DkvcSV4aibFXR/3xGt0T8OAIVcFvb7dUGX4xH8xGcixUn/i2HUzs+9cvy9Rk5Hk1Oap2/3W/wF" }
 ```
 
 ![Image of Lighthouse](/images/LightHouse.png)
 
 ```
-<tilemap name='Laboratory' tiles='http://www.beipmu.com/FutureTiles.png' tileSize='32,32' mapSize='16,16' enc='ZBase64_8'>eJyT5kUBfNosrEiATX/mLEeG2wxgEHMsWUx/5apAhtevGDg4uRhyrhWL6WuDZH4xSEhKMdQwNID4WotBQsYgAsKfDtG+eyeUv5xBF8Q/fRLKD2WwZbh8mYHhJlyeAci/DNe/nQEswHAHzI9lSAcbd5nhDZhfy9DOEM1whAFm31cGBADxVVSRgJq+jy8K8AMAsu0ywg</tilemap>
+beip.tilemap.info { "Laboratory":{ "tile-url":"https://github.com/BeipDev/BeipMU/raw/master/images/FutureTiles.png", "tile-size":"32,32", "map-size":"16,16", "encoding":"zbase64_8" }}
+beip.tilemap.data { "Laboratory": "k+ZFAXzaLKxIgE1/5ixHhtsMYBBzLFlMf+WqQIbXrxg4OLkYcq4Vi+lrg2R+MUhISjHUMDSA+FqLQULGIALCnw7RvnsnlL+cQRfEP30Syg9lsGW4fJmB4SZcngHIvwzXv50BLMBwB8yPZUgHG3eZ4Q2YX8vQzhDNcIQBZt9XBgQA8VVUkYCavo8vCvADAA" }
 ```
 
 ![Image of Laboratory](/images/Laboratory.png)
