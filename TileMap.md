@@ -6,7 +6,7 @@ Tilemaps let you encode any single layer 2D tile map in a compact JSON format.
 beip.tilemap.info {
   "Map1":
   {
-     "tile-url":"http://wiki.ultimacodex.com/images/5/55/Ultima_5_-_Tiles-pc.png",
+     "tile-url":"https://github.com/BeipDev/BeipMU/raw/master/images/Ultima5.png",
      "tile-size":"16,16",
      "map-size":"10,4",
      "encoding":"Hex_4"
