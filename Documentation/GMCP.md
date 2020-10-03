@@ -3,9 +3,10 @@
 On connect, if the server sends the telnet 'WILL GMCP' BeipMU will reply with these two GMCP messages:
 
     Core.Hello {"client":"Beip", "version":"build number"}
-    Core.Supports.Set [ "Beip.Stats 1", "Client.Media 1" ]
+    Core.Supports.Set [ "Beip.Stats 1", "Beip.Tilemap 1", "Client.Media 1" ]
     
 * [beip.stats](#beipstats)
+* [beip.tilemap](../TileMap.md)
 * [client.media](#clientmedia)
 
 # beip.stats
@@ -13,8 +14,7 @@ On connect, if the server sends the telnet 'WILL GMCP' BeipMU will reply with th
 This package lets you display and update stats in multiple stat windows.
 
 ```
-beip.stats
-{
+beip.stats {
    "Player":
    {
       "background-color": "#002040",
@@ -45,8 +45,7 @@ beip.stats
 ## JSON Structure
 
 ```
-beip.stats
-{
+beip.stats {
    "<window pane title>":
    {
      "background-color": "Optional window background color"
@@ -100,8 +99,7 @@ Only values that are changing need to be set, and only the properties changing n
 Simply send an empty object for that value. For example, this will delete "0_Name" and "4_Money" if they exist:
 
 ```
-beip.stats
-{
+beip.stats {
    "Player":
    {
       "values":
