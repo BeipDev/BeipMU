@@ -12,6 +12,8 @@ This was started by copying some of the items from our help file, it's probably 
 
 [Aliases](Aliases.md)
 
+[Mapping](Mapping.md)
+
 [Scripting](Scripting.md)
 
 [Tips & Tricks](Tips_and_Tricks.md)
