@@ -1,3 +1,22 @@
+4.00.302 - 2021-3-9
+
+Added support for jpeg rotation property, so images won't appear rotated/flipped in the image viewer
+Added regex capture index for send trigger actions
+Added Hash coloring to Paragraph trigger actions, plus made background hash coloring use 50% brightness
+Added global 'exit text color' option for maps
+Changed tilemaps to be a GMCP protocol: beip.tilemap
+Changed some build options, changed PCRE to be compiled for speed (~8% perf boost locally) slightly bigger .exe (improves boot perf with large restore logs & lots of triggers)
+Changed /receive to be more useful during trigger processing, it now gets passed directly to the trigger code (vs reentering the line buffer code incorrectly)
+Changed /connect & /world commands to not give an error if the tab is already connected as the error had no use, new tabs would be opened anyways.
+Removed the confusing 'Connect without creating a server' pane 
+Improved Pueblo support, now waits for "</xch_mudtext>" before interpreting incoming text as Pueblo tags
+Fixed a map bug where per room text colors weren't being saved
+Fixed a hang on shutdown due to WM_ENDSESSION being handled by the wrong window
+Fixed live spell-check, and tab-complete so it's possible to use under Wine on Unix (needs a separate spelling DLL, but it now works) - sponsored by The Order of Her Noodly Appendage
+Fixed a crash when a mu* sends a new prompt while the user is selecting the last line of text in the output window.
+Fixed a bug where while selecting text in the top pane of a split window, and the window is unsplit by the middle mouse button while over the splitter, the window gets stuck paused and can't be unpaused
+Fixed a bug where Logging->'Starting from top of window...' wouldn't work properly as the 'Logging started' message would scroll the window to the bottom and start at that new top.
+
 4.00.301 - 2020-9-30
 
 Added actions to the trigger debugger, so much easier to see what's happening when
@@ -886,6 +905,8 @@ Added option to Replacement trigger to parse HTML - SMILEYS!!  Ex.. turn :) into
 
 HTML Logging!  Just name the log file as .htm or .html and it's automatic
 
+2.00.166 - 2005-5-17
+
 2.00.158
 
 New text engine!
@@ -916,7 +937,7 @@ Fixed SSL so that it handles the case where the server asks for client credentia
 Added some new scripting features for Mark, such as IWindow_Text.Paused, IConnection.IsLogging(), and their associated events.
 IWindow_Main.TitlePrefix property (write only) - To set a prefix to the window title that is independant from BeipMU's window title
 
-2.00.145
+2.00.145 - 2003-4-23
 
 Options for fixed output window formatting (specify the number of chars to wrap at)
 Added Triggers to the object model
@@ -924,15 +945,15 @@ Added basic Docking windows to the object model
 Fixed the /idle bug (was setting the string to empty after idling out once)
 Fixed a macro bug that caused 1 undefined character to be sent (causing an error on the next thing you say)
 
-2.00.144
+2.00.144 - 2003-1-27
 
 Experimenting with docking windows, and reorganized a lot of the internal code to be much cleaner.
 
-2.00.142
+2.00.142 - 2002-11-28
 
 Added new Ansi code support, along with some telnet support for Cryosphere (see '/test ansi' for details)
 
-2.00.141
+2.00.141 - 2002-11-18
 
 Made a small off by 1 fix in the window resize code that you could hit if you're Whyrl
 
@@ -941,18 +962,18 @@ Made a small off by 1 fix in the window resize code that you could hit if you're
 Imaging Work
 Splash screen is now a separate file, splash.* (search order is splash.jpg, splash.gif then splash.bmp)
 
-2.00.139
+2.00.139 - 2002-11-3
 
 Splash screen test
 Fixed Ctrl+F (broke in regular expressions)
 Fixed .* hang with regular expressions (.* matches nothing, wasn't prepared for nothing)
 Fixed the large SSL buffer send bug (caught by Stelard)
 
-2.00.138
+2.00.138 - 2002-10-25
 
 Added the ability to process triggers optionally in reverse order (see the triggers dialog for more info)
 
-2.00.137
+2.00.137 - 2002-10-19
 
 Made the cursor up/down redefinition work on 9x (hopefully for real this time Kal!)
 
@@ -983,39 +1004,40 @@ Added new 'pause behaves like scrollback' feature.  Also improved the 'don't scr
 
 Found out there was a CRT dll on all systems past Win95 that I could use instead of importing 30k into Imaging.dll and BeipMU.exe, so now it's dynamically loaded which saved 20k for BeipMU and reduced the imaging library by 60k.
 
-2.00.127
+2.00.127 - 2002-9-10
 
 Logging now includes options to log what you typed and/or what was sent to the server.
 Saves the Direct Connect info in the connect dialog.
 Adjusted the font style used to measure text, fixing an underline dreg in Courier New 9pt
 
-2.00.126
+2.00.126 - 2002-9-5
 
 Fixed Thygrrr's 16-bit scroll bar limit.  Uses the 32-bit windows api now (instead of the 16-bit message)
 
-2.00.125
+2.00.125 - 2002-8-31
 
 Fixed Thygrrr's text selection bug into the indented region above. (GDI call failure)
 
-2.00.124
+2.00.124 - 2002-8-26
 
 More Visual Basic style event interfaces supported.
 Improved internal event system (spurred by VB's requirements)
 Object Model: Added Connection object + events
 
-2.00.123
+2.00.123 - 2002-8-12
 
 Made it so that when dialogs are reactivated the focus returns to the control who had it when the dialog was deactivated.  It's standard behavior and I just wasn't doing it.
 Made Alt+0 activate window 10 (used to only work from Alt+1 to Alt+9)
 Fixed image receiving code.  Stupid bug.
 Added ansi codes: 2, 7, 22, 24, 25, 27 (dim, reverse, and unset-flags), handle [;;m empty codes
 
+2.00.122 - 2002-8-6
 
-2.00.121
+2.00.121 - 2002-7-22
 
 Mav and I figured out the strange crash when viewing /help then doing a few things.  Turns out it was me passing in a negative length to GDI which caused a crash on Win9x.  NT handled it fine.
 
-2.00.119
+2.00.119 - 2002-7-17
 
 Fixed Sabbath's Text Layout Bug
 Made it so that when viewing scrollback, new lines do not cause it to jump to the bottom, as per Revar's guidelines.
@@ -1031,21 +1053,21 @@ Added an IsAddress command to return true if the string passed is a valid IP add
 
 Added a reverse DNS lookup command in the app interface to help with the sockets.
 
-2.00.116
+2.00.116 - 2002-6-19
 
 Added the ISocket and ISocketServer interfaces, so that outgoing connections and simple servers can be done in a few lines of script!
 
-2.00.115
+2.00.115 - 2002-6-17
 
 Added 'Reconnect' to the Connect menu for easy access and discoverability, rather than finding out by trying to send something once you're already disconnected.
 
-2.00.114
+2.00.114 - 2002-6-5
 
 Fixed the bug where switching windows in MDI mode when all windows were maximized would cause a reformat behind the scenes (regression from blinking text causing the reformat).
 
 Fixed a bug in the new 'Last IP' field where a crash might result on a failed DNS lookup due to attempting to access the undefined hostinfo structure.
 
-2.00.113
+2.00.113 - 2002-5-5
 
 Added a debug output window for scripts.  Script errors are sent here instead of through a popup window, and scripts can output their own debug messages through app.OutputDebugHTML(string), and app.OutputDebugText(string).
 
@@ -1058,24 +1080,24 @@ Added a 'Last IP' field for every server that remembers the last DNS lookup so t
 /Tracert and /Ping will now work on the current server if you're connected, and if a current tracert or ping is in progress they will abort it.
 Fixed a minor issue in tracert where it waits unnecessarily, lowering performance.
 
-2.00.110
+2.00.110 - 2002-4-16
 
 SSL connection spam would appear with <$color> tags as it was displaying text incorrectly (and becoming dependant on the HTML tag parsing flag in the world settings)
 Text wrapping - Lines with carriage returns would incorrectly wrap on the last word before the carriage return.
 /test ansi - Caused a crash since the code assumed there was a server during the test
 
-2.00.109
+2.00.109 - 2002-4-14
 
 MDI: Edit menu was being left disabled after closing all windows and opening a new one.  Bug caused because MDI is sneaky.
 
 Fixed the hang in the Trigger dialog when clicking on away/present
 
-2.00.108
+2.00.108 - 2002-4-12
 
 Fixed SSL issue that only surfaced on Windows 9X where it'd hang on an error
 Fixed another SSL issue where on Windows 9X connections after the first are broken due to having the same SPN value as the original (basically only the first SSL connection on win9x worked well, after that it was luck).
 
-2.00.107
+2.00.107 - 2002-3-27
 
 Fixed crash at midnight when you're autologging with date
 Fixed crash in the multiple retry code if you're unlucky
@@ -1085,20 +1107,49 @@ Fixed connection still showing as connected in the multiple retry code due to me
 Reworked the event system to support multiple event hooks natively (and broke Squirrelly's scripts temporarily)
 
 Beautified the network error codes a bit (don't know how I lived without those).
- 
-Pre 2.00.0107
 
- SSL Support (added a new server type in the connect dialog)
- Network connect/disconnect errors are now reported properly
- New log file created at midnight when auto logging with date appended
- Splitters in main window move nicer and smoother
- Smart Paste now shows what's in the clipboard and the number of bytes it will take
- Keyboard Shortcuts now have 'don't care' options on modifier keys so that you can say 'Key is Ctrl+K and I don't care if shift is down or not'
- Some Ansi handling bugs
- Option to not reset ansi colors on new lines
- MDI mode bug fix where switching windows slowed down when more text was in the window, caused by a hidden window resize that did a hidden reformat of all the text (ouch)
+2.00.106 - 2002-3-25
+2.00.105 - 2002-3-22
+2.00.102 - 2002-3-19
+2.00.99 - 2002-3-14
 
- Puppet Auto Logging
- Auto Connecting Puppets
- ActiveScripting support (VB & Java) see scripting.txt for more info
- 
+SSL Support (added a new server type in the connect dialog)
+Network connect/disconnect errors are now reported properly
+New log file created at midnight when auto logging with date appended
+Splitters in main window move nicer and smoother
+Smart Paste now shows what's in the clipboard and the number of bytes it will take
+Keyboard Shortcuts now have 'don't care' options on modifier keys so that you can say 'Key is Ctrl+K and I don't care if shift is down or not'
+Some Ansi handling bugs
+Option to not reset ansi colors on new lines
+MDI mode bug fix where switching windows slowed down when more text was in the window, caused by a hidden window resize that did a hidden reformat of all the text (ouch)
+
+Puppet Auto Logging
+Auto Connecting Puppets
+ActiveScripting support (VB & Java) see scripting.txt for more info
+
+2.00.95 - 2002-3-10
+2.00.90 - 2002-3-8
+2.00.77 - 2002-3-3
+2.00.64 - 2002-2-28
+2.00.19 - 2002-1-2
+2.00.17 - 2002-1-2
+2.00.9 - 2001-12-13
+
+Puppets can auto-connect upon activity.
+New triggers based on activity in a window without focus (e.g. play sound, etc.).
+Full JavaScript and VBScript support.
+Command line script access (start line with '/@').
+Many script-controllable hooks into BeipMU features and events.
+Script-definable BeipMU '/commands'.
+Included: Some additional script-level added commands TinyFugue users may be familiar with: /repeat, /at, /ps, /kill, plus a few more (see /help2 for now).
+Support for muck property 'edit' command that worked with TinyFugue.
+MUD Client Protocol (MCP) Version 2.1 support and user-extendable with script.
+Can break out of 'run away' scripts.
+Build number and date as well as verion (script accessible).
+Auto load and run of JavaScripts in 'init_js' directory at startup.
+
+1.9 - 2000-8-20
+1.8a - 2000-2-14
+1.8 - 1999-7-1
+1.7 - 1999-6-16
+1.4 - 1998-12-13

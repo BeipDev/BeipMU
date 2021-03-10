@@ -10,6 +10,7 @@
   - [/clear](#clear)
   - [/close](#close)
   - [/connect](#connect)
+  - [/connectioninfo](#connectioninfo)
   - [/debugnetwork](#debugnetwork)
   - [/debugtriggers](#debugtriggers)
   - [/delay](#delay)
@@ -135,6 +136,10 @@ Examples:
     /connect fluff bennet
 
 This connects to the given server, in the form of hostname:port, or server name.  The name is the name shown in the tree view of the edit worlds/connect dialog.  Hostnames can be a standard DNS name or just an IP address.
+
+## /connectioninfo
+
+Shows the socket connection information, like the TLS/SSL security information.
 
 ## /delay
 Usage:
