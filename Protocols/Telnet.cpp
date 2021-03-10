@@ -78,6 +78,10 @@ const BYTE TELOPT_AUTHENTICATION = 37;        /* Authenticate */
 const BYTE TELOPT_ENCRYPT        = 38;        /* Encryption option */
 const BYTE TELOPT_NEW_ENVIRON    = 39;        /* New - Environment variables */
 const BYTE TELOPT_CHARSET        = 42;
+const BYTE TELOPT_MSSP           = 70;        // MUD Server Status Protocol
+const BYTE TELOPT_MCCP1          = 85;
+const BYTE TELOPT_MCCP2          = 86;        // Mud Client Compression Protocol 2
+const BYTE TELOPT_ZMP            = 93;        // Zenith Mud Protocol
 const BYTE TELOPT_GMCP           = 201;       // C9
 const BYTE TELOPT_EXOPL         = 255;        /* extended-options-list */
 
@@ -134,13 +138,18 @@ void TelnetParser::Parse(Array<const char> buffer)
             case State::Will:
                switch(c)
                {
+                  case TELOPT_CHARSET:
+                     m_notify.OnTelnet(MakeString<TELNET_IAC, TELNET_DO, TELOPT_CHARSET>);
+                     m_state=State::Normal;
+                     continue;
+
                   case TELOPT_EOR:
                      m_notify.OnTelnet(MakeString<TELNET_IAC, TELNET_DO, TELOPT_EOR>);
                      m_state=State::Normal;
                      continue;
 
                   case TELOPT_SGA:
-                     m_notify.OnTelnet(MakeString<TELNET_IAC, TELNET_DO, TELOPT_SGA>);
+                     m_notify.OnTelnet(MakeString<TELNET_IAC, TELNET_DONT, TELOPT_SGA>);
                      m_state=State::Normal;
                      continue;
 
@@ -148,7 +157,7 @@ void TelnetParser::Parse(Array<const char> buffer)
                      m_notify.OnTelnet(MakeString<TELNET_IAC, TELNET_DO, TELOPT_GMCP>);
                      m_state=State::Normal;
                      m_notify.OnTelnet("\xFF\xFA\xC9" R"(Core.Hello {"client":"Beip", "version":")" STRINGIZE(BUILD_NUMBER) R"("})" "\xFF\xF0"
-                        "\xFF\xFA\xC9" R"(Core.Supports.Set [ "Beip.Stats 1", "Client.Media 1" ])" "\xFF\xF0");
+                        "\xFF\xFA\xC9" R"(Core.Supports.Set [ "Beip.Stats 1", "Beip.Tilemap 1", "Client.Media 1" ])" "\xFF\xF0");
                      continue;
                }
                #if _DEBUG
@@ -267,8 +276,9 @@ void TelnetParser::Parse(Array<const char> buffer)
 
                   while(charsets)
                   {
-                     unsigned end=charsets.FindFirstOf(separator, charsets.Count());
-                     auto charset=charsets.First(end); charsets=charsets.WithoutFirst(end);
+                     ConstString charset;
+                     if(!charsets.Split(separator, charset, charsets))
+                        Swap(charset, charsets);
 
                      if(charset=="UTF-8")
                      {

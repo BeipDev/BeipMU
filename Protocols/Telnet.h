@@ -24,7 +24,7 @@ private:
 
    void HandleCharset();
 
-   enum class State
+   enum struct State
    {
       Normal,
       IAC,
