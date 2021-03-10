@@ -1,3 +1,7 @@
+4.00.303 - 2021-3-10
+
+Fixed a hang on telnet charset (thank you Reflexwolf!)
+
 4.00.302 - 2021-3-9
 
 Added support for jpeg rotation property, so images won't appear rotated/flipped in the image viewer
