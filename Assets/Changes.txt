@@ -1,3 +1,13 @@
+4.00.304 - 2021-3-17
+
+Fixed twitchy text scrolling when showing MUD prompts
+Added 'Delete Line' in output text windows, delete things you don't want to see! (Note: Not removed from logs)
+Added workaround for servers that lie about the charset they support (Server option, 'Limit CHARSET negotation to chosen encoding')
+Tweaked docked window dragging to require some drag movement before dragging starts (previously dragged instantly, causing issues)
+Fixed a crash/hang on Logging/'Start from Beginning'/'Start from top of Window' if the window is empty
+Fixed TCP_KEEPALIVE, broke it in 302 when shuffling around some code. Apparently Keepalive can only be set after connecting, not before.
+Remember the window size even if aero-snapped so that docked windows don't shrink on restart
+
 4.00.303 - 2021-3-10
 
 Fixed a hang on telnet charset (thank you Reflexwolf!)
