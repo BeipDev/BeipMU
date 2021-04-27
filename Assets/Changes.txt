@@ -1,3 +1,13 @@
+4.00.305 - 2021-4-27
+
+Added inline images! (optional of course, can configure it in the Options->Preferences... dialog)
+Added ability to click on pause icon to unpause if it was paused by the user (vs paused by an action like find requiring it to stay paused)
+Added 'Thesaurus.com' lookup on right click of word in input window (if it's spelled correctly)
+Added 'Reconnect' keyboard shortcut
+Added idle message sending to the character settings, no need to use /idle anymore
+Changed the alias dialog to show a multiline test result
+Fixed the output window getting stuck paused if you left click on multiple input devices at once (like mouse & touchpad for example).
+
 4.00.304 - 2021-3-17
 
 Fixed twitchy text scrolling when showing MUD prompts
