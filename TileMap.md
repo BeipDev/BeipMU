@@ -89,7 +89,7 @@ beip.tilemap.data { "Laboratory": "k+ZFAXzaLKxIgE1/5ixHhtsMYBBzLFlMf+WqQIbXrxg4O
 
 ## Usage in BeipMU
 
-To enable tilemap tag parsing, type: /tilemap on
+As tilemap parsing is done through GMCP, it's enabled by default. To disable tilemap tag parsing, type: /tilemap off
 
 To show an example tilemap, use: /test tilemap1
 
