@@ -1,3 +1,21 @@
+4.00.307 - 2021-5-19
+
+Made .gifv links be treated as .gif and will now show up and animate for inline images
+Made image URLs with ? in them work, like http://example.com/image.jpg?width=100&height=100
+Extended /delay times to allow fractional values, so `/delay 2.2s ...` `/delay 1.5m ...` etc now works
+Changed inline images to decode on a background thread vs the UI thread, should be a little smoother
+Improved HTML logging to handle paragraph styles, toggle-able time stamps and formatting!
+Fixed a weird inline image redraw bug with webp, apparently webp pumps window messages during decoding, fixed by the previous item
+Fixed Pueblo glitch where an image URL could show two inline images, due to auto URL parsing running on top of the Pueblo URL
+Fixed some windows shutdown related bugs (and app update), it would previously not save settings if a windows shutdown was previously aborted
+Fixed a bug where timers stop working randomly (all app timers, so even tooltips)
+Fixed a redraw bug with inline images, the top margin wasn't being accounted for properly
+Fixed a crash on images where it thinks an image is an animated gif but isn't
+
+4.00.306 - 2021-4-28
+
+Fixed a crashing bug for certain items in the right click menu (had a bug in the new structure to hold the menu items)
+
 4.00.305 - 2021-4-27
 
 Added inline images! (optional of course, can configure it in the Options->Preferences... dialog)
