@@ -1,3 +1,11 @@
+4.00.308 - 2021-5-24
+
+Added 'Input Window - Autocomplete Whole Line'
+Added YouTube link previews
+Added tooltips to inline images (shows the full video title for youtube previews)
+Fixed a bug with accessibility, can cause a crash if over a line just deleted
+Fixed a hang when inline images/image viewer is on and the URL is not valid
+
 4.00.307 - 2021-5-19
 
 Made .gifv links be treated as .gif and will now show up and animate for inline images
