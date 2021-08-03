@@ -17,15 +17,18 @@ This package lets you display and update stats in multiple stat windows.
 beip.stats {
    "Player":
    {
-      "background-color": "#002040",
       "values":
       {
          "0_Name": { "prefix-length": 2, "string": "Bennet", "name-color":"Ansi256(56)" },
-         "1_Hit Points": { "prefix-length": 2, "range": { "value": 823, "max": 1000, "bar-fill": "#00FF00" }, "value-color": "#345678" },
+         "1_Hit Points": { "prefix-length": 2, "range": { "value":823, "max": 1000, "bar-fill": "#00FF00" }, "value-color": "#345678" },
          "2_Energy Points": { "prefix-length": 2, "range": { "value": 60, "max": 100, "bar-fill": "#8080FF" }, "color":"#FF0000" },
-         "3_PP": { "prefix-length":2, "string":"30/60" },
-         "4_Money": { "prefix-length": 2, "int":123, "color":"#FFFF00", "name-alignment":"right" }
-      }
+         "3_PP": { "prefix-length":2, "string":"30/60 \u0041 \u2648\u2640 \u849c\u8089" },
+         "3_": { "prefix-length":2, "string":"" },
+         "4_Money": { "prefix-length": 2, "int":123456, "color":"#FFFF00", "name-alignment":"right" },
+         "5_Progress": { "prefix-length": 2, "progress": { "label": "75%", "value":0.75, "fill-color": "#FF0000" } },
+         "6_Experience": { "prefix-length": 2, "progress": { "label": "1,234 XP", "value":0.65, "fill-color": "#C07070", "empty-color": "#804040", "outline-color":"transparent" } }
+      },
+      "background-color": "#002040"
    }
    "Attributes":
    {
@@ -90,13 +93,36 @@ A single stat can be one of three types, an int, a string, or a range. The prese
 * **max** - The maximum value of the range (default is 0)
 * **bar-fill** - This is the color used to fill the range bar
 
+**progress** - (Starting in 309) A progress bar, defined by an object with the following values:
+
+* **label** - The text to display
+* **value** - A floating point value going from 0.0 to 1.0 that indicates the progress amount
+* **fill-color** - The progress bar color
+* **empty-color** - The color of the empty area of the progress bar
+* **outline-color** - The outline color of the progress bar
+
 ## Updating values
 
 Only values that are changing need to be set, and only the properties changing need to be specified.
 
 ## Deleting values
 
-Simply send an empty object for that value. For example, this will delete "0_Name" and "4_Money" if they exist:
+Starting in build 309: To delete individual stats or all stats in a pane at once, just use the JSON null value:
+```
+beip.stats {
+   "Player":
+   {
+      "values":
+      {
+         "0_Name": null,
+         "4_Money": null
+      }
+   }
+   "Online Players": null
+}
+```
+
+Pre 309 you can only send an empty object for that value. For example, this will delete "0_Name" and "4_Money" if they exist:
 
 ```
 beip.stats {
@@ -113,7 +139,7 @@ beip.stats {
 
 ## Colors
 
-Colors are string values in the format of #RRGGBB or ansi256([decimal number from 0-255]).
+Colors are string values in the format of #RRGGBB or ansi256([decimal number from 0-255]). A value of 'transparent' is also valid for some properties.
 
 Ansi256 is to simplify porting colors from 256-color ansi to colors here.
 
@@ -122,6 +148,7 @@ Examples:
 ```
 "#8080FF"
 "ansi256(34)"
+"transparent"
 ```
 
 # client.media
