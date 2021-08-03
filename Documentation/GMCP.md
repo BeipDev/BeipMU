@@ -91,17 +91,17 @@ A single stat can be one of three types, an int, a string, or a range. The prese
 * **value** - A signed integer that is the current range value
 * **min** - The minimum value of the range (default is 0)
 * **max** - The maximum value of the range (default is 0)
-* **fill-color** -  This is the color used to fill the range bar (named bar-color in pre 309, kept for compatibility)
+* **fill-color** -  The color of the completed range bar area (named bar-color in pre 309, kept for compatibility)
 * **empty-color** - The color of the empty area of the range bar
-* **outline-color** - The outline color of the range bar
+* **outline-color** - The color of the range bar outline
 
 **progress** - (Starting in 309) A progress bar, defined by an object with the following values:
 
 * **label** - The text to display
 * **value** - A floating point value going from 0.0 to 1.0 that indicates the progress amount
-* **fill-color** - The progress bar color
+* **fill-color** - The color of the completed progress bar area
 * **empty-color** - The color of the empty area of the progress bar
-* **outline-color** - The outline color of the progress bar
+* **outline-color** - The color of the progress bar outline
 
 ## Updating values
 
