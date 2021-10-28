@@ -115,8 +115,7 @@ void TelnetParser::Parse(Array<const char> buffer)
                   case TELNET_GA:
                   case TELNET_EOR:
                   {
-                     auto prompt=GetPartial();
-                     if(prompt)
+                     if(auto prompt=GetPartial())
                         m_notify.OnPrompt(prompt); // (don't reset the buffer because we continue)
                      m_state=State::Normal;
                      continue;
@@ -274,6 +273,14 @@ void TelnetParser::Parse(Array<const char> buffer)
                   char separator=m_buffer[m_sb_start];
                   auto charsets=GetPartial().WithoutFirst(m_sb_start+1);
 
+                  bool limit=false;
+                  auto limit_encoding=Prop::Server::Encoding::UTF8;
+                  if(auto *p_server=m_notify.GetServer();p_server->fLimitTelnetCharset())
+                  {
+                     limit=true;
+                     limit_encoding=p_server->eEncoding();
+                  }
+
                   while(charsets)
                   {
                      ConstString charset;
@@ -282,10 +289,21 @@ void TelnetParser::Parse(Array<const char> buffer)
 
                      if(charset=="UTF-8")
                      {
-                        m_notify.OnTelnet(FixedStringBuilder<256>(MakeString<TELNET_IAC, TELNET_SB, TELOPT_CHARSET, 1>, charset, MakeString<TELNET_IAC, TELNET_SE>));
+                        if(limit && limit_encoding!=Prop::Server::Encoding::UTF8)
+                           continue;
+
+                        m_notify.OnTelnet(FixedStringBuilder<256>(MakeString<TELNET_IAC, TELNET_SB, TELOPT_CHARSET, 2>, charset, MakeString<TELNET_IAC, TELNET_SE>));
                         m_notify.OnEncoding(Prop::Server::Encoding::UTF8);
                         break;
                      }
+#ifdef _DEBUG
+                     if(charset=="ISO-8859-1" || charset=="ISO-8859-15")
+                        continue;
+                     if(charset=="US-ASCII" || charset=="ASCII")
+                        continue;
+                     if(charset=="x-penn-def" || charset=="ANSI_X3.4-1968")
+                        continue;
+#endif
                      Assert(false); // If this hits, add it to the list
                   }
 
@@ -313,6 +331,7 @@ void TelnetParser::Parse(Array<const char> buffer)
 
       switch(c)
       {
+         case 0: continue; // Eat NULL characters
          case TELNET_IAC: m_state=State::IAC; continue; // IAC
          case CHAR_CR: continue; // Eat these, as only the LineFeed moves us to the next line.
          case CHAR_LF: m_notify.OnLine(GetPartial()); m_buffer.Empty(); continue;
