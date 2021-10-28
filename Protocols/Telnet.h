@@ -10,6 +10,7 @@ struct TelnetParser
       virtual void OnPrompt(ConstString string)=0;
       virtual void OnEncoding(Prop::Server::Encoding encoding)=0;
       virtual void OnGMCP(ConstString string)=0;
+      virtual Prop::Server *GetServer()=0;
    };
 
    TelnetParser(INotify &notify);
