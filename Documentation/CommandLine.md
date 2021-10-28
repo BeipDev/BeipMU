@@ -159,14 +159,14 @@ Current option is only 'every' to make it a repeating timer (be familiar with ho
 
 Examples:
 
-    /delay 3m "WHO"
-    (sends WHO after 3 minutes)
+    /delay 3.5m "WHO"
+    (sends WHO after 3 & 1/2 minutes)
     
     /delay every 30s "status"
     (sends status every 30 seconds)
 
 This is used to delay a send to the server by a given amount of time. Multiple delayed commands can be queued up.
-For the time, the format is: number(h,m,s). 3m = 3 minutes, 10s = 10 seconds, etc.
+For the time, the format is: number(h,m,s). 3m = 3 minutes, 10s = 10 seconds, etc. Fractional values also work, like 1.5s, 0.5h etc..
 
 ## /disconnect 
 Usage:
