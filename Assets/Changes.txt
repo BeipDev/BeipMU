@@ -1,3 +1,9 @@
+4.00.310 - 2022-1-10
+
+Fix bug where using "Edit->Copy/Paste window settings" can lead to crashes
+Fix bug where window settings are not intiialized to defaults when creating new characters
+Fix minor display only error with input window font size not matching chosen font size
+
 4.00.309 - 2021-10-27
 
 Add per server/character window settings, have different fonts/colors/etc per window!
@@ -8,11 +14,12 @@ Add Shift+Click to extend selection in output windows
 Add Holding down Ctrl when connecting opens the tab without connecting
 Tweak URL detection to include trailing _ characters (Dranyth)
 Tweak preferences dialog to not be so vertical
-Improive restore logs to restore local echo
+Improve restore logs to restore local echo
 Fix a bug in MCMP where http:// was being prepended to every URL and it shouldn't have been.
 Fix another timers related bug (I found out OS timers can hit early, which leads to waiting 2x the timeout duration)
 Fix idle timer to not re-activate when trying to send something on a disconnected window
 Fixed a sound playback bug where if a file is not found or there is an error that playback slot becomes unusable (So after 16 failed sounds and no more will play)
+Fixed telnet charset response (https://github.com/BeipDev/BeipMU/issues/166)
 
 4.00.308 - 2021-5-24
 
