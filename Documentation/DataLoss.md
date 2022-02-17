@@ -20,7 +20,7 @@ If you want to look at the files directly just to see what's there, here's where
 
 ## Store version
 
-C:\Users\(Username)\AppData\Local\Packages\38939Ratman.BeipMU_xsyr3b6qthb5g\LocalCache\Roaming\BeipMU
+`C:\Users\(Username)\AppData\Local\Packages\38939Ratman.BeipMU_xsyr3b6qthb5g\LocalCache\Roaming\BeipMU`
 
 Replace (username) with your Windows username.
 
@@ -28,7 +28,7 @@ Why the weird folder? Store apps have the OS folders virtualized so that they're
   
 ## Github version
 
-%appdata%\BeipMU  
+`%appdata%\BeipMU`
 
 This only applies if you don't manually put your config.txt in the same folder as BeipMU.exe. If you did this, why are you reading this section?!
   
