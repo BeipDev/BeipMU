@@ -21,3 +21,7 @@ The store version writes it's settings to a hidden and sandboxed %APPDATA% folde
 The store version auto updates (based on your OS settings)
 
 For the github version, if your user settings are stored in %appdata%/BeipMU (the automatic default) then just replace the folder you unzipped BeipMU into with the new version's unzipped folder. If you manually put your config.txt inside the BeipMU.exe program folder, simply be sure to move or copy it to the new version's folder.
+
+# Help! I lost my files!
+
+[Data Loss Help](Documentation/DataLoss.md)
