@@ -200,7 +200,9 @@ beip.ids
 ```
 
 **url** is self explanatory. The URL of the image to display in a column to the left of a single line of text
+
 **click-url** the URL to use when clicking on the avatar image. This is optional. If not set it will use the "url" field.
+
 **hover-text** When showing a tooltip for the image, this text will be shown to the right. Useful for extra information about a player.
 
 If the server wishes to update the id information on the client, it can send this message at any time. It only has to send the fields that are changing. If "url" is changed, then the existing images will update to show the new image URL.
