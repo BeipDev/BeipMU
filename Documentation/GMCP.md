@@ -162,10 +162,10 @@ Aka "Player Avatars"
 
 Lets the server specify image links that are displayed to the left of a line of text. Typically this is to show an avatar for the player speaking, but it can be used to show any image on any line of text.
 
-## avatar-url
+## image-url
 The simplest way to get an image on a line is to send this before the line:
 ```
-beip.line.avatar-url "a url of an image"
+beip.line.image-url "a url of an image"
 ```
 
 This is simple, but less efficient and flexible than the id messages below. Typically URLs will be much longer than an ID string, and the server has no way to update this URL after it is sent, or provide any extra text on hover. It's a good place to start as a simple test of inline images.
