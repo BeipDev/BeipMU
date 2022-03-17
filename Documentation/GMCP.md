@@ -179,7 +179,7 @@ beip.line.id "1234"
 It is simply a single JSON string value that is the id to associate with this line.
 
 ## ids
-The server will send this GMCP to specify details about an id:
+The server will send this GMCP to specify details about an id. Sent in response to the client sending beip.id.request, or preemptively by servers keeping track of it themselves (see id.request):
 ```
 beip.ids
 {
