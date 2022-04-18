@@ -1,15 +1,4 @@
-Version=296
-Windows
-{
-  MDIPosition=(151,1059,1495,943)
-  Positions
-  {
-    {
-      Position=(151,1059,1495,943)
-      ActiveTab=0
-    }
-  }
-}
+Version=313
 Connections
 {
   Logging.RestoreBufferSizeCurrent=256
@@ -92,7 +81,7 @@ Connections
       Example="Alice asked Bob about Chris and Debbie"
       FindString
       {
-        MatchText="(Alice|Bob|Chris|Debbie)"
+        MatchText="\\b(Alice|Bob|Chris|Debbie)\\b"
         RegularExpression=true
       }
       Color
@@ -106,7 +95,7 @@ Connections
       Example="This is a very naughty sentence."
       FindString
       {
-        MatchText="(naughty|words|to|censor)"
+        MatchText="\\b(naughty|words|to|censor)\\b"
         RegularExpression=true
       }
       Filter
@@ -126,6 +115,93 @@ Connections
       {
         UseForeColor=true
         ForeHash=true
+      }
+    }
+    {
+      Description="Spawn Windows"
+      Disabled=true
+      Triggers
+      {
+        AfterCount=2
+        {
+          Description="[Channel] Tabs for specific channels"
+          Example="[Shouts] Hi everybody!"
+          FindString
+          {
+            MatchText="^\\[(Public|Private|Shouts|You|Get|The|Idea)\\]"
+            RegularExpression=true
+          }
+          Spawn
+          {
+            Active=true
+            Title="\\1"
+            TabGroup="Channels"
+          }
+        }
+        {
+          Description="[Channel] Tabs for any channel matching a pattern"
+          Example="[Public] Hi everybody!"
+          FindString
+          {
+            MatchText="^\\[([^\\]]+)\\]"
+            RegularExpression=true
+          }
+          Spawn
+          {
+            Active=true
+            Title="\\1"
+            TabGroup="Channels"
+          }
+        }
+        {
+          Description="[Channel] Single window"
+          Example="[Special] Channel message"
+          FindString
+          {
+            MatchText="^\\[Special\\]"
+            RegularExpression=true
+          }
+          Spawn
+          {
+            Active=true
+            Title="Special Messages"
+          }
+        }
+        {
+          Disabled=true
+          FindString.MatchText="Connection Messages in a Spawn"
+          Triggers
+          {
+            {
+              Description="Someone connected"
+              Example="Frank has connected"
+              FindString
+              {
+                MatchText="(.+) has connected"
+                RegularExpression=true
+              }
+              Spawn
+              {
+                Active=true
+                Title="Connections"
+              }
+            }
+            {
+              Description="Someone disconnected"
+              Example="Frank has disconnected"
+              FindString
+              {
+                MatchText="(.+) has disconnected"
+                RegularExpression=true
+              }
+              Spawn
+              {
+                Active=true
+                Title="Connections"
+              }
+            }
+          }
+        }
       }
     }
     {
@@ -420,56 +496,6 @@ Connections
             Replace=" \\1"
           }
           Speech.Say="Out of Character"
-        }
-      }
-    }
-    {
-      Description="[Channel] Spawn Tabs"
-      Example="[Public] Hi everybody!"
-      FindString
-      {
-        MatchText="^\\[([^\\]]+)\\]"
-        RegularExpression=true
-      }
-      Spawn
-      {
-        Active=true
-        Title="\\1"
-        TabGroup="Channels"
-      }
-    }
-    {
-      Disabled=true
-      FindString.MatchText="Connection Messages in a Spawn"
-      Triggers
-      {
-        {
-          Description="Someone connected"
-          Example="Frank has connected"
-          FindString
-          {
-            MatchText="(.+) has connected"
-            RegularExpression=true
-          }
-          Spawn
-          {
-            Active=true
-            Title="Connections"
-          }
-        }
-        {
-          Description="Someone disconnected"
-          Example="Frank has disconnected"
-          FindString
-          {
-            MatchText="(.+) has disconnected"
-            RegularExpression=true
-          }
-          Spawn
-          {
-            Active=true
-            Title="Connections"
-          }
         }
       }
     }

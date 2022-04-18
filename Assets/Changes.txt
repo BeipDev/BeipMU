@@ -1,3 +1,26 @@
+4.00.313 - 2022-4-18
+
+Removed trigger processing order and added ability to drag triggers before/after the servers/characters, which lets you have both orders at once
+Added right click menu for triggers to move to top/bottom
+Fixed edit windows having wrong font (broken in 312)
+Fixed inline gif flickering (introduced in 312)
+Fixed a crash in HTML logging when the output window's font is changed after logging has started.
+Fixed a crash/hang on a blank non regex trigger matching 'once per line'
+Fixed a crash on connection failure, the worker thread was accessing the socket after the socket was already deleted
+When 'Dark mode' enabled, scrollbars in main window are now dark theme
+Add 'Prevent smart quote mode in input windows' to hopefully prevent people accidentally turning this on once and for all (optional in case you actually want it)
+
+4.00.312 - 2022-3-27
+
+Add line images (aka Avatars) through GMCP & trigger actions
+Add support for Unicode DNS names (I didn't know this didn't work until I discovered that getaddrinfo doesn't support UTF8)
+Added 'Use Global Settings' toggle to text & input right click menus, to make it easy to share settings or override per window
+Added global/local settings for puppet windows, and they now save/restore their own docking layouts
+Added connection stats to character dialog (was previously only shown in the statistics window)
+Changed local echo setting to be per input window, and can be set in the input window settings
+Change keyboard shortcuts dialog to detect duplicate keys and give you option to unbind the duplicate
+Fix bug where input & history window sizes are not saved when closing the app (they're saved when closing a tab, but not the app)
+
 4.00.311 - 2022-2-17
 
 Added TLS 1.3 support (only a small change needed for it, works out of box on Windows 11, Windows 10 needs a reg key set to enable it)
@@ -6,7 +29,7 @@ Added 'Process Commands' option for alias results (to run / commands in the resu
 Added 'Stop Processing when hit' option for aliases (to prevent later aliases from breaking things)
 Changed connecting to create an 'Unnamed' character if not using a character, to make it more intuitive to use (will preserve settings/restore more automatically)
 Changed taskbar coloring to look cleaner (and work better in dark theme)
-Added 'Dark theme' to color BeipMU drawn GUI as dark (Windows drawn stuff will follow windows's mode)
+Added 'Dark theme' to color BeipMU drawn GUI as dark (Windows drawn stuff will follow windows' mode)
 Map selection filter is preserved across close/open of character tabs (like how origin/zoom is)
 Fixed bug in puppet 'Hide prefix' when prefix wasn't at the start of the line (could even crash)
 
@@ -404,7 +427,7 @@ Fixed a bad bug where shutting down windows doesn't save the config file (this r
 Fixed a bug where the keyboard macro text length would let you paste 64k but it wouldn't persist it
 Fixed some Wine issues on Linux where there'd be multiple disconnect messages and an error message
 
-3.00.278 - 2019-1-6If yo
+3.00.278 - 2019-1-6
 
 Added spawn tabs! Just specify a 'Tab group' name for a spawn trigger and multiple spawn windows will appear as a single tabbed window.
 Fixed regex search bug, where it wasn't skipping the previous match properly, which caused extra invalid matches (for example quoted text would not match correctly)
