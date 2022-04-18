@@ -3,9 +3,10 @@
 On connect, if the server sends the telnet 'WILL GMCP' BeipMU will reply with these two GMCP messages:
 
     Core.Hello {"client":"Beip", "version":"build number"}
-    Core.Supports.Set [ "Beip.Stats 1", "Beip.Tilemap 1", "Client.Media 1" ]
+    Core.Supports.Set [ "Beip.Stats 1", "Beip.Tilemap 1", "Beip.Id 1", "Client.Media 1" ]
     
 * [beip.stats](#beipstats)
+* [beip.id](#beipid)
 * [beip.tilemap](../TileMap.md)
 * [client.media](#clientmedia)
 
@@ -152,6 +153,68 @@ Examples:
 "ansi256(34)"
 "transparent"
 ```
+
+# beip.id
+
+![Image of Sample](/images/GMCP_Line.png)
+
+Aka "Player Avatars"
+
+Lets the server specify image links that are displayed to the left of a line of text. Typically this is to show an avatar for the player speaking, but it can be used to show any image on any line of text.
+
+## image-url
+The simplest way to get an image on a line is to send this before the line:
+```
+beip.line.image-url "a url of an image"
+```
+
+This is simple, but less efficient and flexible than the id messages below. Typically URLs will be much longer than an ID string, and the server has no way to update this URL after it is sent, or provide any extra text on hover. It's a good place to start as a simple test of inline images.
+
+## id
+The server will send this GMCP before a line of text:
+```
+beip.line.id "1234"
+```
+
+It is simply a single JSON string value that is the id to associate with this line.
+
+## ids
+The server will send this GMCP to specify details about an id. Sent in response to the client sending beip.id.request, or preemptively by servers keeping track of it themselves (see id.request):
+```
+beip.ids
+{
+  "1234":
+  {
+    "url":"a url",
+    "click-url":"the url to open when clicking on the image",
+    "hover-text":"text to show in the on-hover tooltip, can include newlines"
+  },
+  "another ID value":
+  {
+     "url":"update just the url"
+  },
+  "etc...":
+  {
+  }
+}
+```
+
+**url** is self explanatory. The URL of the image to display in a column to the left of a single line of text
+
+**click-url** the URL to use when clicking on the avatar image. This is optional. If not set it will use the "url" field.
+
+**hover-text** When showing a tooltip for the image, this text will be shown to the right. Useful for extra information about a player.
+
+If the server wishes to update the id information on the client, it can send this message at any time. It only has to send the fields that are changing. If "url" is changed, then the existing images will update to show the new image URL.
+
+## id.request
+
+Sent by the client to the server to request an 'ids' response:
+```
+beip.id.request "1234"
+```
+
+This is only sent if the client doesn't already have information about a previously received id. A server could just send an "ids" message before the first time it sends an "id" to a client, but then the server has to keep track of what ids it has already sent to the client. This message makes it easier for the server to know when to send ids.
 
 # client.media
 
