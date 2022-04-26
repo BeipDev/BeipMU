@@ -1,3 +1,8 @@
+4.00.314 - 2022-4-25
+
+Switch to .msix packaging for store
+Added ability to set ranges of times in /delay triggers and it'll do a random delay in that range. For example: `/delay 1m-5m <command>`
+
 4.00.313 - 2022-4-18
 
 Removed trigger processing order and added ability to drag triggers before/after the servers/characters, which lets you have both orders at once
