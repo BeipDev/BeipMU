@@ -16,8 +16,8 @@ For anyone who left a review on the previous version, please feel free to copy/p
 
 1. Launch app
 2. 'File->Export Configuration...' to save all current settings
-   Note: Restore logs aren't exported
-3. Optionally close BeipMU (can leave it open, just might get confusing)
+   * Note: Restore logs aren't exported
+4. Optionally close BeipMU (can leave it open, just might get confusing)
 
 ## Now to install the new non-game BeipMU:
 
