@@ -16,13 +16,14 @@ For anyone who left a review on the previous version, please feel free to copy/p
 
 1. Launch app
 2. 'File->Export Configuration...' to save all current settings
-   Note: Restore logs aren't exported
-3. Optionally close BeipMU (can leave it open, just might get confusing)
+   * Note: Restore logs aren't exported
+4. Optionally close BeipMU (can leave it open, just might get confusing)
 
 ## Now to install the new non-game BeipMU:
 
 1. https://www.microsoft.com/store/apps/9NFS86LKJLRX
 2. Launch new BeipMU
+   * The new one will say it's version 4.00.314 (if it launches with all the settings, it's likely the original one)
 3. Do 'File->Import Configuration...' and choose the file saved earlier.
    * When first closing it'll warn you about the original config, this is expected as you just replaced it.
    * Dark mode will not be applied until the app is closed and restarted.

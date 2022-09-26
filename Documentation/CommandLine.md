@@ -162,11 +162,17 @@ Examples:
     /delay 3.5m "WHO"
     (sends WHO after 3 & 1/2 minutes)
     
+    /delay 1-5s "attack"
+    (sends attack after a random time between 1 and 5 seconds)
+  
     /delay every 30s "status"
     (sends status every 30 seconds)
 
 This is used to delay a send to the server by a given amount of time. Multiple delayed commands can be queued up.
-For the time, the format is: number(h,m,s). 3m = 3 minutes, 10s = 10 seconds, etc. Fractional values also work, like 1.5s, 0.5h etc..
+For the time, the format is: number(optional end range)(h,m,s). 3m = 3 minutes, 10s = 10 seconds, etc. Fractional values also work, like 1.5s, 0.5h etc..
+
+The optional end range is just a '-' then a number. The end range number must be after the start range. Example: 1-5m  0-0.5s  0.5-1h
+
 
 ## /disconnect 
 Usage:
