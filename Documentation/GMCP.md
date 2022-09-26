@@ -121,7 +121,7 @@ beip.stats {
          "4_Money": null
       }
    }
-   "Online Players": null
+   "Online Players": { "values": null }
 }
 ```
 
