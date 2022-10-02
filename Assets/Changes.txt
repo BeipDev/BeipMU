@@ -3,7 +3,7 @@ OLD FILE, do not edit!
 4.00.314 - 2022-4-25
 
 Switch to .msix packaging for store
-Added ability to set ranges of times in /delay triggers and it'll do a random delay in that range. For example: `/delay 1-5m <command>`
+Added ability to set ranges of times in /delay triggers and it'll do a random delay in that range. For example: `/delay 1m-5m <command>`
 
 4.00.313 - 2022-4-18
 
