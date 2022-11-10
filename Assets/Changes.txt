@@ -1,9 +1,39 @@
-OLD FILE, do not edit!
+4.00.318 - 2022-11-10
+
+Added popup window "Cancel current capture" to easily stop a runaway spawn capture. Pops up after 5 seconds of capture.
+DNS lookups now show actual errors vs generic "Could not find host name" message
+For idle timers, send TELNET NOP when there is a blank string
+Fixed a crash if sending text while already trying to reconnect
+Catch errors on Badge Updating code, as it apparently fails sometimes
+
+4.00.317 - 2022-10-2
+
+Fixed blinking taskbar icon not blinking if badges are off
+Added 'Show activity on taskbar' tab context menu option, to not show badges/blink the OS taskbar on activity (stored per character/puppet)
+Fixed a really old crash on exit bug (happens after everything is saved, but is still lame to happen)
+
+4.00.316 - 2022-9-26
+
+Added taskbar badge to show count of windows with activity (Only works for store app version)
+Added vertical window captions for docked windows (right click a docked caption to set)
+Improve connect/error messages to be simpler and clearer
+Fix reconnect issue where Pueblo/etc isn't reset properly
+Fix Aliases/Macros to open the dialog and select the current server/character
+Fix crash when getting TLS error during connection (typically only happens on Wine)
+Fixed a trigger crash caused by /receive aborting a spawn capture
+Tweaked local echo handling with MUD prompts
+Fix GMCP avatar handling to work with puppets
+
+4.00.315 - 2022-5-20
+
+Move Text Conversion menu from Edit into the input window's right click menu
+Fix Pueblo entity glitch where some entities showed up as garbage
+Fix a network perf glitch (debug code that was accidentally released)
 
 4.00.314 - 2022-4-25
 
 Switch to .msix packaging for store
-Added ability to set ranges of times in /delay triggers and it'll do a random delay in that range. For example: `/delay 1m-5m <command>`
+Added ability to set ranges of times in /delay triggers and it'll do a random delay in that range. For example: `/delay 1-5m <command>`
 
 4.00.313 - 2022-4-18
 
