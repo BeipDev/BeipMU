@@ -1,3 +1,8 @@
+4.00.319 - 2022-11-14
+
+Fixed crash in tab completion, use after free (bug has existed for ages, only just made aware of it)
+Added "Animated images start as paused" option in preferences, so animated gifs do not play until unpaused
+
 4.00.318 - 2022-11-10
 
 Added popup window "Cancel current capture" to easily stop a runaway spawn capture. Pops up after 5 seconds of capture.
