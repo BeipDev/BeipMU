@@ -1,3 +1,12 @@
+4.00.320 - 2022-12-30
+
+Fixed a bug where if the window is maximized on startup it gets shifted slightly. Some overzealous "ensure window on screen" code added in 318 was the cause.
+Fixed a potentially crashing bug in regex handling when 'null' capture groups are in the match (for example, a capture group in an OR expression that doesn't get hit)
+Fixed a crash when trying to send text in a new tab (tries to process aliases but there's no server yet)
+Fixed a crash if selecting text, right clicking while still selected and doing 'Trigger on' in a new unconnected tab
+Fixed a bug in scripts calling Connection.Receive(...) during a Connection.Receive(...) now will output an error message vs recursing incorrectly
+Moved 'Show new content marker' into the text window dialog, and made it take effect properly (applies globally, previously required changing the text window settings for it to apply, which is broken)
+
 4.00.319 - 2022-11-14
 
 Fixed crash in tab completion, use after free (bug has existed for ages, only just made aware of it)
