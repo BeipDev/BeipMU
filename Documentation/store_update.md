@@ -23,7 +23,7 @@ For anyone who left a review on the previous version, please feel free to copy/p
 
 1. https://www.microsoft.com/store/apps/9NFS86LKJLRX
 2. Launch new BeipMU
-   * The new one will say it's version 4.00.314 (if it launches with all the settings, it's likely the original one)
+   * The new one will say it's version 4.00.314, or something higher than 312. If it launches with all the settings, it's likely the original one.
 3. Do 'File->Import Configuration...' and choose the file saved earlier.
    * When first closing it'll warn you about the original config, this is expected as you just replaced it.
    * Dark mode will not be applied until the app is closed and restarted.
