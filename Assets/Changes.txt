@@ -1,3 +1,10 @@
+4.00.321 - 2022-1-23
+
+Fixed a potential hang in certain conditions (posted message processing message while background thread posts a message)
+Fixed a crash in triggers where if an empty child trigger is created, then the app restarted, it will crash opening the trigger dialog
+Fixed Midnight logging rollover, it was accidentally broken in a code simplification in the last release
+Fixed 'Use Global Settings' on input history window
+
 4.00.320 - 2022-12-30
 
 Fixed a bug where if the window is maximized on startup it gets shifted slightly. Some overzealous "ensure window on screen" code added in 318 was the cause.
