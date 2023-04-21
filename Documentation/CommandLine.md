@@ -308,12 +308,22 @@ Opens a new window.
 ## /newedit
 Usage:
 
-    /newedit title='string' capture='#' capture_skip='#' spellcheck='t/f'
+    /newedit title='string' capture='#' capture_skip='#' spellcheck='t/f' prepend='string' append='string'
 
 Opens a new editor window. All attributes are optional, and are in XML style syntax (so ' or " works to surround one). When you click 'Send' there is no alias or command processing done to what is sent. The content is sent directly.
 
 The capture attribute is useful to populate the editor window with the last # of lines in the output window. The capture_skip lets you skip over a certain # of lines before capturing.
 
+All parameters are optional and can be in any order.
+
+Parameters:
+* title = Title of the edit window
+* capture = Number of lines of the output window to capture into the edit box
+* capture_skip = Number of lines of the output window to skip before beginning capture (used to ignore some lines)
+* spellcheck = Turn on spell checking, defaults to 't'
+* prepend = String to prepend to start of captured text, to have newlines, use XML entities for special chars, like `&#10;` for newlines
+* append = String to append to end of captured text
+  
 ## /newinput
 Usage:
 
