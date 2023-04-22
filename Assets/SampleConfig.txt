@@ -1,4 +1,8 @@
-Version=313
+Version=322
+Windows
+{
+  MDIPosition=(228,228,2880,1537)
+}
 Connections
 {
   Logging.RestoreBufferSizeCurrent=256
@@ -20,7 +24,7 @@ Connections
     LambdaMOO
     {
       Host="lambda.moo.mud.org:8888"
-      Info="Website: https://www.cc.gatech.edu/classes/cs8113e_99_winter/lambda.html"
+      Info="https://www.cc.gatech.edu/classes/cs8113e_99_winter/lambda.html"
       Characters
       {
         Guest.Connect="connect guest"
@@ -40,6 +44,239 @@ Connections
             Active=true
             Title="WHO"
             CaptureUntil="^Total: [0-9]+ players"
+          }
+        }
+      }
+    }
+    CthulhuMud
+    {
+      Host="cthulhumud.com:8889"
+      Info="\r\nhttp://www.cthulhumud.com/\r\n"
+      Characters
+      {
+        Unnamed
+        {
+          Docking.ClientSize={2858,1415}
+          MainWindowSettings.InputSize=25
+        }
+      }
+    }
+    "Heroes Assemble Mush"
+    {
+      Host="mushhaven.com:3000"
+      Info="https://heroesassemble.mushhaven.com/index.php?title=Main_Page"
+      Pueblo=true
+      Characters
+      {
+        Guest
+        {
+          Connect="/delay 3s \"connect %NAME% %PASSWORD%\""
+          Password="guest"
+          Docking
+          {
+            ClientSize={2858,1415}
+            DockedPanes
+            {
+              {
+                Side=1
+                Size=214
+                Windows
+                {
+                  {
+                    Size=1389
+                    Type=1
+                    SpawnWindow
+                    {
+                      Title="ChannelSpawn"
+                      TextWindow
+                      {
+                        TimeFormat=2
+                        Margins=(5,0,0,20)
+                        LineWrappedIndent=20
+                        FixedWidthChars=82
+                        Font.Size=19
+                      }
+                    }
+                  }
+                  {
+                    Size=1464
+                    Type=1
+                    SpawnWindow
+                    {
+                      Title="GroupSpawn"
+                      TextWindow
+                      {
+                        TimeFormat=2
+                        Margins=(5,0,0,20)
+                        LineWrappedIndent=20
+                        FixedWidthChars=82
+                        Font.Size=19
+                      }
+                    }
+                  }
+                }
+              }
+              {
+                Side=3
+                Size=81
+                Windows
+                {
+                  {
+                    Size=2858
+                    InputWindow
+                    {
+                      AutoSizeVertically=false
+                      MinimumHeight=5
+                      MaximumHeight=20
+                      Font.Size=19
+                    }
+                  }
+                }
+              }
+            }
+          }
+          MainWindowSettings
+          {
+            InputSize=25
+            HistorySize=0
+            History=false
+            History
+            {
+              ForeColor=RGB(0,128,64)
+              Font.Size=15
+            }
+          }
+        }
+      }
+      Triggers
+      {
+        {
+          Description="Outgoing Page Trigger"
+          FindString
+          {
+            MatchText="(^Long distance to|^You paged|^You page)(.*?)$"
+            RegularExpression=true
+            StartsWith=true
+          }
+          Paragraph
+          {
+            UseAlignment=true
+            Alignment=2
+            "UseIndent_Left"=true
+            "Indent_Left"=15
+            "UsePadding_Top"=true
+            "Padding_Top"=7
+            "UsePadding_Bottom"=true
+            "Padding_Bottom"=7
+            UseBorder=true
+            Border=3
+            UseBorderStyle=true
+            BorderStyle=1
+            UseBackgroundColor=true
+            Background=RGB(0,18,36)
+          }
+          Color.ForeColor=RGB(128,128,0)
+        }
+        {
+          Description="Incoming Page Trigger"
+          FindString
+          {
+            MatchText="^(From afar|(.*?) pages:|(.*?)\\) pages|(.*?) pages (.*?) and (.*?):)(.*?)$"
+            RegularExpression=true
+            StartsWith=true
+          }
+          Paragraph
+          {
+            UseAlignment=true
+            "UseIndent_Right"=true
+            "Indent_Right"=10
+            "UsePadding_Top"=true
+            "Padding_Top"=7
+            "UsePadding_Bottom"=true
+            "Padding_Bottom"=7
+            UseBorder=true
+            Border=3
+            UseBorderStyle=true
+            BorderStyle=1
+            UseBackgroundColor=true
+            Background=RGB(0,32,0)
+          }
+          Color
+          {
+            ForeColor=RGB(182,123,1)
+            UseForeColor=true
+          }
+        }
+        {
+          Description="Activity Triggers"
+          Disabled=true
+          FindString.MatchText=""
+          Triggers
+          {
+            {
+              Description="-=<WATCH>=-  Activity"
+              FindString
+              {
+                MatchText="\\-\\=\\<(WATCH|BBS)\\>\\=\\- .*"
+                RegularExpression=true
+              }
+              Activate.NoActivity=true
+            }
+          }
+        }
+        {
+          Description="Channel Spawns"
+          Disabled=true
+          FindString.MatchText=""
+          Triggers
+          {
+            {
+              Description="Public Spawn"
+              FindString
+              {
+                MatchText="^\\<(Public|Role-Play|TV and Movies|Politics|Comics and Games)\\>(.*?)$"
+                RegularExpression=true
+                StartsWith=true
+              }
+              Spawn
+              {
+                Active=true
+                Title="ChannelSpawn"
+              }
+              Activate.NoActivity=true
+            }
+            {
+              Description="Guest Spawn"
+              FindString
+              {
+                MatchText="^\\<(Guest|Questions)\\>(.*?)$"
+                RegularExpression=true
+                StartsWith=true
+              }
+              Spawn
+              {
+                Active=true
+                Title="ChannelSpawn"
+                Copy=true
+              }
+              Activate.NoActivity=true
+            }
+            {
+              Description="Group Spawn"
+              OncePerLine=true
+              FindString
+              {
+                MatchText="^\\<(Avengers|Bat Family|Birds of Prey|Defenders|Excalibur|Gotham|Guardians|JL Dark|Justice League|Light|Mutants|Mystic Arts|Ninja Turtles|Secret Warriors|SHIELD|Street Level|Spider-Verse|Xaviers|X-Men)\\-OOC\\>(.*?)$"
+                RegularExpression=true
+                StartsWith=true
+              }
+              Spawn
+              {
+                Active=true
+                Title="GroupSpawn"
+              }
+              Activate.NoActivity=true
+            }
           }
         }
       }
@@ -120,6 +357,7 @@ Connections
     {
       Description="Spawn Windows"
       Disabled=true
+      FindString.MatchText=""
       Triggers
       {
         AfterCount=2
@@ -208,7 +446,11 @@ Connections
       Description="Modify quoted text"
       Example="Frank says, \"I'm speaking!\", then laughs."
       Disabled=true
-      FindString.RegularExpression=true
+      FindString
+      {
+        MatchText=""
+        RegularExpression=true
+      }
       Triggers
       {
         {
@@ -266,7 +508,11 @@ Connections
     {
       Description="Markdown"
       Disabled=true
-      FindString.RegularExpression=true
+      FindString
+      {
+        MatchText=""
+        RegularExpression=true
+      }
       Triggers
       {
         {
@@ -323,6 +569,7 @@ Connections
     {
       Description="Text bubbles"
       Disabled=true
+      FindString.MatchText=""
       Triggers
       {
         {
@@ -502,11 +749,13 @@ Connections
     {
       Description="Stat Panes"
       Disabled=true
+      FindString.MatchText=""
       Triggers
       {
         {
           Description="Character Attributes"
           Disabled=true
+          FindString.MatchText=""
           Triggers
           {
             {
@@ -586,6 +835,7 @@ Connections
     {
       Description="Nicknames for Friends"
       Folder=true
+      FindString.MatchText=""
       Aliases
       {
         {
