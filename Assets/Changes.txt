@@ -1,3 +1,18 @@
+4.00.322 - 2022-4-21
+
+Added Password field for characters, so can use %PASSWORD% in connect strings (also added %NAME% for completeness)
+Added per tab variables, see /set /unset /printenv commands. Available in the send trigger action, and aliases
+Removed "Explore other worlds" in favor of new "Sample Worlds" section (to be populated more soon)
+Added ability to import/export worlds (includes all characters, their triggers, etc, be sure to copy and remove your passwords/notes before exporting!)
+Made /@ work in all places that / commands will work (like send triggers)
+Shift+Double click on text in the output window will select the whole paragraph. Double clicking by itself just selects the word
+Reworked tooltips to not use TrackMouseEvent, so should work better on Wine
+Added option to ignore errors when trying to connect in preferences
+Added option for puppets, "Remove accidentally typed send prefix" (Tofof)
+Added option to hide title bars on docked windows, View->Show Hidden Captions to override
+Fixed resizing of the window to prevent docked windows from moving things offscreen, now they will shrink to fit when space runs out
+Added 'prepend' and 'append' parameters to /newedit command
+
 4.00.321 - 2022-1-23
 
 Fixed a potential hang in certain conditions (posted message processing message while background thread posts a message)
