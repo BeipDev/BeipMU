@@ -67,8 +67,6 @@ Note that automated logging only works if you connect to your character as descr
 
 To connect to a character, click on Connect, expand the character list next to the server, then double-click on the character to connect. You can also use the little 'head' icon on the bottom left of the window to connect to any character in any world vs going through the world dialog.
 
-After connecting to a server with a character, BeipMU will send the 'Connect String' to the server and start logging if you have any logs setup.
-
 Another way to connect is to use the input window command `/connect [server] [character]`. To connect to our example character we would use the following command:
 
     /connect Compy Beip
