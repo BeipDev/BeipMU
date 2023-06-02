@@ -61,8 +61,6 @@ Environment variables are processed in the log filename, so if you use Dropbox a
 
 If you would prefer BeipMU to include the current date in the log file name, select Append Current Date. Otherwise all logs for this character will be saved to the same file.
 
-Note that automated logging only works if you connect to your character as described in the next section.
-
 ## Connecting to a character
 
 To connect to a character, click on Connect, expand the character list next to the server, then double-click on the character to connect. You can also use the little 'head' icon on the bottom left of the window to connect to any character in any world vs going through the world dialog.
