@@ -1,4 +1,18 @@
-4.00.322 - 2022-4-21
+4.00.323 - 2023-7-1
+
+No more menu bar! Menu is now a burger menu on the left of the taskbar (alt still works to activate it)
+Rewritten settings dialogs, all in one place and hopefully much easier to use
+Dark mode now applies to the title bar now that there is no menu bar
+Taskbar is rewritten in Direct2D, so prettier icons and an updated design
+Menus now show current keyboard shortcuts vs the defaults
+Added inline image support for Tenor links
+Change GUI font to match size chosen in dialog (previously it didn't match, it was incorrectly using cell height vs font height)
+Fixed a weird issue with setting the input window font, where it wouldn't 'stick' if you have multiple keyboard input languages.
+Fixed docked windows being able to be sized down to zero, now will have a minimum size.
+Add line/column display to editor windows
+Added right click option to show/hide 'Typed #' indicator on taskbar to give more room for tabs
+
+4.00.322 - 2023-4-21
 
 Added Password field for characters, so can use %PASSWORD% in connect strings (also added %NAME% for completeness)
 Added per tab variables, see /set /unset /printenv commands. Available in the send trigger action, and aliases
@@ -13,7 +27,7 @@ Added option to hide title bars on docked windows, View->Show Hidden Captions to
 Fixed resizing of the window to prevent docked windows from moving things offscreen, now they will shrink to fit when space runs out
 Added 'prepend' and 'append' parameters to /newedit command
 
-4.00.321 - 2022-1-23
+4.00.321 - 2023-1-23
 
 Fixed a potential hang in certain conditions (posted message processing message while background thread posts a message)
 Fixed a crash in triggers where if an empty child trigger is created, then the app restarted, it will crash opening the trigger dialog
