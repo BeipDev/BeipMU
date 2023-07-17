@@ -61,19 +61,14 @@ Environment variables are processed in the log filename, so if you use Dropbox a
 
 If you would prefer BeipMU to include the current date in the log file name, select Append Current Date. Otherwise all logs for this character will be saved to the same file.
 
-Note that automated logging only works if you connect to your character as described in the next section.
-
 ## Connecting to a character
 
-To connect to a character, click on Connect, expand the character list next to the server, then double-click on the character to connect. 
+To connect to a character, click on Connect, expand the character list next to the server, then double-click on the character to connect. You can also use the little 'head' icon on the bottom left of the window to connect to any character in any world vs going through the world dialog.
 
-An alternative method is to use the /connect and /char BeipMU commands in the input window. Apart from the direct connect method, the /connect command will also use the name for the server that you gave it in the World List and connects you to the server. Likewise, the /char command uses the name for the character on the server you have connected to. The /char command tells BeipMU which character you have connected to, sends the character’s connect string to the server, and starts logging if you have specified a file under the character settings.
+Another way to connect is to use the input window command `/connect [server] [character]`. To connect to our example character we would use the following command:
 
-To connect to our example character using the input window we would use the following two commands:
-
-    /connect Compy
-    /char Beip
-
+    /connect Compy Beip
+    
 ## Macros, triggers and aliases
 
 Keyboard macros, triggers and aliases make your BeipMU experience more effective by automating commands and responding to world output.
