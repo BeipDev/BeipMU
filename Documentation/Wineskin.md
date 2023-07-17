@@ -2,7 +2,7 @@
 
 ## Install Fonts
 
-If you don't already have it, find and download the Segoe UI and the Segoe UI Emoji ttf files. Any friend with a Windows PC can give these to you. I don't know a guaranteed safe place for it.
+If you don't already have it, find and download the Segoe UI and the Segoe UI Emoji ttf files. Any friend with a Windows PC can give these to you. I don't know a guaranteed safe place for it. (Or ask on our Discord and we can send it to you)
 
 These should be manually dragged to the Mac (Or Macintosh HD)/Library/Font folder and dropped there. That should be all it takes to activate them. It seems to be more reliable than dragging it into the user one.
 
