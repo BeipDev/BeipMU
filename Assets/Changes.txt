@@ -1,3 +1,13 @@
+4.00.324
+
+Added taskbar option to show/hide logging indicator
+Added /roll command for simulated dice rolls
+Added regex searching to the find dialog
+Replaced old remaining 16-color icons in various dialogs
+Fixed minor issue in settings where setting a keyboard shortcut then pressing 'ok' loses the just set shortcut
+Fixed output window not drawing issue caused by Taskbar going to Direct2D
+Stats window is now Direct2D, so emojis in stats are now multcolored. Also no chance of flicker anymore
+
 4.00.323 - 2023-7-1
 
 No more menu bar! Menu is now a burger menu on the left of the taskbar (alt still works to activate it)
