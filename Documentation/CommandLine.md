@@ -31,6 +31,7 @@
   - [/newedit](#newedit)
   - [/newinput](#newinput)
   - [/ping](#ping)
+  - [/printenv](#printenv)
   - [/puppet](#puppet)
   - [/puppets](#puppets)
   - [/quit](#quit)
@@ -38,12 +39,14 @@
   - [/reconnect](#reconnect)
   - [/receive](#receive)
   - [/resetscript](#resetscript)
+  - [/set](#set)
   - [/setinput](#setinput)
   - [/silence](#silence)
   - [/slist](#slist)
   - [/switchtab](#switchtab)
   - [/tabcolor](#tabcolor)
   - [/ttype](#ttype)
+  - [/unset](#unset)
   - [/wall](#wall)
 
 # Command Line Commands
@@ -344,6 +347,13 @@ Examples:
 
 Sends the given text to the server and times how long it takes for the server to send a reply. Useful in benchmarking or testing network latency. Note that if lots of data is being received that a /ping won't know which data is from the text being sent, so it will give incorrect results in this case.
 
+## /printenv
+Usage:
+  
+    /printenv
+  
+Shows the list of variabes in the output window.
+  
 ## /puppet 
 Usage:
 
@@ -413,6 +423,15 @@ Usage:
 
 Will reset the current scripting engine, removing all currently running scripts and hooks.  This will also switch the scripting language to what is currently set in the preferences dialog, so the language can change after this. 
 
+## /set
+Usage:
+  
+    /set <variable name>=<value>
+
+Sets a value into a per window variable list. If the variable doesn't exist, it is created. Variables can have spaces and any other characters in them, except for the '=' char as it's used to separate the sides. Variables can be set/used in send trigger actions and aliases.
+  
+Variables are case sensitive.
+
 ## /setinput
 Usage:
 
@@ -461,6 +480,13 @@ Usage:
 
 Set telnet terminal type (Default = "Beip"). With this you can pretend to be any other terminal type.
 
+## /unset
+Usage:
+  
+    /unset <variable name>
+  
+Deletes a variable. See /set for more info
+  
 ## /wall
 Usage:
 
