@@ -19,6 +19,10 @@
 * Press Quit
 * Click the BeipMU wrapper to launch
 
+## Install Fonts
+
+BeipMU needs the 'Segoe UI Emoji' font for the icons to appear properly (seguiemj.ttf), you can find a copy of this font on any Windows 10/11 system and install it from there.
+
 # Known glitches
 
 Most everything works well, but here are a couple of known glitches.
