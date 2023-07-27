@@ -39,6 +39,7 @@
   - [/reconnect](#reconnect)
   - [/receive](#receive)
   - [/resetscript](#resetscript)
+  - [/roll](#roll)
   - [/set](#set)
   - [/setinput](#setinput)
   - [/silence](#silence)
@@ -422,6 +423,18 @@ Usage:
     /resetscript 
 
 Will reset the current scripting engine, removing all currently running scripts and hooks.  This will also switch the scripting language to what is currently set in the preferences dialog, so the language can change after this. 
+
+## /roll
+Usage:
+
+    /roll #d#[+#]
+
+Examples:
+
+    /roll 2d6
+    /roll 1d20
+
+Dice roll, uses standard syntax of (number of dice)d(number of sides) with an optional +extra number. Outputs every die rolled, the totals, and the average.
 
 ## /set
 Usage:
