@@ -2,6 +2,7 @@
   * [Interface Descriptions](#interface-descriptions)
   * [Windows OLE Types](#windows-ole-types)
   * [App](#app)
+  * [ArrayUInt](#arrayuint)
   * [Character](#character)
   * [Characters](#characters)
   * [Connection](#connection)
@@ -195,6 +196,18 @@ Appends a string to the debug window.
     OutputDebugHTML(String text)
 
 Same as OutputDebugText, except that HTML codes in the bstr are parsed. 
+
+## ArrayUInt
+
+    [default] unsigned Item(VARIANT var) 
+
+Returns unsigned integer 'var'. var is typically an integer index
+
+Note: instead of array.item(5), array(5) can also be used since it's a default method
+
+    [read] unsigned int Count 
+
+Used by the trigger script callback to pass an array of integers
 
 ## Character
 
