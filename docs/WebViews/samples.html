@@ -1,0 +1,70 @@
+<html>
+<script>
+
+window.onload = function() {
+  window.chrome.webview.hostObjects.options.defaultSyncProxy=true
+  window.chrome.webview.hostObjects.window.connection.SetOnDisplay(onDisplay);
+}
+
+function handleKeyPress(event) {
+  if (event.keyCode === 13) { // 13 is the Enter key
+    let textBox = document.getElementById('textBox');
+    let text = textBox.value;
+    window.chrome.webview.hostObjects.window.connection.send(text);
+    textBox.value = ''; // Clear the text box
+  }
+}
+
+function onDisplay(line) {
+  let text=line.String;
+  document.getElementById("last_text").innerHTML = text;
+
+  if (text.toLowerCase().includes("bananas")) {
+    // Show the message
+    document.getElementById("bananas_seen").innerHTML = "Bananas detected!";
+        
+    // After 5 seconds, clear the message
+    setTimeout(function() {
+      document.getElementById("bananas_seen").innerHTML = "";
+      }, 5000);
+    }
+}
+</script>
+<body>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: 'Calibri', sans-serif;
+        }
+        h1 {
+            color: green;
+        }
+        h2 {
+            color: lightblue
+        }
+        h3 {
+            color: lightpink
+        }
+    </style>
+
+    <h1>Hello!</h1>
+    This is a web page! <b>Can you tell?</b><br>
+    <h2>Example features:</h2>
+
+    <h3>Sending text</h3>
+    Button to send to the current connection. Sends "Button clicked"<br>
+    <button onclick="window.chrome.webview.hostObjects.window.output.write('Button clicked!')">Send Example</button><br>
+    <br>
+    Edit box to send the typed text when you press enter:<br>
+    <input type="text" id="textBox" onkeydown="handleKeyPress(event)" />
+
+    <h3>Receiving text</h3>
+    Output hook to show the last line of text received from the server:<br>
+    <p>Text last seen:<span id="last_text">(none)</span></p>
+
+    Output hook to watch for a particular word from the server:<br>
+    <p>Bananas seen:<span id="bananas_seen">(none)</span></p>
+
+</body>
+</html>
