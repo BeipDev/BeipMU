@@ -5,7 +5,6 @@
   - [/ansireset](#ansireset)
   - [/autolog](#autolog)
   - [/capturecancel](#capturecancel)
-  - [/char](#char)
   - [/chars](#chars)
   - [/clear](#clear)
   - [/close](#close)
@@ -39,6 +38,7 @@
   - [/reconnect](#reconnect)
   - [/receive](#receive)
   - [/resetscript](#resetscript)
+  - [/roll](#roll)
   - [/set](#set)
   - [/setinput](#setinput)
   - [/silence](#silence)
@@ -90,19 +90,6 @@ Usage:
     /capturecancel
     
 Cancel any spawn capture in the current window. Useful if your spawn gets stuck capturing and your 'stop capture' trigger isn't working properly yet.
-
-## /char
-Usage:
-
-    /char <character shortcut>
-
-Examples:
-
-    /char Alpha
-    /char Beip
-
-When you are connected to a server from the world list but did not connect a character yet, this will send the character's connect string and BeipMU will show you as connected to that character.  At this point it will be as though you connected through that character initially, as all of that characters triggers/macros/etc will apply. 
-This is a separate command because it was frequently the case where someone would /connect to a world, do a WHO to see if their friends were there, and if they were, then do a /char to connect and say hi.  Rather than connecting as their char and disconnecting afterwards.  
 
 ## /chars
 Usage:
@@ -422,6 +409,18 @@ Usage:
     /resetscript 
 
 Will reset the current scripting engine, removing all currently running scripts and hooks.  This will also switch the scripting language to what is currently set in the preferences dialog, so the language can change after this. 
+
+## /roll
+Usage:
+
+    /roll #d#[+#]
+
+Examples:
+
+    /roll 2d6
+    /roll 1d20
+
+Dice roll, uses standard syntax of (number of dice)d(number of sides) with an optional +extra number. Outputs every die rolled, the totals, and the average.
 
 ## /set
 Usage:
