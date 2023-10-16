@@ -1,12 +1,30 @@
-4.00.324
+4.00.325
+
+Remove border around tabbed spawn text windows
+Added /script command to run a 1-line script, so that simple scripts can run in more places like aliases
+Added minimize button to trigger/aliases/macros dialogs
+Added Spawn trigger option "If in tab group, switch to this tab" to show the tab with the latest activity
+Added 'ranges' paramer to script triggers that holds the regex matched ranges of the line of text
+Fixed script errors not showing up when using script triggers & callbacks
+Updated to PCRE 10.42 (from PCRE 10.34)
+Changed regexes so that zero length matches are allowed (so can match empty lines) they're only once per line at most
+Fixed message box popups (yes/no question popups) from blocking output window updates
+Added connection.SetOnGMCP(function, userdata) so scripts can handle GMCP
+Added app.ActiveXObject(name) to replace missing ActiveScript 'new ActiveXObject' function
+Added text selection right click option 'Delete selected lines'
+Added 'Choose' button to startup script dialog
+
+4.00.324 - 2023-7-26
 
 Added taskbar option to show/hide logging indicator
 Added /roll command for simulated dice rolls
 Added regex searching to the find dialog
-Replaced old remaining 16-color icons in various dialogs
+Replaced old remaining 16-color icons in various dialogs with modern images
 Fixed minor issue in settings where setting a keyboard shortcut then pressing 'ok' loses the just set shortcut
-Fixed output window not drawing issue caused by Taskbar going to Direct2D
+Fixed inactive output window not drawing under high output volume issue caused by Taskbar going to Direct2D
 Stats window is now Direct2D, so emojis in stats are now multcolored. Also no chance of flicker anymore
+Minor fix to undocked spawn windows, so they minimize to the taskbar vs to a corner of the desktop
+Fixed issue where taskbar stops updating after internal device loss
 
 4.00.323 - 2023-7-1
 

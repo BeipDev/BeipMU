@@ -460,3 +460,16 @@ Output is as follows:
 
     /@ maxhp=1000; hpbar(20);
     [                    ]45
+
+# Script to handle GMCP
+
+Displays the package & stringified JSON data. Users of this are expected to process the data vs just display it.
+
+    /@function Test(gmcp, window) {
+     var p=gmcp.indexOf(" ");
+     var package=gmcp.substring(0, p);
+     var json=JSON.parse(gmcp.substring(p+1));
+     window.output.write("GMCP package:"+package);
+     window.output.write("GMCP data:"+JSON.stringify(json));
+    }
+    window.connection.SetOnGMCP(Test, window);
