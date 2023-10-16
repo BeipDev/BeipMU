@@ -17,15 +17,15 @@ function handleKeyPress(event) {
 
 function onDisplay(line) {
   let text=line.String;
-  document.getElementById("last_text").innerHTML = text;
+  document.getElementById("last_text").innerText = text;
 
   if (text.toLowerCase().includes("bananas")) {
     // Show the message
-    document.getElementById("bananas_seen").innerHTML = "Bananas detected!";
+    document.getElementById("bananas_seen").innerText = "Bananas detected!";
         
     // After 5 seconds, clear the message
     setTimeout(function() {
-      document.getElementById("bananas_seen").innerHTML = "";
+      document.getElementById("bananas_seen").innerText = "";
       }, 5000);
     }
 }
