@@ -2,6 +2,7 @@
   * [Interface Descriptions](#interface-descriptions)
   * [Windows OLE Types](#windows-ole-types)
   * [App](#app)
+  * [ArrayUInt](#arrayuint)
   * [Character](#character)
   * [Characters](#characters)
   * [Connection](#connection)
@@ -26,6 +27,7 @@
   * [Worlds](#worlds)
 - [Advanced](#advanced)
   * [Using BeipMU from Visual Basic](#using-beipmu-from-visual-basic)
+  * [Trigger Scripts](#trigger-scripts)
 
 <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
@@ -195,6 +197,18 @@ Appends a string to the debug window.
     OutputDebugHTML(String text)
 
 Same as OutputDebugText, except that HTML codes in the bstr are parsed. 
+
+## ArrayUInt
+
+    [default] unsigned Item(VARIANT var) 
+
+Returns unsigned integer 'var'. var is typically an integer index
+
+Note: instead of array.item(5), array(5) can also be used since it's a default method
+
+    [read] unsigned int Count 
+
+Used by the trigger script callback to pass an array of integers
 
 ## Character
 
@@ -822,3 +836,28 @@ At this point, you can use Visual Basic's object browser and 'BeipMU 2.00' will 
 
 /activate - This puts BeipMU into OLE's ROT (Running Object Table).  Think of it as a way to tell Windows that BeipMU is running and it's ready to handle requests from other apps.  Without doing this, VB will complain that BeipMU is not running.  BeipMU does not currently support creation from scratch by other apps.
 
+## Trigger Scripts
+
+For those who really need to do weird things, you can set the name of a script function to be called when a trigger hits. Here's an example of the function demonstrating using each of the parameters:
+
+    function Test(window, line, ranges)
+    {
+      window.output.write("Trigger hit");
+      var string="Ranges: ";
+      for(var i=0;i<ranges.Count;i++)
+        string+=String(ranges(i))+" ";
+      window.output.write(string);
+    
+      var matches="Matches: ";
+      for(var i=0;i<ranges.Count;i+=2)
+        matches+="\""+line.string.substring(ranges(i), ranges(i+1))+"\"  ";
+      window.output.write(matches);
+    }
+
+When used with a trigger with this Matcharoo: `Foo (\w+) (\w+) (\w+)`
+And this line being received: `This is a foo one two three`
+Will output this:
+
+    Trigger hit
+    Ranges: 10 27 14 17 18 21 22 27 
+    Matches: "foo one two three"  "one"  "two"  "three"  
