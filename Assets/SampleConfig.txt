@@ -355,6 +355,19 @@ Connections
       }
     }
     {
+      Description="Empty line"
+      FindString
+      {
+        MatchText="^$"
+        RegularExpression=true
+      }
+      Filter
+      {
+        Active=true
+        Replace="(empty line detected)"
+      }
+    }
+    {
       Description="Spawn Windows"
       Disabled=true
       FindString.MatchText=""
