@@ -1,5 +1,6 @@
 4.00.325
 
+Added WebView `/webview url="<url>"`
 Remove border around tabbed spawn text windows
 Added /script command to run a 1-line script, so that simple scripts can run in more places like aliases
 Added minimize button to trigger/aliases/macros dialogs
