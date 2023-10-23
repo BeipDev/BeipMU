@@ -4,14 +4,15 @@
 
 window.onload = function() {
   window.chrome.webview.hostObjects.options.defaultSyncProxy=true
-  window.chrome.webview.hostObjects.window.connection.SetOnDisplay(onDisplay);
+  window.chrome.webview.hostObjects.client.SetOnDisplay(onDisplay, ".*");
+  window.chrome.webview.hostObjects.client.SetOnDisplayCapture(onCapture, onCaptureChanged, "{{begin capture}}", "{{end capture}}");
 }
 
 function handleKeyPress(event) {
   if (event.keyCode === 13) { // 13 is the Enter key
     let textBox = document.getElementById('textBox');
     let text = textBox.value;
-    window.chrome.webview.hostObjects.window.connection.send(text);
+    window.chrome.webview.hostObjects.client.send(text);
     textBox.value = ''; // Clear the text box
   }
 }
@@ -28,8 +29,50 @@ function onDisplay(line) {
     setTimeout(function() {
       document.getElementById("bananas_seen").innerText = "";
       }, 5000);
-    }
+  }
+  return true;
 }
+
+function onCaptureChanged(line, started)
+{
+  document.getElementById("capture_state").innerText = started ? "Capturing" : "Not capturing";
+
+  if(started)
+  {
+    let list = document.getElementById("itemList");
+    while (list.hasChildNodes()) {  
+      list.removeChild(list.firstChild);
+    }
+  }
+}
+
+function onCapture(line)
+{
+  let regex = "^\\s\\s+?(.+?)\\s\\s+(?:(.+))?";
+  let match = line.string.match(regex);
+
+  if (match) {
+      AddListItem(match[1]);
+      AddListItem(match[2]);
+  } else
+    AddListItem(line.string);
+}
+
+function AddListItem(string)
+{
+  let node = document.createElement("LI");
+  let textnode = document.createTextNode(string);
+  node.appendChild(textnode);
+
+   // Add the onclick event to the new item
+  node.onclick = function() {
+    window.chrome.webview.hostObjects.window.output.write("You clicked on:"+string);
+    window.chrome.webview.hostObjects.client.send(string);
+  };
+
+  document.getElementById("itemList").appendChild(node);
+}
+
 </script>
 <body>
     <style>
@@ -66,6 +109,12 @@ function onDisplay(line) {
 
     Output hook to watch for a particular word from the server:<br>
     <p>Bananas seen:<span id="bananas_seen">(none)</span></p>
+
+    <h3>Text Capture</h3>
+
+    <p>Watching for text between {{begin capture}} and {{end capture}}</p>
+    <p>Capture State: <span id="capture_state">Not capturing</span></p>
+    <ul id="itemList" style="height: 200px; overflow-y: scroll; border: 1px solid white;"></ul>
 
 </body>
 </html>
