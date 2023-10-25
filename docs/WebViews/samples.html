@@ -4,8 +4,9 @@
 
 window.onload = function() {
   window.chrome.webview.hostObjects.options.defaultSyncProxy=true
-  window.chrome.webview.hostObjects.client.SetOnDisplay(onDisplay, ".*");
-  window.chrome.webview.hostObjects.client.SetOnDisplayCapture(onCapture, onCaptureChanged, "{{begin capture}}", "{{end capture}}");
+  window.chrome.webview.hostObjects.client.SetOnDisplay(1, onDisplay, ".*");
+  window.chrome.webview.hostObjects.client.SetOnDisplayCapture(1, onCapture, onCaptureChanged, "{{begin capture1}}", "{{end capture1}}");
+  window.chrome.webview.hostObjects.client.SetOnDisplayCapture(2, onCapture, onCaptureChanged, "{{begin capture2}}", "{{end capture2}}");
 }
 
 function handleKeyPress(event) {
@@ -17,7 +18,7 @@ function handleKeyPress(event) {
   }
 }
 
-function onDisplay(line) {
+function onDisplay(id, line) {
   let text=line.String;
   document.getElementById("last_text").innerText = text;
 
@@ -33,20 +34,20 @@ function onDisplay(line) {
   return true;
 }
 
-function onCaptureChanged(line, started)
+function onCaptureChanged(id, line, started)
 {
-  document.getElementById("capture_state").innerText = started ? "Capturing" : "Not capturing";
+  document.getElementById("capture_state"+id).innerText = started ? "Capturing" : "Not capturing";
 
   if(started)
   {
-    let list = document.getElementById("itemList");
+    let list = document.getElementById("itemList"+id);
     while (list.hasChildNodes()) {  
       list.removeChild(list.firstChild);
     }
   }
 }
 
-function onCapture(line)
+function onCapture(id, line)
 {
   let regex = "^\\s\\s+?(.+?)\\s\\s+(?:(.+))?";
   let match = line.string.match(regex);
@@ -55,10 +56,10 @@ function onCapture(line)
       AddListItem(match[1]);
       AddListItem(match[2]);
   } else
-    AddListItem(line.string);
+    AddListItem(id, line.string);
 }
 
-function AddListItem(string)
+function AddListItem(id, string)
 {
   let node = document.createElement("LI");
   let textnode = document.createTextNode(string);
@@ -70,7 +71,7 @@ function AddListItem(string)
     window.chrome.webview.hostObjects.client.send(string);
   };
 
-  document.getElementById("itemList").appendChild(node);
+  document.getElementById("itemList"+id).appendChild(node);
 }
 
 </script>
@@ -112,9 +113,17 @@ function AddListItem(string)
 
     <h3>Text Capture</h3>
 
-    <p>Watching for text between {{begin capture}} and {{end capture}}</p>
-    <p>Capture State: <span id="capture_state">Not capturing</span></p>
-    <ul id="itemList" style="height: 200px; overflow-y: scroll; border: 1px solid white;"></ul>
+    <p>Watching for text between {{begin capture1}} and {{end capture1}}</p>
+    <button onclick="window.chrome.webview.hostObjects.client.ClearOnDisplayCapture(1)">Clear Capturer</button>
+    <p>Capture State: <span id="capture_state1">Not capturing</span></p>
+    <ul id="itemList1" style="height: 200px; overflow-y: scroll; border: 1px solid white;"></ul>
+
+    <p>Watching for text between {{begin capture2}} and {{end capture2}}</p>
+    <p>Capture State: <span id="capture_state2">Not capturing</span></p>
+    <ul id="itemList2" style="height: 200px; overflow-y: scroll; border: 1px solid white;"></ul>
+
+    <h3>Window Control</h3>
+    <button onclick="window.chrome.webview.hostObjects.client.CloseWindow()">Close WebView</button><br>
 
 </body>
 </html>
