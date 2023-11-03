@@ -9,7 +9,7 @@ https://github.com/BeipDev/BeipMU/blob/master/Documentation/CommandLine.md#webvi
 
 You can also right click hyperlinks on a page to open them as a webview vs the default browser. Useful if you want to dock it inside your client.
 
-The mu* server can also send a GMCP `webview.open` message. (will add example here soon)
+The mu* server can also send a GMCP `webview.open` message. https://github.com/BeipDev/BeipMU/edit/master/Documentation/WebViews.md#gmcp
 
 ## Examples
 
