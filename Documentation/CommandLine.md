@@ -48,6 +48,7 @@
   - [/ttype](#ttype)
   - [/unset](#unset)
   - [/wall](#wall)
+  - [/webview](#webview)
 
 # Command Line Commands
 
@@ -492,3 +493,14 @@ Usage:
     /wall <string>
 
 Sends the given string to every connection.
+
+## /webview
+Usage:
+
+    /webview url="url" position="x,y,width,height"
+    /webview url="https://beipdev.github.io/BeipMU/WebViews/samples.html"
+
+Opens up a webview pane.
+
+  url - The link to the webview, just a regular URL. For local files, remember to use file://
+  position - Optional position, if you always want the webview to appear in a certain screen position/size
