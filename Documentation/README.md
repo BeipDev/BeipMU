@@ -28,5 +28,9 @@ This was started by copying some of the items from our help file, it's probably 
 
 [GMCP Support](GMCP.md)
 
+[Web Views](WebViews.md)
+
+[In case of data loss](DataLoss.md)
+
 [Change Log](../Assets/Changes.txt)
 
