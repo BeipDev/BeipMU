@@ -202,4 +202,23 @@ window.chrome.webview.hostObjects.client.SetOnReceive(OnReceive);
 ```
 </details>
 
+## GMCP
 
+If enabled, a server can send a `webview.open` GMCP message to have the client open a webview.
+
+Can be as simple as just opening a URL:
+
+```
+webview.open { "url":"https://our_cool_website.html" }
+```
+
+Or having it auto dock, plus providing http-request-header to auto-login to your website. Useful for doing online player editing through the website with a simple in-game command!
+
+```
+webview.open { "id":"Character editor", "dock":"right", "url":"value", "http-request-headers":{ "name1":"value1", "name2":"value2" } }
+```
+
+The attributes:
+* id - A way to refer to a webview. If a later `webview.open` comes in, it will replace the original one with the same id
+* dock - (optional) For a new webview, will dock it on creation.
+* http-request-headers - (optional) A list of name/value pairs to be added to the http request.
