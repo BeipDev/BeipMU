@@ -13,8 +13,10 @@ Inside the webview HTML, JavaScript can access the host through this object:
 
 `window.chrome.webview.hostObjects.client` Note that this part: `window.chrome.webview.hostObjects.` is just where WebViews give access to host objects (host = BeipMU in this case). It's long because they want to avoid colliding with any user scripts.
 
-As the webview runs in a separate process, all functions are asynchronous by default. To avoid needing to use 'await' on everything, do this first:
-`window.chrome.webview.hostObjects.options.defaultSyncProxy=true`
+As the webview runs in a separate process, all functions are asynchronous by default. To avoid needing to use 'await' on everything, do this first (it's done in the example page above):
+```js
+window.chrome.webview.hostObjects.options.defaultSyncProxy=true
+```
 
 ## client
 
