@@ -1,0 +1,72 @@
+<html>
+<title>Shortcuts</title>
+<script>
+
+window.onload = function() {
+  window.chrome.webview.hostObjects.options.defaultSyncProxy=true
+  window.chrome.webview.hostObjects.window.connection.SetOnDisplay(onDisplay);
+}
+
+function Send(text) {
+  window.chrome.webview.hostObjects.window.connection.send(text)
+}
+
+function playAudio() { 
+  document.getElementById("audio").play(); 
+}
+</script>
+
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: 'Calibri', sans-serif;
+        }
+       #container {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+        }
+        #grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0px;
+            justify-items: center;
+            align-items: center;
+            width: 100px;
+        }
+        .direction-button {
+            padding: 0; /* Remove padding */
+            width: 30px;
+            height: 30px;
+            font-size: 20px; /* Increase font size */
+        }
+    </style>
+</head>
+<body>
+  <div id="container">
+    <div id="grid">
+        <button class="direction-button" onclick="Send('NW')">↖️</button>
+        <button class="direction-button" onclick="Send('N')">⬆️</button>
+        <button class="direction-button" onclick="Send('NE')">↗️</button>
+        <button class="direction-button" onclick="Send('W')">⬅️</button>
+        <button class="direction-button" onclick="Send('C')">C</button>
+        <button class="direction-button" onclick="Send('E')">➡️</button>
+        <button class="direction-button" onclick="Send('SW')">↙️</button>
+        <button class="direction-button" onclick="Send('S')">⬇️</button>
+        <button class="direction-button" onclick="Send('SE')">↘️</button>
+    </div>
+
+    <!-- Add your additional buttons here -->
+
+    <button onclick="Send('WHO')">WHO</button>
+    <button onclick="Send('look')">Look</button>
+    <button onclick="Send('blah')">Some other command</button>
+    <button onclick="Send('blah')">🦎</button>
+<button onclick="playAudio()" type="button">Play Lullaby</button>
+  </div>
+
+<audio id="audio" src="https://orangefreesounds.com/wp-content/uploads/2018/01/Brahms-lullaby-music-box.mp3?_=1" preload="auto"></audio>
+
+</body>
+</html>
