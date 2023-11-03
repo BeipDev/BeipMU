@@ -13,6 +13,8 @@ The mu* server can also send a GMCP `webview.open` message. (will add example he
 
 ## Examples
 
+Note that these examples will not function in the browser, but you'll still get to see what they look like. To have them be functional, use the `/webview` command with the `url` set to one of them.
+
 A little bit of everything:
 https://beipdev.github.io/BeipMU/WebViews/samples.html
 
