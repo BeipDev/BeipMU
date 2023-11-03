@@ -2,10 +2,22 @@
 
 WebViews are web browser windows that are integrated into the client. They can dock in a tab, and scripts in the webview can send and receive client events.
 
+## How to use
+
+The `/webview` command line command is the simplest:
+https://github.com/BeipDev/BeipMU/blob/master/Documentation/CommandLine.md#webview
+
+You can also right click hyperlinks on a page to open them as a webview vs the default browser. Useful if you want to dock it inside your client.
+
+The mu* server can also send a GMCP `webview.open` message. (will add example here soon)
+
 ## Examples
 
 A little bit of everything:
 https://beipdev.github.io/BeipMU/WebViews/samples.html
+
+Navigation UI (buttons that send stuff)
+https://beipdev.github.io/BeipMU/WebViews/macros.html
 
 ## API
 
@@ -94,7 +106,7 @@ function OnDisplay(line, matches)
 window.chrome.webview.hostObjects.client.SetOnDisplay(1, OnDisplay, "^\\d+");
 ```
 
-<B>Remember</B> to escape \'s in regex parameters, as it's a Javascript string literal.
+<B>Remember</B> to escape \\'s in regex parameters, as it's a Javascript string literal.
 </details>
 
 
@@ -132,7 +144,7 @@ function OnCaptureChanged(id, line, starting)
 window.chrome.webview.hostObjects.client.SetOnDisplayCapture(1, OnCapture, OnCaptureChanged, "^Players online:", "^\\d+ players");
 ```
 
-<B>Remember</B> to escape \'s in regex parameters, as it's a Javascript string literal.
+<B>Remember</B> to escape \\'s in regex parameters, as it's a Javascript string literal.
 </details>
 
 <details><summary>ClearOnDisplayCapture</summary>
