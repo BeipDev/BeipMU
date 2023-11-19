@@ -502,5 +502,7 @@ Usage:
 
 Opens up a webview pane.
 
-  url - The link to the webview, just a regular URL. For local files, remember to use file://
-  position - Optional position, if you always want the webview to appear in a certain screen position/size
+  * url - The link to the webview, just a regular URL. For local files, remember to use file://
+  * position - Optional position, if you always want the webview to appear in a certain screen position/size
+  * state - Window state, current value is only 'maximized'
+    
