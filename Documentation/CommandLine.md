@@ -497,12 +497,14 @@ Sends the given string to every connection.
 ## /webview
 Usage:
 
-    /webview url="url" position="x,y,width,height"
+    /webview url="url" position="x,y,width,height" state="maximized"
     /webview url="https://beipdev.github.io/BeipMU/WebViews/samples.html"
 
 Opens up a webview pane.
 
+Attributes:
+
   * url - The link to the webview, just a regular URL. For local files, remember to use file://
-  * position - Optional position, if you always want the webview to appear in a certain screen position/size
-  * state - Window state, current value is only 'maximized'
+  * position(optional) - Optional position, if you always want the webview to appear in a certain screen position/size
+  * state(optional) - Window state, current value is only 'maximized'
     
