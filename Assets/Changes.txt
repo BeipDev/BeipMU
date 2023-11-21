@@ -1,11 +1,11 @@
-4.00.325
+4.00.325 - 2023-11-20
 
 Added WebView `/webview url="<url>"`
 Remove border around tabbed spawn text windows
 Added /script command to run a 1-line script, so that simple scripts can run in more places like aliases
 Added minimize button to trigger/aliases/macros dialogs
 Added Spawn trigger option "If in tab group, switch to this tab" to show the tab with the latest activity
-Added 'ranges' paramer to script triggers that holds the regex matched ranges of the line of text
+Added 'ranges' parameter to script triggers that holds the regex matched ranges of the line of text
 Fixed script errors not showing up when using script triggers & callbacks
 Updated to PCRE 10.42 (from PCRE 10.34)
 Changed regexes so that zero length matches are allowed (so can match empty lines) they're only once per line at most
@@ -14,6 +14,9 @@ Added connection.SetOnGMCP(function, userdata) so scripts can handle GMCP
 Added app.ActiveXObject(name) to replace missing ActiveScript 'new ActiveXObject' function
 Added text selection right click option 'Delete selected lines'
 Added 'Choose' button to startup script dialog
+Fix Trigger bug with non regex searches involving 'Whole Word'
+Fix stats window crash if range stat is used with a non zero minimum
+Fix restore log strikeout text issue when using Pueblo enabled servers (room exit with <S> sent)
 
 4.00.324 - 2023-7-26
 
