@@ -1,0 +1,66 @@
+<html>
+<title>GMCP WebView Example</title>
+<script>
+
+let client=window.chrome.webview.hostObjects.client;
+
+window.onload = async function() {
+
+  client.SetOnConnect(OnConnect);
+  client.SetOnDisconnect(OnDisconnect);
+
+  client.SetOnGMCP("BeipTest1", OnBeipTest1);
+  client.SetOnGMCP("BeipTest2", OnBeipTest2);
+
+  // Window was opened while we were already connected, so setup as though we just connected
+  if(await client.IsConnected())
+    OnConnect();
+}
+
+function OnConnect() {
+  console.log("WebView OnConnect");
+
+  let gmcp=["BeipTest1 1", "BeipTest2 2"];
+  client.SendGMCP("Core.Supports.Add"+JSON.stringify(gmcp));
+}
+
+function OnDisconnect() {
+  console.log("WebView OnDisconnect");
+}
+
+function OnBeipTest1(package, json) {
+  console.log("BeipTest1:");
+  console.log("Package Name:"+package);
+  console.log("JSON Data:"+json);
+}
+
+function OnBeipTest2(package, json) {
+  console.log("BeipTest2:");
+  console.log("Package Name:"+package);
+  console.log("JSON Data:"+json);
+}
+
+</script>
+<body>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: 'Calibri', sans-serif;
+        }
+        h1 { color: green; }
+        h2 { color: lightblue }
+        h3 { color: lightpink }
+    </style>
+
+    <h1>Hello!</h1>
+    This is a trivial GMCP handler example<br>
+    <h2>How to test</h2>
+    Type `/test gmcp_beiptest1` and `/test gmcp_beiptest2`
+    <h2>Sending GMCP</h3>
+    Button to send to the current connection. Sends "Button clicked"<br>
+    <button onclick="client.ClearOnGMCP('BeipTest1')">Clear BeipTest1 hook</button><br>
+    <button onclick="client.ClearOnGMCP('BeipTest2')">Clear BeipTest2 hook</button><br>
+
+</body>
+</html>
