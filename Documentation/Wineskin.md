@@ -17,7 +17,7 @@ Click on the link and the rest is self-explanatory. You'll need to paste the com
 Install Wineskin Winery: https://github.com/Gcenx/WineskinServer
 * You can paste this into your MacOS Terminal shell prompt:
  
-`brew install --cask --no-quarantine gcenx/wine/unofficial-wineskin`
+`brew install --cask --no-quarantine gcenx/wine/wineskin`
 
 ## Using Wineskin
 
@@ -30,6 +30,8 @@ Install Wineskin Winery: https://github.com/Gcenx/WineskinServer
  
 If this step was done correctly, it'll now look something like this with both an Installed Engine and a Wrapper Version: 
 ![Sample](/images/Wineskin.jpeg)
+
+**NOTE**: WS11WineCX64Bit22.1.1-8 works, but newer ones might not. If the later version fails, try this version.
  
 * After that, you'll want to click 'Create New Blank Wrapper'. 
   * Name it 'beipmu' (it'll append .app to it)
