@@ -2,7 +2,7 @@
 <title>GMCP WebView Example</title>
 <script>
 
-let client=window.chrome.webview.hostObjects.client;
+const client=window.chrome.webview.hostObjects.client;
 
 window.onload = async function() {
 
@@ -20,8 +20,8 @@ window.onload = async function() {
 function OnConnect() {
   console.log("WebView OnConnect");
 
-  let gmcp=["BeipTest1 1", "BeipTest2 2"];
-  client.SendGMCP("Core.Supports.Add"+JSON.stringify(gmcp));
+  let gmcp=["BeipTest1 1", "BeipTest2 1"];
+  client.SendGMCP("Core.Supports.Add "+JSON.stringify(gmcp));
 }
 
 function OnDisconnect() {

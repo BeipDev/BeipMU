@@ -2,24 +2,26 @@
 <title>Sample WebView Pane</title>
 <script>
 
-window.onload = function() {
-  window.chrome.webview.hostObjects.options.defaultSyncProxy=true
-  window.chrome.webview.hostObjects.client.SetOnDisplay(1, onDisplay, ".*");
-  window.chrome.webview.hostObjects.client.SetOnDisplayCapture(1, onCapture, onCaptureChanged, "{{begin capture1}}", "{{end capture1}}");
-  window.chrome.webview.hostObjects.client.SetOnDisplayCapture(2, onCapture, onCaptureChanged, "{{begin capture2}}", "{{end capture2}}");
+const client=window.chrome.webview.hostObjects.client;
+
+window.onload = async function() {
+
+  client.SetOnDisplay(1, onDisplay, ".*", false /*gag*/);
+  client.SetOnDisplayCapture(1, onCapture, onCaptureChanged, "{{begin capture1}}", "{{end capture1}}");
+  client.SetOnDisplayCapture(2, onCapture, onCaptureChanged, "{{begin capture2}}", "{{end capture2}}");
 }
 
 function handleKeyPress(event) {
   if (event.keyCode === 13) { // 13 is the Enter key
     let textBox = document.getElementById('textBox');
     let text = textBox.value;
-    window.chrome.webview.hostObjects.client.send(text, true);
+    client.send(text, true);
     textBox.value = ''; // Clear the text box
   }
 }
 
-function onDisplay(id, line) {
-  let text=line.String;
+async function onDisplay(id, line) {
+  let text=await line.String;
   document.getElementById("last_text").innerText = text;
 
   if (text.toLowerCase().includes("bananas")) {
@@ -47,16 +49,17 @@ function onCaptureChanged(id, line, started)
   }
 }
 
-function onCapture(id, line)
+async function onCapture(id, line)
 {
   let regex = "^\\s\\s+?(.+?)\\s\\s+(?:(.+))?";
-  let match = line.string.match(regex);
+  let string = await line.string;
+  let match = string.match(regex);
 
   if (match) {
       AddListItem(match[1]);
       AddListItem(match[2]);
   } else
-    AddListItem(id, line.string);
+    AddListItem(id, string);
 }
 
 function AddListItem(id, string)
@@ -67,8 +70,8 @@ function AddListItem(id, string)
 
    // Add the onclick event to the new item
   node.onclick = function() {
-    window.chrome.webview.hostObjects.window.output.write("You clicked on:"+string);
-    window.chrome.webview.hostObjects.client.send(string);
+    window.output.write("You clicked on:"+string);
+    client.send(string);
   };
 
   document.getElementById("itemList"+id).appendChild(node);
@@ -114,7 +117,7 @@ function AddListItem(id, string)
     <h3>Text Capture</h3>
 
     <p>Watching for text between {{begin capture1}} and {{end capture1}}</p>
-    <button onclick="window.chrome.webview.hostObjects.client.ClearOnDisplayCapture(1)">Clear Capturer</button>
+    <button onclick="client.ClearOnDisplayCapture(1)">Clear Capturer</button>
     <p>Capture State: <span id="capture_state1">Not capturing</span></p>
     <ul id="itemList1" style="height: 200px; overflow-y: scroll; border: 1px solid white;"></ul>
 
@@ -123,7 +126,7 @@ function AddListItem(id, string)
     <ul id="itemList2" style="height: 200px; overflow-y: scroll; border: 1px solid white;"></ul>
 
     <h3>Window Control</h3>
-    <button onclick="window.chrome.webview.hostObjects.client.CloseWindow()">Close WebView</button><br>
+    <button onclick="client.CloseWindow()">Close WebView</button><br>
 
 </body>
 </html>
