@@ -1,6 +1,4 @@
-TODO: Show disabled triggers more clearly
-
-4.00.326
+4.00.326 - 2024-1-15
 
 Fixed possible flicker in spawn windows by optimizing away drawing the background
 Restore log Pueblo issue caused the opposite problem, tweaked it to hopefully fix it
