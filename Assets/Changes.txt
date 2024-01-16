@@ -1,3 +1,19 @@
+TODO: Show disabled triggers more clearly
+
+4.00.326
+
+Fixed possible flicker in spawn windows by optimizing away drawing the background
+Restore log Pueblo issue caused the opposite problem, tweaked it to hopefully fix it
+Improve WebView2 GMCP handling
+Changed HTML copy to use <p> tags around each line vs <span>
+Puppets can now be copied in worlds dialog
+Puppets now work properly with multiline aliases (prefix sent per line vs once at the start)
+Puppets can now optionally log their text into the character's log (with an optional prefix too)
+In connect dialog, current puppet now gets selected (previously only server/character did)
+Fix minor WebView bug where popup menus in web pages are in the wrong spot once if the window was moved
+Fix minor logging issue with 'log from..' options writing out a 0x01 byte for lines with inline images or icons
+Fix minor glitch in ping command, it was sending an extra pair of CRLF sequences after it
+
 4.00.325 - 2023-11-20
 
 Added WebView `/webview url="<url>"`
