@@ -5,7 +5,6 @@
 const client=window.chrome.webview.hostObjects.client;
 
 window.onload = async function() {
-
   client.SetOnDisplay(1, onDisplay, ".*", false /*gag*/);
   client.SetOnDisplayCapture(1, onCapture, onCaptureChanged, "{{begin capture1}}", "{{end capture1}}");
   client.SetOnDisplayCapture(2, onCapture, onCaptureChanged, "{{begin capture2}}", "{{end capture2}}");
