@@ -1,3 +1,20 @@
+4.00.327 - 2024-4-14
+
+Added multiline triggers, that run their child triggers for 'n' lines or 'x' time after first hitting
+Added custom UI theme support
+Added 'Clear Activity In Current Tab' keyboard shortcut so people can clear the 'Last Read' like indicators without clicking away then back
+Added script functions to work with window variables window.GetVariable, window.SetVariable, window.DeleteVariable
+Added Server option "Send NAWS on window resize" to do equivalent of `/naws auto` on negotiation and on window resize
+Fixed glitch with 'Paste all window settings' causing tabbing between input windows to not work
+Fixed weird undo behavior in input window, should work more as expected now.
+Fixed a couple map editing crashes, one due to undoing a delete, and another when moving exit end points
+Added 'removelast' command to remove the last line of text in the output window
+Update last modified time on restore.dat on exit (was confusing some backup software that it was never being modified)
+Escape HTML < and & chars inside HTML replacement triggers so that received text won't be interpreted as HTML
+New HTML log headers, far better performance as log files get larger
+Add horizontal splitter to Triggers/Macros/Aliases windows so they stretch horizontally better
+Add import/export of aliases & macros
+
 4.00.326 - 2024-1-15
 
 Fixed possible flicker in spawn windows by optimizing away drawing the background
