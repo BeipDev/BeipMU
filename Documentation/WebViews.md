@@ -99,14 +99,15 @@ window.chrome.webview.hostObjects.client.SetOnSend(MyCallback);
 Watch text lines about to be displayed and call `callback` when `regex` results in a match. Basically a script defined trigger.
 
 ```js
-function OnDisplay(line, matches)
+function OnDisplay(id, line)
 {
-  // line is a text line object
-  // matches is an array of the regex matches begin/end pairs. First match is matches(0) to matches(1)
+  // id is the id passed to SetOnDiplsay
+  // line is a TextWindowLine object (see link below)
 }
 
 window.chrome.webview.hostObjects.client.SetOnDisplay(1, OnDisplay, "^\\d+");
 ```
+[TextWindowLine interface](ScriptingAPI.md#textwindowline)
 
 <B>Remember</B> to escape \\'s in regex parameters, as it's a Javascript string literal.
 </details>
@@ -130,7 +131,7 @@ The 'id' is mainly useful if you set multiple display captures, as a way to tell
 function OnCapture(id, line)
 {
   // id is the 'id' you passed to SetOnDisplayCapture
-  // line is a text line object
+  // line is a TextWindowLine object (see link below)
 
   let text=line.string;
   let length=line.length;
@@ -139,12 +140,13 @@ function OnCapture(id, line)
 function OnCaptureChanged(id, line, starting)
 {
   // id is the 'id' you passed to SetOnDisplayCapture
-  // line is a text line object
+  // line is a TextWindowLine object (see link below)
   // starting is a bool. 'true' when capture is beginning, 'false' when it is ending
 }
 
 window.chrome.webview.hostObjects.client.SetOnDisplayCapture(1, OnCapture, OnCaptureChanged, "^Players online:", "^\\d+ players");
 ```
+[TextWindowLine interface](ScriptingAPI.md#textwindowline)
 
 <B>Remember</B> to escape \\'s in regex parameters, as it's a Javascript string literal.
 </details>
