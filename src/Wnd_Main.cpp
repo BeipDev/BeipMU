@@ -213,22 +213,6 @@ void LoadConfig(ConstString filename, bool fImportingConfig)
 
    Global_PropChange();
 
-#if 0
-   // Set the DPI to whatever monitor we appear on first
-   auto &prop_positions=g_ppropGlobal->propWindows().propPositions();
-   if(prop_positions)
-   {
-      auto &rect=prop_positions.First()->rcPosition();
-      int2 point=rect.pt1+rect.pt2/2; // Center of window as rect is origin/size vs pt1/pt2
-      if(auto monitor=MonitorFromPoint(*(POINT *)&point, MONITOR_DEFAULTTONEAREST))
-      {
-         UINT dpix, dpiy;
-         if(GetDpiForMonitor(monitor, MDT_DEFAULT, &dpix, &dpiy)==S_OK)
-            g_dpiScale.SetLogPixelsX(dpix);
-      }
-   }
-#endif
-
    SetUIFont(g_ppropGlobal->pclUIFontName(), g_ppropGlobal->iUIFontSize());
 }
 
@@ -2782,25 +2766,6 @@ bool Wnd_Main::ProcessEditKey(InputControl &edInput, const Msg::Key &msg)
    if(key.iVKey==VK_MENU && !(fDown && msg.fRepeating()))
       m_wnd_MDI.GetTaskbar().DrawTabNumbers(fDown);
 
-#if 0
-   if(key.iVKey==VK_ESCAPE)
-   {
-      if(fDown)
-      {
-         if(auto menu=m_wnd_MDI.GetMenu())
-         {
-            m_wnd_MDI.SetMenu(nullptr);
-            DestroyMenu(menu);
-            mp_input_active->SetFocus();
-            return false;
-         }
-         else
-            m_wnd_MDI.SetMenu(LoadMenu(g_hInst, MAKEINTRESOURCE(IDR_MAINMENU)));
-      }
-      return false;
-   }
-#endif
-
    // Ignore these keys as we don't do anything on them
    if(key.iVKey==VK_CONTROL || key.iVKey==VK_SHIFT || key.iVKey==VK_MENU)
       return true;
@@ -3561,22 +3526,6 @@ void Wnd_MDI::PopupMainMenu(int2 position)
       m.Append(MF_STRING, ID_LOGGING_FROMWINDOW, "Starting From Top of Window...");
       menu.Append(std::move(m), "&Logging");
    }
-#if 0
-   {
-      PopupMenu m;
-      m.Append(MF_STRING, ID_FILE_EXPORTCONFIG, "Export...");
-      m.Append(MF_STRING, ID_FILE_IMPORTCONFIG, "Import...");
-      m.Append(MF_STRING, ID_FILE_SAVESETTINGS, "Save");
-      m.Append(MF_STRING, ID_FILE_LOADBACKUPCONFIG, "Load backup");
-      m.AppendSeparator();
-      m.Append(MF_STRING, ID_OPTIONS_AUTO_EMOJI, "Auto Emoji...");
-      m.Append(MF_STRING, ID_OPTIONS_KEYBOARDSHORTCUTS, "&Keyboard Shortcuts...");
-      m.Append(MF_STRING, ID_OPTIONS_ANSICOLORS, "Ansi Colors...");
-      m.Append(MF_STRING, ID_LOGGING_OPTIONS, "Logging...");
-      m.Append(MF_STRING, ID_OPTIONS_PREFERENCES, "General...");
-      menu.Append(std::move(m), "&Settings");
-   }
-#endif
    menu.Append(MF_STRING, ID_OPTIONS_PREFERENCES, "&Settings...");
 
    {
@@ -3611,94 +3560,6 @@ LRESULT Wnd_MDI::On(const Msg::Command &msg)
          wndMDI.Show(SW_SHOW);
          return msg.Success();
       }
-
-#if 0
-      case ID_FILE_SAVESETTINGS:
-      {
-         if(!SaveConfig(*this))
-            return msg.Success();
-         if(IsStoreApp())
-            mp_active_wnd_main->GetConnection().Text("<icon information> <font color='lime'>Configuration saved");
-         else
-         {
-            FixedStringBuilder<1024> path("<icon information> Configuration saved to <font color='lime'>", GetConfigPath(), "Config.txt");
-            mp_active_wnd_main->GetConnection().Text(path);
-         }
-         mp_active_wnd_main->GetConnection().Text("<icon information> <font color='aqua'>Note: Configuration is also saved on exit");
-         return msg.Success();
-      }
-
-      case ID_FILE_EXPORTCONFIG:
-      {
-         File::Chooser cf;
-         cf.SetTitle("Export Configuration");
-         cf.SetFilter("*.txt\0\0", 0);
-
-         File::Path filename{"BeipMU Config "};
-         Time::Local().FormatDate(filename, "yyyy'-'MM'-'dd");
-         filename(".txt");
-            
-         if(cf.Choose(*this, filename, true))
-         {
-            if(filename.Exists() && MessageBox(*this, "File already exists, overwrite?", "Warning", MB_ICONWARNING|MB_YESNO)!=IDYES)
-               return msg.Success();
-
-            SaveWindowInformationInConfig();
-            ConfigExport(filename, g_ppropGlobal, g_ppropGlobal->fShowDefaults(), true);
-         }
-
-         return msg.Success();
-      }
-
-      case ID_FILE_LOADBACKUPCONFIG:
-      {
-         File::Path filename(GetConfigPath(), "Config.bak");
-         if(!filename.Exists())
-         {
-            MessageBox(*this, "No backup config exists", "Note:", MB_ICONERROR|MB_OK);
-            return msg.Success();
-         }
-
-         FixedStringBuilder<256> string("Backup is from ");
-         {
-            File::Read_Only file(filename);
-            if(!file)
-            {
-               MessageBox(*this, "Could not open backup config file", "Note:", MB_ICONERROR|MB_OK);
-               return msg.Success();
-            }
-
-            auto time=Time::File(Time::System().GetFileTime()-file.GetLastWrite()).ToSeconds();
-            Time::SecondsToStringAbbreviated(string, time);
-            string(" ago (");
-            Time::Time(file.GetLastWrite()).FormatDate(string);
-            string("). Are you sure you want to use it?");
-         }
-
-         if(MessageBox(*this, string, "Are you sure?", MB_ICONQUESTION|MB_YESNO)==IDNO)
-            return msg.Success();
-
-         ImportConfig(filename);
-         return msg.Success();
-      }
-
-      case ID_FILE_IMPORTCONFIG:
-      {
-         if(MessageBox(*this, "This will erase all current settings and restart BeipMU.\rAre you sure?", "Warning", MB_ICONWARNING|MB_YESNO)!=IDYES)
-            return msg.Success();
-
-         File::Chooser cf;
-         cf.SetTitle("Import Configuration");
-         cf.SetFilter("*.txt\0\0", 0);
-
-         FixedStringBuilder<256> filename;
-
-         if(cf.Choose(*this, filename, false))
-            ImportConfig(filename);
-
-         return msg.Success();
-      }
-#endif
 
       case ID_FILE_QUIT:
       {
@@ -3891,16 +3752,6 @@ void Wnd_MDI::Connect(Prop::Server *ppropServer, Prop::Character *ppropCharacter
       SetActiveWindow(window);
 }
 
-struct Foo
-{
-   Foo(int b_) : b{b_}
-   {
-      OutputDebugString("test");
-   }
-
-   int b;
-};
-
 void Code_Test()
 {
 #if 1
@@ -4037,167 +3888,6 @@ Test() int
    }
 #endif
 }
-
-#if 0
-struct AllocTracker
-{
-   // These are non const so that they can be changed during debugging
-   size_t break_on_count_exceeded_=100; // Break if a certain sized allocation goes above this count
-   size_t dump_on_size_exceeded_=1'000'000;
-   size_t dump_on_size_exceeded_delta_=1'000'000; // Add this amount to the dump_on_size_exceeded_ every time it gets exceeded
-   size_t dump_count_=10; // Number of top counts to dump
-
-   void Alloc(void *address, size_t size)
-   {
-      total_allocated_+=size;
-      allocation_count_++;
-
-      address_map_.insert({address, {size}});
-
-      if(auto iter=size_map_.find(size);iter!=size_map_.end())
-      {
-         if(iter->second.count_>=break_on_count_exceeded_)
-            []{}(); // Set breakpoint here
-
-         count_set_.extract(iter->second);
-         iter->second.count_++;
-         count_set_.insert(iter->second);
-      }
-      else
-      {
-         AllocationSize allocation_size{size, 1};
-         size_map_.insert({size, allocation_size});
-         count_set_.insert(allocation_size);
-      }
-
-      if(total_allocated_>dump_on_size_exceeded_)
-      {
-         dump_on_size_exceeded_+=dump_on_size_exceeded_delta_;
-         OutputDebugString("Allocated size limit exceeded\r\n");
-         Dump();
-      }
-   }
-
-   void Free(void *address)
-   {
-      auto size=address_map_.extract(address).mapped().size_;
-
-      auto iter=size_map_.find(size);
-      count_set_.extract(iter->second);
-      iter->second.count_--;
-      if(iter->second.count_)
-         count_set_.insert(iter->second);
-
-      total_allocated_-=size;
-      allocation_count_--;
-   }
-
-   void Dump()
-   {
-      OutputDebugString("Dumping allocations:\r\n");
-      if(!count_set_.empty())
-      {
-         auto iter=count_set_.end();
-         for(size_t i=0;i<dump_count_ && iter--!=count_set_.begin();i++)
-         {
-            OutputDebugString(FixedStringBuilder<256>("  Size: ", iter->size_, "  Count: ", iter->count_, CRLF));
-   //         printf("Size: %d  Count: %d", iter->first, iter->second);
-         }
-      }
-
-      OutputDebugString("Finished Dumping allocations\r\n");
-   }
-
-   struct Allocation
-   {
-      size_t size_;
-   };
-
-   struct AllocationSize // How many allocation of a particular size
-   {
-      size_t size_;
-      size_t count_;
-   };
-
-   struct ReverseKey
-   {
-      bool operator()(const AllocationSize &v1, const AllocationSize &v2) const
-      {
-         if(v1.count_!=v2.count_)
-            return v1.count_<v2.count_;
-
-         return v1.size_<v2.size_;
-      }
-   };
-
-   size_t total_allocated_{};
-   size_t allocation_count_{};
-
-   std::map<void *, Allocation> address_map_;
-   std::map<size_t, AllocationSize> size_map_; // sorted by size
-   std::set<AllocationSize, ReverseKey> count_set_; // sorted by count
-};
-
-void Test()
-{
-   AllocTracker tracker;
-
-   std::vector<void*> allocs;
-
-   for(unsigned i=1;i<100;i++)
-   {
-      allocs.push_back(new uint8_t[i]);
-      tracker.Alloc(allocs.back(), i);
-   }
-
-   for(auto i : { 100, 100, 100, 20, 20, 20, 5})
-   {
-      allocs.push_back(new uint8_t[i]);
-      tracker.Alloc(allocs.back(), i);
-   }
-
-   for(unsigned i=1;i<1000;i++)
-   {
-      allocs.push_back(new uint8_t[100'000]);
-      tracker.Alloc(allocs.back(), 100'000);
-   }
-
-   tracker.Dump();
-
-   while(allocs.size())
-   {
-      tracker.Free(allocs.back());
-      allocs.pop_back();
-   }
-
-   tracker.Dump();
-}
-
-static bool _=(Test(), false);
-#endif
-
-#if 0
-void Test()
-{
-    const int SHIP_FRAMES = 48;
-    const double PI = cPI;
-
-    int2 gVelocityTable[SHIP_FRAMES];
-    double ss_list[SHIP_FRAMES];
-
-    double ss = SHIP_FRAMES;
-    double factor = (360.0 / ss);
-
-    for (int index = 0; index < SHIP_FRAMES; index++) {
-        ss = index;
-        ss = -(((ss * factor) * PI) / 180.0);
-        ss = fmod(-ss+PI/4.0f, PI / 2.0f)+PI/4.0f;
-        ss_list[index] = ss;
-        gVelocityTable[index].x = (int)(sin(ss) * -8.0);
-        gVelocityTable[index].y = (int)(cos(ss) * -8.0);
-    }
-}
-#endif
 
 void CreateWindow_Root(ConstString command_line, int nCmdShow)
 {
