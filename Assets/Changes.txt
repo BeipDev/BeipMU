@@ -1,3 +1,9 @@
+4.00.328
+
+Added voice selector in Settings for speech playback
+Fixed Windows 10 bug where recording icon doesn't appear on taskbar
+Fixed crash on wine when connecting to sample characters
+
 4.00.327 - 2024-4-14
 
 Added multiline triggers, that run their child triggers for 'n' lines or 'x' time after first hitting

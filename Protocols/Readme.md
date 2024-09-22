@@ -1,1 +1,0 @@
-Currently just the Telnet protocol handler, posted here to figure out easy ways to add MXP support.
