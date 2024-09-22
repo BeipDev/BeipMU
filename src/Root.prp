@@ -1,0 +1,1003 @@
+//
+// Property Description Tree
+//
+// Initial version completed 9/12/99
+//
+
+// File format description:
+//
+// Individual properties are defined as basic types or as another property set.
+// Properties are stored in a tree like structure where property sets are the
+// 'folders' of the tree.
+//
+// The basic types are:
+//   String - Strings
+//   Int    - Integers/Numbers
+//   UInt32 - 32-bit Unsigned integer
+//   UInt64 - 64-bit Unsigned integer
+//   Flag   - Flags (true/false)
+//   Byte   - Byte values (values between 0-255)
+//   Color  - Color values (RGB values, or color names)
+//   Rect   - Rectangle coordinates
+//   float  - Floating point value
+//   float2 - Floating point coordinate
+//   Key    - Keyboard key ID (VKey,tri fShift, tri fControl, tri fAlt)
+//            Example: For Ctrl+C = 'C',false,true,false
+//            If a char ('A') is used, the letter should be uppercase
+//   DateTime - Date and Time, Y-M-D-H-M-S
+//   GUID   - COM GUID "{0x645AFA5B,0x1D86,0x4eac,0xB0,0x62,0xC7,0xF8,0xA3,0xAE,0x00,0xBD}" format
+//
+// The prefix PT_ is used for Property Type, PH_for Property Holder, and also
+// a special type PE_ is for Property Enums.  
+//
+// Properties are defined as follows:
+// Prop <property name>
+//   <items contained in property>
+//
+// To define basic types the following form is used:
+// <basic type> <property name> [= <default value>]
+//
+// Enum properties - To define an enumerated property first the enumeration name
+// and the valid values must be defined, then enum properties can be defined
+// based on it.  Property enums are local to the property they're defined inside.
+// Nothing is ever global.
+//
+// Definition of enum type:
+// Enum <enum name> { <enum name1>, <enum name2>, ... }
+// Using the enum type to define a property:
+//
+// There are also a set of special features that are very special purpose.
+//
+// Property lists - When a property holds a variable size list of other properties.
+// Defined as a property.  Example:
+//
+// Prop Characters(StackOf PH_Character by Shortcut)
+// Prop Triggers(StackOf Trigger)
+//
+// The format is:
+// Prop <property name>(StackOf <type> [by <name in type>])
+// The 'by' part is used to guarantee unique items, since that's the title name
+// of the scope when loading/saving.  See the config file format for an example.
+//
+// Refcounted Properties - Certain properties can be 'in use' by multiple objects
+// at a time and shouldn't be modified/deleted during this time.  To make a property
+// group refcounted, just put (RefCounted) after the name, like so:
+// Prop Character(RefCounted)
+//
+// Func items - Used by the internal programming to associate functions that work
+// with the property objects.  Property definitions internally turn into class
+// definitions and functions just turn into member functions.  Nobody should
+// really care about these.
+//
+
+
+// All currently stored settings for a font and the
+// methods to manipulate them
+Prop Font
+{
+   String Name      = "Courier New", MaxLen=LF_FACESIZE
+   Int    Size      = 13
+   Flag   Italic    = false
+   Flag   Bold      = false
+   Flag   Underline = false
+   Flag   Strikeout = false
+   Byte   CharSet   = DEFAULT_CHARSET
+
+   Func "unsigned SizeInPoints() const { return MulDiv(iSize(), 72, 96); }"
+   Func "Handle<HFONT> CreateFont() const;"
+   Func "Handle<HFONT> CreateFont(bool fBold, bool fItalic, bool fUnderline, bool fStrikeout) const;"
+   Func "void  ToLogFont(LOGFONT &lf) const;"
+   Func "void  FromLogFont(const LOGFONT &lf);"
+   Func "bool  ChooseFont(HWND hWnd); // Brings up the font selection dialog"
+   Func "bool operator==(const Font &prop) const=default;"
+}
+
+// Search parameters used by Find and by Triggers
+Prop FindString
+{
+   String MatchText(AlwaysWrite), MaxLen=65536 // The text to search for (what to match against)
+   Flag   Forward    = true
+
+   Flag   RegularExpression = false // If true, none of the below apply
+   Flag   MatchCase  = false
+   Flag   StartsWith = false
+   Flag   EndsWith   = false
+   Flag   WholeWord  = false
+
+   Func "mutable CachedUniquePtr<RegEx::Expression> mp_regex_cache;"
+   Func "bool Find(ConstString search, unsigned iStartChar, uint2 &found) const;"
+   Func "Array<uint2> Find(ConstString search, unsigned iStartChar, Array<uint2> ranges) const;"
+   Func "bool operator==(const FindString &pfs) const;"
+}
+
+// Text window settings (duh)
+Prop TextWindow(RefCounted)
+{
+   Font Font
+
+   Color  Fore &ForeColor   = ::Colors::OffWhite
+   Color  Back &BackColor   = ::Colors::Black
+   Color  Link &LinkColor   = ::Colors::LtBlue
+   Int    History           = 10000
+   Int    O1 &ScrollDelay(NoWrite) = 0
+   Flag   SmoothScrolling   = true
+
+   Flag   LocalEcho(NoWrite)      = false
+   Color  LocalEchoColor(NoWrite) = ::Colors::Cyan
+
+   Int    TimeFormat        = 0
+   Int    TimeFormatToolTip = Text::Time32::F_Time|Text::Time32::F_Date
+   Rect   Margins           = "0,0,0,0"
+   Int    LineWrappedIndent = 0
+   Int    ParagraphSpacing  = 0
+   Flag   ScrollToBottomOnAdd = true
+   Flag   SplitOnPageUp = false
+   Flag   InvertBrightness = false
+   Flag   FanFold           = false
+   Color  FanFold1           = "RGB(15, 15, 15)" // "RGB(16, 37, 39)" // "RGB(32, 75, 79)"
+   Color  FanFold2           = "RGB(30, 30, 30)" // "RGB(16, 37, 39)" // "RGB(32, 75, 79)"
+
+   Flag   FixedWidth        = false
+   Int    FixedWidthChars   = 80
+
+   String BackgroundImage(NoWrite), MaxLen=MAX_PATH
+
+   Enum BackgroundImageStyle { Normal Tiled Scaled }
+   BackgroundImageStyle BackgroundImageStyle(NoWrite) = Scaled
+
+   Flag PauseIsScrollLock(NoWrite) = false // Scroll lock the output windows instead of 
+   Func "bool operator==(const TextWindow &prop) const=default;"
+   Func "bool ShouldCopy() const;"
+}
+
+Prop InputWindow(RefCounted)
+{
+   Font Font
+
+   Color  Fore &ForeColor   = ::Colors::OffWhite
+   Color  Back &BackColor   = ::Colors::Black
+
+   Color  LocalEchoColor    = ::Colors::Cyan
+   Flag   LocalEcho         = false
+   Flag   Sticky            = false // Don't clear input on enter
+
+   Flag   AutoSizeVertically = true
+   Int    MinimumHeight = 1, Min=1
+   Int    MaximumHeight = 5, Min=2
+
+   Rect   Margins           = "0,0,0,0"
+
+   String Prefix // Send prefix
+
+   Func "bool operator==(const InputWindow &prop) const=default;"
+   Func "bool ShouldCopy() const;"
+}
+
+Prop SpawnWindow
+{
+   String Title
+   TextWindow TextWindow(DemandCreate)
+}
+
+Prop SpawnTabs(StackOf SpawnWindow)
+{
+}
+
+Prop SpawnTabsWindow
+{
+   String Title
+   SpawnTabs Tabs
+}
+
+Prop StatsWindow
+{
+   String Title
+   Color Background = ::Colors::Black
+}
+
+Prop TileMapWindow
+{
+   String Title
+}
+
+Prop MapWindow
+{
+   String FileName
+   Int MapIndex
+   Int CurrentMapIndex=-1
+   Int CurrentRoomIndex=-1
+   float Scale
+   float2 Origin
+   Flag SelectionFilter_Rooms=false
+   Flag SelectionFilter_Rectangles=false
+   Flag SelectionFilter_Images=false
+   Flag SelectionFilter_Labels=false
+}
+
+Prop WebViewWindow
+{
+    String URL
+    String ID
+    Flag HostObjects=true
+}
+
+Prop DockedWindow
+{
+   Rect Rect // If undocked, this is the rectangle used
+   Int Size // Size Pane's size on it's Side axis (ex, for a right pane, it's vertical size)
+   Int Type // 0=Input, 1=Spawn, 2=SpawnTabs, 3=Image, 4=TileMap, 5=Stats, 6=Character Notes, 7=Map, 8=YarnMap, 9=WebView
+   Flag VerticalCaption=false
+   Flag HideCaption=false
+
+   InputWindow InputWindow(DemandCreate)
+   SpawnWindow SpawnWindow(DemandCreate)
+   SpawnTabsWindow SpawnTabsWindow(DemandCreate)
+   StatsWindow StatsWindow(DemandCreate)
+   TileMapWindow TileMapWindow(DemandCreate)
+   MapWindow MapWindow(DemandCreate)
+   WebViewWindow WebViewWindow(DemandCreate)
+}
+
+Prop DockedWindows(StackOf DockedWindow)
+{
+}
+
+Prop DockedPane
+{
+   DockedWindows Windows
+   Int Side // 0=left 1=top 2=right 3=bottom
+   Int Size // The Width/Height relative to client area
+}
+
+Prop FloatingWindows(StackOf DockedWindow)
+{
+}
+
+Prop DockedPanes(StackOf DockedPane)
+{
+}
+
+Prop Docking
+{
+   int2 ClientSize // Size of client area
+   DockedPanes DockedPanes
+   FloatingWindows FloatingWindows
+}
+
+Prop Tab
+{
+   String Server
+   String Character
+   String Puppet
+   Color Color(NoWrite)=::Colors::White // Deprecated in favor of Character::TabColor
+}
+
+Prop Tabs(StackOf Tab)
+{
+}
+
+// Location of a window on the screen, along with
+// positions of the splitter bars inside of it
+Prop Position
+{
+   Rect Position = "0, 0, 1024, 768"
+
+   Enum State { Normal Minimized Maximized }
+   State State = Normal
+
+   // Obsolete Items
+   Int SBPosHistory &HistoryPos =-1
+   Int SBPosInput   &InputPos   =-1
+
+   Int O1 &SBPosOutput(NoWrite)   =-1
+   Int O2 &SBPosHistory(NoWrite)  =-1
+   Int O3 &SBPosInput(NoWrite)    =-1
+   Int O4 &OutputPos  =-1 // Obsolete
+
+   Tabs Tabs
+   Int ActiveTab = -1
+}
+
+Prop Positions(StackOf Position)
+{
+}
+
+Prop MainWindowSettings(RefCounted)
+{
+   InputWindow Input(DemandCreate)
+   TextWindow Output(DemandCreate)
+   TextWindow History(DemandCreate)
+
+   Int  InputSize = 50
+   Int  HistorySize = 40
+   Flag History = true
+}
+
+Prop Windows
+{
+   MainWindowSettings MainWindowSettings(DemandCreate)
+
+   // These are all part of MainWindowSettings now
+   // {
+   InputWindow OldInput &Input (DemandCreate)
+   TextWindow OldOutput &Output (DemandCreate)
+   TextWindow OldHistory &History (DemandCreate)
+   TextWindow OldSpawnWindows &SpawnWindows(DemandCreate)
+
+   Int  OldInputSize &InputSize(NoWrite) = 50
+   Int  OldHistorySize &HistorySize(NoWrite) = 40
+   Flag OldHistory &History(NoWrite) = true
+   Flag SpawnsUseOutputSettings(NoWrite) = true
+   // }
+
+   Positions  Positions
+   Rect       MDIPosition = "0, 0, 0, 0"
+
+   Flag AskBeforeDisconnecting = true // The 'Still connected' message box
+   Flag AskBeforeClosing = false // The 'Close Window', 'Are you sure?' message box
+
+   // Obsolete Items
+   Positions MDIPositions // Positions for MDI Windows
+   Flag MDI(NoWrite)  = true // MDI Windows
+   Flag MDITaskBar(NoWrite) = true
+   Flag ToolBar(NoWrite)   = false
+   Flag StatusBar(NoWrite) = true
+   Int  Open(NoWrite) = 1 // Number of windows to open at startup
+}
+
+// Logging options
+Prop Logging
+{
+   Int    TimeFormat
+   String Path, MaxLen=MAX_PATH
+
+   Flag   LogSent    =false
+   String SentPrefix ="Sent>"
+   Flag   LogTyped   =false
+   String TypedPrefix="Typed>"
+
+   Flag   Wrap = false
+   Int    Wrap &WrapChars = 80, Min=2
+   Flag   HangingIndent = false
+   Int    HangingIndent &HangingIndentChars =2, Min=0
+   Flag   WrapNearestWord = true
+   Flag   DoubleSpace = false
+
+   String FileDateFormat="yyyy'-'MM'-'dd" // This default must also be changed in dlg_logging.cpp!
+
+   String DefaultLogFileName
+
+   Flag   RestoreLogs = true
+   UInt32 RestoreBufferSize = 256
+   UInt32 RestoreBufferSizeCurrent = 64 // Buffer Size of the currently created file
+}
+
+// The ansi color array
+Prop Colors
+{
+   Color[] Colors // Taken from the XP Terminal default ansi colors
+   {
+      // Normal
+      Black   = "RGB(  0,  0,  0)"
+      Red     = "RGB(205,  0,  0)"
+      Green   = "RGB(  0,205,  0)"
+      Yellow  = "RGB(205,205,  0)"
+      Blue    = "RGB(  0,  0,238)"
+      Magenta = "RGB(205,  0,205)"
+      Cyan    = "RGB(  0,205,205)"
+      White   = "RGB(229,229,229)"
+
+      // Bold
+      BoldBlack   = "RGB(127,127,127)"
+      BoldRed     = "RGB(255,  0,  0)"
+      BoldGreen   = "RGB(  0,255,  0)"
+      BoldYellow  = "RGB(255,255,  0)"
+      BoldBlue    = "RGB( 92, 92,255)"
+      BoldMagenta = "RGB(255,  0,255)"
+      BoldCyan    = "RGB(  0,255,255)"
+      BoldWhite   = "RGB(255,255,255)"
+   }
+}
+
+// Ansi code settings
+Prop Ansi
+{
+   Colors Colors
+   Flag   FontBold = false // Use font bold rather than 'bright' colors
+   Flag   PreventInvisible = true // No same foreground & background
+   Flag   Parse  = true   // Only time we don't want to parse ansi codes is
+                             // when we're debugging the codes
+
+   Int    FlashSpeed = 500 // Milliseconds
+
+   Flag   Beep       = true // Enable ansi beep
+   Flag   BeepSystem = true // Use system beep
+   String BeepFileName, MaxLen=MAX_PATH // File to play instead of using system beep
+
+   Flag   ResetOnNewLine = false
+   
+   Func "void PlayBeep() const;"
+}
+
+Prop Aliases;
+Prop Alias
+{
+   String     Description, MaxLen=65536
+   FindString FindString
+   String     Example, MaxLen=65536
+   String     Replace, MaxLen=65536
+   Flag       Folder = false
+   Aliases    Aliases(DemandCreate)
+   Flag       StopProcessing = false
+   Flag       ExpandVariables = false
+}
+
+Prop Aliases(StackOf Alias)
+{
+   Flag Active = false // Aliases are off by default because they're dangerous
+   Flag Echo = true // Echo the processed alias (to see what you actually sent)
+   Flag ProcessCommands = false
+}
+
+Prop KeyboardMacros(StackOf KeyMacro)
+{
+   Flag Active = true
+
+   Func "const CKeyMacro *Macro(KEY_ID keyPressed) const;"
+}
+
+//*****************************************************************************
+//
+// Triggers
+//
+Prop Trigger_Color
+{
+   String FontFace, MaxLen=256 // Empty string = don't set font
+   Int    FontSize = 0 // 0 = Current font default size
+   Flag FontDefault = false // If set, set font to default
+
+   Color Fore &ForeColor    = ::Colors::White
+   Flag  Fore &UseForeColor = false
+   Flag  ForeDefault = false // If set, set fore color to default
+   Flag  ForeHash = false
+   Color Back &BackColor    = ::Colors::Black
+   Flag  Back &UseBackColor = false
+   Flag  BackDefault = false // If set, set back color to default
+   Flag  BackHash = false
+   Flag  WholeLine          = false
+}
+   
+Prop Trigger_Style
+{
+   Flag Italic       = false
+   Flag SetItalic    = false
+   Flag Bold         = false
+   Flag SetBold      = false
+   Flag Underline    = false
+   Flag SetUnderline = false
+   Flag Strikeout    = false
+   Flag SetStrikeout = false
+   Flag Flash        = false // Not part of the mask
+   Flag FlashFast    = false // Option applied to Flash
+   Flag WholeLine    = false
+}
+
+Prop Trigger_Spawn
+{
+   Flag Active = false
+   String Title, MaxLen=65536
+   String CaptureUntil, MaxLen=65536
+   String TabGroup, MaxLen=65536
+   Flag OnlyChildrenDuringCapture = false
+   Flag ShowTab = false
+   Flag Clear = false
+   Flag GagLog = false
+   Flag Copy = false // Copy text into spawn window vs move
+
+   Func "RegEx::Expression *GetCaptureUntilRegEx() const;"
+   Func "mutable CachedUniquePtr<RegEx::Expression> mp_regex_cache;"
+}
+
+Prop Trigger_Gag
+{
+   Flag Active  = false
+   Flag Log     = false // Gag the log file (Active doesn't need to be true for this to work)
+   Flag Message(NoWrite) = false
+}
+
+Prop Trigger_Sound
+{
+   Flag   Active = false
+   String Sound, MaxLen=MAX_PATH
+}
+
+Prop Trigger_Activate
+{
+   Flag Active = false
+   Flag Activity = false
+   Flag NoActivity = false
+   Flag ImportantActivity = false
+}
+
+Prop Trigger_Send
+{
+   Flag   Active = false
+   String Send, MaxLen=65536
+   Int CaptureIndex = 1
+   Flag   SendOnClick = false
+   Flag   ExpandVariables = false
+}
+
+Prop Trigger_Filter
+{
+   Flag   Active = false
+   Flag   HTML = false
+
+   String Replace, MaxLen=65536 // Text to replace trigger text
+}
+
+Prop Trigger_Avatar
+{
+   String URL
+}
+
+Prop Trigger_Script
+{
+   Flag   Active = false
+   String Function, MaxLen=256
+}
+
+Prop Trigger_Toast
+{
+   Flag   Active = false
+}
+
+Prop Trigger_Speech
+{
+   Flag Active = false
+   Flag WholeLine = false
+   String Say, MaxLen=65536
+}
+
+Prop Trigger_Paragraph
+{
+   Flag UseAlignment = false
+   Int Alignment = 0 // 0=Left, 1=Center, 2=Right
+   Flag UseIndent_Left = false
+   Int Indent_Left = 0, Max=99
+   Flag UseIndent_Right = false
+   Int Indent_Right = 0, Max=99
+   Flag UsePadding_Top = false
+   Int Padding_Top = 0, Max=100
+   Flag UsePadding_Bottom = false
+   Int Padding_Bottom = 0, Max=100
+   Flag UseBorder = false
+   Int Border = 0, Max=100
+   Flag UseBorderStyle = false
+   Int BorderStyle = 0 // 0=Square, 1=Round
+   Flag UseStroke = false
+   Int StrokeWidth = 1
+   Color Stroke = ::Colors::White
+   Flag StrokeHash = false
+   Int StrokeStyle = 0 // 0=Outline, 1=Top, 2=Bottom
+   Flag UseBackgroundColor = false
+   Color Background = ::Colors::Blue
+   Flag  BackgroundHash = false
+   Flag UseHorizontalRule = false
+}
+
+Prop Stat_Int
+{
+   Flag Add = false
+}
+
+Prop Stat_Range
+{
+   String Lower
+   String Upper
+   Color Color = "::Windows::Color(154, 154, 191)"
+}
+
+Prop Trigger_Stat
+{
+   String Title // Window title
+   String Name
+   String Prefix // Invisible prefix used to sort
+   String Value
+   Flag UseColor = false
+   Color Color = ::Colors::White
+   Flag UseFont = false
+   Font Font
+
+   Int NameAlignment=1 // 0=Left, 1=Center, 2=Right
+   Int Type // 0=Int, 1=String, 2=Range
+   Stat_Range Range(DemandCreate)
+   Stat_Int Int(DemandCreate)
+}
+
+Prop Trigger_Extension
+{
+   GUID   GUID = IID_NULL
+}
+
+Prop Trigger_Extensions(StackOf Trigger_Extension)
+{
+}
+
+Prop Triggers; // Prototype
+
+Prop Trigger(RefCounted)
+{
+   String Description, MaxLen=65536
+   FindString FindString
+   String Example, MaxLen=65536
+
+   Trigger_Paragraph  Paragraph  (DemandCreate)
+   Trigger_Color      Color      (DemandCreate)
+   Trigger_Style      Style      (DemandCreate)
+   Trigger_Gag        Gag        (DemandCreate)
+   Trigger_Spawn      Spawn      (DemandCreate)
+   Trigger_Sound      Sound      (DemandCreate)
+   Trigger_Activate   Activate   (DemandCreate)
+   Trigger_Send       Send       (DemandCreate)
+   Trigger_Filter     Filter     (DemandCreate)
+   Trigger_Avatar     Avatar     (DemandCreate)
+   Trigger_Script     Script     (DemandCreate)
+   Trigger_Toast      Toast      (DemandCreate)
+   Trigger_Speech     Speech     (DemandCreate)
+   Trigger_Stat       Stat       (DemandCreate)
+   Trigger_Extensions Extensions (DemandCreate)
+   Triggers           Triggers   (DemandCreate)
+
+   Flag Disabled = false
+   Flag StopProcessing = false
+   Flag OncePerLine = false
+
+   Flag AwayPresent = false
+   Flag AwayPresentOnce = false // Only happens once per away (currently only away)
+   Flag Away = true // False means when Present
+
+   Flag Multiline = false
+   Int Multiline_Limit
+   float Multiline_Time
+
+   Flag Cooldown = false
+   float CooldownTime = 0 // Time in seconds
+
+   Legacy MatchText  FindString // 1.7 to 2.0 compatibility
+   Legacy MatchCase  FindString // "
+   Legacy StartsWith FindString // "
+   Legacy EndsWith   FindString // "
+   Legacy WholeWord  FindString // "
+   
+   Func "mutable Time::Stopwatch m_lastHit{60*60*24};" // Initialize last hit with 24 hours ago
+}
+
+Prop Triggers(RefCounted StackOf Trigger)
+{
+   Flag Active = true
+   UInt32 AfterCount = 0
+
+//   Func "private: using Collection<CopyCntPtrTo<Trigger>>::Push; public:"
+}
+
+//*****************************************************************************
+//
+// Characters and Servers
+//
+Prop Puppet(RefCounted)
+{
+   String Name          , MaxLen=1024
+   String Info          , MaxLen=65536
+   String ReceivePrefix , MaxLen=1024
+   Flag   RegularExpression = false
+   Flag   HideReceivePrefix = true
+   String SendPrefix    , MaxLen=1024
+
+   String LogFileName   , MaxLen=MAX_PATH
+   Int    LogFileNameTimeFormat = 0
+   Flag   CharacterLog = false
+   String CharacterLogPrefix
+
+   Flag   AutoConnect = true
+   Flag   ConnectWithPlayer = false // Connect the puppet as the player connects
+   Color  TabColor=::Colors::Transparent
+   Flag   ShowActivityOnTaskbar = true
+   Flag   RemoveAccidentalPrefix = false
+
+   Docking Docking
+   MainWindowSettings MainWindowSettings(DemandCreate)
+
+   KeyboardMacros KeyboardMacros(DemandCreate)
+   Triggers       Triggers(DemandCreate)
+   Aliases        Aliases(DemandCreate)
+
+   Func "mutable CachedUniquePtr<RegEx::Expression> mp_regex_cache;"
+}
+
+Prop Puppets(RefCounted StackOf Puppet by Name)
+{
+   Func "Puppet &New();"
+   Func "Puppet &Copy(const Puppet &copy);"
+}
+
+Prop Character(RefCounted)
+{
+   String Name &Shortcut(NoWrite) , MaxLen=256
+   String DeprecatedName &Name(NoWrite), MaxLen=1024 // Deprecated in build 258
+   String Connect       , MaxLen=65536
+   String Password
+   String Info          , MaxLen=262144 // 256K
+   Flag   Info_Editing(NoWrite) = false // The info pane is open, so don't allow editing in the character dialog
+   String LogFileName   , MaxLen=MAX_PATH
+   Int    LogFileNameTimeFormat = 0
+   Flag   ConnectAtStartup = false
+
+   Flag   IdleEnabled = false
+   Int    IdleTimeout = 0
+   String IdleString
+
+   Docking Docking
+   MainWindowSettings MainWindowSettings(DemandCreate)
+   Color   TabColor=::Colors::Transparent
+   Flag    ShowActivityOnTaskbar = true
+   Flag    RestoreLog = true
+   Int     RestoreLogIndex = -1
+
+   UInt64 BytesSent = 0
+   UInt64 BytesReceived = 0
+   UInt32 SecondsConnected = 0
+   UInt32 ConnectionCount = 0
+  
+   DateTime LastUsed
+   DateTime Created
+
+   KeyboardMacros KeyboardMacros(DemandCreate)
+   Triggers       Triggers(DemandCreate)
+   Aliases        Aliases(DemandCreate)
+
+   Puppets        Puppets(DemandCreate)
+
+   Func "bool Rename(Characters &characters, ConstString name);"
+}
+
+Prop Characters(StackOf Character by Name)
+{
+   Func "Character &New();"
+   Func "Character &Copy(const Character &copy);"
+   Func "void Delete(Character &c);"
+}
+
+Prop Server(RefCounted)
+{
+   String Host="example.com:8889", MaxLen=256
+   String DeprecatedName &Name(NoWrite), MaxLen=256 // Deprecated in build 258
+   String Name &Shortcut(NoWrite) , MaxLen=256
+   String Info              , MaxLen=65536
+   Int    Port(NoWrite) = 8888, Min=1, Max=65536
+   String Module(NoWrite)="Standard Text Muck" // The plug-in for what kind of server this is (empty is the Beip built-in type)
+   GUID   Client(NoWrite) = __uuidof(IClient_Standard)
+
+   Int    CharacterExpirationTime = 0, Min=0
+
+   UInt32 LastIP(NoWrite) = 0
+
+   Flag   HTMLTags(NoWrite) = false
+   Flag   Pueblo = false
+   Flag   Prompts = false // MUD like prompt handling
+   Flag   MCP = false // Enable MCP
+   Flag   MCMP = false // Enable MCMP ((Mud Client Media Protocol)
+   Flag   NAWSOnResize = false
+   Flag   IPV4 = false // Force IPV4 name lookup
+   Flag   LimitTelnetCharset = false // Restrict Telnet Charset Negotiation
+   Int    GMCP_WebView = 2 // 0=ignore, 1=allow, 2=ask every time
+
+   Enum Encoding { UTF8 CP1252 CP437 }
+   Encoding Encoding = CP1252
+
+   Flag TLS = false
+   Flag VerifyCertificate = false // False since most servers don't have verifiable certificates
+
+   Characters     Characters
+   Triggers       Triggers(DemandCreate)
+   Aliases        Aliases(DemandCreate)
+   KeyboardMacros KeyboardMacros(DemandCreate)
+
+   Func "bool Rename(Servers &servers, ConstString name);"
+}
+
+Prop Servers(StackOf Server by Name)
+{
+   Func "Server &New();"
+   Func "Server &Copy(const Server &copy);"
+   Func "void Delete(Server &server);"
+   Func "using Collection<CopyCntPtrTo<Server>>::Delete;"
+}
+
+Prop Connections
+{
+   String PastePrefix , MaxLen=65536
+   String PasteSuffix , MaxLen=65536
+
+   Flag ActivateDisconnect = false
+   Int  ConnectTimeout = 30000
+   Int  ConnectRetry   = 5
+   Flag RetryForever   = false
+   Flag IgnoreErrors   = false
+
+   Flag StripTrailingSpaces = false
+
+   Enum ActivityNotify { None Blink Solid Star }
+   ActivityNotify ActivityNotify = Blink
+
+   // Direct Connect
+   String DirectHost(NoWrite)              , MaxLen=256
+   Int    DirectPort(NoWrite) = 8888, Min=1, Max=65536
+
+   Logging        Logging
+   KeyboardMacros KeyboardMacros
+   Servers        Servers &Shortcuts
+   Triggers       Triggers(DemandCreate)
+   Aliases        Aliases(DemandCreate)
+
+   Int TriggerOrder(NoWrite) = 0    // Removed in build 313
+   // 0 = Character, Server, Global
+   // 1 = Global, Server, Character
+}
+
+//*****************************************************************************
+//
+// Keyboard Shortcuts
+//
+Prop Keys
+{
+   // Warning!  The order of the items in this list must match the order of the
+   // translation table in the keyboard shortcut handler.  As these are just
+   // names and key definitions, not the handling
+   // Order of the modifiers is: SHIFT, CONTROL, ALT
+   Key[] Keys
+   {
+      Minimize             = "VK_ESCAPE,false,false,false"
+      Hide                 = "VK_ESCAPE,true,false,false"
+      ClearActivity
+
+      Input_Send           = "VK_RETURN,Tristate::Unknown,false,false"
+      Input_RepeatLastLine = "'Z',false,false,true"
+      Input_LineUp    = "VK_UP,false,false,false"
+      Input_LineDown  = "VK_DOWN,false,false,false"
+      Input_Clear     = "'U',false,true,false"
+      Input_NextInput
+      Input_PushToHistory
+	  Input_Autocomplete = "VK_TAB,false,false,false"
+      Input_AutocompleteWholeLine
+
+      Output_PageUp   = "VK_PRIOR,false,false,false"
+      Output_PageDown = "VK_NEXT,false,false,false"
+      Output_LineUp   = "VK_PRIOR,false,true,false"
+      Output_LineDown = "VK_NEXT,false,true,false"
+      Output_Top      = "VK_HOME,false,true,false"
+      Output_Bottom   = "VK_END,false,true,false"
+
+      History_PageUp
+      History_PageDown
+      History_SelectUp   = "VK_UP,false,true,false"
+      History_SelectDown = "VK_DOWN,false,true,false"
+	  History_Toggle
+
+      Imaging_Toggle
+
+      Window_Next         = "VK_TAB,false,true,false"
+      Window_Prev         = "VK_TAB,true,true,false"
+      Window_Close        = "VK_F4,false,true,false"
+
+      File_NewTab      = "'T',false,true,false"
+      File_NewWindow   = "'N',false,true,false"
+
+      Edit_Find        = "'F',false,true,false"
+      Edit_FindHistory = "'H',false,true,false"
+      Edit_SelectAll   = "'A',false,true,false"
+      Edit_Paste       = "'V',false,true,false"
+      Edit_Pause       = "VK_PAUSE,false,false,false"
+      Edit_SmartPaste  = "'V',true,true,false"
+      Edit_ConvertReturns = "VK_F1,false,false,false"
+      Edit_ConvertTabs    = "VK_F1,true,false,false"
+	  Edit_ConvertSpaces  = "VK_F2,true,false,false"
+
+      Connection_Connect    = "0xDB,false,true,false"
+      Connection_Disconnect = "0xDD,false,true,false"
+      Connection_Reconnect = "'R',false,true,false"
+
+      Logging_Toggle = "'L',false,true,false"
+
+      SendTelnet_IP
+   }
+}
+
+Prop CustomTheme
+{
+   Color UI_3D_face
+   Color UI_3D_light
+   Color UI_3D_shadow
+   Color UI_active
+   Color UI_flash
+   Color UI_flash_text
+   Color UI_text
+
+   Color Docking_caption_background
+   Color Docking_active_caption_background
+   Color Docking_inactive_caption_outline
+   Color Docking_active_caption_text
+   Color Docking_inactive_caption_text
+
+   Color Taskbar_background
+   Color Taskbar_highlight
+   Color Taskbar_flash
+   Color Taskbar_text
+   Color Taskbar_text_faint
+   Color Taskbar_text_disconnected
+   Color Taskbar_tab_divider
+
+   Color Splitter
+}
+
+//*****************************************************************************
+//
+// The root property that all others are stored in
+//
+Prop Global
+{
+   Windows     Windows
+   Connections Connections
+   Ansi        Ansi
+   Keys        Keys
+
+   Int  Version = 0 // We say zero so that the version number is always written out
+                    // Since the main program will set it's value at startup
+
+   Flag ShowDefaults        = false // Defaults are normally hidden to save space
+   Flag SaveOnExit(NoWrite) = true
+   Flag LoadErrors(NoWrite) = false // Errors occurred during loading
+   Flag Upgraded(NoWrite) = false // Upgraded to a newer version on load
+   String LastFind(NoWrite)
+   Int LogFileFilter = 1 // 1=.txt 2=.html
+
+   String ScriptLanguage="JScript"
+   String ScriptStartup , MaxLen=MAX_PATH
+   Flag ScriptDebug = false
+
+   Flag ParseEmoticons = false
+   Flag AutoImageViewer = false
+   Flag InlineImages = true
+   Int  InlineImageHeight = 150
+   Flag AnimatedImagesStartPaused = false
+   Int  AvatarWidth = 50
+   Int  AvatarHeight = 30
+
+   Flag SpellCheck = true
+   String SpellLanguage = "en-US"
+
+   Flag TCP_KeepAlive = true
+   Flag TCP_NoDelay = true
+   String Telnet_TType(NoWrite)="Beip"
+
+   Flag TaskbarOnTop = false
+   Flag TaskbarShowTyped = true
+   Flag TaskbarShowLogging = true
+   Flag NotificationIcon = false
+   Flag ShowSplash(NoWrite) = true
+   Flag ShowWelcome = true
+   Flag SendUnrecognizedCommands = false
+   Flag PreventSmartQuotes = true
+
+   Flag NewContentMarker = true
+   Flag TaskbarBadge = true
+   String VoiceID
+
+   String UIFontName = "Calibri" // "Segoe UI"
+   Int    UIFontSize = 13
+   Flag   DarkMode = false
+   Int    Theme = 0 // 0 = Light Mode
+   CustomTheme CustomTheme(DemandCreate) // If it exists, is used
+
+   Flag ShowTip_SelectionCopy = true
+}

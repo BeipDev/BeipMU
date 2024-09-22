@@ -49,7 +49,7 @@ struct Connection
    // TelnetParser::INotify
    void TelnetParser::INotify::OnLine(ConstString string) override; // Single line of network data
    void TelnetParser::INotify::OnTelnet(ConstString string) override;
-   void TelnetParser::INotify::OnPrompt(ConstString string) override;
+   void TelnetParser::INotify::OnPrompt(ConstString string) override { OnLine(string); }
    void TelnetParser::INotify::OnEncoding(Prop::Server::Encoding encoding) override;
    void TelnetParser::INotify::OnGMCP(ConstString string) override;
    void TelnetParser::INotify::OnDoNAWS() override;

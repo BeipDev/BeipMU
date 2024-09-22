@@ -251,26 +251,6 @@ void Connection::OnTelnet(ConstString string)
       mp_client->Input(string);
 }
 
-void Connection::OnPrompt(ConstString string)
-{
-#if 0
-   if(m_ppropServer && m_ppropServer->fPrompts())
-   {
-      RemovePrompt();
-      m_timer_prompt.Reset();
-
-      auto p_line=m_text_to_line.Parse(string, m_ppropServer->fHTMLTags(), m_ppropServer->eEncoding());
-      mp_prompt=*p_line;
-      GetOutput().Add(std::move(p_line));
-   }
-   else
-#endif
-   {
-      OnLine(string);
-//      m_telnet_parser.Reset();
-   }
-}
-
 void Connection::OnEncoding(Prop::Server::Encoding encoding)
 {
    Text(FixedStringBuilder<256>("<icon information> <font color='lime'>Charset negotiated: ", g_encoding_names[int(encoding)]));
@@ -338,21 +318,21 @@ struct JSON_WebView_Open : JSON::Element
 {
    void OnString(ConstString name, ConstString value) override
    {
-      if(name&"url")
+      if(name=="url")
          m_url=value;
-      else if(name&"id")
+      else if(name=="id")
          m_id=value;
-      else if(name&"source")
+      else if(name=="source")
          m_source=value;
-      else if(name&"dock")
+      else if(name=="dock")
       {
-         if(value&"left")
+         if(value=="left")
             m_docking_side=Docking::Side::Left;
-         else if(value&"right")
+         else if(value=="right")
             m_docking_side=Docking::Side::Right;
-         else if(value&"top")
+         else if(value=="top")
             m_docking_side=Docking::Side::Top;
-         else if(value&"bottom")
+         else if(value=="bottom")
             m_docking_side=Docking::Side::Bottom;
          else
          {
@@ -367,7 +347,7 @@ struct JSON_WebView_Open : JSON::Element
 
    JSON::Element &OnObject(ConstString name) override
    {
-      if(name&"http-request-headers")
+      if(name=="http-request-headers")
          return m_headers;
       return __super::OnObject(name);
    }

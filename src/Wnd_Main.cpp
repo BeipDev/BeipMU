@@ -26,7 +26,6 @@
 #include "Yarn\IYarn_Tilemap.h"
 namespace Yarn { struct Wnd_Windows; }
 #endif
-#include "shellscalingapi.h"
 #include "WebView.h"
 
 Prop::Docking g_propDockingClipboard;
