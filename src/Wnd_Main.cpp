@@ -42,6 +42,7 @@ void CreateDialog_Find(Window wnd, Text::Wnd &wndText);
 void CreateDialog_Settings(Window wndParent);
 
 void CreateWindow_About(Window wndParent);
+void D2DTest();
 
 void ShowStatistics(Text::Wnd &wnd)
 {
@@ -870,7 +871,7 @@ SpawnWindow &Wnd_Main::GetSpawnWindow(const Prop::Trigger_Spawn &trigger, ConstS
 
       for(auto &tabWindow : m_spawn_tabs_windows)
       {
-         if(tabWindow && tabWindow.m_title.Compare(trigger.pclTabGroup())==0)
+         if(tabWindow && tabWindow.m_title==trigger.pclTabGroup())
          {
             pTabWindow=&tabWindow;
             break;
@@ -888,7 +889,7 @@ SpawnWindow &Wnd_Main::GetSpawnWindow(const Prop::Trigger_Spawn &trigger, ConstS
 
    for(auto &window : m_spawn_windows)
    {
-      if(window.m_title.Compare(title)==0)
+      if(window.m_title==title)
          return window;
    }
 
@@ -943,7 +944,7 @@ Wnd_WebView *Wnd_Main::FindWebView(ConstString id)
 {
    for(auto &view : m_webview_windows)
    {
-      if(view.GetID().Compare(id)==0)
+      if(view.GetID()==id)
          return &view;
    }
    return nullptr;
@@ -1013,7 +1014,7 @@ SpawnWindow &SpawnTabsWindow::GetTab(ConstString title, Prop::TextWindow *pprops
    // Look for an existing tab
    for(unsigned i=0;i<m_spawn_windows.Count();i++)
    {
-      if(m_spawn_windows[i].m_title.Compare(title)==0)
+      if(m_spawn_windows[i].m_title==title)
       {
          if(hilight)
             mp_tabs->SetHilight(i);
@@ -1107,7 +1108,7 @@ bool SpawnTabsWindow::SetVisible(ConstString title)
 {
    for(unsigned i=0;i<m_spawn_windows.Count();i++)
    {
-      if(m_spawn_windows[i].m_title.Compare(title)==0)
+      if(m_spawn_windows[i].m_title==title)
       {
          auto old_visible=mp_tabs->GetVisible();
          mp_tabs->SetVisible(i);
@@ -2118,7 +2119,7 @@ void Wnd_Main::History_AddToHistory(ConstString string, ConstString prefix, uint
       unsigned iCurrentLine=m_history_pos==~0 ? lines.Count()-1 : m_history_pos;
       auto lineText=lines[iCurrentLine].GetText();
 
-      if(lineText.Compare(*pLine)==0 || lineText.Count()>prefix.Count() && lineText.WithoutFirst(prefix.Count()).Compare(*pLine)==0)
+      if(lineText==*pLine || lineText.Count()>prefix.Count() && lineText.WithoutFirst(prefix.Count())==*pLine)
          return;
    }
 
@@ -2934,6 +2935,7 @@ void Wnd_Main::HandleKey(InputControl &edInput, Keys key)
       case Key_Window_Next: ActivateWindow(Direction::Next); return;
       case Key_Window_Prev: ActivateWindow(Direction::Previous); return;
       case Key_Window_Close: Close(); return;
+      case Key_Window_CloseAll: Msg::Command(ID_FILE_QUIT, nullptr, 0).Post(GetMDI()); return;
 
       case Key_NewTab: Msg::Command(ID_FILE_NEWTAB, nullptr, 0).Post(GetMDI()); return;
       case Key_NewWindow: Msg::Command(ID_FILE_NEWWINDOW, nullptr, 0).Post(GetMDI()); return;
@@ -3537,7 +3539,7 @@ void Wnd_MDI::PopupMainMenu(int2 position)
    }
 
    menu.AppendSeparator();
-   menu.Append(MF_STRING, ID_FILE_QUIT, "Close all Windows and E&xit");
+   Append(menu, ID_FILE_QUIT, "Close all Windows and E&xit", Wnd_Main::Key_Window_CloseAll);
 
    if(mp_active_wnd_main)
       mp_active_wnd_main->InitMenu(menu);
@@ -3952,5 +3954,7 @@ void CreateWindow_Root(ConstString command_line, int nCmdShow)
 #if BETA_BUILD!=0
    MessageBox(*Wnd_MDI::s_root_node.Next(), "This is a beta build, expect things to not be perfect.\nAnd as always, please try to break it!", "BETA reminder", MB_ICONEXCLAMATION|MB_OK);
 #endif
-
+#if DWRITE_TEST
+   D2DTest();
+#endif
 }

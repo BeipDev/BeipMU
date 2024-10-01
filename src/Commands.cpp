@@ -1405,7 +1405,7 @@ try
 
       for(auto &window : m_spawn_tabs_windows)
       {
-         if(window.m_title.Compare(wl[1])==0)
+         if(window.m_title==wl[1])
          {
             if(!window.SetVisible(wl[2]))
                mp_wnd_text->AddHTML("<icon error> <font color='red'>Tab not found");

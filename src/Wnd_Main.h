@@ -274,6 +274,7 @@ struct Wnd_Main
       Key_Window_Next,
       Key_Window_Prev,
       Key_Window_Close,
+      Key_Window_CloseAll,
 
       Key_NewTab,
       Key_NewWindow,

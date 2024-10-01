@@ -166,7 +166,7 @@ struct DataInfo_String : DataInfo
    void Read(void *data, ConstString input) const override;
    void Write(const void *data, Streams::Output &output) const override { output.Write_String(Cast(data), true); }
 
-   bool IsDefault(const void *data) const { return m_default.Compare(Cast(data))==0; }
+   bool IsDefault(const void *data) const { return m_default==Cast(data); }
    void SetToDefault(void *data) const { Cast(data)=m_default; }
    unsigned GetMaxLength() const { return m_maxLength; }
 
