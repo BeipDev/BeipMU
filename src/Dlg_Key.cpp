@@ -1,7 +1,3 @@
-//
-// Keyboard Shortcuts Dialog
-//
-
 #include "Main.h"
 #include "Dlg_Key.h"
 

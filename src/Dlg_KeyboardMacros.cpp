@@ -1,7 +1,3 @@
-//
-// Keyboard Macros Dialog
-//
-
 #include "Main.h"
 #include "Wnd_PropTree.h"
 

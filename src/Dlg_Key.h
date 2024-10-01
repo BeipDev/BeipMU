@@ -1,7 +1,3 @@
-//
-//
-//
-
 struct Wnd_Key : TWindowImpl<Wnd_Key>, AutoLayout::LayoutEngine
 // Brings up a modal window that demands a keypress and sends a notification
 // if the key press is made (and no notification if the user cancels)

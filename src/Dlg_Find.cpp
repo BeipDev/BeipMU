@@ -1,7 +1,3 @@
-//
-// Connection Dialog
-//
-
 #include "Main.h"
 
 static bool s_regular_expression=false;

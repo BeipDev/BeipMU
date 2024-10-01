@@ -1,8 +1,4 @@
-﻿//
-// Connection Dialog
-//
-
-#include "Main.h"
+﻿#include "Main.h"
 #include "Speller.h"
 #include "Wnd_Main.h"
 #include "Dlg_Key.h"

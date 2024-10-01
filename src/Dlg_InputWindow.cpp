@@ -1,7 +1,3 @@
-//
-// Connection Dialog
-//
-
 #include "Main.h"
 #include "Wnd_Input.h"
 
