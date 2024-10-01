@@ -1,0 +1,486 @@
+// [ uuid(36A385C8-A258-4210-A61C-EB3890501903), object, dual ]
+
+// NOTE: Every function name is is in UpperCase style, as it all must match, since if you
+// use 'output' somewhere, it'll turn later 'Output' names into 'output' and confuse the
+// heck out of other clients who get the switcheroo pulled on them when you add new names
+// that don't match the standard.  Note that this only affects the idl file, not us.
+
+//#define _MIDL_DECLARE_WIREM_HANDLE // Used for handles like HWND, etc. Not currently needed
+midl_pragma warning(disable: 2111) // identifier length exceeds 31 characters
+midl_pragma warning(disable: 2366) // cannot assign a default value : var
+// import "ocidl.idl";
+
+[
+   uuid(36A385C0-A258-4210-A61C-EB3890501903),
+   helpstring("BeipMU 4.00")
+]
+library BeipMU
+{
+   importlib("stdole32.tlb");
+   #include "OM_Props.idl"
+
+   interface IConnection;
+   interface IWindow_Main;
+   interface ITextWindowLine;
+
+   [ uuid(4be9e159-9074-446c-9fa3-c08fc97c5502), oleautomation, dual, nonextensible ]
+   interface IWindow_Properties : IDispatch
+   {
+      [propput] HRESULT Title([in] BSTR title);
+      [propget] HRESULT Title([out, retval] BSTR *title);
+
+      [propget] HRESULT HWND([out, retval] __int3264 *hwnd);
+   }
+
+   typedef enum tagMouseButton
+   {
+      Left=0,
+      Right=1,
+      Middle=2
+   } MouseButton;
+
+   [ uuid(7401476A-2852-487f-9B4A-22927B1EC320), oleautomation, dual, nonextensible ]
+   interface IWindow_Events : IDispatch
+   {
+      HRESULT SetOnClose([in, defaultvalue(0)] IDispatch *pDisp, [in, defaultvalue(0)] VARIANT var);
+      HRESULT SetOnMouseMove([in, defaultvalue(0)] IDispatch *pDisp, [in, defaultvalue(0)] VARIANT var);
+      // OnMouseMove(x, y)
+      HRESULT SetOnKey([in, defaultvalue(0)] IDispatch *pDisp, [in, defaultvalue(0)] VARIANT var);
+      // OnKey(key)
+//      HRESULT SetOnMouseButton([in, defaultvalue(0)] IDispatch *pDisp, [in, defaultvalue(0)] VARIANT var);
+      // OnMouseButton(x,y,button)
+   }
+
+   [uuid(AA9E1802-71D0-4E53-8E6E-2FD4A1326B97), oleautomation, dual, nonextensible]
+   interface IArrayUInt : IDispatch
+   {
+      [propget, id(DISPID_VALUE)] HRESULT Item([in] VARIANT var, [out, retval] unsigned int *retval);
+      [propget] HRESULT Count([out, retval] long *);
+   }
+
+   [ uuid(36A385C6-A258-4210-A61C-EB3890501903), oleautomation, dual, nonextensible ]
+   interface ITextWindowLine : IDispatch
+   {
+      [propget] HRESULT Length([out, retval] long *);
+      [propget] HRESULT String([out, retval] BSTR *); 
+      [propget] HRESULT HTMLString([out, retval] BSTR *);
+
+      HRESULT Insert([in] unsigned int position, [in] ITextWindowLine *line);
+      HRESULT Delete([in] unsigned int start, [in] unsigned int end);
+
+      HRESULT Color([in] unsigned int start, [in] unsigned int end, [in, defaultvalue(0)] long lColor);
+      HRESULT BgColor([in] unsigned int start, [in] unsigned int end, [in, defaultvalue(0)] long lColor);
+
+      HRESULT Bold([in] unsigned int start, [in] unsigned int end, [in, defaultvalue(1)] VARIANT_BOOL fSet);
+      HRESULT Italic([in] unsigned int start, [in] unsigned int end, [in, defaultvalue(1)] VARIANT_BOOL fSet);
+      HRESULT Underline([in] unsigned int start, [in] unsigned int end, [in, defaultvalue(1)] VARIANT_BOOL fSet);
+      HRESULT Strikeout([in] unsigned int start, [in] unsigned int end, [in, defaultvalue(1)] VARIANT_BOOL fSet);
+      HRESULT Flash([in] unsigned int start, [in] unsigned int end, [in, defaultvalue(1)] VARIANT_BOOL fSet);
+      HRESULT FlashMode([in] unsigned int start, [in] unsigned int end, [in, defaultvalue(0)] int iMode); // 0 = normal, 1 = inverse
+      HRESULT Blink([in] unsigned int start, [in] unsigned int end, [in] unsigned int iBits, [in] unsigned int mask);
+   }
+
+    [ uuid(36A385C4-A258-4210-A61C-EB3890501903), dual, nonextensible ]
+   interface IWindow_Text : IDispatch
+   {
+      [propget] HRESULT Properties([out, retval] IWindow_Properties **retval);
+      [propget] HRESULT Paused([out, retval] VARIANT_BOOL *paused);
+
+      HRESULT Create([in] BSTR bstr, [out, retval] ITextWindowLine** retval);
+      HRESULT CreateHTML([in] BSTR bstr, [out, retval] ITextWindowLine** retval);
+      HRESULT Add([in] ITextWindowLine *lineNew);
+      HRESULT Write([in] BSTR bstr);
+      HRESULT WriteHTML([in] BSTR bstr);
+
+      HRESULT SetOnPause([in, defaultvalue(0)] IDispatch *pDisp);
+
+//		[propget] HRESULT UserData([out, retval] VARIANT *pVar);
+//		[propput] void UserData([in] VARIANT var);
+	}
+ 
+   [ uuid(72dcbdbb-e23a-4b9e-a65a-88fe98490ce7) ]
+   dispinterface _IWindow_Text_Events
+   {
+      properties:
+      methods:
+         [id(1)] void OnPause([in] VARIANT_BOOL paused);
+   }
+
+	[ uuid(E50E3B98-5AE1-4fe7-814A-4B1B1A188EF2), oleautomation, dual, nonextensible ]
+	interface IWindow_Control_Edit : IDispatch
+	{
+		HRESULT SetSel([in] int start, [in] int end);
+		HRESULT GetSelStart([out, retval] int *retval);
+		HRESULT GetSelEnd([out, retval] int *retval);
+
+		[propget] HRESULT Length([out, retval] int *retval);
+
+		HRESULT Set([in] BSTR bstr);
+		HRESULT Get([out, retval] BSTR *retval);
+
+//      [local, propget] HRESULT HWND([out, retval] void **hwnd);
+	}
+
+   [ uuid(479a8e11-1a05-464d-afec-6c32a7a3a3b5), oleautomation, dual, nonextensible ]
+   interface ILog : IDispatch
+   {
+      HRESULT Write([in] BSTR bstr);
+      HRESULT WriteLine([in] ITextWindowLine *pLine);
+
+      [propget] HRESULT FileName([out, retval] BSTR *bstr);
+   }
+
+   [ uuid(36A385C5-A258-4210-A61C-EB3890501903), oleautomation, dual, nonextensible ]
+	interface IConnection : IDispatch
+	{
+		HRESULT Send([in] BSTR bstr); // Text about to be sent
+		HRESULT SetOnSend([in, defaultvalue(0)] IDispatch *pDisp, [in, defaultvalue(0)] VARIANT var);
+		// OnSend(bstr Text, var);
+		HRESULT Transmit([in] BSTR bstr); // Send the text to the connection
+
+		HRESULT Receive([in] BSTR bstr); // Act as though the given string was received from the connection
+		HRESULT SetOnReceive([in, defaultvalue(0)] IDispatch *pDisp, [in, defaultvalue(0)] VARIANT var);
+		// OnReceive(bstr Text, var);
+
+		HRESULT Display([in] BSTR bstr); // 
+		HRESULT SetOnDisplay([in, defaultvalue(0)] IDispatch *pDisp, [in, defaultvalue(0)] VARIANT var);
+		// OnDisplay(ITextWindowLine, var);
+
+      HRESULT SetOnGMCP([in, defaultvalue(0)] IDispatch *pDisp, [in, defaultvalue(0)] VARIANT var);
+
+		HRESULT SetOnConnect([in, defaultvalue(0)] IDispatch *pDisp, [in, defaultvalue(0)] VARIANT var);
+		HRESULT SetOnDisconnect([in, defaultvalue(0)] IDispatch *pDisp, [in, defaultvalue(0)] VARIANT var);
+
+		HRESULT IsConnected([out, retval] VARIANT_BOOL *);
+      HRESULT Reconnect([out, retval] VARIANT_BOOL *); // Returns TRUE if reconnect possible
+
+      HRESULT IsLogging([out, retval] VARIANT_BOOL *);
+      [propget] HRESULT Log([out, retval] ILog **);
+
+		[propget] HRESULT World([out, retval] IWorld **);
+		[propget] HRESULT Character([out, retval] ICharacter **);
+      [propget] HRESULT Puppet([out, retval] IPuppet **);
+
+  		[propget] HRESULT Window_Main([out, retval] IWindow_Main **retval);
+	}
+
+   [ uuid(02ac3aaa-9650-4087-8d3c-719de645b1a9) ]
+   dispinterface _IConnection_Events
+   {
+      properties:
+      methods:
+         [id(1)] void OnConnect();
+         [id(2)] void OnDisconnect();
+         [id(3)] void OnSend([in] BSTR text, [in, out] VARIANT_BOOL *handled);
+         [id(4)] void OnReceive([in] BSTR text, [in, out] VARIANT_BOOL *handled);
+         [id(5)] void OnDisplay([in] ITextWindowLine *line, [in, out] VARIANT_BOOL *handled);
+         [id(6)] void OnLogging([in] VARIANT_BOOL state);
+   }
+
+   [ uuid(3d9792c9-2639-4a3b-9127-215ce2ae7ef5) ]
+   coclass Connection
+   {
+      [default] interface IConnection;
+      [default, source] dispinterface _IConnection_Events;
+   }
+
+   typedef enum tagSide
+   {
+      Side_Left,
+      Side_Top,
+      Side_Right,
+      Side_Bottom
+   } Side;
+
+   [ uuid(39ac8829-0e73-40d7-bec7-193c72e2a7cc), oleautomation, dual, nonextensible ]
+   interface IDocking : IDispatch
+   {
+      HRESULT Dock(Side side); // Docks the window to a particular side
+   };
+
+   [ uuid(36A385C1-A258-4210-A61C-EB3890501903), oleautomation, dual, nonextensible ]
+   interface IWindow_Main : IDispatch
+   {
+      [propget] HRESULT Output([out, retval] IWindow_Text** retval);
+      [propget] HRESULT History([out, retval] IWindow_Text** retval);
+      [propget] HRESULT Input([out, retval] IWindow_Control_Edit** retval);
+      [propget] HRESULT Connection([out, retval] IConnection** retval);
+
+      [propget] HRESULT UserData([out, retval] VARIANT *pVar);
+      [propput] void UserData([in] VARIANT var);
+
+      HRESULT Close();
+
+      HRESULT SetOnCommand([in, defaultvalue(0)] IDispatch *pDisp, [in, defaultvalue(0)] VARIANT var);
+      HRESULT SetOnActivate([in, defaultvalue(0)] IDispatch *pDisp, [in, defaultvalue(0)] VARIANT var);
+      // OnActivate(ISocket sock, BSTR bstrData);
+      HRESULT SetOnClose([in, defaultvalue(0)] IDispatch *pDisp, [in, defaultvalue(0)] VARIANT var);
+
+      HRESULT Run([in] BSTR bstr);
+      HRESULT RunFile([in] BSTR bstr);
+
+      HRESULT CreateDialogConnect(); // Fails if window is already connected
+
+      [propput] HRESULT TitlePrefix([in] BSTR title); // Sets the title prefix (what appears before BeipMU's automatic title)
+      [propget] HRESULT TitlePrefix([out, retval] BSTR *title);
+      [propget] HRESULT Title([out, retval] BSTR *title); // Reads the current full title
+
+      HRESULT GetVariable([in] BSTR name, [out, retval] BSTR *value);
+      HRESULT SetVariable([in] BSTR name, [in] BSTR value);
+      HRESULT DeleteVariable([in] BSTR name);
+
+//      [local, propget] HRESULT HWND([out, retval] long *hwnd);
+//      [local] HRESULT MakeDocking([in] __int3264 hwnd, [out, retval] IDocking **pDocking);
+   }
+
+   [ uuid(afb7d777-4d09-48cd-849f-2fc7fe25a7bf) ]
+   dispinterface _IWindow_Main_Events
+   {
+      properties:
+      methods:
+         [id(1)] void OnCommand([in] BSTR command, [in] BSTR params, [in, out] VARIANT_BOOL *handled);
+         [id(2)] void OnActivate([in] VARIANT_BOOL fActivated);
+         [id(3)] void OnClose();
+         [id(4)] void OnKey([in] long vkey, [in, out] VARIANT_BOOL *handled);
+   }
+
+   [ uuid(2f71157c-d178-4f3c-ab6b-a183c773e372) ]
+   coclass Window_Main
+   {
+      [default] interface IWindow_Main;
+      [default, source] dispinterface _IWindow_Main_Events;
+   }
+
+	[ uuid(E9440711-EB4F-4250-AE95-5DB339E27C98), oleautomation, dual, nonextensible ]
+	interface IWindows : IDispatch
+	{
+		[propget, id(DISPID_VALUE)] HRESULT Item([in] VARIANT var, [out, retval] IWindow_Main** retval);
+		[propget] HRESULT Count([out, retval] long *);
+	}
+
+	[ uuid(9B7F5272-55B2-43ef-9E46-545F8D866AD8), oleautomation, dual, nonextensible ]
+	interface IWindow_FixedText : IDispatch
+	{
+      [propget] HRESULT Events([out, retval] IWindow_Events **retval);
+      [propget] HRESULT Properties([out, retval] IWindow_Properties **retval);
+
+		[propput] HRESULT CursorX([in] int X);
+		[propget] HRESULT CursorX([out, retval] int *pX);
+		[propput] HRESULT CursorY([in] int Y);
+		[propget] HRESULT CursorY([out, retval] int *pY);
+
+		HRESULT Clear();
+		HRESULT Write([in] BSTR);
+	}
+
+	[ uuid(2531C240-64EA-4293-B08A-A9C1F9271627), oleautomation, dual, nonextensible ]
+	interface ITimer : IDispatch
+	{
+		[propget] HRESULT UserData([out, retval] VARIANT *pVar);
+		[propput] void UserData([in] VARIANT var);
+
+		void Kill();
+      [propget] HRESULT Active([out, retval] VARIANT_BOOL *retval);
+	}
+
+	[ uuid(71569D4A-704F-4fb3-8F18-CE0E0EE634F3), oleautomation, dual, nonextensible ]
+	interface IWindow_Graphics : IDispatch
+	{
+      [propget] HRESULT Events([out, retval] IWindow_Events **retval);
+      [propget] HRESULT Properties([out, retval] IWindow_Properties **retval);
+
+		[propget] HRESULT Width([out, retval] int *);
+		[propget] HRESULT Height([out, retval] int *);
+
+		HRESULT Clear([in, defaultvalue(0)] long lColor);
+
+		HRESULT SetPixel([in] int x, [in] int y, [in] long lColor);
+		HRESULT GetPixel([in] int x, [in] int y, [out, retval] long *);
+
+		HRESULT SetPen([in] long lColor, [in, defaultvalue(0)] int width);
+		HRESULT MoveTo([in] int x, [in] int y);
+		HRESULT LineTo([in] int x, [in] int y);
+
+      HRESULT Text([in] int x, [in] int y, [in] BSTR text);
+	}
+
+   [ uuid(06815526-b219-411c-bf00-afe01930db8b), oleautomation, dual, nonextensible ]
+   interface ISocket : IDispatch
+   {
+      HRESULT Connect([in] BSTR host, [in, defaultvalue(1234)] unsigned int iPort);
+      HRESULT Close();
+      HRESULT IsConnected([out, retval] VARIANT_BOOL *);
+
+      HRESULT Send([in] VARIANT send);
+
+      HRESULT SetOnReceive([in, defaultvalue(0)] IDispatch *pDisp);
+      // OnReceive(ISocket sock, BSTR buffer);
+      HRESULT SetOnConnect([in, defaultvalue(0)] IDispatch *pDisp);
+      // OnConnectEvent(ISocket sock);
+      HRESULT SetOnDisconnect([in, defaultvalue(0)] IDispatch *pDisp);
+      // OnDisconnectEvent(ISocket sock);
+
+      HRESULT SetFlag([in] int iFlag, [in] VARIANT_BOOL fValue);
+      // Flags:
+      // 1 = Only send entire lines to OnReceive (wait for carriage returns/line feeds)
+
+      [propget] HRESULT UserData([out, retval] VARIANT *pVar);
+      [propput] void UserData([in] VARIANT var);
+   }
+
+   [ uuid(1942893B-C4F0-410D-8348-D69DE3174CFB), dual, nonextensible ]
+   interface IWebView : IDispatch
+   {
+      HRESULT CloseWindow();
+
+      HRESULT IsConnected([out, retval] VARIANT_BOOL *retval);
+      HRESULT SetOnConnect([in] IDispatch *p_callback);
+      HRESULT SetOnDisconnect([in] IDispatch *p_callback);
+
+      HRESULT Send([in] BSTR bstr, [in, defaultvalue(0)] VARIANT_BOOL process_aliases); // Send the given string as text over the socket
+      HRESULT SetOnSend([in] IDispatch *p_callback);
+      // OnSend(text);
+
+      HRESULT Receive([in] BSTR bstr); // Act as though the given string was received from the connection
+      HRESULT SetOnReceive([in] IDispatch *p_callback);
+      // OnReceive(text);
+
+      HRESULT Display([in] BSTR bstr);
+      HRESULT SetOnDisplay([in] int id, [in] IDispatch *p_callback, [in] BSTR regex, [in, defaultvalue(0)] VARIANT_BOOL gag);
+      HRESULT ClearOnDisplay([in] int id);
+      // OnDisplay(line, matches)
+
+      HRESULT SetOnDisplayCapture([in] int id, [in] IDispatch *p_capture, [in] IDispatch *p_capture_changed, [in] BSTR regex_begin, [in] BSTR regex_end);
+      HRESULT ClearOnDisplayCapture([in] int id, [out, retval] VARIANT_BOOL *success);
+      // OnDisplayCapture(id, line)
+      // OnDisplayCaptureChanged(id, line, bool starting)
+
+      HRESULT SendGMCP([in] BSTR gmcp);
+      HRESULT SetOnGMCP([in] BSTR package_prefix, [in] IDispatch *p_callback);
+      HRESULT ClearOnGMCP([in] BSTR package_prefix);
+      // OnGMCP(BSTR package, BSTR json)
+   }
+
+   [ uuid(4703fc42-40af-4b8a-94f2-e09dff9ab8e0) ]
+   dispinterface _ISocket_Events
+   {
+      properties:
+      methods:
+         [id(1)] void OnReceive();
+         [id(2)] void OnConnect();
+         [id(3)] void OnDisconnect();
+   }
+
+   [ uuid(ddfb49b9-3d86-400c-8034-0f08d0bf637a) ]
+   coclass Socket
+   {
+      [default] interface ISocket;
+      [default, source] dispinterface _ISocket_Events;
+   }
+
+
+   [ uuid(5b53fd39-46a8-4519-86a4-0442d98d79aa), oleautomation, dual, nonextensible ]
+   interface ISocketServer : IDispatch
+   {
+      HRESULT Shutdown();
+      // OnConnection(ISocket sock);
+   }
+
+   [ uuid(1497b3f5-43e9-4edf-bd91-01efcd2598a7) ]
+   dispinterface _ISocketServer_Events
+   {
+      properties:
+      methods:
+         [id(1)] void OnConnection([in] ISocket *pSocket);
+   }
+
+   [ uuid(1b99abe3-48c7-4fe1-8f1f-85722612e50b) ]
+   coclass SocketServer
+   {
+      [default] interface ISocketServer;
+      [default, source] dispinterface _ISocketServer_Events;
+   }
+
+   [ uuid(334038f2-b7e7-4a0d-af86-eca67b6f82ff), oleautomation, dual, nonextensible ]
+   interface IReverseDNS : IDispatch
+   {
+      // The object created during a RevereDNS lookup (hidden currently)
+   };
+
+   [ uuid(daae34c6-1e89-410e-a095-eb1f8c2777a7), oleautomation, dual, nonextensible ]
+   interface IForwardDNS : IDispatch
+   {
+      // The object created during a ForwardDNS lookup (hidden currently)
+   };
+
+   [ uuid(36A385C8-A258-4210-A61C-EB3890501903), oleautomation, dual, nonextensible ]
+   interface IApp : IDispatch
+   {
+      [propget] HRESULT BuildNumber([out, retval] long *);
+      [propget] HRESULT BuildDate([out, retval] DATE *);
+      [propget] HRESULT Version([out, retval] long *);
+
+      [propget] HRESULT Worlds([out, retval] IWorlds **retval);
+      [propget] HRESULT Windows([out, retval] IWindows **retval);
+      [propget] HRESULT Triggers([out, retval] ITriggers **retval);
+
+      [propget] HRESULT ConfigPath([out, retval] BSTR *retval);
+
+      HRESULT ActiveXObject([in] BSTR name, [out, retval] IDispatch **retval);
+
+      HRESULT NewTrigger([out, retval] ITrigger **retval);
+
+      HRESULT NewWindow_FixedText([in, defaultvalue(80)] int iWidth, [in, defaultvalue(25)] int iHeight, [out, retval] IWindow_FixedText** retval);
+      HRESULT NewWindow_Graphics([in] int iWidth, [in] int iHeight, [out, retval] IWindow_Graphics** retval);
+      HRESULT NewWindow_Text([in, defaultvalue(320)] int iWidth, [in, defaultvalue(240)] int iHeight, [out, retval] IWindow_Text** retval);
+
+      HRESULT NewWindow([out, retval] IWindow_Main** retval);
+      HRESULT SetOnNewWindow([in, defaultvalue(0)] IDispatch *pDisp, [in, defaultvalue(0)] VARIANT var);
+
+      HRESULT CreateInterval([in] int iTimeOut, [in] IDispatch *pDisp, [in, defaultvalue(0)] VARIANT var, [out, retval] ITimer **retval);
+      HRESULT CreateTimeout([in] int iTimeOut, [in] IDispatch *pDisp, [in, defaultvalue(0)] VARIANT var, [out, retval] ITimer **retval);
+
+      HRESULT New_Socket([out, retval] ISocket **retval);
+      HRESULT New_SocketServer([in] unsigned int iPort, 
+                               [in] IDispatch *pDisp, [in, defaultvalue(0)] VARIANT var,
+                               [out, retval] ISocketServer **retval);
+
+      HRESULT ReverseDNSLookup([in] BSTR bstrIP, [in] IDispatch *pDisp, [in, defaultvalue(0)] VARIANT var);
+      // pDisp(bstr hostname, var);
+      // function Lookup(hostname) { window.output.write(hostname); } app.ReverseDNSLookup("127.0.0.1", Lookup);
+
+      HRESULT ForwardDNSLookup([in] BSTR bstrName, [in] IDispatch *pDisp, [in, defaultvalue(0)] VARIANT var);
+      // pDisp(bstr hostIP, var);
+      // function Lookup(hostip) { window.output.write(hostip); } app.ForwardDNSLookup("www.msn.com", Lookup);
+
+      HRESULT IsAddress([in] BSTR bstrIP, [out, retval] VARIANT_BOOL *pResult);
+
+      HRESULT PlaySound([in] BSTR filename, [in, defaultvalue(1.0)] float volume);
+      HRESULT StopSounds();
+
+      HRESULT OutputDebugHTML([in] BSTR bstr);
+      HRESULT OutputDebugText([in] BSTR bstr);
+	}
+
+   [ uuid(1ca35bdd-168d-4f07-824d-8cb2c3ebed0c) ]
+   dispinterface _IApp_Events
+   {
+      properties:
+      methods:
+         [id(1)] void OnNewWindow([in] IWindow_Main *window);
+   }
+
+   [ uuid(f68111ba-44ec-46f5-9ada-0fd22a077b37) ]
+   coclass App
+   {
+      [default] interface IApp;
+      [default, source] dispinterface _IApp_Events;
+   }
+
+	[ uuid(36A385C7-A258-4210-A61C-EB3890501903), oleautomation, dual, nonextensible ]
+	interface IBeip : IDispatch
+	{
+		[propget] HRESULT Window([out, retval] IWindow_Main** retval);
+		[propget] HRESULT App([out, retval] IApp** retval);
+	}
+}
