@@ -1,0 +1,145 @@
+interface ITriggers;
+
+[ uuid(d51a0ef9-a9e1-445a-850d-7bd00f339aae), oleautomation, dual, nonextensible ]
+interface IFindString : IDispatch
+{
+   [propget] HRESULT MatchText([out, retval] BSTR *);
+   [propput] HRESULT MatchText([in] BSTR);
+
+//   [propget] HRESULT Forward([out, retval] VARIANT_BOOL *);
+//   [propput] HRESULT Forward([in] VARIANT_BOOL);
+
+   [propget] HRESULT RegularExpression([out, retval] VARIANT_BOOL *);
+   [propput] HRESULT RegularExpression([in] VARIANT_BOOL);
+   [propget] HRESULT MatchCase([out, retval] VARIANT_BOOL *);
+   [propput] HRESULT MatchCase([in] VARIANT_BOOL);
+   [propget] HRESULT StartsWith([out, retval] VARIANT_BOOL *);
+   [propput] HRESULT StartsWith([in] VARIANT_BOOL);
+   [propget] HRESULT EndsWith([out, retval] VARIANT_BOOL *);
+   [propput] HRESULT EndsWith([in] VARIANT_BOOL);
+   [propget] HRESULT WholeWord([out, retval] VARIANT_BOOL *);
+   [propput] HRESULT WholeWord([in] VARIANT_BOOL);
+}
+
+[ uuid(dc81a328-691f-4856-9169-927880201559), oleautomation, dual, nonextensible ]
+interface ITrigger : IDispatch
+{
+   HRESULT Delete([out, retval] VARIANT_BOOL *); // Returns true if successful
+
+   [propget] HRESULT FindString([out, retval] IFindString **);
+
+   [propget] HRESULT Disabled([out, retval] VARIANT_BOOL *);
+   [propput] HRESULT Disabled([in] VARIANT_BOOL);
+   [propget] HRESULT StopProcessing([out, retval] VARIANT_BOOL *);
+   [propput] HRESULT StopProcessing([in] VARIANT_BOOL);
+   [propget] HRESULT OncePerLine([out, retval] VARIANT_BOOL *);
+   [propput] HRESULT OncePerLine([in] VARIANT_BOOL);
+
+   [propget] HRESULT AwayPresent([out, retval] VARIANT_BOOL *);
+   [propput] HRESULT AwayPresent([in] VARIANT_BOOL);
+   [propget] HRESULT AwayPresentOnce([out, retval] VARIANT_BOOL *);
+   [propput] HRESULT AwayPresentOnce([in] VARIANT_BOOL);
+   [propget] HRESULT Away([out, retval] VARIANT_BOOL *);
+   [propput] HRESULT Away([in] VARIANT_BOOL);
+
+   [propget] HRESULT Triggers([out, retval] ITriggers **);
+}
+
+[ uuid(5f02c414-aa5e-48b0-adda-1a73c57b1dd0), oleautomation, dual, nonextensible ]
+interface ITriggers : IDispatch
+{
+	[propget, id(DISPID_VALUE)] HRESULT Item([in] VARIANT var, [out, retval] ITrigger **);
+	[propget] HRESULT Count([out, retval] long *);
+
+   HRESULT Delete([in] long index);
+   HRESULT AddCopy([in] ITrigger *, [out, retval] ITrigger **);
+//   HRESULT Move([in] long from, [in] long to);
+}
+
+[ uuid(2f45ae30-3f0c-487a-be87-f79acf9b0608), oleautomation, dual, nonextensible ]
+interface IPuppet : IDispatch
+{
+   [propget] HRESULT Name([out, retval] BSTR *);
+   [propput] HRESULT Name([in] BSTR);
+   [propget] HRESULT Info([out, retval] BSTR *);
+   [propput] HRESULT Info([in] BSTR);
+   [propget] HRESULT ReceivePrefix([out, retval] BSTR *);
+   [propput] HRESULT ReceivePrefix([in] BSTR);
+   [propget] HRESULT SendPrefix([out, retval] BSTR *);
+   [propput] HRESULT SendPrefix([in] BSTR);
+
+   [propget] HRESULT LogFileName([out, retval] BSTR *);
+   [propput] HRESULT LogFileName([in] BSTR);
+
+   [propget] HRESULT AutoConnect([out, retval] VARIANT_BOOL *);
+   [propput] HRESULT AutoConnect([in] VARIANT_BOOL);
+   [propget] HRESULT ConnectWithPlayer([out, retval] VARIANT_BOOL *);
+   [propput] HRESULT ConnectWithPlayer([in] VARIANT_BOOL);
+
+   [propget] HRESULT Triggers([out, retval] ITriggers **);
+}
+
+[ uuid(432dfd7e-be27-469e-b848-b50452405dda), oleautomation, dual, nonextensible ]
+interface IPuppets : IDispatch
+{
+	[propget, id(DISPID_VALUE)] HRESULT Item([in] VARIANT var, [out, retval] IPuppet**);
+	[propget] HRESULT Count([out, retval] long *);
+}
+
+[ uuid(AFD5A7A1-D926-4a41-8BC3-923FAC7FECE7), oleautomation, dual, nonextensible ]
+interface ICharacter : IDispatch
+{
+	[propget] HRESULT Shortcut([out, retval] BSTR *);
+	[propput] HRESULT Shortcut([in] BSTR);
+	[propget] HRESULT Name([out, retval] BSTR *);
+	[propput] HRESULT Name([in] BSTR);
+	[propget] HRESULT Connect([out, retval] BSTR *);
+	[propput] HRESULT Connect([in] BSTR);
+	[propget] HRESULT Info([out, retval] BSTR *);
+	[propput] HRESULT Info([in] BSTR);
+	[propget] HRESULT LogFileName([out, retval] BSTR *);
+	[propput] HRESULT LogFileName([in] BSTR);
+
+   [propget] HRESULT LastUsed([out, retval] VARIANT *date);
+   [propget] HRESULT TimeCreated([out, retval] VARIANT *date);
+
+   [propget] HRESULT Triggers([out, retval] ITriggers **);
+   [propget] HRESULT Puppets([out, retval] IPuppets **);
+}
+
+[ uuid(645AFA5B-1D86-4eac-B062-C7F8A3AE00BD), oleautomation, dual, nonextensible ]
+interface ICharacters : IDispatch
+{
+//		HRESULT New([out, retval] IWorld** retval);
+//		HRESULT Remove([in] IWorld *pWorld);
+
+	[propget, id(DISPID_VALUE)] HRESULT Item([in] VARIANT var, [out, retval] ICharacter **);
+	[propget] HRESULT Count([out, retval] long *);
+}
+
+[ uuid(A6AEFF4B-EBD9-4bb9-B118-F7C253B2D78A), oleautomation, dual, nonextensible ]
+interface IWorld : IDispatch
+{
+	[propget] HRESULT Shortcut([out, retval] BSTR *);
+	[propput] HRESULT Shortcut([in] BSTR);
+	[propget] HRESULT Name([out, retval] BSTR *);
+	[propput] HRESULT Name([in] BSTR);
+	[propget] HRESULT Info([out, retval] BSTR *);
+	[propput] HRESULT Info([in] BSTR);
+	[propget] HRESULT Host([out, retval] BSTR *);
+	[propput] HRESULT Host([in] BSTR);
+
+	[propget] HRESULT Characters([out, retval] ICharacters **);
+   [propget] HRESULT Triggers([out, retval] ITriggers **);
+}
+
+[ uuid(C79D75D4-6F7F-47b0-BD1A-EEA0FF8DE39F), oleautomation, dual, nonextensible ]
+interface IWorlds : IDispatch
+{
+//		HRESULT New([out, retval] IWorld** retval);
+//		HRESULT Remove([in] IWorld *pWorld);
+
+	[propget, id(DISPID_VALUE)] HRESULT Item([in] VARIANT var, [out, retval] IWorld**);
+	[propget] HRESULT Count([out, retval] long *);
+}
+

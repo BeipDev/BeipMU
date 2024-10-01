@@ -1,0 +1,66 @@
+#include "resource.h"
+#include "..\Libraries\LibWin32\Resource.h"
+#include "winres.h"
+
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(65001) // UTF-8 file encoding (1252)
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""winres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_APP                ICON                    "Compy16.ico"
+
+#include "BuildNumber.h"
+#define STRINGIZE2(x) #x
+#define STRINGIZE(x) STRINGIZE2(x)
+
+1 TYPELIB "OM.tlb"
+
+1 VERSIONINFO
+ FILEVERSION 4,0,BUILD_NUMBER,0
+ PRODUCTVERSION 4,0,BUILD_NUMBER,0
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x40004L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "CompanyName", "R-Axis"
+            VALUE "FileDescription", "BeipMU MU* Client"
+            VALUE "FileVersion", "4, 0, " STRINGIZE(BUILD_NUMBER)
+            VALUE "InternalName", "BeipMU"
+            VALUE "LegalCopyright", "Copyright   1998"
+            VALUE "OriginalFilename", "BeipMU.exe"
+            VALUE "ProductName", "BeipMU"
+            VALUE "ProductVersion", "4, 0, " STRINGIZE(BUILD_NUMBER)
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END

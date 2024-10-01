@@ -742,7 +742,7 @@ void Connection::Connect(bool offline)
    }
 
 #if defined(_DEBUG)
-   if(m_ppropServer->pclName().Compare("Entrepreneur Jungle")==0)
+   if(m_ppropServer->pclName()=="Entrepreneur Jungle")
       mp_client=Extensions::Client::Create_Entrepreneur(*this);
    else
 #endif

@@ -889,6 +889,7 @@ Prop Keys
       Window_Next         = "VK_TAB,false,true,false"
       Window_Prev         = "VK_TAB,true,true,false"
       Window_Close        = "VK_F4,false,true,false"
+      Window_CloseAll
 
       File_NewTab      = "'T',false,true,false"
       File_NewWindow   = "'N',false,true,false"

@@ -94,7 +94,6 @@ Log::Log(Connection &connection, Prop::Logging &propLogging, IError &error, Cons
    {
       if(m_HTML) // Write out new HTML header
       {
-#if 1
          HybridStringBuilder<1024> string(
             "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01//EN' 'http://www.w3.org/TR/html4/strict.dtd'>" CRLF
             "<HTML>" CRLF
@@ -138,46 +137,6 @@ Log::Log(Connection &connection, Prop::Logging &propLogging, IError &error, Cons
             "<span class='stamp'><label for='stamptoggle'></label> Timestamps</span>" CRLF
             "<input id='formattoggle' class='toggle' type='checkbox'>" CRLF
             "<span class='format'><label for='formattoggle'></label> Unformat</span>" CRLF
-#else
-         HybridStringBuilder<1024> string(
-            "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01//EN' 'http://www.w3.org/TR/html4/strict.dtd'>" CRLF
-            "<HTML>" CRLF
-            "<HEAD>" CRLF
-            "<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>" CRLF
-            "<TITLE>Log for "); connection.GetWorldTitle(string, 0); string("</TITLE>" CRLF
-            "<STYLE TYPE='text/css' MEDIA=screen>" CRLF
-            "* { box-sizing: border-box; }" CRLF
-            "BODY { background:", HTML::HTMLColor(m_prop_text_window.clrBack()),
-              "; color:", HTML::HTMLColor(m_prop_text_window.clrFore()),
-              "; font-family:'", m_prop_text_window.propFont().pclName(), "'; font-size:", m_prop_text_window.propFont().iSize(), "px; } " CRLF
-            "H2 { border-style: solid; border-width: 2px 0; padding: .5em; text-align: center; }" CRLF
-            ".startlog { border-bottom-style: dotted; margin: .75em 0 .5em; }" CRLF
-            ".stoplog { border-top-style: dotted; margin: .5em 0 .75em; }" CRLF
-            "p { margin: 0 0 ", m_prop_text_window.iParagraphSpacing(), "px 0; display: flex; flex-flow: row; }" CRLF
-            ".stamp, .format { position: absolute; top: 2.25em; display: inline-flex; align-items: center; }" CRLF
-            ".format { right: .75em; }" CRLF
-            "input { position: absolute; clip: rect(0 0 0 0); }" CRLF
-            "input + span > label { display: inline-block; cursor: pointer; outline: none; user-select: none; padding: 2px; width: 2em; height: 1em; background-color: #dddddd; border-radius: 2em; z-index: 50; position: relative; margin-right: .5em; }" CRLF
-            "input + span > label:before, input + span > label:after { display: block; position: absolute; top: 1px; left: 1px; bottom: 1px; content: ''; }" CRLF
-            "input + span > label:before { right: 1px; background-color: #c0c0c0; border-radius: 1em; transition: background 0.4s; }" CRLF
-            "input + span > label:after { width: 1em; background-color: #fff; border-radius: 100%; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); transition: margin 0.4s; }" CRLF
-            "input:checked + span > label:before { background-color: #62c362; }" CRLF
-            "input:checked + span > label:after { margin-left: 1em; }" CRLF
-            ".timestamp { opacity: .25; font-size: .875em; position: relative; top: .175em; width: 11.5em; flex: none; white-space: nowrap; display: none; }" CRLF
-            "#stamptoggle:checked ~ p > .timestamp { display: block; }" CRLF
-            "#formattoggle:checked ~ p span { font-size: unset !important; font-family: unset !important; color: unset !important; background: unset !important; border: unset !important;"
-            "margin: unset !important; text-align: left !important; font-weight: normal !important; font-style: normal !important; padding: 0 !important; line-height: unset !important; top: unset !important; }" CRLF
-            ".timestamp, #formattoggle:checked ~ p > .timestamp { margin-right: 1em !important; text-align: right !important; }" CRLF
-            "p:hover .timestamp { opacity: 1; }" CRLF
-            ".line { flex: auto; white-space: pre-wrap; }" CRLF
-            "</STYLE>" CRLF
-            "</HEAD>" CRLF
-            "<BODY>" CRLF
-            "<input id='stamptoggle' class='toggle' type='checkbox'>" CRLF
-            "<span class='stamp'><label for='stamptoggle'></label> Timestamps</span>" CRLF
-            "<input id='formattoggle' class='toggle' type='checkbox'>" CRLF
-            "<span class='format'><label for='formattoggle'></label> Unformat</span>" CRLF
-#endif
          );
          m_file_log.Write(string);
       }
