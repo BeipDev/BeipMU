@@ -251,6 +251,25 @@ void Connection::OnTelnet(ConstString string)
       mp_client->Input(string);
 }
 
+
+void Connection::OnPrompt(ConstString string)
+{
+   if(m_ppropServer && m_ppropServer->fPrompts())
+   {
+      RemovePrompt();
+      m_timer_prompt.Reset();
+
+      auto p_line=m_text_to_line.Parse(string, m_ppropServer->fHTMLTags(), m_ppropServer->eEncoding());
+      mp_prompt=*p_line;
+      GetOutput().Add(std::move(p_line));
+   }
+   else
+   {
+      OnLine(string);
+      m_telnet_parser.Reset();
+   }
+}
+
 void Connection::OnEncoding(Prop::Server::Encoding encoding)
 {
    Text(FixedStringBuilder<256>("<icon information> <font color='lime'>Charset negotiated: ", g_encoding_names[int(encoding)]));
