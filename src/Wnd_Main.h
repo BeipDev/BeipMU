@@ -132,7 +132,9 @@ struct Wnd_Main
    static ATOM Register();
 
    Wnd_Main(Wnd_MDI &wndMDI);
-   Wnd_Main(Wnd_MDI &wndMDI, Prop::Server *ppropServer, Prop::Character *ppropCharacter, Prop::Puppet *ppropPuppet, bool fOffline=false);
+   Wnd_Main(Wnd_MDI &wndMDI, Prop::Server *ppropServer, Prop::Character *ppropCharacter, Prop::Puppet *ppropPuppet, bool offline=false);
+
+   void Redock(Wnd_MDI &wnd_MDI);
 
    void ParseCommandLine(ConstString params);
    void PopupTabMenu(int2 position);
@@ -203,7 +205,7 @@ struct Wnd_Main
    IYarn_TileMap &EnsureYarn_TileMap();
 
    OM::MainWindow *GetDispatch();
-   Wnd_MDI &GetMDI() noexcept { return m_wnd_MDI; }
+   Wnd_MDI &GetMDI() noexcept { return *mp_wnd_MDI; }
 
    Wnd_WebView *FindWebView(ConstString id);
    Wnd_WebView* GetWebViewRoot() { return m_webview_windows.begin(); }
@@ -388,7 +390,7 @@ private:
 
    void DestroyPanes();
 
-   Wnd_MDI &m_wnd_MDI;
+   Wnd_MDI *mp_wnd_MDI{};
    CntPtrTo<Prop::MainWindowSettings> mp_prop_main_window_settings;
 
    InputControl m_input;

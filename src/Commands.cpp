@@ -901,7 +901,7 @@ try
          return;
       }
 
-      m_wnd_MDI.Connect(mp_connection->GetServer(), mp_connection->GetCharacter(), ppropPuppet, true);
+      mp_wnd_MDI->Connect(mp_connection->GetServer(), mp_connection->GetCharacter(), ppropPuppet, true);
       return;
    }
 
@@ -941,13 +941,13 @@ try
             }
          }
 
-         m_wnd_MDI.Connect(ppropServer, ppropCharacter, nullptr, true);
+         mp_wnd_MDI->Connect(ppropServer, ppropCharacter, nullptr, true);
          return;
       }
 
       ppropServer=new Prop::Server();
       ppropServer->pclHost(lstrAddress);
-      m_wnd_MDI.Connect(ppropServer, nullptr, nullptr, true);
+      mp_wnd_MDI->Connect(ppropServer, nullptr, nullptr, true);
       return;
    }
 
@@ -991,19 +991,19 @@ try
 
    if(IEquals(command, "exit"))
    {
-      Msg::Command(ID_FILE_QUIT, 0, 0).Post(m_wnd_MDI);
+      Msg::Command(ID_FILE_QUIT, 0, 0).Post(*mp_wnd_MDI);
       return;
    }
 
    if(IEquals(command, "new"))
    {
-      Msg::Command(ID_FILE_NEWWINDOW, 0, 0).Send(m_wnd_MDI);
+      Msg::Command(ID_FILE_NEWWINDOW, 0, 0).Send(*mp_wnd_MDI);
       return;
    }
 
    if(IEquals(command, "newtab"))
    {
-      Msg::Command(ID_FILE_NEWTAB, 0, 0).Send(m_wnd_MDI);
+      Msg::Command(ID_FILE_NEWTAB, 0, 0).Send(*mp_wnd_MDI);
       return;
    }
 
@@ -1746,7 +1746,7 @@ try
       if(IEquals(wl[1], "connectall"))
       {
          for(auto &propServer : g_ppropGlobal->propConnections().propServers())
-            m_wnd_MDI.Connect(propServer, nullptr, nullptr, false);
+            mp_wnd_MDI->Connect(propServer, nullptr, nullptr, false);
          return;
       }
 
