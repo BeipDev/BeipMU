@@ -359,6 +359,8 @@ library BeipMU
       HRESULT SetOnGMCP([in] BSTR package_prefix, [in] IDispatch *p_callback);
       HRESULT ClearOnGMCP([in] BSTR package_prefix);
       // OnGMCP(BSTR package, BSTR json)
+
+      HRESULT ProcessAliases([in] BSTR text, [out, retval] BSTR *result);
    }
 
    [ uuid(4703fc42-40af-4b8a-94f2-e09dff9ab8e0) ]

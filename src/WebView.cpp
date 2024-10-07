@@ -206,6 +206,14 @@ struct WebView_OM
 		return E_FAIL;
 	}
 
+	STDMETHODIMP ProcessAliases(BSTR bstr, BSTR *out) override
+	{
+		HybridStringBuilder string(bstr);
+		m_connection.ProcessAliases(string);
+		*out=LStrToBSTR(string);
+		return S_OK;
+	}
+
 	void On(Connection::Event_Receive &event)
 	{
 		if(m_hook_receive)
