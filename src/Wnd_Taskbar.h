@@ -41,13 +41,15 @@ private:
    LRESULT On(const Msg::MouseMove &msg);
    LRESULT On(const Msg::RButtonUp &msg);
    LRESULT On(const Msg::CaptureChanged &msg);
+   LRESULT On(const Msg::_GetTypeID &msg) { return msg.Success(this); }
+   LRESULT On(const Msg::_GetThis &msg) { return msg.Success(this); }
 
    void CreateD2DResources() override;
    void Paint() override;
 
    RectF CalculateButtonRect(unsigned iButton) const;
    RectF CalculateTabRect(unsigned iWindow) const;
-   RectF CalculateDraggingTabRect() const { return CalculateTabRect(m_tab_clicked_index)+ScreenToClient(Windows::GetMessagePos())/g_dpiScale-m_pt_clicked; }
+   RectF CalculateDraggingTabRect() const { return RectF{float2(m_width, m_rcTabs.size().y)}+ScreenToClient(Windows::GetMessagePos())/g_dpiScale-m_pt_dragged; }
    int CalculateToolbarX(unsigned iButton) const noexcept { return m_rcTabs.size().y*iButton; }
    void PopupCharacterWindow(int2 position);
    void OnTimerToolTip();
@@ -65,14 +67,13 @@ private:
    RectF m_rcTime;
 
    float2 m_pt_clicked;
-   RectF m_last_dragged;
    bool m_dragging{};
+   float2 m_pt_dragged; // Location relative to top left of tab that we started dragging
    unsigned m_toolbar_clicked_index{~0U}; // Toolbar button being clicked
    bool m_over_toolbar{}; // Mouse is over the clicked toolbar button
    bool m_draw_tab_numbers{};
 
    unsigned m_tab_clicked_index{~0U}; // Window being clicked
-   RectF m_rect_clicked_window; // Rect of clicked window
    Time::Timer m_timer_time{[this]() { Refresh(); }};
 
    Time::Timer m_timer_tool_tip{[this]() { OnTimerToolTip(); }};

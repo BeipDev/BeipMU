@@ -1302,13 +1302,13 @@ CntPtrTo<Prop::MainWindowSettings> GetMainWindowSettings(Prop::Character *p_prop
 }
 
 Wnd_Main::Wnd_Main(Wnd_MDI &wnd_MDI, Prop::Server *ppropServer, Prop::Character *ppropCharacter, Prop::Puppet *ppropPuppet, bool offline)
- : m_wnd_MDI{wnd_MDI},
+ : mp_wnd_MDI{&wnd_MDI},
    mp_prop_main_window_settings{GetMainWindowSettings(ppropCharacter, ppropPuppet)},
    m_input{*this, GlobalInputSettings()},
    mp_connection{MakeUnique<Connection>(*this)}
 {
    mp_connection->Associate(ppropServer, ppropCharacter, ppropPuppet);
-   Create("", WS_CHILD, Position_Zero, m_wnd_MDI);
+   Create("", WS_CHILD, Position_Zero, *mp_wnd_MDI);
    GetMDI().AddWindow(*this);
 
    // We must send this event because if a script creates a new window, it expects the OnNewWindow event
@@ -1333,6 +1333,13 @@ Wnd_Main::Wnd_Main(Wnd_MDI &wnd_MDI, Prop::Server *ppropServer, Prop::Character 
 
 Wnd_Main::Wnd_Main(Wnd_MDI &wnd_MDI) : Wnd_Main(wnd_MDI, nullptr, nullptr, nullptr, false)
 {
+}
+
+void Wnd_Main::Redock(Wnd_MDI &wnd_MDI)
+{
+   GetMDI().DeleteWindow(*this);
+   mp_wnd_MDI=&wnd_MDI; SetParent(*mp_wnd_MDI);
+   GetMDI().AddWindow(*this);
 }
 
 void Wnd_Main::ParseCommandLine(ConstString cmdLine)
@@ -1389,7 +1396,7 @@ void Wnd_Main::On(const Connection::Event_Activity &event)
    if(!m_flash_state && g_ppropGlobal->propConnections().eActivityNotify()==Prop::Connections::Solid)
       FlashTab();
 
-   m_wnd_MDI.RefreshBadgeCount();
+   mp_wnd_MDI->RefreshBadgeCount();
    GetMDI().RefreshTaskbar(*this); // Either way, redraw the window's unread count
 }
 
@@ -2211,13 +2218,13 @@ void Wnd_Main::ActivateWindow(Direction::PN dir)
    if(dir==Direction::Next)
    {
       p=DLNode<Wnd_Main>::Next();
-      if(p==&m_wnd_MDI.GetRootWindow())
+      if(p==&mp_wnd_MDI->GetRootWindow())
          p=p->DLNode<Wnd_Main>::Next();
    }
    else
    {
       p=DLNode<Wnd_Main>::Prev();
-      if(p==&m_wnd_MDI.GetRootWindow())
+      if(p==&mp_wnd_MDI->GetRootWindow())
          p=p->DLNode<Wnd_Main>::Prev();
    }
 
@@ -2634,7 +2641,7 @@ void Wnd_Main::SetActive(bool active)
       mp_connection->Away(false);
 
       FlashTab();
-      m_wnd_MDI.RefreshBadgeCount();
+      mp_wnd_MDI->RefreshBadgeCount();
       m_input.SetFocus();
 
       // Bring all of the floating panes to the top
@@ -2715,7 +2722,7 @@ bool Wnd_Main::EditKey(InputControl &edInput, const Msg::Key &msg)
    {
       m_events.Send(Event_InputChanged());
       if(g_ppropGlobal->fTaskbarShowTyped())
-         m_wnd_MDI.GetTaskbar().Refresh();
+         mp_wnd_MDI->GetTaskbar().Refresh();
    }
    CheckInputHeight();
 
@@ -2764,7 +2771,7 @@ bool Wnd_Main::ProcessEditKey(InputControl &edInput, const Msg::Key &msg)
 
    // Refresh the taskbar when Alt is pressed/released to show the tab numbers
    if(key.iVKey==VK_MENU && !(fDown && msg.fRepeating()))
-      m_wnd_MDI.GetTaskbar().DrawTabNumbers(fDown);
+      mp_wnd_MDI->GetTaskbar().DrawTabNumbers(fDown);
 
    // Ignore these keys as we don't do anything on them
    if(key.iVKey==VK_CONTROL || key.iVKey==VK_SHIFT || key.iVKey==VK_MENU)

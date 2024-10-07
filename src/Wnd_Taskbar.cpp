@@ -30,7 +30,7 @@ Wnd_Taskbar::~Wnd_Taskbar()
 
 LRESULT Wnd_Taskbar::WndProc(const Message &msg)
 {
-   return Dispatch<WindowImpl, Msg::Create, Msg::Size, Msg::LButtonDown, Msg::LButtonUp, Msg::MouseMove, Msg::RButtonUp, Msg::CaptureChanged, Msg::Paint>(msg);
+   return Dispatch<WindowImpl, Msg::Create, Msg::Size, Msg::LButtonDown, Msg::LButtonUp, Msg::MouseMove, Msg::RButtonUp, Msg::CaptureChanged, Msg::Paint, Msg::_GetTypeID, Msg::_GetThis>(msg);
 }
 
 void Wnd_Taskbar::OnSize(Rect &rcClient)
@@ -279,7 +279,6 @@ LRESULT Wnd_Taskbar::On(const Msg::LButtonDown &msg)
       unsigned iButton=(m_pt_clicked.x-m_rcToolbar.left)/CalculateToolbarX(1);
       Assert(iButton<std::size(c_toolbar_items));
 
-      m_rect_clicked_window=CalculateButtonRect(iButton);
       m_toolbar_clicked_index=iButton;
       m_over_toolbar=true;
    }
@@ -287,9 +286,9 @@ LRESULT Wnd_Taskbar::On(const Msg::LButtonDown &msg)
    {
       // Tabs?
       unsigned iWindow=(m_pt_clicked.x-m_rcTabs.left)/m_width;
-      if(iWindow>=m_wnd_MDI.GetWindowCount()) return msg.Success();
+      if(iWindow>=m_wnd_MDI.GetWindowCount())
+         return msg.Success();
 
-      m_rect_clicked_window=CalculateTabRect(iWindow);
       m_tab_clicked_index=iWindow;
    }
    else
@@ -331,9 +330,28 @@ LRESULT Wnd_Taskbar::On(const Msg::LButtonUp &msg)
    }
    else
    {
-      if(m_tab_clicked_index>=m_wnd_MDI.GetWindowCount()) return msg.Success(); // Nothing was really pressed
+      if(m_tab_clicked_index>=m_wnd_MDI.GetWindowCount())
+         return msg.Success(); // Nothing was really pressed
 
       m_wnd_MDI.SetActiveWindow(m_wnd_MDI.GetWindow(m_tab_clicked_index));
+
+      if(m_dragging)
+      {
+         Wnd_Main &window=m_wnd_MDI.GetWindow(m_tab_clicked_index);
+
+         // Are we not over any window?
+         if(Window wnd_over=WindowFromPoint(ClientToScreen(msg)); wnd_over!=*this &&
+            (GetWindowThreadProcessId(wnd_over.hWnd(), nullptr)!=GetCurrentThreadId() ||
+               Msg::_GetTypeID().Send(wnd_over)!=GetTypeID<Wnd_Taskbar>()))
+         {
+            auto *p_MDI=new Wnd_MDI();
+            p_MDI->SetPosition(ClientToScreen(msg)-m_wnd_MDI.ScreenToClient(ClientToScreen(int2{})));
+            p_MDI->EnsureOnScreen(true);
+            window.Redock(*p_MDI);
+            p_MDI->GetWindow(0).Close(); // Close the new tab in the new window we don't want
+         }
+      }
+
       m_tab_clicked_index=~0U;
    }
 
@@ -356,11 +374,11 @@ LRESULT Wnd_Taskbar::On(const Msg::MouseMove &msg)
 
    if(m_toolbar_clicked_index<2)
    {
-      bool fOver=m_rect_clicked_window.IsInside(msg/g_dpiScale);
-      if(fOver==m_over_toolbar)
+      bool over=CalculateButtonRect(m_toolbar_clicked_index).IsInside(msg/g_dpiScale);
+      if(over==m_over_toolbar)
          return msg.Success();
 
-      m_over_toolbar=fOver;
+      m_over_toolbar=over;
       Refresh();
    }
    else
@@ -370,37 +388,51 @@ LRESULT Wnd_Taskbar::On(const Msg::MouseMove &msg)
 
       if(!m_dragging)
       {
-         int cxDrag=abs(GetSystemMetrics(SM_CXDRAG));
+         int cx_drag=abs(GetSystemMetrics(SM_CXDRAG));
 
          int2 delta=m_pt_clicked-msg.position()/g_dpiScale;
-         if(abs(delta.x)>cxDrag || abs(delta.y)>cxDrag)
+         if(abs(delta.x)>cx_drag || abs(delta.y)>cx_drag)
          {
             m_dragging=true;
-            m_last_dragged=CalculateTabRect(m_tab_clicked_index); // Can't use CalculateDraggedTabRect since it'll be wrong by the cxDrag position
+            m_pt_dragged=m_pt_clicked-CalculateTabRect(m_tab_clicked_index).ptLT();
             SetCursor(LoadCursor(nullptr, IDC_HAND));
          }
       }
 
       if(m_dragging)
       {
-         unsigned tabIndex=(msg.x()/g_dpiScale-m_rcTabs.left)/m_width;
-         if(tabIndex!=m_tab_clicked_index && tabIndex<m_wnd_MDI.GetWindowCount())
+         Wnd_Main &window=m_wnd_MDI.GetWindow(m_tab_clicked_index);
+
+         // Are we over another taskbar?
+         if(Window wnd_over=WindowFromPoint(ClientToScreen(msg));wnd_over!=*this &&
+            GetWindowThreadProcessId(wnd_over.hWnd(), nullptr)==GetCurrentThreadId() &&
+            Msg::_GetTypeID().Send(wnd_over)==GetTypeID<Wnd_Taskbar>())
          {
-            Wnd_Main &window=m_wnd_MDI.GetWindow(m_tab_clicked_index);
-            Wnd_Main &windowInsertAfter=m_wnd_MDI.GetWindow(tabIndex);
-            if(m_tab_clicked_index<tabIndex)
-               window.DLNode<Wnd_Main>::Link(&windowInsertAfter);
-            else
-               window.DLNode<Wnd_Main>::Link(windowInsertAfter.DLNode<Wnd_Main>::Prev());
-
-            m_tab_clicked_index=tabIndex;
-            RectF rcClicked=CalculateTabRect(m_tab_clicked_index);
-            m_pt_clicked+=rcClicked.ptLT()-m_rect_clicked_window.ptLT();
-            m_rect_clicked_window=rcClicked;
-            m_rect_clicked_window.top=0; // Since the dragging window is moved down, we do this to be sure to redraw the top of the tab
+            Wnd_Taskbar &taskbar=*reinterpret_cast<Wnd_Taskbar*>(Msg::_GetThis().Send(wnd_over));
+            window.Redock(taskbar.m_wnd_MDI);
+            Msg::LButtonUp(int2(), 0).Post(*this); // End draggong on this taskbar
+            taskbar.m_dragging=true;
+            taskbar.m_pt_dragged=m_pt_dragged;
+            PinBelow(taskbar.m_pt_dragged.x, taskbar.m_width); // If going from a longer tab window to a shorter tab one, ensure we're still on the tab
+            taskbar.m_tab_clicked_index=window.GetMDI().GetWindowCount()-1;
+            taskbar.SetCapture();
+            taskbar.Refresh();
+            return msg.Success();
          }
+         else
+         {
+            unsigned tab_index=(msg.x()/g_dpiScale-m_rcTabs.left)/m_width;
+            if(tab_index!=m_tab_clicked_index && tab_index<m_wnd_MDI.GetWindowCount())
+            {
+               Wnd_Main &window_insert_after=m_wnd_MDI.GetWindow(tab_index);
+               if(m_tab_clicked_index<tab_index)
+                  window.DLNode<Wnd_Main>::Link(&window_insert_after);
+               else
+                  window.DLNode<Wnd_Main>::Link(window_insert_after.DLNode<Wnd_Main>::Prev());
 
-         m_last_dragged=CalculateDraggingTabRect();
+               m_tab_clicked_index=tab_index;
+            }
+         }
          Refresh();
       }
    }
