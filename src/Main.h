@@ -22,7 +22,7 @@
 #define YARN 1
 #define DWRITE_TEST 1
 #else
-#define BETA_BUILD 2
+#define BETA_BUILD 3
 #define SCRIPTING 0
 #define YARN 0
 #define DWRITE_TEST 0
@@ -107,6 +107,8 @@ struct Variable
 
 extern RandomKISS g_random;
 extern std::array<ConstString, 3> g_encoding_names;
+
+UINT StateToShowCmd(Prop::Position::State state) noexcept;
 
 [[nodiscard]] bool LoadConfig(); // Loads default config
 void LoadConfig(ConstString filename, bool fImportingConfig=false);

@@ -1,5 +1,4 @@
 #include "Main.h"
-#include "Dlg_Statistics.h"
 
 struct Dlg_Statistics : Wnd_Dialog, Singleton<Dlg_Statistics>
 {
