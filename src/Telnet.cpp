@@ -119,10 +119,7 @@ void TelnetParser::Parse(Array<const char> buffer)
                   case TELNET_EOR:
                   {
                      if(auto prompt=GetPartial())
-                     {
-                        m_notify.OnPrompt(prompt);
-                        m_buffer.Empty();
-                     }
+                        m_notify.OnPrompt(prompt); // (don't reset the buffer because we continue)
                      m_state=State::Normal;
                      continue;
                   }
