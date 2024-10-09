@@ -51,9 +51,9 @@ void ShowStatistics(Text::Wnd &wnd)
    for(auto &pServer : g_ppropGlobal->propConnections().propServers())
       for(auto &pCharacter : pServer->propCharacters())
       {
-         totalSecondsConnected+=pCharacter->iSecondsConnected();
-         totalBytes+=pCharacter->iBytesReceived()+pCharacter->iBytesSent();
-         totalConnections+=pCharacter->iConnectionCount();
+         totalSecondsConnected+=pCharacter->SecondsConnected();
+         totalBytes+=pCharacter->BytesReceived()+pCharacter->BytesSent();
+         totalConnections+=pCharacter->ConnectionCount();
       }
 
    HybridStringBuilder string(
@@ -172,17 +172,17 @@ Prop::InputWindow &GlobalInputSettings()
 
 void SetTextWindowProperties(Text::Wnd &window, Prop::TextWindow &prop)
 {
-   window.SetFont(prop.propFont().pclName(), prop.propFont().iSize(), prop.propFont().byCharSet());
-   window.SetTimeFormat(prop.iTimeFormat());
-   window.SetTimeFormatToolTip(prop.iTimeFormatToolTip());
+   window.SetFont(prop.propFont().pclName(), prop.propFont().Size(), prop.propFont().CharSet());
+   window.SetTimeFormat(prop.TimeFormat());
+   window.SetTimeFormatToolTip(prop.TimeFormatToolTip());
    window.SetScrollToBottomOnAdd(prop.fScrollToBottomOnAdd());
    window.SetSplitOnPageUp(prop.fSplitOnPageUp());
    window.SetSmoothScrolling(prop.fSmoothScrolling());
-   window.SetHistoryLimit(prop.iHistory());
-   window.SetFixedWidth(prop.fFixedWidth() ? prop.iFixedWidthChars() : 0);
+   window.SetHistoryLimit(prop.History());
+   window.SetFixedWidth(prop.fFixedWidth() ? prop.FixedWidthChars() : 0);
    window.SetMargins(prop.rcMargins());
-   window.SetWrappedLineIndent(prop.iLineWrappedIndent());
-   window.SetParagraphSpacing(prop.iParagraphSpacing());
+   window.SetWrappedLineIndent(prop.LineWrappedIndent());
+   window.SetParagraphSpacing(prop.ParagraphSpacing());
 
    Text::ColorSet &colors=window.GetColorSet();
    colors.SetInvertBrightness(prop.fInvertBrightness());
@@ -310,24 +310,24 @@ SpawnWindow &Wnd_Main::GetSpawnWindow(const Prop::Trigger_Spawn &trigger, ConstS
 
    if(trigger.pclTabGroup())
    {
-      SpawnTabsWindow *pTabWindow{};
+      SpawnTabsWindow *p_tab_window{};
 
-      for(auto &tabWindow : m_spawn_tabs_windows)
+      for(auto &tab_window : m_spawn_tabs_windows)
       {
-         if(tabWindow && tabWindow.m_title==trigger.pclTabGroup())
+         if(tab_window && tab_window.m_title==trigger.pclTabGroup())
          {
-            pTabWindow=&tabWindow;
+            p_tab_window=&tab_window;
             break;
          }
       }
 
-      if(!pTabWindow)
+      if(!p_tab_window)
       {
-         pTabWindow=new SpawnTabsWindow(m_spawn_tabs_windows.Prev(), *this, trigger.pclTabGroup());
-         pTabWindow->GetDocking().Dock(Docking::Side::Right);
+         p_tab_window=new SpawnTabsWindow(m_spawn_tabs_windows.Prev(), *this, trigger.pclTabGroup());
+         p_tab_window->GetDocking().Dock(Docking::Side::Right);
       }
 
-      return pTabWindow->GetTab(title, nullptr, fHilight);
+      return p_tab_window->GetTab(title, nullptr, fHilight);
    }
 
    for(auto &window : m_spawn_windows)
@@ -693,7 +693,7 @@ void Wnd_Main::UpdateCharacterIdleTimer()
       return;
    }
 
-   m_idle_delay=p_character->iIdleTimeout();
+   m_idle_delay=p_character->IdleTimeout();
    PinAbove(m_idle_delay, 1U); // Must be at least 1 minute
    m_idle_string=p_character->pclIdleString();
    m_idle_timer.Set(m_idle_delay*60.0f, true);
@@ -1129,7 +1129,7 @@ bool SaveDockedWindowSettings(Prop::DockedWindow &propWindow, Wnd_Docking &windo
 
       if(typeID==GetTypeID<Wnd_InputPane>())
       {
-         propWindow.iType(0);
+         propWindow.Type(0);
          auto *pWnd=reinterpret_cast<Wnd_InputPane*>(p_this);
 
          if(&pWnd->m_input.GetProps()==&GlobalInputSettings())
@@ -1140,7 +1140,7 @@ bool SaveDockedWindowSettings(Prop::DockedWindow &propWindow, Wnd_Docking &windo
       }
       else if(typeID==GetTypeID<SpawnWindow>())
       {
-         propWindow.iType(1);
+         propWindow.Type(1);
          auto *pWnd=reinterpret_cast<SpawnWindow*>(p_this);
          Prop::SpawnWindow &propSpawnWindow=propWindow.propSpawnWindow();
          propSpawnWindow.pclTitle(pWnd->m_title);
@@ -1153,7 +1153,7 @@ bool SaveDockedWindowSettings(Prop::DockedWindow &propWindow, Wnd_Docking &windo
       }
       else if(typeID==GetTypeID<SpawnTabsWindow>())
       {
-         propWindow.iType(2);
+         propWindow.Type(2);
          auto *pWnd=reinterpret_cast<SpawnTabsWindow*>(p_this);
          Prop::SpawnTabsWindow &propSpawnTabsWindow=propWindow.propSpawnTabsWindow();
          propSpawnTabsWindow.pclTitle(pWnd->m_title);
@@ -1171,12 +1171,12 @@ bool SaveDockedWindowSettings(Prop::DockedWindow &propWindow, Wnd_Docking &windo
       }
       else if(typeID==GetTypeID<Wnd_Image>())
       {
-         propWindow.iType(3);
+         propWindow.Type(3);
          return true;
       }
       else if(typeID==GetTypeID<Wnd_TileMap>())
       {
-         propWindow.iType(4);
+         propWindow.Type(4);
          auto *pWnd=reinterpret_cast<IWnd_TileMap*>(p_this);
          Prop::TileMapWindow &propTileMapWindow=propWindow.propTileMapWindow();
          propTileMapWindow.pclTitle(pWnd->GetTitle());
@@ -1184,7 +1184,7 @@ bool SaveDockedWindowSettings(Prop::DockedWindow &propWindow, Wnd_Docking &windo
       }
       else if(typeID==GetTypeID<Stats::Wnd>())
       {
-         propWindow.iType(5);
+         propWindow.Type(5);
          auto *pWnd=reinterpret_cast<Stats::Wnd*>(p_this);
          Prop::StatsWindow &propStatsWindow=propWindow.propStatsWindow();
          propStatsWindow.pclTitle(pWnd->GetTitle());
@@ -1193,18 +1193,18 @@ bool SaveDockedWindowSettings(Prop::DockedWindow &propWindow, Wnd_Docking &windo
       }
       else if(typeID==GetTypeID<Wnd_EditPropertyPane>())
       {
-         propWindow.iType(6);
+         propWindow.Type(6);
          return true;
       }
       else if(typeID==GetTypeID<Maps::Wnd>())
       {
-         propWindow.iType(7);
+         propWindow.Type(7);
          auto *pWnd=reinterpret_cast<Maps::Wnd*>(p_this);
          Prop::MapWindow &propMapWindow=propWindow.propMapWindow();
          propMapWindow.pclFileName(pWnd->m_filename);
-         propMapWindow.iMapIndex(pWnd->GetMapIndex());
-         propMapWindow.iCurrentMapIndex(pWnd->GetCurrentMapIndex());
-         propMapWindow.iCurrentRoomIndex(pWnd->GetCurrentRoomIndex());
+         propMapWindow.MapIndex(pWnd->GetMapIndex());
+         propMapWindow.CurrentMapIndex(pWnd->GetCurrentMapIndex());
+         propMapWindow.CurrentRoomIndex(pWnd->GetCurrentRoomIndex());
          propMapWindow.Scale(pWnd->m_scale);
          propMapWindow.Origin(pWnd->m_origin);
          propMapWindow.fSelectionFilter_Rooms(pWnd->m_selection_filter.m_rooms);
@@ -1216,13 +1216,13 @@ bool SaveDockedWindowSettings(Prop::DockedWindow &propWindow, Wnd_Docking &windo
 #ifdef YARN
       else if(typeID==GetTypeID<Yarn::Wnd_Windows>())
       {
-         propWindow.iType(8);
+         propWindow.Type(8);
          return true;
       }
 #endif
       else if(typeID==GetTypeID<Wnd_WebView>())
       {
-         propWindow.iType(9);
+         propWindow.Type(9);
          auto *pWnd=reinterpret_cast<Wnd_WebView *>(p_this);
          Prop::WebViewWindow &prop=propWindow.propWebViewWindow();
          prop.pclURL(pWnd->GetURL());
@@ -1238,7 +1238,7 @@ bool SaveDockedWindowSettings(Prop::DockedWindow &propWindow, Wnd_Docking &windo
 
 Wnd_Docking *Wnd_Main::RestoreDockedWindowSettings(Prop::DockedWindow &propWindow)
 {
-   switch(propWindow.iType())
+   switch(propWindow.Type())
    {
       case 0: // Wnd_InputPane
       {
@@ -1320,8 +1320,8 @@ Wnd_Docking *Wnd_Main::RestoreDockedWindowSettings(Prop::DockedWindow &propWindo
          if(props.pclFileName())
          {
             mp_wnd_map->Open(props.pclFileName());
-            mp_wnd_map->SetMapIndex(props.iMapIndex());
-            mp_wnd_map->SetCurrentPosition(props.iCurrentMapIndex(), props.iCurrentRoomIndex());
+            mp_wnd_map->SetMapIndex(props.MapIndex());
+            mp_wnd_map->SetCurrentPosition(props.CurrentMapIndex(), props.CurrentRoomIndex());
             mp_wnd_map->m_scale=props.Scale();
             mp_wnd_map->m_origin=props.Origin();
             mp_wnd_map->m_selection_filter.m_rooms=props.fSelectionFilter_Rooms();
@@ -1390,15 +1390,15 @@ void Wnd_Main::SaveDockingConfiguration(Prop::Docking &propDocking)
    for(auto &frame : GetFrames())
    {
       auto &propPane=*propPanes.Push(MakeUnique<Prop::DockedPane>());
-      propPane.iSide(frame.side());
-      propPane.iSize(frame.Size());
+      propPane.Side(frame.side());
+      propPane.Size(frame.Size());
       auto &propWindows=propPane.propWindows();
 
       for(auto &window : frame.GetWindows())
       {
          auto &propWindow=*propWindows.Push(MakeUnique<Prop::DockedWindow>());
          int2 windowSize=window.WindowSize();
-         propWindow.iSize(frame.direction()==Direction::Horizontal ? windowSize.x : windowSize.y);
+         propWindow.Size(frame.direction()==Direction::Horizontal ? windowSize.x : windowSize.y);
          propWindow.fVerticalCaption(window.IsVerticalCaption());
          propWindow.fHideCaption(window.IsCaptionHidden());
 
@@ -1449,7 +1449,7 @@ void Wnd_Main::RestoreDockingConfiguration(Prop::Docking &propDocking)
 
       for(auto &propFrame : propPanes)
       {
-         auto side=Docking::Side(propFrame->iSide());
+         auto side=Docking::Side(propFrame->Side());
          int2 frameSize=clientSize;
          int2 originalFrameSize=originalClient;
          bool isHorizontal=Docking::ToDirection(side)==Direction::Horizontal;
@@ -1462,7 +1462,7 @@ void Wnd_Main::RestoreDockingConfiguration(Prop::Docking &propDocking)
             std::swap(originalFrameSize.x, originalFrameSize.y);
          }
 
-         frameSize.x=max(propFrame->iSize()*frameSize.x/originalFrameSize.x, 10*g_dpiScale);
+         frameSize.x=max(propFrame->Size()*frameSize.x/originalFrameSize.x, 10*g_dpiScale);
          Docking::Frame &frame=CreateFrame(side, frameSize.x);
 
          for(auto &ppropWindow : propFrame->propWindows())
@@ -1473,7 +1473,7 @@ void Wnd_Main::RestoreDockingConfiguration(Prop::Docking &propDocking)
 
             pWnd->SetVerticalCaption(ppropWindow->fVerticalCaption());
             pWnd->SetHideCaption(ppropWindow->fHideCaption());
-            int2 size(frameSize.x, ppropWindow->iSize()*frameSize.y/originalFrameSize.y);
+            int2 size(frameSize.x, ppropWindow->Size()*frameSize.y/originalFrameSize.y);
             if(isHorizontal)
                std::swap(size.x, size.y);
 
@@ -1527,7 +1527,7 @@ void Wnd_Main::SendInput(InputControl &edInput)
 
    if(auto *pCharacter=mp_connection->GetCharacter();pCharacter && !mp_connection->InReplay())
    {
-      if(auto index=pCharacter->iRestoreLogIndex();index!=-1)
+      if(auto index=pCharacter->RestoreLogIndex();index!=-1)
          gp_restore_logs->WriteSent(index, string);
    }
 
@@ -1761,15 +1761,15 @@ void Wnd_Main::SaveMainWindowSettings(Prop::MainWindowSettings &settings)
    else
       settings.propInput()=m_input.GetProps();
 
-   settings.iHistorySize(mp_splitter->GetSize(1));
-   settings.iInputSize(mp_splitter_input->GetSize(1));
+   settings.HistorySize(mp_splitter->GetSize(1));
+   settings.InputSize(mp_splitter_input->GetSize(1));
 }
 
 void Wnd_Main::ApplyMainWindowSettings()
 {
    auto &settings=GetWindowSettings();
-   mp_splitter->SetSize(1, settings.iHistorySize());
-   mp_splitter_input->SetSize(1, settings.iInputSize());
+   mp_splitter->SetSize(1, settings.HistorySize());
+   mp_splitter_input->SetSize(1, settings.InputSize());
 
    ApplyHistoryVisibility();
 
@@ -1930,7 +1930,7 @@ LRESULT Wnd_Main::On(const Msg::Command &msg)
 
             File::Chooser cf;
             cf.SetTitle(STR_LogToFile);
-            cf.SetFilter(STR_LogFileFilter, g_ppropGlobal->iLogFileFilter());
+            cf.SetFilter(STR_LogFileFilter, g_ppropGlobal->LogFileFilter());
             cf.SetDirectory(propLogging.pclPath());
 
             FixedStringBuilder<256> fileName;
@@ -1938,7 +1938,7 @@ LRESULT Wnd_Main::On(const Msg::Command &msg)
 
             if(cf.Choose(*this, fileName, true))
             {
-               g_ppropGlobal->iLogFileFilter(cf.GetFilterIndex());
+               g_ppropGlobal->LogFileFilter(cf.GetFilterIndex());
                mp_connection->LogStart(fileName, msg.iID());
                propLogging.pclPath(ConstString(fileName.begin(), cf.GetFileOffset()));
             }
@@ -2182,7 +2182,7 @@ void Wnd_Main::CheckInputHeight()
    if(!propInputWindow.fAutoSizeVertically())
       return;
 
-   int iInputHeight=std::clamp(int(m_input.GetLineCount()), propInputWindow.iMinimumHeight(), propInputWindow.iMaximumHeight());
+   int iInputHeight=std::clamp(int(m_input.GetLineCount()), propInputWindow.MinimumHeight(), propInputWindow.MaximumHeight());
    if(iInputHeight==m_last_input_height)
       return;
 
@@ -2226,17 +2226,17 @@ bool Wnd_Main::ProcessEditKey(InputControl &edInput, const Msg::Key &msg)
 
    // Don't process macros when the key is A-Z and no control or alt keys are pressed
    if(fDown && (key.fControl || key.fAlt || !IsBetween<int>(key.iVKey, 'A', 'Z')) &&
-       g_ppropGlobal->propConnections().propKeyboardMacros().fActive())
+       g_ppropGlobal->propConnections().propKeyboardMacros2().fActive())
    {
-      const CKeyMacro *pMacro=mp_connection->MacroKey(&key);
+      const Prop::KeyboardMacro *p_macro=mp_connection->MacroKey(&key);
 
-      if(pMacro)
+      if(p_macro)
       {
          // If we get a macro with an fType, we must type it in
-         if(pMacro->fType)
-            edInput.ReplaceSel(pMacro->pclMacro);
+         if(p_macro->fType())
+            edInput.ReplaceSel(p_macro->pclMacro());
          else
-            SendLines(pMacro->pclMacro);
+            SendLines(p_macro->pclMacro());
 
          // Windows generates number keys for these entries, so if we hit a macro, ignore the next
          // char message received
@@ -2689,7 +2689,7 @@ Wnd_MDI::Wnd_MDI(Prop::Position *p_position)
          new Wnd_Main(*this, ppropServer, ppropCharacter, ppropPuppet, true);
       }
 
-      int activeTab=p_position->iActiveTab();
+      int activeTab=p_position->ActiveTab();
       if(IsBetween(activeTab, 0, int(m_window_count-1)))
          SetActiveWindow(GetWindow(activeTab));
    }

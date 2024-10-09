@@ -111,11 +111,11 @@ Log::Log(Connection &connection, Prop::Logging &propLogging, IError &error, Cons
             "<STYLE TYPE='text/css' MEDIA=screen>" CRLF
             "BODY { background:", HTML::HTMLColor(m_prop_text_window.clrBack()),
                "; color:", HTML::HTMLColor(m_prop_text_window.clrFore()),
-               "; font-family:'", m_prop_text_window.propFont().pclName(), "'; font-size:", m_prop_text_window.propFont().iSize(), "px; } " CRLF
+               "; font-family:'", m_prop_text_window.propFont().pclName(), "'; font-size:", m_prop_text_window.propFont().Size(), "px; } " CRLF
             "H2 { border-style: solid; border-width: 2px 0; padding: .5em; text-align: center; }" CRLF
             ".startlog { border-bottom-style: dotted; margin: .75em 0 .5em; }" CRLF
             ".stoplog { border-top-style: dotted; margin: .5em 0 .75em; }" CRLF
-            "p { margin: 0 0 ", m_prop_text_window.iParagraphSpacing(), "px 0; display: flex; flex-flow: row; }" CRLF
+            "p { margin: 0 0 ", m_prop_text_window.ParagraphSpacing(), "px 0; display: flex; flex-flow: row; }" CRLF
             ".stamp, .format{position: absolute; top: 2.25em; display: inline-flex; align-items: center;}" CRLF
             ".format{right: .75em;}" CRLF
             ".timestamp{opacity: .25; font-size: .875em; position: relative; top: .175em; width: 11.5em; flex: none; white-space: nowrap; display: none; margin-right: 1em !important; text-align: right !important;}" CRLF
@@ -147,7 +147,7 @@ Log::Log(Connection &connection, Prop::Logging &propLogging, IError &error, Cons
       Time::Time time; time.Local();
       time.FormatDate(string);
       string(' ');
-      time.FormatTime(string, ConstString(), mp_prop_logging.iTimeFormat()&Text::Time32::F_24HR ? (TIME_FORCE24HOURFORMAT|TIME_NOTIMEMARKER) : 0);
+      time.FormatTime(string, ConstString(), mp_prop_logging.TimeFormat()&Text::Time32::F_24HR ? (TIME_FORCE24HOURFORMAT|TIME_NOTIMEMARKER) : 0);
 
       if(m_HTML)
       {
@@ -180,7 +180,7 @@ Log::~Log()
       Time::Time time; time.Local();
       time.FormatDate(string);
       string(' ');
-      time.FormatTime(string, ConstString(), mp_prop_logging.iTimeFormat()&Text::Time32::F_24HR ? (TIME_FORCE24HOURFORMAT|TIME_NOTIMEMARKER) : 0);
+      time.FormatTime(string, ConstString(), mp_prop_logging.TimeFormat()&Text::Time32::F_24HR ? (TIME_FORCE24HOURFORMAT|TIME_NOTIMEMARKER) : 0);
 
       if(m_HTML)
       {
@@ -218,7 +218,7 @@ void Log::LogTextList(const Text::List &list, const Text::Line *pStart)
 void Log::WriteHTMLPrefix(StringBuilder &string, Text::Time32 time)
 {
    string("<p><span class='timestamp'>");
-   time.Format(string, mp_prop_logging.iTimeFormat()|Text::Time32::F_Date|Text::Time32::F_Time);
+   time.Format(string, mp_prop_logging.TimeFormat()|Text::Time32::F_Date|Text::Time32::F_Time);
    string("</span><span class='line'");
 }
 
@@ -233,7 +233,7 @@ void Log::LogTextLine(const Text::Line &line)
    {
       HybridStringBuilder string;
       WriteHTMLPrefix(string, line.Time());
-      line.HTMLCopy(string, m_prop_text_window.clrFore(), m_prop_text_window.clrBack(), m_prop_text_window.clrLink(), m_prop_text_window.propFont().pclName(), m_prop_text_window.propFont().iSize());
+      line.HTMLCopy(string, m_prop_text_window.clrFore(), m_prop_text_window.clrBack(), m_prop_text_window.clrLink(), m_prop_text_window.propFont().pclName(), m_prop_text_window.propFont().Size());
       WriteHTMLSuffix(string);
       m_file_log.Write(string);
       return;
@@ -256,7 +256,7 @@ void Log::LogTyped(ConstString line)
       HybridStringBuilder string;
       WriteHTMLPrefix(string, Time::Local());
       {
-         HTML::Writer writer(string, m_prop_text_window.clrFore(), m_prop_text_window.clrBack(), m_prop_text_window.clrLink(), m_prop_text_window.propFont().pclName(), m_prop_text_window.propFont().iSize(), ConstString{});
+         HTML::Writer writer(string, m_prop_text_window.clrFore(), m_prop_text_window.clrBack(), m_prop_text_window.clrLink(), m_prop_text_window.propFont().pclName(), m_prop_text_window.propFont().Size(), ConstString{});
          writer << mp_prop_logging.pclTypedPrefix() << line;
       }
       WriteHTMLSuffix(string);
@@ -281,7 +281,7 @@ void Log::LogSent(ConstString line)
       HybridStringBuilder string;
       WriteHTMLPrefix(string, Time::Local());
       {
-         HTML::Writer writer(string, m_prop_text_window.clrFore(), m_prop_text_window.clrBack(), m_prop_text_window.clrLink(), m_prop_text_window.propFont().pclName(), m_prop_text_window.propFont().iSize(), ConstString{});
+         HTML::Writer writer(string, m_prop_text_window.clrFore(), m_prop_text_window.clrBack(), m_prop_text_window.clrLink(), m_prop_text_window.propFont().pclName(), m_prop_text_window.propFont().Size(), ConstString{});
          writer << mp_prop_logging.pclSentPrefix() << line;
       }
       WriteHTMLSuffix(string);
@@ -299,10 +299,10 @@ void Log::LogSent(ConstString line)
 
 void Log::Write(Text::Time32 time32)
 {
-   if(mp_prop_logging.iTimeFormat()&Text::Time32::F_Visible)
+   if(mp_prop_logging.TimeFormat()&Text::Time32::F_Visible)
    {
       FixedStringBuilder<80> string;
-      time32.Format(string, mp_prop_logging.iTimeFormat());
+      time32.Format(string, mp_prop_logging.TimeFormat());
       string("  ");
       Write(string);
 
@@ -330,7 +330,7 @@ void Log::Write(ConstString text)
 
    while(true)
    {
-      unsigned maxLength=max(mp_prop_logging.iWrap()-m_line_pos, 20U); // Minimum length of 20 chars for sanity
+      unsigned maxLength=max(mp_prop_logging.Wrap()-m_line_pos, 20U); // Minimum length of 20 chars for sanity
       maxLength=min(maxLength, text.Length());
 
       // Is there an embedded CR/LF in the string?
@@ -366,7 +366,7 @@ void Log::Write(ConstString text)
 
       if(mp_prop_logging.fHangingIndent())
       {
-         m_line_pos=mp_prop_logging.iHangingIndent()+m_time_indent;
+         m_line_pos=mp_prop_logging.HangingIndent()+m_time_indent;
          for(unsigned i=0;i<m_line_pos;i++)
             m_file_log.Write(ConstString(" "));
       }
@@ -380,8 +380,8 @@ UniquePtr<RestoreLogs> RestoreLogs::Create()
    if(!propLogging.fRestoreLogs())
       return MakeUnique<RestoreLogs>(0);
 
-   auto buffer_size=propLogging.iRestoreBufferSizeCurrent()*1024;
-   auto default_size=propLogging.iRestoreBufferSize()*1024;
+   auto buffer_size=propLogging.RestoreBufferSizeCurrent()*1024;
+   auto default_size=propLogging.RestoreBufferSize()*1024;
 
    // Ensure default size is a multiple of 64k
    {
@@ -392,7 +392,7 @@ UniquePtr<RestoreLogs> RestoreLogs::Create()
       if(default_size!=rounded_size)
       {
          default_size=rounded_size;
-         propLogging.iRestoreBufferSize(default_size/1024);
+         propLogging.RestoreBufferSize(default_size/1024);
       }
    }
 
@@ -402,7 +402,7 @@ UniquePtr<RestoreLogs> RestoreLogs::Create()
       if(Resize(buffer_size, default_size))
       {
          buffer_size=default_size;
-         propLogging.iRestoreBufferSizeCurrent(buffer_size/1024);
+         propLogging.RestoreBufferSizeCurrent(buffer_size/1024);
          SaveConfig(nullptr);
       }
    }
@@ -533,7 +533,7 @@ void RestoreLogs::CheckAndRepair()
       // Iterate through the characters on the server
       for(auto &p_character : p_server->propCharacters())
       {
-         auto index=p_character->iRestoreLogIndex();
+         auto index=p_character->RestoreLogIndex();
          if(index==-1) // No log
             continue;
 
@@ -548,7 +548,7 @@ void RestoreLogs::CheckAndRepair()
                   string(" Maximum index is ", infos.Count()-1);
                ConsoleHTML(string);
             }
-            p_character->iRestoreLogIndex(-1);
+            p_character->RestoreLogIndex(-1);
             continue;
          }
 
@@ -556,7 +556,7 @@ void RestoreLogs::CheckAndRepair()
          if(info.mp_character)
          {
             ConsoleHTML(FixedStringBuilder<256>("<icon error> Restore Log ", index, " is already used by <b>", info.mp_server->pclName(), " - ", info.mp_character->pclName(), "</b>, unlinking <b>", p_server->pclName(), " - ", p_character->pclName(), "</b> from it."));
-            p_character->iRestoreLogIndex(-1);
+            p_character->RestoreLogIndex(-1);
             continue;
          }
 
@@ -575,7 +575,7 @@ void RestoreLogs::CheckAndRepair()
          Free(i);
          infos.UnsortedDelete(i);
          if(i<infos.Count())
-            infos[i].mp_character->iRestoreLogIndex(i);
+            infos[i].mp_character->RestoreLogIndex(i);
          continue;
       }
    }
@@ -588,7 +588,7 @@ void RestoreLogs::EraseAll()
    {
       // Iterate through the characters on the server
       for(auto &p_character : p_server->propCharacters())
-         p_character->iRestoreLogIndex(-1);
+         p_character->RestoreLogIndex(-1);
    }
 
    if(m_buffer_count)
@@ -758,7 +758,7 @@ void RestoreLogs::Allocate(Prop::Character &propCharacter)
    }
 
    MemoryZero(Array<BYTE>(reinterpret_cast<BYTE*>(static_cast<Buffer*>(p_view->m_buffer)), m_buffer_size));
-   propCharacter.iRestoreLogIndex(m_buffer_count++);
+   propCharacter.RestoreLogIndex(m_buffer_count++);
    SaveConfig(nullptr);
 }
 
@@ -772,9 +772,9 @@ void RestoreLogs::FixupMovedLog(int from, int to)
       // Iterate through the characters on the server
       for(auto &p_character : p_server->propCharacters())
       {
-         if(p_character->iRestoreLogIndex()==from)
+         if(p_character->RestoreLogIndex()==from)
          {
-            p_character->iRestoreLogIndex(to);
+            p_character->RestoreLogIndex(to);
             return;
          }
       }
@@ -784,11 +784,11 @@ void RestoreLogs::FixupMovedLog(int from, int to)
 
 void RestoreLogs::Free(Prop::Character &propCharacter)
 {
-   unsigned index=propCharacter.iRestoreLogIndex();
+   unsigned index=propCharacter.RestoreLogIndex();
    Free(index);
    if(index!=m_buffer_count) // If this wasn't the last buffer, the last was moved to this spot
       FixupMovedLog(m_buffer_count, index);
-   propCharacter.iRestoreLogIndex(-1);
+   propCharacter.RestoreLogIndex(-1);
    SaveConfig(nullptr);
 }
 

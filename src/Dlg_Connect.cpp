@@ -181,7 +181,7 @@ Wnd_Connect::~Wnd_Connect()
 
 void Wnd_Connect::InitImageList()
 {
-   IconDrawer id{g_ppropGlobal->iUIFontSize()*g_dpiScale};
+   IconDrawer id{g_ppropGlobal->UIFontSize()*g_dpiScale};
 
    m_iml=id.CreateImageList(3);
    id.Add("🖥", m_iml);
@@ -342,7 +342,7 @@ void Wnd_Connect::Import()
    auto p_prop_server=props.propConnections().propServers().Delete(0);
 
    for(auto &p_character : p_prop_server->propCharacters())
-      p_character->iRestoreLogIndex(-1); // We can't copy this
+      p_character->RestoreLogIndex(-1); // We can't copy this
 
    auto &servers=g_ppropGlobal->propConnections().propServers();
 
@@ -373,7 +373,7 @@ void Wnd_Connect::Export()
       return;
 
    Prop::Global props;
-   props.iVersion(g_ciBuildNumber);
+   props.Version(g_ciBuildNumber);
 
    props.propConnections().propServers().Push(MakeCounting<Prop::Server>(*selection->GetServer()));
    ConfigExport(filename, &props, g_ppropGlobal->fShowDefaults(), true);

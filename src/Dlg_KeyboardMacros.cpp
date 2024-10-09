@@ -20,14 +20,21 @@ private:
    bool EditKey(const Msg::Key &msg) override;
    bool EditChar(const Msg::Char &msg) override { return true; }
 
-   bool SetKeyMacro(CKeyMacro *pKeyMacro, bool fKeepChanges);
+   bool SetKeyMacro(Prop::KeyboardMacro *pKeyMacro, bool fKeepChanges);
 
    ITreeView *m_pITreeView;
-   CKeyMacro *m_pKeyMacro{};
+   Prop::KeyboardMacro *m_pKeyMacro{};
 
    int m_iVKey;
 
+   enum
+   {
+      IDC_CHECK_TREATASFOLDER = 100,
+   };
+
    AL::CheckBox *m_pcbActive;
+   AL::CheckBox *m_pcbTreatAsFolder;
+   AL::Edit *m_pedDescription;
    AL::Edit *m_pedMacro, *m_pedKey;
    AL::CheckBox *m_pcbType, *m_pcbControl, *m_pcbAlt, *m_pcbShift;
 };
@@ -52,22 +59,28 @@ bool Dlg::SetProp(IPropTreeItem *pti, bool fKeepChanges)
    return SetKeyMacro(pti ? pti->pKeyMacro() : nullptr, fKeepChanges);
 }
 
-bool Dlg::SetKeyMacro(CKeyMacro *pNewKeyMacro, bool fKeepChanges)
+bool Dlg::SetKeyMacro(Prop::KeyboardMacro *pNewKeyMacro, bool fKeepChanges)
 {
-   g_ppropGlobal->propConnections().propKeyboardMacros().fActive(m_pcbActive->IsChecked());
+   g_ppropGlobal->propConnections().propKeyboardMacros2().fActive(m_pcbActive->IsChecked());
 
    if(pNewKeyMacro!=nullptr && m_pKeyMacro==pNewKeyMacro)
       return false; // Nothing changed
 
-   HybridStringBuilder sBuffer;
    bool fUpdate=false;
 
    if(m_pKeyMacro && fKeepChanges)
    {
-      sBuffer(m_pedMacro->GetText());
-      m_pKeyMacro->pclMacro=sBuffer;
+      m_pKeyMacro->fFolder(m_pcbTreatAsFolder->IsChecked());
+      auto strDescription=m_pedDescription->GetText();
+      fUpdate=m_pKeyMacro->pclDescription()!=strDescription || m_pKeyMacro->fFolder()!=m_pcbTreatAsFolder->IsChecked();
+      m_pKeyMacro->pclDescription(strDescription);
 
-      KEY_ID &key=m_pKeyMacro->key;
+      auto macro=m_pedMacro->GetText();
+      if(macro!=m_pKeyMacro->pclMacro())
+      {
+         fUpdate=true;
+         m_pKeyMacro->pclMacro(macro);
+      }
 
       KEY_ID keyNew;
       keyNew.iVKey=m_iVKey;
@@ -75,18 +88,21 @@ bool Dlg::SetKeyMacro(CKeyMacro *pNewKeyMacro, bool fKeepChanges)
       keyNew.fAlt=m_pcbAlt->IsChecked();
       keyNew.fShift=m_pcbShift->IsChecked();
 
-      m_pKeyMacro->fType=m_pcbType->IsChecked();
+      m_pKeyMacro->fType(m_pcbType->IsChecked());
 
-      if(keyNew!=key)
+      if(keyNew!=m_pKeyMacro->key())
       {
          fUpdate=true;
-         key=keyNew;
+         m_pKeyMacro->key(keyNew);
       }
    }
 
    m_pKeyMacro=pNewKeyMacro;
 
    bool fEnable=m_pKeyMacro!=nullptr;
+   m_pcbTreatAsFolder->Enable(fEnable);
+   EnableWindows(fEnable, *m_pedDescription);
+   fEnable&=!m_pcbTreatAsFolder->IsChecked();
    m_pedMacro->Enable(fEnable);
    m_pedKey  ->Enable(fEnable);
    m_pcbType   ->Enable(fEnable);
@@ -96,26 +112,29 @@ bool Dlg::SetKeyMacro(CKeyMacro *pNewKeyMacro, bool fKeepChanges)
 
    if(!m_pKeyMacro)
    {
+      m_pedDescription->SetText("");
       m_pedMacro->SetText("");
       m_pedKey->SetText("");
       return fUpdate;
    }
 
-   m_pedMacro->SetText(m_pKeyMacro->pclMacro);
+   m_pedMacro->SetText(m_pKeyMacro->pclMacro());
 
-   const KEY_ID *pKey=&m_pKeyMacro->key;
+   const KEY_ID *pKey=&m_pKeyMacro->key();
 
-   sBuffer.Clear();
-   pKey->KeyName(sBuffer);
+   HybridStringBuilder string;
+   pKey->KeyName(string);
 
-   m_pedKey->SetText(sBuffer);
+   m_pcbTreatAsFolder->Check(m_pKeyMacro->fFolder());
+   m_pedDescription->SetText(m_pKeyMacro->pclDescription());
+   m_pedKey->SetText(string);
 
    m_iVKey=pKey->iVKey;
    m_pcbControl->Check(pKey->fControl);
    m_pcbAlt    ->Check(pKey->fAlt);
    m_pcbShift  ->Check(pKey->fShift);
 
-   m_pcbType->Check(m_pKeyMacro->fType);
+   m_pcbType->Check(m_pKeyMacro->fType());
    return fUpdate;
 }
 
@@ -131,6 +150,18 @@ LRESULT Dlg::On(const Msg::Create &msg)
       *pGH >> AL::Style::Attach_Left;
 
       m_pcbActive=m_layout.CreateCheckBox(-1, STR_ProcessKeyboardMacros); *pGH << m_pcbActive;
+   }
+
+   m_pcbTreatAsFolder=m_layout.CreateCheckBox(IDC_CHECK_TREATASFOLDER, "Treat As Folder (This macro has no effect)");
+   *pGV << m_pcbTreatAsFolder;
+
+   auto *pstDescription=m_layout.CreateStatic("Description:");
+   {
+      m_pedDescription=m_layout.CreateEdit(-1, int2(30, 1), ES_AUTOHSCROLL);
+      m_pedDescription->LimitText(Prop::KeyboardMacro::pclDescription_MaxLength());
+      AL::Group_Horizontal *pGroup=m_layout.CreateGroup_Horizontal(); pGroup->weight(0);
+      *pGroup << pstDescription << m_pedDescription;
+      *pGV << pGroup;
    }
 
    *pGV << m_layout.CreateStatic(STR_MacroText);
@@ -159,7 +190,7 @@ LRESULT Dlg::On(const Msg::Create &msg)
    }
    *pGV << m_layout.CreateStatic(STR_MacroLimitations);
 
-   m_pcbActive->Check(g_ppropGlobal->propConnections().propKeyboardMacros().fActive());
+   m_pcbActive->Check(g_ppropGlobal->propConnections().propKeyboardMacros2().fActive());
 
    Init_EditSendEnter(*m_pedKey, *this);
    SetProp(nullptr, true);
@@ -201,10 +232,10 @@ bool Dlg::EditKey(const Msg::Key &msg)
 
    // Swap in the key so we can display it
    {
-      KEY_ID keyOriginal=m_pKeyMacro->key;
-      m_pKeyMacro->key=key;
+      KEY_ID key_original=m_pKeyMacro->key();
+      m_pKeyMacro->key(key);
       m_pITreeView->UpdateSelection();
-      m_pKeyMacro->key=keyOriginal;
+      m_pKeyMacro->key(key_original);
    }
 
    return true;
@@ -215,13 +246,16 @@ bool Dlg::EditKey(const Msg::Key &msg)
 //
 struct PropTreeItem : IPropTreeItem
 {
-   PropTreeItem(CKeyMacro &keyMacro) : m_keyMacro(keyMacro) { }
+   PropTreeItem(Prop::KeyboardMacro &keyMacro) : m_keyMacro(keyMacro) { }
 
    ConstString Label() const override
    {
+      if(m_keyMacro.pclDescription())
+         return m_keyMacro.pclDescription();
+
       FixedStringBuilder<256> sBuffer;
 
-      const KEY_ID &key=m_keyMacro.key;
+      const KEY_ID &key=m_keyMacro.key();
 
       if(key.fAlt) sBuffer(STR_Alt " + ");
       if(key.fControl) sBuffer(STR_Control " + ");
@@ -233,18 +267,24 @@ struct PropTreeItem : IPropTreeItem
       return m_pcLabel;
    }
 
+   bool fCanRename() const override { return true; }
+   void Rename(ConstString string) override
+   {
+      m_keyMacro.pclDescription(string);
+   }
+
    bool fCanDelete() const override { return true; }
    bool fCanMove() const override { return true; }
    bool fSort() const override { return false; }
-   eTIB eBitmap() const override { return TIB_KEYMACRO; }
+   eTIB eBitmap() const override { return m_keyMacro.fFolder() ? TIB_FOLDER_CLOSED : TIB_KEYMACRO; }
 
-   CKeyMacro *pKeyMacro() override { return &m_keyMacro; }
-   Prop::KeyboardMacros *ppropKeyboardMacros() override { return nullptr; }
+   Prop::KeyboardMacro *pKeyMacro() override { return &m_keyMacro; }
+   Prop::KeyboardMacros2 *ppropKeyboardMacros() override { return &m_keyMacro.propKeyboardMacros2(); }
 
 private:
 
    mutable OwnedString m_pcLabel;
-   CKeyMacro &m_keyMacro;
+   Prop::KeyboardMacro &m_keyMacro;
 };
 
 static ITreeView *s_tree{};
@@ -278,7 +318,7 @@ struct PropTree : IPropTree
       if(!item.ppropKeyboardMacros())
          return nullptr;
 
-      return MakeUnique<PropTreeItem>(*item.ppropKeyboardMacros()->Push(MakeUnique<CKeyMacro>()));
+      return MakeUnique<PropTreeItem>(*item.ppropKeyboardMacros()->Push(MakeUnique<Prop::KeyboardMacro>()));
    }
 
    UniquePtr<IPropTreeItem> CopyChild(IPropTreeItem &item, IPropTreeItem &child) override
@@ -286,7 +326,7 @@ struct PropTree : IPropTree
       if(!child.pKeyMacro())
          return nullptr;
 
-      auto ppropKeyMacro=MakeUnique<CKeyMacro>(*child.pKeyMacro());
+      auto ppropKeyMacro=MakeUnique<Prop::KeyboardMacro>(*child.pKeyMacro());
       auto pItem=MakeUnique<PropTreeItem>(*ppropKeyMacro);
 
       ppropKeyMacro.Extract(); // TODO: The alias isn't owned by the IPropTreeItem, so if the InsertChild doesn't happen this object can leak
@@ -306,12 +346,12 @@ struct PropTree : IPropTree
 
    void InsertChild(IPropTreeItem &item, IPropTreeItem *pti, IPropTreeItem *ptiNextTo, bool fAfter) override
    {
-      CKeyMacro *pKeyMacro=pti->pKeyMacro();
+      Prop::KeyboardMacro *pKeyMacro=pti->pKeyMacro();
 
       unsigned iPosition=0;
       if(ptiNextTo)
       {
-         CKeyMacro *ppropKeyboardMacroNextTo=ptiNextTo->pKeyMacro();
+         Prop::KeyboardMacro *ppropKeyboardMacroNextTo=ptiNextTo->pKeyMacro();
          Assert(ppropKeyboardMacroNextTo);
          iPosition=item.ppropKeyboardMacros()->Find(ppropKeyboardMacroNextTo);
          if(fAfter) iPosition++;
@@ -329,13 +369,13 @@ struct PropTree : IPropTree
 
 UniquePtr<IPropTreeItem> PropTree::Import(IPropTreeItem &item, Prop::Global &props, Window window)
 {
-   if(!props.propConnections().propKeyboardMacros())
+   if(!props.propConnections().propKeyboardMacros2())
    {
       MessageBox(window, "No macros in file!", "Error", MB_ICONEXCLAMATION|MB_OK);
       return nullptr;
    }
 
-   auto p_prop_macro=props.propConnections().propKeyboardMacros().Delete(0);
+   auto p_prop_macro=props.propConnections().propKeyboardMacros2().Delete(0);
    auto new_item=MakeUnique<PropTreeItem>(*p_prop_macro);
    item.ppropKeyboardMacros()->Push(std::move(p_prop_macro));
    return new_item;
@@ -343,10 +383,10 @@ UniquePtr<IPropTreeItem> PropTree::Import(IPropTreeItem &item, Prop::Global &pro
 
 void PropTree::Export(IPropTreeItem &item, Prop::Global &props)
 {
-   auto &macros=props.propConnections().propKeyboardMacros();
+   auto &macros=props.propConnections().propKeyboardMacros2();
 
    if(auto *p_macro=item.pKeyMacro())
-      macros.Push(MakeUnique<CKeyMacro>(*p_macro));
+      macros.Push(MakeUnique<Prop::KeyboardMacro>(*p_macro));
 }
 
 };

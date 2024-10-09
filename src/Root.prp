@@ -83,7 +83,7 @@ Prop Font
    Flag   Strikeout = false
    Byte   CharSet   = DEFAULT_CHARSET
 
-   Func "unsigned SizeInPoints() const { return MulDiv(iSize(), 72, 96); }"
+   Func "unsigned SizeInPoints() const { return MulDiv(Size(), 72, 96); }"
    Func "Handle<HFONT> CreateFont() const;"
    Func "Handle<HFONT> CreateFont(bool fBold, bool fItalic, bool fUnderline, bool fStrikeout) const;"
    Func "void  ToLogFont(LOGFONT &lf) const;"
@@ -439,11 +439,27 @@ Prop Aliases(StackOf Alias)
    Flag ProcessCommands = false
 }
 
+Prop KeyboardMacros2;
+Prop KeyboardMacro
+{
+    String Description
+    String Macro
+    Key    key
+    Flag   Type = false // Type into input window
+    Flag   Folder = false
+    KeyboardMacros2 KeyboardMacros2(DemandCreate)
+}
+
+// Obsolete, removed in build 328 and replaced with KeyboardMacros2
 Prop KeyboardMacros(StackOf KeyMacro)
 {
-   Flag Active = true
+   Flag Active(NoWrite) = true
+}
 
-   Func "const CKeyMacro *Macro(KEY_ID keyPressed) const;"
+Prop KeyboardMacros2(StackOf KeyboardMacro)
+{
+   Flag Active = true
+   Func "const KeyboardMacro *Macro(KEY_ID keyPressed) const;"
 }
 
 //*****************************************************************************
@@ -708,7 +724,8 @@ Prop Puppet(RefCounted)
    Docking Docking
    MainWindowSettings MainWindowSettings(DemandCreate)
 
-   KeyboardMacros KeyboardMacros(DemandCreate)
+   KeyboardMacros KeyboardMacrosOld &KeyboardMacros(DemandCreate)
+   KeyboardMacros2 KeyboardMacros2(DemandCreate)
    Triggers       Triggers(DemandCreate)
    Aliases        Aliases(DemandCreate)
 
@@ -752,7 +769,8 @@ Prop Character(RefCounted)
    DateTime LastUsed
    DateTime Created
 
-   KeyboardMacros KeyboardMacros(DemandCreate)
+   KeyboardMacros KeyboardMacrosOld &KeyboardMacros(DemandCreate)
+   KeyboardMacros2 KeyboardMacros2(DemandCreate)
    Triggers       Triggers(DemandCreate)
    Aliases        Aliases(DemandCreate)
 
@@ -801,7 +819,8 @@ Prop Server(RefCounted)
    Characters     Characters
    Triggers       Triggers(DemandCreate)
    Aliases        Aliases(DemandCreate)
-   KeyboardMacros KeyboardMacros(DemandCreate)
+   KeyboardMacros KeyboardMacrosOld &KeyboardMacros(DemandCreate)
+   KeyboardMacros2 KeyboardMacros2(DemandCreate)
 
    Func "bool Rename(Servers &servers, ConstString name);"
 }
@@ -835,7 +854,8 @@ Prop Connections
    Int    DirectPort(NoWrite) = 8888, Min=1, Max=65536
 
    Logging        Logging
-   KeyboardMacros KeyboardMacros
+   KeyboardMacros KeyboardMacrosOld &KeyboardMacros
+   KeyboardMacros2 KeyboardMacros2
    Servers        Servers &Shortcuts
    Triggers       Triggers(DemandCreate)
    Aliases        Aliases(DemandCreate)

@@ -107,10 +107,10 @@ void Dlg_Trigger_Appearance::SetTrigger(Prop::Trigger *ppropTrigger)
       m_clrForeground=m_ptColor->clrFore();
       m_clrBackground=m_ptColor->clrBack();
 
-      if(m_ptColor->pclFontFace().Length()!=0 && m_ptColor->iFontSize())
+      if(m_ptColor->pclFontFace().Length()!=0 && m_ptColor->FontSize())
       {
          m_font.pclName(m_ptColor->pclFontFace());
-         m_font.iSize(m_ptColor->iFontSize());
+         m_font.Size(m_ptColor->FontSize());
       }
       else
          m_font=g_ppropGlobal->propWindows().propMainWindowSettings().propOutput().propFont();
@@ -142,7 +142,7 @@ void Dlg_Trigger_Appearance::Save()
    m_ptColor->clrBack(m_clrBackground);
 
    m_ptColor->pclFontFace(m_pcbFont->IsChecked() ? m_font.pclName() : OwnedString());
-   m_ptColor->iFontSize(m_pcbFont->IsChecked() ? m_font.iSize() : 0);
+   m_ptColor->FontSize(m_pcbFont->IsChecked() ? m_font.Size() : 0);
    m_ptColor->fFontDefault(m_pcbFontDefault->IsChecked());
 
    Assert(m_ptStyle);
@@ -183,7 +183,7 @@ void Dlg_Trigger_Appearance::Update()
 
    if(m_ptColor)
    {
-      m_pcbFont->Check(m_ptColor->iFontSize()!=0);
+      m_pcbFont->Check(m_ptColor->FontSize()!=0);
       m_pcbFontDefault->Check(m_ptColor->fFontDefault());
       m_pcbForeground->Check(m_ptColor->fFore());
       m_pcbForegroundDefault->Check(m_ptColor->fForeDefault());
@@ -240,7 +240,7 @@ void Dlg_Trigger_Appearance::InvalidateSample()
       // Use default font face & size, but keep the styles
       Prop::Font font=m_font;
       font.pclName(propOutput.propFont().pclName());
-      font.iSize(propOutput.propFont().iSize());
+      font.Size(propOutput.propFont().Size());
       m_hfForeground=font.CreateFont();
    }
    m_hbBackground=CreateSolidBrush(m_pcbBackground->IsChecked() && !m_pcbBackgroundDefault->IsChecked() ? m_clrBackground : propOutput.clrBack());
@@ -387,7 +387,7 @@ LRESULT Dlg_Trigger_Appearance::On(const Msg::Paint &msg)
    ps.SetBackgroundMode(TRANSPARENT);
 
    DC::FontSelector _(ps, m_hfForeground);
-   ps.ExtTextOut(int2(rcSample.left+rcSample.size().x/2, rcSample.top+(rcSample.size().y-abs(m_font.iSize()))/2),
+   ps.ExtTextOut(int2(rcSample.left+rcSample.size().x/2, rcSample.top+(rcSample.size().y-abs(m_font.Size()))/2),
                  ETO_CLIPPED, rcSample, STR_AaBbCc, nullptr);
 
    return msg.Success();
@@ -494,35 +494,35 @@ void Dlg_Trigger_Paragraph::SaveTo(Prop::Trigger_Paragraph &p)
    p.fUseStroke(m_pcbStroke->IsChecked());
    p.clrStroke(m_clrStroke);
    if(int value;m_edStrokeWidth->Get(value))
-      p.iStrokeWidth(value);
+      p.StrokeWidth(value);
    p.fStrokeHash(m_pcbStrokeHash->IsChecked());
 
-   p.iStrokeStyle(m_pStrokeStyleCombo->GetCurSel());
+   p.StrokeStyle(m_pStrokeStyleCombo->GetCurSel());
 //   p.iStrokeStyle(m_pcbStrokeTop->IsChecked()+m_pcbStrokeBottom->IsChecked()*2);
 
    p.fUseIndent_Left(m_pcbIndent_Left->IsChecked());
    if(int value;m_edIndent_Left->Get(value))
-      p.iIndent_Left(value);
+      p.Indent_Left(value);
    p.fUseIndent_Right(m_pcbIndent_Right->IsChecked());
    if(int value;m_edIndent_Right->Get(value))
-      p.iIndent_Right(value);
+      p.Indent_Right(value);
 
    p.fUsePadding_Top(m_pcbPadding_Top->IsChecked());
    if(int value;m_edPadding_Top->Get(value))
-      p.iPadding_Top(value);
+      p.Padding_Top(value);
    p.fUsePadding_Bottom(m_pcbPadding_Bottom->IsChecked());
    if(int value;m_pcbPadding_Bottom->IsChecked() && m_edPadding_Bottom->Get(value))
-      p.iPadding_Bottom(value);
+      p.Padding_Bottom(value);
 
    p.fUseBorder(m_pcbBorder->IsChecked());
    if(int value;m_edBorder->Get(value))
-      p.iBorder(value);
+      p.Border(value);
 
    p.fUseBorderStyle(m_pcbBorderStyle->IsChecked());
-   p.iBorderStyle(m_pcbRound->IsChecked());
+   p.BorderStyle(m_pcbRound->IsChecked());
 
    p.fUseAlignment(m_pcbAlignment->IsChecked());
-   p.iAlignment(m_pcbAlignCenter->IsChecked()+m_pcbAlignRight->IsChecked()*2);
+   p.Alignment(m_pcbAlignCenter->IsChecked()+m_pcbAlignRight->IsChecked()*2);
 }
 
 void Dlg_Trigger_Paragraph::Update()
@@ -535,32 +535,32 @@ void Dlg_Trigger_Paragraph::Update()
       m_pcbBackground_hash->Check(m_pParagraph->fBackgroundHash());
 
       m_pcbStroke->Check(m_pParagraph->fUseStroke());
-      m_edStrokeWidth->Set(m_pParagraph->iStrokeWidth());
+      m_edStrokeWidth->Set(m_pParagraph->StrokeWidth());
 
       m_pcbStrokeHash->Check(m_pParagraph->fStrokeHash());
-      m_pStrokeStyleCombo->SetCurSel(m_pParagraph->iStrokeStyle());
+      m_pStrokeStyleCombo->SetCurSel(m_pParagraph->StrokeStyle());
 
       m_pcbIndent_Left->Check(m_pParagraph->fUseIndent_Left());
-      m_edIndent_Left->Set(m_pParagraph->iIndent_Left());
+      m_edIndent_Left->Set(m_pParagraph->Indent_Left());
       m_pcbIndent_Right->Check(m_pParagraph->fUseIndent_Right());
-      m_edIndent_Right->Set(m_pParagraph->iIndent_Right());
+      m_edIndent_Right->Set(m_pParagraph->Indent_Right());
 
       m_pcbPadding_Top->Check(m_pParagraph->fUsePadding_Top());
-      m_edPadding_Top->Set(m_pParagraph->iPadding_Top());
+      m_edPadding_Top->Set(m_pParagraph->Padding_Top());
       m_pcbPadding_Bottom->Check(m_pParagraph->fUsePadding_Bottom());
-      m_edPadding_Bottom->Set(m_pParagraph->iPadding_Bottom());
+      m_edPadding_Bottom->Set(m_pParagraph->Padding_Bottom());
 
       m_pcbBorder->Check(m_pParagraph->fUseBorder());
-      m_edBorder->Set(m_pParagraph->iBorder());
+      m_edBorder->Set(m_pParagraph->Border());
 
       m_pcbBorderStyle->Check(m_pParagraph->fUseBorderStyle());
-      m_pcbSquare->Check(m_pParagraph->iBorderStyle()==0);
-      m_pcbRound->Check(m_pParagraph->iBorderStyle()==1);
+      m_pcbSquare->Check(m_pParagraph->BorderStyle()==0);
+      m_pcbRound->Check(m_pParagraph->BorderStyle()==1);
 
       m_pcbAlignment->Check(m_pParagraph->fUseAlignment());
-      m_pcbAlignLeft->Check(m_pParagraph->iAlignment()==0);
-      m_pcbAlignCenter->Check(m_pParagraph->iAlignment()==1);
-      m_pcbAlignRight->Check(m_pParagraph->iAlignment()==2);
+      m_pcbAlignLeft->Check(m_pParagraph->Alignment()==0);
+      m_pcbAlignCenter->Check(m_pParagraph->Alignment()==1);
+      m_pcbAlignRight->Check(m_pParagraph->Alignment()==2);
    }
 
    UpdateEnabled();
@@ -697,7 +697,7 @@ LRESULT Dlg_Trigger_Paragraph::On(const Msg::Create &msg)
 
    {
       m_pText=new Text::Wnd(*this, *this);
-      m_pText->SetFont(g_ppropGlobal->pclUIFontName(), g_ppropGlobal->iUIFontSize(), DEFAULT_CHARSET);
+      m_pText->SetFont(g_ppropGlobal->pclUIFontName(), g_ppropGlobal->UIFontSize(), DEFAULT_CHARSET);
       m_pText->SetSmoothScrolling(false);
       m_pText->SetMargins(Rect(1,1,1,1));
       auto *pTextLayout=m_layout.AddChildWindow(*m_pText);
@@ -942,12 +942,12 @@ void Dlg_Trigger_Stat::Save()
    m_pTrigger->pclName(m_pedName->GetText());
    m_pTrigger->pclPrefix(m_pedPrefix->GetText());
    m_pTrigger->pclValue(m_pedValue->GetText());
-   m_pTrigger->iNameAlignment(m_pNameCenterAlign->IsChecked()*1 + m_pNameRightAlign->IsChecked()*2);
+   m_pTrigger->NameAlignment(m_pNameCenterAlign->IsChecked()*1 + m_pNameRightAlign->IsChecked()*2);
    m_pTrigger->fUseColor(m_pcbColor->IsChecked());
    m_pTrigger->clrColor(m_color);
    m_pTrigger->fUseFont(m_pcbFont->IsChecked());
    m_pTrigger->propFont()=m_propFont;
-   m_pTrigger->iType(m_pRadioString->IsChecked()*1 + m_pRadioRange->IsChecked()*2);
+   m_pTrigger->Type(m_pRadioString->IsChecked()*1 + m_pRadioRange->IsChecked()*2);
    m_pTrigger->propRange().pclLower(m_pRangeLower->GetText());
    m_pTrigger->propRange().pclUpper(m_pRangeUpper->GetText());
    m_pTrigger->propRange().clrColor(m_rangeColor);
@@ -962,17 +962,17 @@ void Dlg_Trigger_Stat::Update()
       m_pedName->SetText(m_pTrigger->pclName());
       m_pedPrefix->SetText(m_pTrigger->pclPrefix());
       m_pedValue->SetText(m_pTrigger->pclValue());
-      m_pNameLeftAlign->SetCheck(m_pTrigger->iNameAlignment()==0);
-      m_pNameCenterAlign->SetCheck(m_pTrigger->iNameAlignment()==1);
-      m_pNameRightAlign->SetCheck(m_pTrigger->iNameAlignment()==2);
+      m_pNameLeftAlign->SetCheck(m_pTrigger->NameAlignment()==0);
+      m_pNameCenterAlign->SetCheck(m_pTrigger->NameAlignment()==1);
+      m_pNameRightAlign->SetCheck(m_pTrigger->NameAlignment()==2);
       m_pcbColor->SetCheck(m_pTrigger->fUseColor());
       m_color=m_pTrigger->clrColor();
       m_pcbFont->SetCheck(m_pTrigger->fUseFont());
       m_propFont=m_pTrigger->propFont();
 
-      m_pRadioInt->SetCheck(m_pTrigger->iType()==0);
-      m_pRadioString->SetCheck(m_pTrigger->iType()==1);
-      m_pRadioRange->SetCheck(m_pTrigger->iType()==2);
+      m_pRadioInt->SetCheck(m_pTrigger->Type()==0);
+      m_pRadioString->SetCheck(m_pTrigger->Type()==1);
+      m_pRadioRange->SetCheck(m_pTrigger->Type()==2);
 
       m_pRangeLower->SetText(m_pTrigger->propRange().pclLower());
       m_pRangeUpper->SetText(m_pTrigger->propRange().pclUpper());
@@ -1655,7 +1655,7 @@ void Dlg_Trigger_Send::Save()
    m_ptSend->pclSend(m_pedText->GetText());
    m_ptSend->fSendOnClick(m_pcbSendOnClick->IsChecked());
    if(int value;m_pedCaptureIndex->Get(value))
-      m_ptSend->iCaptureIndex(value);
+      m_ptSend->CaptureIndex(value);
    m_ptSend->fExpandVariables(m_pcbExpandVariables->IsChecked());
 }
 
@@ -1675,7 +1675,7 @@ void Dlg_Trigger_Send::Update()
       m_pcbActive->Check(m_ptSend->fActive());
       m_pedText->SetText(m_ptSend->pclSend());
       m_pcbSendOnClick->Check(m_ptSend->fSendOnClick());
-      m_pedCaptureIndex->Set(m_ptSend->iCaptureIndex());
+      m_pedCaptureIndex->Set(m_ptSend->CaptureIndex());
       m_pcbExpandVariables->Check(m_ptSend->fExpandVariables());
    }
    else
@@ -2101,7 +2101,7 @@ bool Dlg_Trigger::SetTrigger(Prop::Trigger *ppropNewTrigger, bool fKeepChanges)
 
       m_ppropTrigger->fMultiline(m_pcbMultiline->IsChecked());
       if(unsigned value; m_pedMultilineLines->Get(value))
-         m_ppropTrigger->iMultiline_Limit(value);
+         m_ppropTrigger->Multiline_Limit(value);
       if(float value; ParseTimeInSeconds(m_pedMultilineTime->GetText(), value))
          m_ppropTrigger->Multiline_Time(value);
       else
@@ -2146,7 +2146,7 @@ bool Dlg_Trigger::SetTrigger(Prop::Trigger *ppropNewTrigger, bool fKeepChanges)
    m_pcbCooldown->Check(m_ppropTrigger->fCooldown());
    m_pedCooldownTime->SetText(Strings::TValue<float>(m_ppropTrigger->CooldownTime()));
    m_pcbMultiline->Check(m_ppropTrigger->fMultiline());
-   m_pedMultilineLines->Set(m_ppropTrigger->iMultiline_Limit());
+   m_pedMultilineLines->Set(m_ppropTrigger->Multiline_Limit());
    if(m_ppropTrigger->Multiline_Time()!=0.0f)
       m_pedMultilineTime->SetText(Strings::TValue<float>(m_ppropTrigger->Multiline_Time()));
    else
@@ -2440,13 +2440,13 @@ struct PropTree : IPropTree
 
    void GetChildren(TCallback<void(UniquePtr<IPropTreeItem>&&)> callback, IPropTreeItem &item) override
    {
-      for(auto &trigger : make_reverse_container(item.ppropTriggers()->WithoutLast(item.ppropTriggers()->iAfterCount())))
+      for(auto &trigger : make_reverse_container(item.ppropTriggers()->WithoutLast(item.ppropTriggers()->AfterCount())))
          callback(MakeUnique<PropTreeItem_Trigger>(trigger));
    }
 
    void GetPostChildren(TCallback<void(UniquePtr<IPropTreeItem>&&)> callback, IPropTreeItem &item) override
    {
-      for(auto &trigger : item.ppropTriggers()->Last(item.ppropTriggers()->iAfterCount()))
+      for(auto &trigger : item.ppropTriggers()->Last(item.ppropTriggers()->AfterCount()))
          callback(MakeUnique<PropTreeItem_Trigger>(trigger));
    }
 
@@ -2455,7 +2455,7 @@ struct PropTree : IPropTree
       auto ppropTrigger=MakeCounting<Prop::Trigger>();
       auto &triggers=*item.ppropTriggers();
       triggers.Push(ppropTrigger);
-      triggers.iAfterCount(triggers.iAfterCount()+1);
+      triggers.AfterCount(triggers.AfterCount()+1);
       return MakeUnique<PropTreeItem_Trigger>(ppropTrigger);
    }
 
@@ -2485,8 +2485,8 @@ struct PropTree : IPropTree
    {
       auto &triggers=*item.ppropTriggers();
       auto position=triggers.Find(pti->ppropTrigger());
-      if(position>=triggers.Count()-triggers.iAfterCount())
-         triggers.iAfterCount(triggers.iAfterCount()-1);
+      if(position>=triggers.Count()-triggers.AfterCount())
+         triggers.AfterCount(triggers.AfterCount()-1);
       triggers.Delete(position);
    }
 
@@ -2508,15 +2508,15 @@ struct PropTree : IPropTree
          {
             if(after)
             {
-               position=triggers.Count()-triggers.iAfterCount();
+               position=triggers.Count()-triggers.AfterCount();
                triggers.Insert(position, ppropTrigger);
-               triggers.iAfterCount(triggers.iAfterCount()+1);
+               triggers.AfterCount(triggers.AfterCount()+1);
                return;
             }
          }
 
-         if(position-after>=triggers.Count()-triggers.iAfterCount())
-            triggers.iAfterCount(triggers.iAfterCount()+1);
+         if(position-after>=triggers.Count()-triggers.AfterCount())
+            triggers.AfterCount(triggers.AfterCount()+1);
       }
 
       triggers.Insert(position, ppropTrigger);
@@ -2540,7 +2540,7 @@ UniquePtr<IPropTreeItem> PropTree::Import(IPropTreeItem &item, Prop::Global &pro
    auto p_prop_trigger=props.propConnections().propTriggers().Delete(0);
    auto new_item=MakeUnique<PropTreeItem_Trigger>(p_prop_trigger);
    item.ppropTriggers()->Push(std::move(p_prop_trigger));
-   item.ppropTriggers()->iAfterCount(item.ppropTriggers()->iAfterCount()+1);
+   item.ppropTriggers()->AfterCount(item.ppropTriggers()->AfterCount()+1);
    return new_item;
 }
 

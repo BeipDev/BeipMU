@@ -50,10 +50,10 @@ int Dlg_Statistics::Sort(const ListItem &item1, const ListItem &item2) const
          break;
       case 2: comparison=item1.m_days_to_deletion-item2.m_days_to_deletion; break;
       case 3: comparison=item1.m_last_used-item2.m_last_used; break;
-      case 4: comparison=int32(item2.mp_character->iConnectionCount())-int32(item1.mp_character->iConnectionCount()); break;
-      case 5: comparison=int32(item2.mp_character->iSecondsConnected())-int32(item1.mp_character->iSecondsConnected()); break;
-      case 6: comparison=int64(item2.mp_character->iBytesSent()+item2.mp_character->iBytesReceived())-
-                         int64(item1.mp_character->iBytesSent()+item1.mp_character->iBytesReceived()); break;
+      case 4: comparison=int32(item2.mp_character->ConnectionCount())-int32(item1.mp_character->ConnectionCount()); break;
+      case 5: comparison=int32(item2.mp_character->SecondsConnected())-int32(item1.mp_character->SecondsConnected()); break;
+      case 6: comparison=int64(item2.mp_character->BytesSent()+item2.mp_character->BytesReceived())-
+                         int64(item1.mp_character->BytesSent()+item1.mp_character->BytesReceived()); break;
    }
 
    if(m_sort_descending)
@@ -141,17 +141,17 @@ LRESULT Dlg_Statistics::On(const Msg::Create &msg)
          else if(time.fRunning())
          {
             stringLast(STR_CurrentlyInUse);
-            stringDays(pServer->iCharacterExpirationTime(), " Days");
+            stringDays(pServer->CharacterExpirationTime(), " Days");
          }
          else
          {
             daysSinceUse=(Time::Local()-time).ToDays();
 
-            if(pServer->iCharacterExpirationTime()==0)
+            if(pServer->CharacterExpirationTime()==0)
                stringDays('?');
             else
             {
-               daysToDeletion=pServer->iCharacterExpirationTime()-daysSinceUse;
+               daysToDeletion=pServer->CharacterExpirationTime()-daysSinceUse;
                if(daysToDeletion>=0)
                   stringDays(daysToDeletion, " Days");
                else
@@ -173,12 +173,12 @@ LRESULT Dlg_Statistics::On(const Msg::Create &msg)
          m_lv.SetItemText(itemnum, 1, pServer->pclName());
          m_lv.SetItemText(itemnum, 2, stringDays);
          m_lv.SetItemText(itemnum, 3, stringLast);
-         m_lv.SetItemText(itemnum, 4, FixedStringBuilder<256>(pCharacter->iConnectionCount()));
-         FixedStringBuilder<256> timeConnected; Time::SecondsToStringAbbreviated(timeConnected, pCharacter->iSecondsConnected());
+         m_lv.SetItemText(itemnum, 4, FixedStringBuilder<256>(pCharacter->ConnectionCount()));
+         FixedStringBuilder<256> timeConnected; Time::SecondsToStringAbbreviated(timeConnected, pCharacter->SecondsConnected());
          m_lv.SetItemText(itemnum, 5, timeConnected);
 
          FixedStringBuilder<256> totalBytes;
-         ByteCountToStringAbbreviated(totalBytes, pCharacter->iBytesSent()+pCharacter->iBytesReceived());
+         ByteCountToStringAbbreviated(totalBytes, pCharacter->BytesSent()+pCharacter->BytesReceived());
          m_lv.SetItemText(itemnum, 6, totalBytes);
       }
    }

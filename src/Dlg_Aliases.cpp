@@ -320,8 +320,8 @@ struct PropTreeItem_Alias : IPropTreeItem
    PropTreeItem_Alias(Prop::Alias &propAlias) : m_propAlias(propAlias) { }
 
    ConstString Label() const override { return m_propAlias.pclDescription() ? m_propAlias.pclDescription() : m_propAlias.propFindString().pclMatchText(); }
-   bool fCanRename() const override { return true; }
 
+   bool fCanRename() const override { return true; }
    void Rename(ConstString string) override
    {
       m_propAlias.pclDescription() ? m_propAlias.pclDescription(string) : m_propAlias.propFindString().pclMatchText(string);
@@ -371,7 +371,9 @@ struct PropTree : IPropTree
 
    UniquePtr<IPropTreeItem> NewChild(IPropTreeItem &item) override
    {
-      if(!item.ppropAliases()) return nullptr;
+      if(!item.ppropAliases())
+         return nullptr;
+
       return MakeUnique<PropTreeItem_Alias>(*item.ppropAliases()->Push(MakeUnique<Prop::Alias>()));
    }
 

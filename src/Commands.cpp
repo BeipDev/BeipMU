@@ -562,7 +562,7 @@ try
          if(auto *p_character=mp_connection->GetCharacter())
          {
             p_character->fIdleEnabled(true);
-            p_character->iIdleTimeout(m_idle_delay);
+            p_character->IdleTimeout(m_idle_delay);
             p_character->pclIdleString(m_idle_string);
          }
          return;
@@ -1303,7 +1303,7 @@ try
          // Iterate through the characters on the server
          for(auto &pCharacter : pServer->propCharacters())
          {
-            auto index=pCharacter->iRestoreLogIndex();
+            auto index=pCharacter->RestoreLogIndex();
             if(index==-1)
                continue;
 

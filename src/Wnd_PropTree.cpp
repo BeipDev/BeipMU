@@ -101,7 +101,7 @@ Wnd_PropTree::~Wnd_PropTree()
 
 void Wnd_PropTree::InitImageList()
 {
-   IconDrawer id{g_ppropGlobal->iUIFontSize()*g_dpiScale};
+   IconDrawer id{g_ppropGlobal->UIFontSize()*g_dpiScale};
 
    m_iml=id.CreateImageList(TIB_MAX);
    id.Add("📁", m_iml);
@@ -482,7 +482,7 @@ LRESULT Wnd_PropTree::On(const Msg::Command &msg)
             break;
 
          Prop::Global props;
-         props.iVersion(g_ciBuildNumber);
+         props.Version(g_ciBuildNumber);
 
          mp_prop_tree->Export(*selection, props);
 

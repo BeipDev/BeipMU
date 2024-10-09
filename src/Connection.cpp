@@ -183,7 +183,7 @@ void Connection::Receive(Array<const char> text)
    }
 
    if(m_ppropCharacter && !m_ppropPuppet)
-      m_ppropCharacter->iBytesReceived(m_ppropCharacter->iBytesReceived()+text.Count());
+      m_ppropCharacter->BytesReceived(m_ppropCharacter->BytesReceived()+text.Count());
 
    m_telnet_parser.Parse(text);
    if(m_ppropServer && m_ppropServer->fPrompts() && m_telnet_parser.HasPartial() && !m_timer_prompt)
@@ -221,7 +221,7 @@ void Connection::OnLine(ConstString string)
 
    if(m_ppropCharacter && !m_ppropPuppet)
    {
-      if(auto index=m_ppropCharacter->iRestoreLogIndex();index!=-1)
+      if(auto index=m_ppropCharacter->RestoreLogIndex();index!=-1)
          gp_restore_logs->WriteReceived(index, string);
    }
 
@@ -251,14 +251,13 @@ void Connection::OnTelnet(ConstString string)
       mp_client->Input(string);
 }
 
-
 void Connection::OnPrompt(ConstString string)
 {
    if(m_ppropServer && m_ppropServer->fPrompts())
    {
       RemovePrompt();
-      m_timer_prompt.Reset();
 
+      m_timer_prompt.Reset();
       auto p_line=m_text_to_line.Parse(string, m_ppropServer->fHTMLTags(), m_ppropServer->eEncoding());
       mp_prompt=*p_line;
       GetOutput().Add(std::move(p_line));
@@ -388,7 +387,7 @@ void Connection::OnGMCP(ConstString string)
    {
       if(m_ppropCharacter && !m_ppropPuppet)
       {
-         if(auto index=m_ppropCharacter->iRestoreLogIndex();index!=-1)
+         if(auto index=m_ppropCharacter->RestoreLogIndex();index!=-1)
             gp_restore_logs->WriteReceived_GMCP(index, string);
       }
    }
@@ -424,7 +423,7 @@ bool Connection::OnGMCP_Parse(ConstString string)
             JSON_WebView_Open element;
             JSON::ParseObject(element, string);
 
-            switch(m_ppropServer->iGMCP_WebView())
+            switch(m_ppropServer->GMCP_WebView())
             {
                case 0: return false; // Ignore
                case 1: break; // Allow
@@ -438,8 +437,8 @@ bool Connection::OnGMCP_Parse(ConstString string)
                   {
                      case 0: return false; // Ignore
                      case 1: break; // Allow
-                     case 2: m_ppropServer->iGMCP_WebView(1); break; // Always allow
-                     case 3: m_ppropServer->iGMCP_WebView(0); return false; // Always ignore
+                     case 2: m_ppropServer->GMCP_WebView(1); break; // Always allow
+                     case 3: m_ppropServer->GMCP_WebView(0); return false; // Always ignore
                   }
                   break;
                }
@@ -596,7 +595,7 @@ void Connection::Send(ConstString string, bool send_event, bool raw)
    if(mp_log && !raw)
       mp_log->LogSent(string);
    if(m_ppropCharacter && !m_ppropPuppet)
-      m_ppropCharacter->iBytesSent(m_ppropCharacter->iBytesSent()+string.Count()+2); // 2 for the CRLF
+      m_ppropCharacter->BytesSent(m_ppropCharacter->BytesSent()+string.Count()+2); // 2 for the CRLF
 
    // Unidle us
    m_qpc_last_send=Time::QueryPerformanceCounter();
@@ -642,7 +641,7 @@ void Connection::OnHostLookup(const Sockets::Address &address)
 
 bool Connection::CanRetryConnecting() const noexcept
 {
-   return m_connect_retries+1<m_propConnections.iConnectRetry() || m_propConnections.fRetryForever();
+   return m_connect_retries+1<m_propConnections.ConnectRetry() || m_propConnections.fRetryForever();
 }
 
 bool Connection::IsConnected() const noexcept
@@ -674,7 +673,7 @@ void Connection::OnConnectTimeout()
       if(m_propConnections.fRetryForever())
          string("unlimited");
       else
-         string(m_propConnections.iConnectRetry());
+         string(m_propConnections.ConnectRetry());
       Text(string);
       Connect(false);
    }
@@ -690,7 +689,7 @@ void Connection::Connect(const Sockets::Address &address)
    mp_client->Connect(address, host_name, m_ppropServer->fVerifyCertificate());
 
    // Connection Timeout Timer
-   m_timer_connect.Set(std::max(m_propConnections.iConnectTimeout()/1000.0f, 1.0f));
+   m_timer_connect.Set(std::max(m_propConnections.ConnectTimeout()/1000.0f, 1.0f));
 }
 
 Connection *Connection::FindCharacterConnection(const Prop::Character *ppropCharacter)
@@ -830,7 +829,7 @@ void Connection::Disconnect()
    if(m_ppropCharacter && !m_ppropPuppet)
    {
       m_ppropCharacter->timeLastUsed(Time::Local());
-      m_ppropCharacter->iSecondsConnected(m_ppropCharacter->iSecondsConnected()+TimeConnectedInSeconds());
+      m_ppropCharacter->SecondsConnected(m_ppropCharacter->SecondsConnected()+TimeConnectedInSeconds());
    }
 
    KillSpawnCapture();
@@ -864,30 +863,30 @@ void Connection::Disconnect()
    }
 }
 
-const CKeyMacro *Connection::MacroKey(const KEY_ID *pKeyID)
+const Prop::KeyboardMacro *Connection::MacroKey(const KEY_ID *pKeyID)
 {
-   const CKeyMacro *pcMacro=nullptr;
+   const Prop::KeyboardMacro *p_macro{};
 
    // Check for Character Macros
-   if(m_ppropCharacter && m_ppropCharacter->fPropKeyboardMacros())
-      pcMacro=m_ppropCharacter->propKeyboardMacros().Macro(*pKeyID);
+   if(m_ppropCharacter && m_ppropCharacter->fPropKeyboardMacros2())
+      p_macro=m_ppropCharacter->propKeyboardMacros2().Macro(*pKeyID);
    // Server Macros
-   if(!pcMacro && m_ppropServer && m_ppropServer->fPropKeyboardMacros())
-      pcMacro=m_ppropServer->propKeyboardMacros().Macro(*pKeyID);
+   if(!p_macro && m_ppropServer && m_ppropServer->fPropKeyboardMacros2())
+      p_macro=m_ppropServer->propKeyboardMacros2().Macro(*pKeyID);
    // Global Macros
-   if(!pcMacro)
-      pcMacro=m_propConnections.propKeyboardMacros().Macro(*pKeyID);
+   if(!p_macro)
+      p_macro=m_propConnections.propKeyboardMacros2().Macro(*pKeyID);
 
-   if(!pcMacro)
+   if(!p_macro)
       return nullptr;
 
-   if(pcMacro->fType)
-      return pcMacro;
+   if(p_macro->fType())
+      return p_macro;
 
    if(auto &props=m_wnd_main.GetActiveInputWindow().GetProps();props.fLocalEcho())
-      Text(pcMacro->pclMacro, props.clrLocalEchoColor());
+      Text(p_macro->pclMacro(), props.clrLocalEchoColor());
 
-   return pcMacro;
+   return p_macro;
 }
 
 void Connection::GetWorldTitle(StringBuilder &string, unsigned unreadCount)
@@ -973,11 +972,11 @@ void Connection::ConnectCharacter()
    Assert(mp_client);
 
    // Start a new log if it's enabled and we don't have one
-   if(m_ppropCharacter->fRestoreLog() && m_ppropCharacter->iRestoreLogIndex()==-1)
+   if(m_ppropCharacter->fRestoreLog() && m_ppropCharacter->RestoreLogIndex()==-1)
       gp_restore_logs->Allocate(*m_ppropCharacter);
 
    // Write the start indicator
-   if(auto index=m_ppropCharacter->iRestoreLogIndex();index!=-1)
+   if(auto index=m_ppropCharacter->RestoreLogIndex();index!=-1)
       gp_restore_logs->WriteStart(index);
 
    // If we don't have a module or we're disconnected or still connecting then wait
@@ -1001,7 +1000,7 @@ void Connection::ConnectCharacter()
       m_wnd_main.SendLines(string);
    }
 
-   m_ppropCharacter->iConnectionCount(m_ppropCharacter->iConnectionCount()+1);
+   m_ppropCharacter->ConnectionCount(m_ppropCharacter->ConnectionCount()+1);
    m_ppropCharacter->timeLastUsed(Time::Running());
    m_wnd_main.UpdateCharacterIdleTimer();
    AutoLogStart();
@@ -1097,7 +1096,7 @@ void Connection::Disconnected(DWORD error)
    if(!m_connect_retry)
       return;
 
-   float seconds=std::max(m_propConnections.iConnectTimeout()/1000.0f, 1.0f);
+   float seconds=std::max(m_propConnections.ConnectTimeout()/1000.0f, 1.0f);
    m_timer_connect.Set(seconds);
    Text(FixedStringBuilder<256>("<icon information> <font color='aqua'>Will try to reconnect in ", int(seconds), " seconds"));
 }
@@ -1211,19 +1210,19 @@ void Connection::Display(UniquePtr<Text::Line> &&p_line)
          }
       }
 
-      TriggersExecute(*p_line, m_propConnections.propTriggers().WithoutLast(m_propConnections.propTriggers().iAfterCount()), state);
+      TriggersExecute(*p_line, m_propConnections.propTriggers().WithoutLast(m_propConnections.propTriggers().AfterCount()), state);
 
       if(m_ppropServer && m_ppropServer->propTriggers().fActive())
       {
-         TriggersExecute(*p_line, m_ppropServer->propTriggers().WithoutLast(m_ppropServer->propTriggers().iAfterCount()), state);
+         TriggersExecute(*p_line, m_ppropServer->propTriggers().WithoutLast(m_ppropServer->propTriggers().AfterCount()), state);
 
          if(m_ppropCharacter && m_ppropCharacter->propTriggers().fActive())
             TriggersExecute(*p_line, m_ppropCharacter->propTriggers(), state);
 
-         TriggersExecute(*p_line, m_ppropServer->propTriggers().Last(m_ppropServer->propTriggers().iAfterCount()), state);
+         TriggersExecute(*p_line, m_ppropServer->propTriggers().Last(m_ppropServer->propTriggers().AfterCount()), state);
       }
 
-      TriggersExecute(*p_line, m_propConnections.propTriggers().Last(m_propConnections.propTriggers().iAfterCount()), state);
+      TriggersExecute(*p_line, m_propConnections.propTriggers().Last(m_propConnections.propTriggers().AfterCount()), state);
 
       // Add new multiline triggers to beginning of list, such that the last one added to the list will be first
       while(m_new_multiline_triggers)
@@ -1455,15 +1454,15 @@ Color ColorHash(ConstString text, uint2 range, Array<const uint2> ranges, float 
 void ApplyParagraphToLine(const Prop::Trigger_Paragraph &p, Text::Line &line, Array<const uint2> ranges)
 {
    if(p.fUseIndent_Left())
-      line.SetIndentLeft(p.iIndent_Left()/100.0f);
+      line.SetIndentLeft(p.Indent_Left()/100.0f);
    if(p.fUseIndent_Right())
-      line.SetIndentRight(p.iIndent_Right()/100.0f);
+      line.SetIndentRight(p.Indent_Right()/100.0f);
    if(p.fUsePadding_Top())
-      line.SetPaddingTop(p.iPadding_Top());
+      line.SetPaddingTop(p.Padding_Top());
    if(p.fUsePadding_Bottom())
-      line.SetPaddingBottom(p.iPadding_Bottom());
+      line.SetPaddingBottom(p.Padding_Bottom());
    if(p.fUseBorder())
-      line.SetBorder(p.iBorder());
+      line.SetBorder(p.Border());
    if(p.fUseBackgroundColor())
    {
       if(p.fBackgroundHash())
@@ -1477,13 +1476,13 @@ void ApplyParagraphToLine(const Prop::Trigger_Paragraph &p, Text::Line &line, Ar
          line.SetParagraphStrokeColor(ColorHash(line.GetText(), {}, ranges, 1.0f));
       else
          line.SetParagraphStrokeColor(p.clrStroke());
-      line.SetParagraphStrokeWidth(p.iStrokeWidth());
-      line.SetStrokeStyle(Text::Records::StrokeStyle(p.iStrokeStyle()));
+      line.SetParagraphStrokeWidth(p.StrokeWidth());
+      line.SetStrokeStyle(Text::Records::StrokeStyle(p.StrokeStyle()));
    }
    if(p.fUseBorderStyle())
-      line.SetBorderStyle(Text::Records::BorderStyle(p.iBorderStyle()));
+      line.SetBorderStyle(Text::Records::BorderStyle(p.BorderStyle()));
    if(p.fUseAlignment())
-      line.SetAlignment(Text::Records::Alignment(p.iAlignment()));
+      line.SetAlignment(Text::Records::Alignment(p.Alignment()));
 }
 
 void Connection::OnMultilineTriggerTimeout(MultilineTrigger &v)
@@ -1552,8 +1551,8 @@ void Connection::TriggersExecute(Text::Line &line, Array<CopyCntPtrTo<Prop::Trig
                {
                   if(color.fFontDefault())
                      line.SetFontDefault(range);
-                  else if(color.iFontSize()!=0 && color.pclFontFace())
-                     line.SetFont(range, *Text::FontCache::GetInstance().Get(color.pclFontFace(), color.iFontSize()));
+                  else if(color.FontSize()!=0 && color.pclFontFace())
+                     line.SetFont(range, *Text::FontCache::GetInstance().Get(color.pclFontFace(), color.FontSize()));
 
                   if(color.fFore())
                   {
@@ -1721,7 +1720,7 @@ void Connection::TriggersExecute(Text::Line &line, Array<CopyCntPtrTo<Prop::Trig
                   Stats::Item &stat=stats.Get(fullname);
                   stat.m_prefix_length=prefix.Count();
 
-                  switch(prop.iType())
+                  switch(prop.Type())
                   {
                      case 0:
                      {
@@ -1757,7 +1756,7 @@ void Connection::TriggersExecute(Text::Line &line, Array<CopyCntPtrTo<Prop::Trig
                      stat.SetFont();
 
                   stat.m_name_color=stat.m_value_color=prop.fUseColor() ? prop.clrColor() : Colors::White;
-                  stat.m_name_alignment=Stats::Alignment(prop.iNameAlignment());
+                  stat.m_name_alignment=Stats::Alignment(prop.NameAlignment());
 
                   if(mp_trigger_debug)
                      TriggerDebugText("#000040", "blue", "10", "Stat set");
@@ -1793,7 +1792,7 @@ void Connection::TriggersExecute(Text::Line &line, Array<CopyCntPtrTo<Prop::Trig
 
                if(ppropTrigger->propSend().fSendOnClick())
                {
-                  unsigned capture_index=ppropTrigger->propSend().iCaptureIndex();
+                  unsigned capture_index=ppropTrigger->propSend().CaptureIndex();
                   auto range=search.ranges().Count()>capture_index ? search.ranges()[capture_index] : search.ranges()[0];
                   line.SetUrl(range, MakeUnique<Text::Records::URLData>(Text::Records::URLType::Custom, sendString));
                }
@@ -1893,7 +1892,7 @@ void Connection::TriggersExecute(Text::Line &line, Array<CopyCntPtrTo<Prop::Trig
          if(ppropTrigger->fMultiline())
          {
             float time=ppropTrigger->Multiline_Time();
-            if(time<=0.0f && ppropTrigger->iMultiline_Limit()==0)
+            if(time<=0.0f && ppropTrigger->Multiline_Limit()==0)
             {
                if(mp_trigger_debug)
                   TriggerDebugText("#FF0000", "red", "10", "Multiline can't be activated with no limit and no time");
@@ -1922,7 +1921,7 @@ void Connection::TriggersExecute(Text::Line &line, Array<CopyCntPtrTo<Prop::Trig
 
                auto &multi=*m_new_multiline_triggers.Last();
                multi.m_line_count=0;
-               multi.m_line_limit=ppropTrigger->iMultiline_Limit();
+               multi.m_line_limit=ppropTrigger->Multiline_Limit();
                if(time>=0.0f)
                {
                   multi.m_timeout.SetCallback([this, &multi]() { OnMultilineTriggerTimeout(multi); });
@@ -2028,7 +2027,7 @@ void Connection::AutoLogStart() try
       if(m_ppropPuppet->pclLogFileName())
       {
          filename=m_ppropPuppet->pclLogFileName();
-         timeFormat=m_ppropPuppet->iLogFileNameTimeFormat();
+         timeFormat=m_ppropPuppet->LogFileNameTimeFormat();
       }
    }
    else if(m_ppropCharacter)
@@ -2036,7 +2035,7 @@ void Connection::AutoLogStart() try
       if(m_ppropCharacter->pclLogFileName())
       {
          filename=m_ppropCharacter->pclLogFileName();
-         timeFormat=m_ppropCharacter->iLogFileNameTimeFormat();
+         timeFormat=m_ppropCharacter->LogFileNameTimeFormat();
       }
       else
          filename=g_ppropGlobal->propConnections().propLogging().pclDefaultLogFileName();
@@ -2098,7 +2097,7 @@ void Connection::ReplayRestoreLog()
       return;
 
    // Replay the log if it exists
-   auto index=m_ppropCharacter->iRestoreLogIndex();
+   auto index=m_ppropCharacter->RestoreLogIndex();
    if(index==-1)
       return;
 
@@ -2178,7 +2177,8 @@ bool Connection::HasMudPrompt() const
 
 void Connection::OnPromptTimer()
 {
-   m_telnet_parser.CheckPrompt();
+   if(m_telnet_parser.HasPartial())
+      OnPrompt(m_telnet_parser.GetPartial());
 }
 
 void Connection::OpenNetworkDebugWindow()
@@ -2193,7 +2193,7 @@ void Connection::OpenNetworkDebugWindow()
    mp_network_debug=MakeUnique<Text::Wnd>(nullptr, s_dummyHost);
 
    Prop::TextWindow &prop=g_ppropGlobal->propWindows().propMainWindowSettings().propOutput();
-   mp_network_debug->SetFont(prop.propFont().pclName(), prop.propFont().iSize(), prop.propFont().byCharSet());
+   mp_network_debug->SetFont(prop.propFont().pclName(), prop.propFont().Size(), prop.propFont().CharSet());
    mp_network_debug->SetSize(uint2(640,480));
    mp_network_debug->SetText("Network Debugger");
    mp_network_debug->Show(SW_SHOWNOACTIVATE);
@@ -2211,7 +2211,7 @@ void Connection::OpenTriggerDebugWindow()
    mp_trigger_debug=MakeUnique<Text::Wnd>(nullptr, s_dummyHost);
 
    Prop::TextWindow &prop=g_ppropGlobal->propWindows().propMainWindowSettings().propOutput();
-   mp_trigger_debug->SetFont(prop.propFont().pclName(), prop.propFont().iSize(), prop.propFont().byCharSet());
+   mp_trigger_debug->SetFont(prop.propFont().pclName(), prop.propFont().Size(), prop.propFont().CharSet());
    mp_trigger_debug->SetSize(uint2(640,480));
    mp_trigger_debug->SetText("Trigger Debugger");
    mp_trigger_debug->Show(SW_SHOWNOACTIVATE);

@@ -14,7 +14,7 @@ void DisplayScriptingEngines(Controls::ComboBox &list);
 static void SetUIFont(Window window, ConstString face, int size)
 {
    g_ppropGlobal->pclUIFontName(face);
-   g_ppropGlobal->iUIFontSize(size);
+   g_ppropGlobal->UIFontSize(size);
    MessageBox(window, "Changes will be applied next time the app starts", "Note:", MB_ICONINFORMATION|MB_OK);
 }
 
@@ -107,11 +107,11 @@ void Dlg_General::Save()
    g_ppropGlobal->fAnimatedImagesStartPaused(m_pcbAnimatedImagesStartPaused->IsChecked());
    g_ppropGlobal->fInlineImages(m_pcbInlineImages->IsChecked());
    if(int value;mp_inline_image_height->Get(value))
-      g_ppropGlobal->iInlineImageHeight(value);
+      g_ppropGlobal->InlineImageHeight(value);
    if(int value;mp_avatar_width->Get(value))
-      g_ppropGlobal->iAvatarWidth(value);
+      g_ppropGlobal->AvatarWidth(value);
    if(int value;mp_avatar_height->Get(value))
-      g_ppropGlobal->iAvatarHeight(value);
+      g_ppropGlobal->AvatarHeight(value);
 
    // Alerts
    g_ppropGlobal->propWindows().fAskBeforeClosing(m_pcbAskBeforeClosing->IsChecked());
@@ -192,9 +192,9 @@ void Dlg_General::OnCreate()
    m_pcbAutoImageViewer->Check(g_ppropGlobal->fAutoImageViewer());
    m_pcbAnimatedImagesStartPaused->Check(g_ppropGlobal->fAnimatedImagesStartPaused());
    m_pcbInlineImages->Check(g_ppropGlobal->fInlineImages());
-   mp_inline_image_height->Set(g_ppropGlobal->iInlineImageHeight());
-   mp_avatar_width->Set(g_ppropGlobal->iAvatarWidth());
-   mp_avatar_height->Set(g_ppropGlobal->iAvatarHeight());
+   mp_inline_image_height->Set(g_ppropGlobal->InlineImageHeight());
+   mp_avatar_width->Set(g_ppropGlobal->AvatarWidth());
+   mp_avatar_height->Set(g_ppropGlobal->AvatarHeight());
 
    // Alerts
    m_pcbAskBeforeClosing->Check(g_ppropGlobal->propWindows().fAskBeforeClosing());
@@ -693,7 +693,7 @@ void Dlg_AnsiColors::Save()
    m_propAnsi.fPreventInvisible(m_pcbPreventInvisible->IsChecked());
    m_propAnsi.fResetOnNewLine(m_pcbResetOnNewLine->IsChecked());
    m_propAnsi.fFontBold(m_pcbFontBold->IsChecked());
-   m_propAnsi.iFlashSpeed(m_pcbParseBlinking->IsChecked() ? 500 : 0);
+   m_propAnsi.FlashSpeed(m_pcbParseBlinking->IsChecked() ? 500 : 0);
 
    m_propAnsi.fBeep(m_pcbBeep->IsChecked());
    m_propAnsi.fBeepSystem(m_pcbBeepSystem->IsChecked());
@@ -744,7 +744,7 @@ void Dlg_AnsiColors::OnCreate()
       m_pcbFontBold=m_layout.CreateCheckBox(-1, STR_UseFontBold);
       m_pcbFontBold->Check(m_propAnsi.fFontBold());
       m_pcbParseBlinking=m_layout.CreateCheckBox(-1, "Parse Blinking");
-      m_pcbParseBlinking->Check(m_propAnsi.iFlashSpeed()!=0);
+      m_pcbParseBlinking->Check(m_propAnsi.FlashSpeed()!=0);
 
       g << m_pcbPreventInvisible << m_pcbResetOnNewLine << m_pcbFontBold << m_pcbParseBlinking;
    }
@@ -1068,7 +1068,7 @@ void ApplyTheme()
       ApplyCustomTheme();
    else
    {
-      unsigned index=g_ppropGlobal->iTheme();
+      unsigned index=g_ppropGlobal->Theme();
       if(index>=std::size(g_themes))
          index=0;
 
@@ -1189,7 +1189,7 @@ void Dlg_UITheme::OnCreate()
    // UI
    m_pcbDarkMode->Check(g_ppropGlobal->fDarkMode());
    m_pcbColors->Check(g_ppropGlobal->fPropCustomTheme());
-   m_lbPresets.SetCurSel(g_ppropGlobal->iTheme());
+   m_lbPresets.SetCurSel(g_ppropGlobal->Theme());
 
    for(unsigned i=0;i<std::size(g_theme_entries);i++)
       m_plbColors->AddData(nullptr);
@@ -1214,10 +1214,10 @@ LRESULT Dlg_UITheme::On(const Msg::Command &msg)
       {
          Prop::Font font;
          font.pclName(g_ppropGlobal->pclUIFontName());
-         font.iSize(g_ppropGlobal->iUIFontSize());
+         font.Size(g_ppropGlobal->UIFontSize());
 
          if(font.ChooseFont(*this))
-            SetUIFont(*this, font.pclName(), font.iSize());
+            SetUIFont(*this, font.pclName(), font.Size());
          break;
       }
 
@@ -1240,7 +1240,7 @@ LRESULT Dlg_UITheme::On(const Msg::Command &msg)
          auto sel=m_lbPresets.GetCurSel();
          if(sel>=0 && size_t(sel)<std::size(g_themes))
          {
-            g_ppropGlobal->iTheme(sel);
+            g_ppropGlobal->Theme(sel);
             g_ppropGlobal->ResetCustomTheme();
             m_pcbColors->SetCheck(false);
             m_plbColors->Invalidate(true);
@@ -1374,10 +1374,10 @@ void Dlg_Network::Save()
    Prop::Connections *ppropConnections=&g_ppropGlobal->propConnections();
 
    if(unsigned value;m_pedConnectTimeout->Get(value))
-      ppropConnections->iConnectTimeout(value*1000);
+      ppropConnections->ConnectTimeout(value*1000);
 
    if(unsigned value;m_pedConnectRetry->Get(value))
-      ppropConnections->iConnectRetry(value);
+      ppropConnections->ConnectRetry(value);
 
    ppropConnections->fRetryForever(m_pcbRetryForever->IsChecked());
    ppropConnections->fIgnoreErrors(m_pcbIgnoreErrors->IsChecked());
@@ -1433,10 +1433,10 @@ void Dlg_Network::OnCreate()
    const Prop::Connections *ppropConnections=&g_ppropGlobal->propConnections();
 
    m_pedConnectTimeout->LimitText(10);
-   m_pedConnectTimeout->Set(ppropConnections->iConnectTimeout()/1000);
+   m_pedConnectTimeout->Set(ppropConnections->ConnectTimeout()/1000);
 
    m_pedConnectRetry->LimitText(10);
-   m_pedConnectRetry->Set(ppropConnections->iConnectRetry());
+   m_pedConnectRetry->Set(ppropConnections->ConnectRetry());
 
    m_pcbRetryForever->Check(ppropConnections->fRetryForever());
    m_pcbIgnoreErrors->Check(ppropConnections->fIgnoreErrors());
@@ -1734,7 +1734,7 @@ void Dlg_Logging::Save()
    if(m_pcbDate->IsChecked()) iTimeFormat|=Text::Time32::F_Date;
    if(m_pcb24HR->IsChecked()) iTimeFormat|=Text::Time32::F_24HR;
 
-   m_ppropLogging->iTimeFormat(iTimeFormat);
+   m_ppropLogging->TimeFormat(iTimeFormat);
 
    unsigned value;
 
@@ -1743,10 +1743,10 @@ void Dlg_Logging::Save()
    m_ppropLogging->fHangingIndent(m_pcbHangingIndent->IsChecked());
 
    if(m_pedWrap->Get(value))
-      m_ppropLogging->iWrap(value);
+      m_ppropLogging->Wrap(value);
 
    if(m_pedHangingIndent->Get(value))
-      m_ppropLogging->iHangingIndent(value);
+      m_ppropLogging->HangingIndent(value);
 
    m_ppropLogging->fWrapNearestWord(m_pcbWrapNearestWord->IsChecked());
    m_ppropLogging->fDoubleSpace(m_pcbDoubleSpace->IsChecked());
@@ -1829,7 +1829,7 @@ void Dlg_Logging::OnCreate()
       m_pcbDate=m_layout.CreateCheckBox(-1, STR_Date);
       m_pcb24HR=m_layout.CreateCheckBox(-1, STR_24Hour);
 
-      int iTimeFormat=m_ppropLogging->iTimeFormat();
+      int iTimeFormat=m_ppropLogging->TimeFormat();
 
       if(iTimeFormat&Text::Time32::F_Time) m_pcbTime->Check(true);
       if(iTimeFormat&Text::Time32::F_Date) m_pcbDate->Check(true);
@@ -1846,7 +1846,7 @@ void Dlg_Logging::OnCreate()
          m_pcbWrap->Check(m_ppropLogging->fWrap());
 
          m_pedWrap=m_layout.CreateEdit(-1, int2(4, 1), ES_NUMBER);
-         m_pedWrap->Set(m_ppropLogging->iWrap());
+         m_pedWrap->Set(m_ppropLogging->Wrap());
 
          *pGH << m_pcbWrap << m_pedWrap << m_layout.CreateStatic(STR_TextCharacters);
       }
@@ -1856,7 +1856,7 @@ void Dlg_Logging::OnCreate()
          m_pcbHangingIndent->Check(m_ppropLogging->fHangingIndent());
 
          m_pedHangingIndent=m_layout.CreateEdit(-1, int2(4, 1), ES_NUMBER);
-         m_pedHangingIndent->Set(m_ppropLogging->iHangingIndent());
+         m_pedHangingIndent->Set(m_ppropLogging->HangingIndent());
 
          *pGH << m_pcbHangingIndent << m_pedHangingIndent << m_layout.CreateStatic(STR_TextCharacters);
       }
@@ -1923,7 +1923,7 @@ void Dlg_RestoreLogs::Save()
    m_ppropLogging->fRestoreLogs(m_pcbRestoreLogs->IsChecked());
 
    if(unsigned value;m_pedRestoreBufferSize->Get(value))
-      m_ppropLogging->iRestoreBufferSize(value);
+      m_ppropLogging->RestoreBufferSize(value);
 
    gp_restore_logs=nullptr;
    gp_restore_logs=RestoreLogs::Create();
@@ -1949,7 +1949,7 @@ void Dlg_RestoreLogs::OnCreate()
          *pGH >> AL::Style::Attach_Right;
 
          m_pedRestoreBufferSize=m_layout.CreateEdit(-1, int2(8, 1), ES_NUMBER);
-         m_pedRestoreBufferSize->Set(m_ppropLogging->iRestoreBufferSize());
+         m_pedRestoreBufferSize->Set(m_ppropLogging->RestoreBufferSize());
 
          *pGH << m_layout.CreateStatic("Per character buffer Size in KB:") << m_pedRestoreBufferSize << m_layout.CreateStatic("(rounds up to nearest 64KB)");
       }

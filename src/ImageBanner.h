@@ -31,7 +31,7 @@ struct ImageBanner : Text::Banner
 
    void Draw(DC dc, const Rect &rect) override;
 
-   int m_height{abs(g_ppropGlobal->iInlineImageHeight())*g_dpiScale};
+   int m_height{abs(g_ppropGlobal->InlineImageHeight())*g_dpiScale};
 
    struct Entry : Events::ReceiversOf<Entry, Image_Events::Changed>
    {
@@ -65,7 +65,7 @@ struct ImageAvatar : Text::InlineImage, Events::ReceiversOf<ImageAvatar, Image_E
    void On(const GMCP::Avatar_Changed &event);
    void On(const GMCP::Avatar_Destroyed &event);
 
-   int2 m_size{abs(g_ppropGlobal->iAvatarWidth())*g_dpiScale, abs(g_ppropGlobal->iAvatarHeight())*g_dpiScale};
+   int2 m_size{abs(g_ppropGlobal->AvatarWidth())*g_dpiScale, abs(g_ppropGlobal->AvatarHeight())*g_dpiScale};
 
    OwnedString m_description;
    CntPtrTo<Image> mp_image;

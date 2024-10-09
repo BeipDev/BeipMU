@@ -21,9 +21,6 @@ struct TelnetParser
    bool HasPartial() const { return m_buffer.Count()!=0; }
    ConstString GetPartial() const { return m_buffer.Count() ? ConstString(&m_buffer[0], m_buffer.Count()) : ConstString(); }
 
-   // If there's a partial buffer, send it as a prompt
-   void CheckPrompt() { if(!HasPartial()) return; m_notify.OnPrompt(GetPartial()); m_buffer.Empty(); }
-
    void SendNAWS(uint16_2 dims);
    bool m_do_naws{};
 
