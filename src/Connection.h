@@ -81,7 +81,7 @@ struct Connection
    void SetupCharacter();
    void SetupPuppet();
 
-   const CKeyMacro *MacroKey(const KEY_ID *pKeyID);
+   const Prop::KeyboardMacro *MacroKey(const KEY_ID *pKeyID);
 
    struct AliasState
    {

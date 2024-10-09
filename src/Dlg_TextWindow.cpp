@@ -117,13 +117,13 @@ void Dlg_TextWindow::Load(const Prop::TextWindow &prop)
    m_pcbInvertBrightness->Check(prop.fInvertBrightness());
    m_pcbFanFold->Check(prop.fFanFold());
 
-   m_pedHistory->Set(prop.iHistory());
+   m_pedHistory->Set(prop.History());
 
-   m_pedLineWrappedIndent->Set(prop.iLineWrappedIndent());
-   m_pedParagraphSpacing->Set(prop.iParagraphSpacing());
+   m_pedLineWrappedIndent->Set(prop.LineWrappedIndent());
+   m_pedParagraphSpacing->Set(prop.ParagraphSpacing());
 
    m_pcbFixedWidth->Check(prop.fFixedWidth());
-   m_pedFixedWidth->Set(prop.iFixedWidthChars());
+   m_pedFixedWidth->Set(prop.FixedWidthChars());
 
    m_pcbSmoothScrolling->Check(prop.fSmoothScrolling());
    m_pcbScrollToBottomOnAdd->Check(prop.fScrollToBottomOnAdd());
@@ -136,13 +136,13 @@ void Dlg_TextWindow::Load(const Prop::TextWindow &prop)
    m_pedMBottom->Set(prop.rcMargins().bottom);
 
    // Time & Date
-   int iTimeFormat=prop.iTimeFormat();
+   int iTimeFormat=prop.TimeFormat();
 
    m_pcbTime->Check((iTimeFormat&Text::Time32::F_Time)!=0);
    m_pcbDate->Check((iTimeFormat&Text::Time32::F_Date)!=0);
    m_pcb24HR->Check((iTimeFormat&Text::Time32::F_24HR)!=0);
 
-   m_pcbDateTimeTooltip->Check(prop.iTimeFormatToolTip()!=0);
+   m_pcbDateTimeTooltip->Check(prop.TimeFormatToolTip()!=0);
 
    Update();
 }
@@ -165,18 +165,18 @@ void Dlg_TextWindow::Save(Prop::TextWindow &prop)
    if(m_pedHistory->Get(value))
    {
       PinAbove(value, 100U);
-      prop.iHistory(value);
+      prop.History(value);
    }
 
    if(m_pedLineWrappedIndent->Get(value))
-      prop.iLineWrappedIndent(value);
+      prop.LineWrappedIndent(value);
 
    if(m_pedParagraphSpacing->Get(value))
-      prop.iParagraphSpacing(value);
+      prop.ParagraphSpacing(value);
 
    prop.fFixedWidth(m_pcbFixedWidth->IsChecked());
    if(m_pedFixedWidth->Get(value))
-      prop.iFixedWidthChars(value);
+      prop.FixedWidthChars(value);
 
    prop.fSmoothScrolling(m_pcbSmoothScrolling->IsChecked());
    prop.fScrollToBottomOnAdd(m_pcbScrollToBottomOnAdd->IsChecked());
@@ -203,12 +203,12 @@ void Dlg_TextWindow::Save(Prop::TextWindow &prop)
    if(m_pcbDate->IsChecked()) iTimeFormat|=Text::Time32::F_Date;
    if(m_pcb24HR->IsChecked()) iTimeFormat|=Text::Time32::F_24HR;
 
-   prop.iTimeFormat(iTimeFormat);
+   prop.TimeFormat(iTimeFormat);
 
    if(m_pcbDateTimeTooltip->IsChecked())
-      prop.iTimeFormatToolTip(Text::Time32::F_Time|Text::Time32::F_Date);
+      prop.TimeFormatToolTip(Text::Time32::F_Time|Text::Time32::F_Date);
    else
-      prop.iTimeFormatToolTip(0);
+      prop.TimeFormatToolTip(0);
 
    // Help
    g_ppropGlobal->fShowTip_SelectionCopy(m_pcbShowSelectionCopyTip->IsChecked());
@@ -487,7 +487,7 @@ LRESULT Dlg_TextWindow::On(const Msg::Paint &msg)
    ps.SetBackgroundMode(TRANSPARENT);
 
    DC::FontSelector _(ps, m_hfText);
-   ps.ExtTextOut(int2(rcSample.left+rcSample.size().x/2, rcSample.top+(rcSample.size().y-m_propFont.iSize())/2),
+   ps.ExtTextOut(int2(rcSample.left+rcSample.size().x/2, rcSample.top+(rcSample.size().y-m_propFont.Size())/2),
                  ETO_CLIPPED, rcSample, STR_AaBbCc, nullptr);
 
    return msg.Success();
