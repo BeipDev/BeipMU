@@ -6,6 +6,7 @@
 #include <wrl.h>
 #include <WebView2.h>
 #include "WebView.h"
+#include "HTML.h"
 
 // To get to work on Wine:
 // https://web.archive.org/web/20210626091814/https://msedge.sf.dl.delivery.mp.microsoft.com/filestreamingservice/files/ee4e97c1-89a3-456f-b9f3-f29651316b7e/MicrosoftEdgeWebView2RuntimeInstallerX64.exe
@@ -211,6 +212,12 @@ struct WebView_OM
 		HybridStringBuilder string(bstr);
 		m_connection.ProcessAliases(string);
 		*out=LStrToBSTR(string);
+		return S_OK;
+	}
+
+	STDMETHODIMP AddToInputHistory(BSTR bstr) override
+	{
+		mp_wnd_webview->GetWndMain().History_AddToHistory(UTF8(bstr), {});
 		return S_OK;
 	}
 
@@ -469,6 +476,25 @@ void Wnd_WebView::On(const Event_WebViewEnvironmentCreated &)
 
 					OM::Variant v_client{mp_webview_om};
 					mp_webview->AddHostObjectToScript(L"client", &v_client);
+
+					{
+						auto &input_props = m_wnd_main.GetInputWindow().GetProps();
+						auto &output_props = m_wnd_main.GetOutputProps();
+						HybridStringBuilder<1024> script(
+							"var style = document.createElement('style');"
+							"style.innerHTML = `"
+							".clientOutput { background:", HTML::HTMLColor(output_props.clrBack()),
+							"; color:", HTML::HTMLColor(output_props.clrFore()),
+							"; font-family:'", output_props.propFont().pclName(), "'; font-size:", output_props.propFont().Size(), "px; }\n"
+							".clientInput { background:", HTML::HTMLColor(input_props.clrBack()),
+							"; color:", HTML::HTMLColor(input_props.clrFore()),
+							"; font-family:'", input_props.propFont().pclName(), "'; font-size:", input_props.propFont().Size(), "px; }\n"
+							"`;"
+							"document.head.appendChild(style);"
+						);
+						mp_webview->ExecuteScript(UTF16(script).stringz(), nullptr);
+					}
+
 					return S_OK;
 				}).Get(), &token);
 
