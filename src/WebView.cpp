@@ -476,27 +476,29 @@ void Wnd_WebView::On(const Event_WebViewEnvironmentCreated &)
 
 					OM::Variant v_client{mp_webview_om};
 					mp_webview->AddHostObjectToScript(L"client", &v_client);
-
-					{
-						auto &input_props = m_wnd_main.GetInputWindow().GetProps();
-						auto &output_props = m_wnd_main.GetOutputProps();
-						HybridStringBuilder<1024> script(
-							"var style = document.createElement('style');"
-							"style.innerHTML = `"
-							".clientOutput { background:", HTML::HTMLColor(output_props.clrBack()),
-							"; color:", HTML::HTMLColor(output_props.clrFore()),
-							"; font-family:'", output_props.propFont().pclName(), "'; font-size:", output_props.propFont().Size(), "px; }\n"
-							".clientInput { background:", HTML::HTMLColor(input_props.clrBack()),
-							"; color:", HTML::HTMLColor(input_props.clrFore()),
-							"; font-family:'", input_props.propFont().pclName(), "'; font-size:", input_props.propFont().Size(), "px; }\n"
-							"`;"
-							"document.head.appendChild(style);"
-						);
-						mp_webview->ExecuteScript(UTF16(script).stringz(), nullptr);
-					}
-
 					return S_OK;
 				}).Get(), &token);
+
+			mp_webview->add_NavigationCompleted(Microsoft::WRL::Callback<ICoreWebView2NavigationCompletedEventHandler>(
+				[this](ICoreWebView2 *webview, ICoreWebView2NavigationCompletedEventArgs *args) -> HRESULT {
+					auto &input_props = m_wnd_main.GetInputWindow().GetProps();
+					auto &output_props = m_wnd_main.GetOutputProps();
+					HybridStringBuilder<1024> script(
+						"var style = document.createElement('style');"
+						"style.innerHTML = `"
+						".clientOutput { background:", HTML::HTMLColor(output_props.clrBack()),
+						"; color:", HTML::HTMLColor(output_props.clrFore()),
+						"; font-family:'", output_props.propFont().pclName(), "'; font-size:", output_props.propFont().Size(), "px; }\n"
+						".clientInput { background:", HTML::HTMLColor(input_props.clrBack()),
+						"; color:", HTML::HTMLColor(input_props.clrFore()),
+						"; font-family:'", input_props.propFont().pclName(), "'; font-size:", input_props.propFont().Size(), "px; }\n"
+						"`;"
+						"document.head.appendChild(style);"
+					);
+					mp_webview->ExecuteScript(UTF16(script).stringz(), nullptr);
+					return S_OK;
+				}).Get(), &token);
+
 
 			if(m_url || m_source)
 				Navigate();
