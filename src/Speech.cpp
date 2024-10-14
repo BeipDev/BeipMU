@@ -44,6 +44,8 @@ SAPI::SAPI()
       }
    }
    SetVoice();
+
+   CallAtShutdown([]() { s_p=nullptr; });
 }
 
 void SAPI::SetVoice()
