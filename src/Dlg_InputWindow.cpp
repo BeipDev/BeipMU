@@ -108,8 +108,8 @@ void Dlg_InputWindow::Load(const Prop::InputWindow &prop)
    if(m_input_window.IsPrimary())
    {
       m_pcbAutoSizeVertically->Check(prop.fAutoSizeVertically());
-      m_pedMinimumHeight->Set(prop.iMinimumHeight());
-      m_pedMaximumHeight->Set(prop.iMaximumHeight());
+      m_pedMinimumHeight->Set(prop.MinimumHeight());
+      m_pedMaximumHeight->Set(prop.MaximumHeight());
    }
    else
    {
@@ -142,16 +142,16 @@ void Dlg_InputWindow::Save(Prop::InputWindow &prop)
 
       unsigned value;
       if(m_pedMinimumHeight->Get(value))
-         prop.iMinimumHeight(value);
+         prop.MinimumHeight(value);
       if(m_pedMaximumHeight->Get(value))
-         prop.iMaximumHeight(value);
+         prop.MaximumHeight(value);
 
       // Ensure minimum height is at least 1
-      if(prop.iMinimumHeight()<1)
-         prop.iMinimumHeight(1);
+      if(prop.MinimumHeight()<1)
+         prop.MinimumHeight(1);
       // Ensure maximum height is at least minimum height
-      if(prop.iMaximumHeight()<prop.iMinimumHeight())
-         prop.iMaximumHeight(prop.iMinimumHeight());
+      if(prop.MaximumHeight()<prop.MinimumHeight())
+         prop.MaximumHeight(prop.MinimumHeight());
    }
    else
    {
@@ -353,7 +353,7 @@ LRESULT Dlg_InputWindow::On(const Msg::Paint &msg)
    ps.SetBackgroundMode(TRANSPARENT);
 
    DC::FontSelector _(ps, m_hfText);
-   ps.ExtTextOut(int2(rcSample.left+rcSample.size().x/2, rcSample.top+(rcSample.size().y-m_propFont.iSize())/2),
+   ps.ExtTextOut(int2(rcSample.left+rcSample.size().x/2, rcSample.top+(rcSample.size().y-m_propFont.Size())/2),
                  ETO_CLIPPED, rcSample, STR_AaBbCc, nullptr);
 
    return msg.Success();

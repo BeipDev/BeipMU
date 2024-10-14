@@ -232,7 +232,7 @@ LRESULT Wnd_Taskbar::On(const Msg::Create &msg)
       }
    }
 
-   m_font_size=g_ppropGlobal->iUIFontSize();
+   m_font_size=g_ppropGlobal->UIFontSize();
    mp_font_emoji=&Font::Get("Segoe UI Emoji");
    mp_font_text=&Font::Get(g_ppropGlobal->pclUIFontName());
    mp_font_text_bold=&Font::Get(g_ppropGlobal->pclUIFontName(), true);

@@ -54,7 +54,7 @@ void LoadConfig(ConstString filename, bool fImportingConfig)
 
    delete g_ppropGlobal;
    g_ppropGlobal=new Prop::Global();
-   g_ppropGlobal->iVersion(g_ciBuildNumber);
+   g_ppropGlobal->Version(g_ciBuildNumber);
    gp_restore_logs=nullptr;
 
    ErrorConsole error;
@@ -74,7 +74,7 @@ void LoadConfig(ConstString filename, bool fImportingConfig)
 
    Global_PropChange();
 
-   SetUIFont(g_ppropGlobal->pclUIFontName(), g_ppropGlobal->iUIFontSize());
+   SetUIFont(g_ppropGlobal->pclUIFontName(), g_ppropGlobal->UIFontSize());
 }
 
 void LoadConfig(Prop::Global &global, ConstString filename, IError &error)
@@ -93,19 +93,19 @@ void LoadConfig(Prop::Global &global, ConstString filename, IError &error)
    // Load the configuration file
    global.fLoadErrors(!ConfigImport(data, &global, error));
 
-   if(global.iVersion()<215) // In build 215 port merged into host
+   if(global.Version()<215) // In build 215 port merged into host
    {
       for(auto &ppropServer : global.propConnections().propServers())
       {
-         ppropServer->pclHost(FixedStringBuilder<256>(ppropServer->pclHost(), ':', ppropServer->iPort()));
-         ppropServer->iPort(0);
+         ppropServer->pclHost(FixedStringBuilder<256>(ppropServer->pclHost(), ':', ppropServer->Port()));
+         ppropServer->Port(0);
       }
    }
-   if(global.iVersion()<216) // In build 216 I removed all saved window positions as they weren't used anymore
+   if(global.Version()<216) // In build 216 I removed all saved window positions as they weren't used anymore
    {
       global.propWindows().propPositions().Empty();
    }
-   if(global.iVersion()<258) // Server & character name was removed in favor of just having the shortcut
+   if(global.Version()<258) // Server & character name was removed in favor of just having the shortcut
    {
       // Go through all the names, remove duplicates and put anything unique into the 'Info' field
       for(auto &pServer : global.propConnections().propServers())
@@ -135,13 +135,13 @@ void LoadConfig(Prop::Global &global, ConstString filename, IError &error)
          pServer->pclInfo(newInfo);
       }
    }
-   if(global.iVersion()<261) // GUID based server types changed instead to just a 'UseSSL' flag
+   if(global.Version()<261) // GUID based server types changed instead to just a 'UseSSL' flag
    {
       // Map the old guidClient over to just the flag
       for(auto &pServer : global.propConnections().propServers())
          pServer->fTLS(pServer->guidClient()==__uuidof(IClient_TLS));
    }
-   if(global.iVersion()<292)
+   if(global.Version()<292)
    {
       // Transfer saved position tab colors to per character tab colors
       auto &propPositions=global.propWindows().propPositions();
@@ -166,7 +166,7 @@ void LoadConfig(Prop::Global &global, ConstString filename, IError &error)
          }
       }
    }
-   if(global.iVersion()<309)
+   if(global.Version()<309)
    {
       // Per server/char window settings were added, so a new structure called 'WindowSettings' was made to hold it all.
       // This moves the global settings in Prop::Windows into the new Prop::WindowSettings so that everything is consistent
@@ -177,8 +177,8 @@ void LoadConfig(Prop::Global &global, ConstString filename, IError &error)
       window_settings.propOutput()=windows.propOldOutput(); windows.ResetOldOutput();
       window_settings.propHistory()=windows.propOldHistory(); windows.ResetOldHistory();
 
-      window_settings.iInputSize(windows.iOldInputSize());
-      window_settings.iHistorySize(windows.iOldHistorySize());
+      window_settings.InputSize(windows.OldInputSize());
+      window_settings.HistorySize(windows.OldHistorySize());
       window_settings.fHistory(windows.fOldHistory());
 
       CntPtrTo<Prop::TextWindow> ppropTextWindow_spawns=windows.fSpawnsUseOutputSettings() ? &window_settings.propOutput() : &windows.propOldSpawnWindows();
@@ -186,7 +186,7 @@ void LoadConfig(Prop::Global &global, ConstString filename, IError &error)
 
       auto ApplySettings=[&](Prop::DockedWindow &window)
          {
-            switch(window.iType())
+            switch(window.Type())
             {
                case 0: // InputWindow
                {
@@ -231,7 +231,7 @@ void LoadConfig(Prop::Global &global, ConstString filename, IError &error)
                ApplySettings(*p_propWindow);
          }
    }
-   if(global.iVersion()<312)
+   if(global.Version()<312)
    {
       // Local echo color moved from output window to input window
       auto &window_settings=global.propWindows().propMainWindowSettings();
@@ -243,7 +243,7 @@ void LoadConfig(Prop::Global &global, ConstString filename, IError &error)
 
       auto ApplySettings=[&](Prop::DockedWindow &window)
          {
-            switch(window.iType())
+            switch(window.Type())
             {
                case 0: // InputWindow
                {
@@ -296,17 +296,17 @@ void LoadConfig(Prop::Global &global, ConstString filename, IError &error)
                ApplySettings(*p_propWindow);
          }
    }
-   if(global.iVersion()<313)
+   if(global.Version()<313)
    {
       // Trigger processing order was removed, and replaced with ability to have triggers above & below their sub-trees
 
       // New change is like the trigger order always being global/server/character, so we only need to modify if we're the opposite
-      if(global.propConnections().iTriggerOrder()==0)
+      if(global.propConnections().TriggerOrder()==0)
       {
          auto ChangeTriggers=[&](Prop::Triggers &triggers)
-            {
-               triggers.iAfterCount(triggers.Count());
-            };
+         {
+            triggers.AfterCount(triggers.Count());
+         };
 
          ChangeTriggers(global.propConnections().propTriggers());
          for(auto &p_server : global.propConnections().propServers())
@@ -317,17 +317,17 @@ void LoadConfig(Prop::Global &global, ConstString filename, IError &error)
          }
       }
    }
-   if(global.iVersion()<318)
+   if(global.Version()<318)
    {
       if(!IsWindows11OrGreater())
          global.fTaskbarBadge(false); // Turn off for Windows 10 or lower
    }
-   if(global.iVersion()<323 && global.iUIFontSize()!=13)
+   if(global.Version()<323 && global.UIFontSize()!=13)
    {
       // Convert font size from cell height to character height
       Prop::Font font;
       font.pclName(global.pclUIFontName());
-      font.iSize(-global.iUIFontSize());
+      font.Size(-global.UIFontSize());
 
       auto hf=font.CreateFont();
       TEXTMETRIC tm;
@@ -335,26 +335,55 @@ void LoadConfig(Prop::Global &global, ConstString filename, IError &error)
       DC::FontSelector _(dc, hf);
       dc.GetTextMetrics(tm);
 
-      global.iUIFontSize((tm.tmHeight-tm.tmInternalLeading)/g_dpiScale);
+      global.UIFontSize((tm.tmHeight-tm.tmInternalLeading)/g_dpiScale);
    }
-   if(global.iVersion()<327)
+   if(global.Version()<327)
    {
-      global.iTheme(global.fDarkMode() ? 1 : 0);
+      global.Theme(global.fDarkMode() ? 1 : 0);
+   }
+   if(global.Version()<329) // Really for <328, but done <329 so that beta users also get this. Harmless to do multiple times
+   {
+      // KeyboardMacros were changed from a specialized single value into a config struct
+      auto ChangeMacros=[&](Prop::KeyboardMacros &macros_old, Prop::KeyboardMacros2 &macros)
+      {
+         // There are no folders, so no recursion needed here
+         macros.fActive(macros_old.fActive());
+         for(auto &macro_old : macros_old)
+         {
+            auto &macro=*macros.Push(MakeUnique<Prop::KeyboardMacro>());
+            macro.pclMacro(macro_old->pclMacro);
+            macro.fType(macro_old->fType);
+            macro.key(macro_old->key);
+         }
+         macros_old.Empty();
+      };
+
+      ChangeMacros(global.propConnections().propKeyboardMacrosOld(), global.propConnections().propKeyboardMacros2());
+      for(auto &p_server : global.propConnections().propServers())
+      {
+         ChangeMacros(p_server->propKeyboardMacrosOld(), p_server->propKeyboardMacros2());
+         for(auto &p_character : p_server->propCharacters())
+         {
+            ChangeMacros(p_character->propKeyboardMacrosOld(), p_character->propKeyboardMacros2());
+            for(auto &p_puppet : p_character->propPuppets())
+               ChangeMacros(p_puppet->propKeyboardMacrosOld(), p_puppet->propKeyboardMacros2());
+         }
+      }
    }
 
    // Validate iAfterCount for all triggers
    {
       auto Validate=[&](this auto &&self, Prop::Triggers &triggers) -> void
-         {
-            if(triggers.iAfterCount()>triggers.Count())
-               triggers.iAfterCount(triggers.Count());
+      {
+         if(triggers.AfterCount()>triggers.Count())
+            triggers.AfterCount(triggers.Count());
 
-            for(auto &p_trigger : triggers)
-            {
-               if(p_trigger->fPropTriggers())
-                  self(p_trigger->propTriggers());
-            }
-         };
+         for(auto &p_trigger : triggers)
+         {
+            if(p_trigger->fPropTriggers())
+               self(p_trigger->propTriggers());
+         }
+      };
 
       Validate(global.propConnections().propTriggers());
       for(auto &p_server : global.propConnections().propServers())
@@ -365,14 +394,14 @@ void LoadConfig(Prop::Global &global, ConstString filename, IError &error)
       }
    }
 
-   if(global.iVersion()>g_ciBuildNumber)
+   if(global.Version()>g_ciBuildNumber)
    {
       error.Error("Config file is from a newer version, this is not supported. Unless you're sure, it is recommended you quit without saving.");
       global.fLoadErrors(true);
    }
 
-   global.fUpgraded(global.iVersion()<g_ciBuildNumber);
-   global.iVersion(g_ciBuildNumber); // Set the current version on the property set
+   global.fUpgraded(global.Version()<g_ciBuildNumber);
+   global.Version(g_ciBuildNumber); // Set the current version on the property set
 }
 
 ConstString GetConfigPath()
@@ -498,7 +527,7 @@ void SaveWindowInformationInConfig()
             propTab.pclPuppet(pPuppet->pclName());
          }
 
-         propPosition.iActiveTab(window.GetActiveWindowIndex());
+         propPosition.ActiveTab(window.GetActiveWindowIndex());
       }
    }
 }
@@ -552,7 +581,7 @@ void ResetConfig()
 {
    delete g_ppropGlobal;
    g_ppropGlobal=new Prop::Global();
-   g_ppropGlobal->iVersion(g_ciBuildNumber);
+   g_ppropGlobal->Version(g_ciBuildNumber);
    g_ppropGlobal->fLoadErrors(true);
    Global_PropChange();
 }

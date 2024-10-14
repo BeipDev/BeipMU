@@ -452,8 +452,8 @@ void InputControl::ApplyProps()
    cf.crTextColor=mp_props->clrFore();
    cf.dwEffects=(mp_props->propFont().fBold() ? CFE_BOLD : 0) | (mp_props->propFont().fItalic() ? CFE_ITALIC : 0);
    // 1440 Twips/Inch, LOGPIXELSY = Pixels/Inch
-   cf.yHeight=MulDiv(mp_props->propFont().iSize()*g_dpiScale, 1440 /*twips*/, dc.GetCaps(LOGPIXELSY));
-   cf.bCharSet=mp_props->propFont().byCharSet();
+   cf.yHeight=MulDiv(mp_props->propFont().Size()*g_dpiScale, 1440 /*twips*/, dc.GetCaps(LOGPIXELSY));
+   cf.bCharSet=mp_props->propFont().CharSet();
    cf.bPitchAndFamily=DEFAULT_PITCH;
    UTF16_Inplace(cf.szFaceName, mp_props->propFont().pclName());
 

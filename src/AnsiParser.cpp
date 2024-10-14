@@ -247,7 +247,7 @@ bool AnsiParser::Parse(Streams::Input &ts, Text::LineBuilder &line_builder)
    if(change.m_change_strikeout)
       line_builder.Set(Text::Records::Strikeout{m_state.m_strikeout});
 
-   if(change.m_change_blink && m_prop_ansi.iFlashSpeed()!=0)
+   if(change.m_change_blink && m_prop_ansi.FlashSpeed()!=0)
    {
       Text::Records::Flash tr;
       switch(m_state.m_blink)

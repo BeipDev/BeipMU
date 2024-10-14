@@ -38,11 +38,11 @@ interface IPropTreeItem
    virtual Prop::Character *GetCharacter() { return nullptr; }
 
    virtual Prop::Alias *ppropAlias() { return nullptr; }
-   virtual CKeyMacro *pKeyMacro() { return nullptr; }
+   virtual Prop::KeyboardMacro *pKeyMacro() { return nullptr; }
    virtual Prop::Trigger *ppropTrigger() { return nullptr; }
 
    virtual Prop::Aliases *ppropAliases() { return nullptr; }
-   virtual Prop::KeyboardMacros *ppropKeyboardMacros() { return nullptr; }
+   virtual Prop::KeyboardMacros2 *ppropKeyboardMacros() { return nullptr; }
    virtual Prop::Triggers *ppropTriggers() { return nullptr; }
 };
 
@@ -92,7 +92,7 @@ struct PropTreeItem_Character : IPropTreeItem
 
    Prop::Character *GetCharacter() override { return m_ppropCharacter; }
 
-   Prop::KeyboardMacros *ppropKeyboardMacros() override { return &m_ppropCharacter->propKeyboardMacros(); }
+   Prop::KeyboardMacros2 *ppropKeyboardMacros() override { return &m_ppropCharacter->propKeyboardMacros2(); }
    Prop::Aliases *ppropAliases() override { return &m_ppropCharacter->propAliases(); }
    Prop::Triggers *ppropTriggers() override { return &m_ppropCharacter->propTriggers(); }
 
@@ -118,7 +118,7 @@ struct PropTreeItem_Server : IPropTreeItem
 
    Prop::Server *GetServer() override { return m_ppropServer; }
 
-   Prop::KeyboardMacros *ppropKeyboardMacros() override { return &m_ppropServer->propKeyboardMacros(); }
+   Prop::KeyboardMacros2 *ppropKeyboardMacros() override { return &m_ppropServer->propKeyboardMacros2(); }
    Prop::Aliases *ppropAliases() override { return &m_ppropServer->propAliases(); }
    Prop::Triggers *ppropTriggers() override { return &m_ppropServer->propTriggers(); }
 
@@ -141,7 +141,7 @@ struct PropTreeItem_Global : IPropTreeItem
          callback(MakeUnique<PropTreeItem_Server>(*pServer));
    }
 
-   Prop::KeyboardMacros *ppropKeyboardMacros() override { return &m_propsGlobal.propConnections().propKeyboardMacros(); }
+   Prop::KeyboardMacros2 *ppropKeyboardMacros() override { return &m_propsGlobal.propConnections().propKeyboardMacros2(); }
    Prop::Triggers *ppropTriggers() override { return &m_propsGlobal.propConnections().propTriggers(); }
    Prop::Aliases *ppropAliases() override { return &m_propsGlobal.propConnections().propAliases(); }
 
