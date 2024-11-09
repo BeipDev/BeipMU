@@ -1854,7 +1854,8 @@ LRESULT Wnd_Main::On(const Msg::Command &msg)
 
       case ID_TABCOLORDEFAULT: TabColor(Colors::Transparent); return msg.Success();
 
-      case ID_MUTE: ToggleShowActivityOnTaskbar(); return msg.Success();
+      case ID_MUTE_AUDIO: mp_connection->m_mute_audio^=true; GetMDI().RefreshTaskbar(*this); return msg.Success();
+      case ID_MUTE_ACTIVITY: ToggleShowActivityOnTaskbar(); return msg.Success();
 #if 0
       case ID_CONNECTION_STATISTICS: CreateDialog_Statistics(*this); return msg.Success();
 #endif
@@ -1866,10 +1867,6 @@ LRESULT Wnd_Main::On(const Msg::Command &msg)
 
       case ID_EDIT_PASTE:
          Msg::Paste().Send(*mp_input_active);
-         return msg.Success();
-
-      case ID_EDIT_COPY:
-         mp_wnd_text->SelectionToClipboard();
          return msg.Success();
 
       case ID_EDIT_FIND:
@@ -2549,7 +2546,8 @@ void Wnd_Main::PopupTabMenu(int2 position)
    Append(menu, ID_CONNECTION_DISCONNECT, "Disconnect", Keys::Key_Disconnect);
    Append(menu, ID_CONNECTION_RECONNECT, "Reconnect", Keys::Key_Reconnect);
    menu.AppendSeparator();
-   menu.Append(MF_STRING, ID_MUTE, "Show activity on Taskbar");
+   menu.Append(MF_STRING, ID_MUTE_ACTIVITY, "Show activity on Taskbar");
+   menu.Append(MF_STRING, ID_MUTE_AUDIO, "Mute audio");
    menu.Append(MF_STRING, ID_TABCOLOR, "Set color...");
    menu.Append(MF_STRING, ID_TABCOLORDEFAULT, "Reset to default color");
    menu.AppendSeparator();
@@ -2560,7 +2558,8 @@ void Wnd_Main::PopupTabMenu(int2 position)
 
    menu.Enable(ID_CONNECTION_DISCONNECT, connected);
    menu.Enable(ID_CONNECTION_RECONNECT, reconnect);
-   menu.Check(ID_MUTE, ShowActivityOnTaskbar());
+   menu.Check(ID_MUTE_ACTIVITY, ShowActivityOnTaskbar());
+   menu.Check(ID_MUTE_AUDIO, mp_connection->m_mute_audio);
 
    TrackPopupMenu(menu, g_ppropGlobal->fTaskbarOnTop() ? 0 : TPM_BOTTOMALIGN, position, *this, nullptr);
 }

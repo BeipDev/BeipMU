@@ -98,6 +98,7 @@ struct Connection
    bool KillSpawnCapture();
    void ShowSpawnCancel();
 
+   bool m_mute_audio{};
    bool IsLogging() const { return mp_log!=nullptr; }
    Log &GetLog() { Assert(mp_log); return *mp_log; }
    void LogStart(ConstString filename, unsigned type);
