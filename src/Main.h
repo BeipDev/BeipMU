@@ -119,14 +119,13 @@ void ResetConfig();
 
 Prop::Global &GetSampleConfig();
 
-struct GlobalTextSettingsModified { };
+struct GlobalTextSettingsModified { Prop::TextWindow &prop; };
 struct GlobalInputSettingsModified { Prop::InputWindow &prop; };
 extern Events::SendersOf<GlobalTextSettingsModified, GlobalInputSettingsModified> g_text_events;
 
 Prop::TextWindow &GlobalTextSettings();
-void OnGlobalTextSettingsModified(); // Called by the text dialog when changing global settings
 Prop::InputWindow &GlobalInputSettings();
-void OnGlobalInputSettingsModified(Prop::InputWindow &prop); // Called by the input dialog when settings
+void OnGlobalTextSettingsModified(Prop::TextWindow &prop); // Called by the text dialog when changing settings
 
 void CreateDialog_KeyboardMacros(Window wnd, Prop::Server *ppropServer, Prop::Character *ppropCharacter);
 void CloseDialog_KeyboardMacros();
