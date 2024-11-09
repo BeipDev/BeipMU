@@ -218,7 +218,6 @@ Prop WebViewWindow
 {
     String URL
     String ID
-    Flag HostObjects=true
 }
 
 Prop DockedWindow

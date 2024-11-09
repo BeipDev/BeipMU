@@ -361,6 +361,7 @@ library BeipMU
       // OnGMCP(BSTR package, BSTR json)
 
       HRESULT ProcessAliases([in] BSTR text, [out, retval] BSTR *result);
+      HRESULT AddToInputHistory([in] BSTR text);
    }
 
    [ uuid(4703fc42-40af-4b8a-94f2-e09dff9ab8e0) ]

@@ -6,7 +6,7 @@ void SetTextWindowProperties(Text::Wnd &window, Prop::TextWindow &prop);
 
 struct Dlg_TextWindow : Wnd_Dialog
 {
-   Dlg_TextWindow(Window wndParent, Text::Wnd &text_window, Prop::TextWindow &propTextWindow);
+   Dlg_TextWindow(Window wndParent, Prop::TextWindow &propTextWindow);
 
 private:
 
@@ -59,7 +59,6 @@ private:
 
    AL::Button *mp_button_copy_settings, *mp_button_paste_settings;
 
-   Text::Wnd &m_text_window;
    CntPtrTo<Prop::TextWindow> m_ppropTextWindow;
    Prop::Font m_propFont;
    Color m_clrFG, m_clrBG, m_clrLink; // Local copies (in case of cancel!)
@@ -73,9 +72,8 @@ LRESULT Dlg_TextWindow::WndProc(const Message &msg)
    return Dispatch<Wnd_Dialog, Msg::Create, Msg::Command, Msg::Paint>(msg);
 }
 
-Dlg_TextWindow::Dlg_TextWindow(Window wndParent, Text::Wnd &text_window, Prop::TextWindow &propTextWindow)
- : m_text_window{text_window},
-   m_ppropTextWindow{&propTextWindow}
+Dlg_TextWindow::Dlg_TextWindow(Window wndParent, Prop::TextWindow &propTextWindow)
+ : m_ppropTextWindow{&propTextWindow}
 {
    FixedStringBuilder<256> title;
    if(&propTextWindow==&GlobalTextSettings())
@@ -422,10 +420,7 @@ LRESULT Dlg_TextWindow::On(const Msg::Command &msg)
       case IDOK:
          Save(*m_ppropTextWindow);
          Global_PropChange(); // To handle the selection message/new content global settings
-         if(m_ppropTextWindow==&GlobalTextSettings())
-            OnGlobalTextSettingsModified(); // Update them all through an event
-         else
-            ::SetTextWindowProperties(m_text_window, *m_ppropTextWindow);
+         OnGlobalTextSettingsModified(*m_ppropTextWindow); // Update them all through an event
       case IDCANCEL:
          Close();
          break;
@@ -493,7 +488,7 @@ LRESULT Dlg_TextWindow::On(const Msg::Paint &msg)
    return msg.Success();
 }
 
-void CreateDialog_TextWindow(Window wndParent, Text::Wnd &text_window, Prop::TextWindow &propTextWindow)
+void CreateDialog_TextWindow(Window wndParent, Prop::TextWindow &propTextWindow)
 {
-   new Dlg_TextWindow(wndParent, text_window, propTextWindow);
+   new Dlg_TextWindow(wndParent, propTextWindow);
 }

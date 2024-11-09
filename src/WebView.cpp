@@ -6,6 +6,7 @@
 #include <wrl.h>
 #include <WebView2.h>
 #include "WebView.h"
+#include "HTML.h"
 
 // To get to work on Wine:
 // https://web.archive.org/web/20210626091814/https://msedge.sf.dl.delivery.mp.microsoft.com/filestreamingservice/files/ee4e97c1-89a3-456f-b9f3-f29651316b7e/MicrosoftEdgeWebView2RuntimeInstallerX64.exe
@@ -214,6 +215,12 @@ struct WebView_OM
 		return S_OK;
 	}
 
+	STDMETHODIMP AddToInputHistory(BSTR bstr) override
+	{
+		mp_wnd_webview->GetWndMain().History_AddToHistory(UTF8(bstr), {});
+		return S_OK;
+	}
+
 	void On(Connection::Event_Receive &event)
 	{
 		if(m_hook_receive)
@@ -379,12 +386,15 @@ Wnd_WebView::Wnd_WebView(Wnd_Main &wnd_main, ConstString id)
 	Create("WebView", WS_OVERLAPPEDWINDOW, Window::Position(int2(CW_USEDEFAULT, CW_USEDEFAULT), int2(800, 800)), wnd_main, WS_EX_APPWINDOW);
 	mp_docking=&m_wnd_main.CreateDocking(*this);
 	Show(SW_SHOWNOACTIVATE);
+
+	AttachTo<GlobalInputSettingsModified>(g_text_events);
+	AttachTo<GlobalTextSettingsModified>(g_text_events);
 }
 
 LRESULT Wnd_WebView::On(const Msg::Create &msg)
 {
 	if(!WebView2EnvironmentCreator::sp_instance)
-			MakeCounting<WebView2EnvironmentCreator>();
+		MakeCounting<WebView2EnvironmentCreator>();
 
 	if(!gp_environment)
 		AttachTo<Event_WebViewEnvironmentCreated>(*WebView2EnvironmentCreator::sp_instance);
@@ -402,8 +412,8 @@ void Wnd_WebView::On(const Event_WebViewEnvironmentCreated &)
 			if(FAILED(result) || !p_controller)
 				return S_OK; // Window closed?
 
-			mp_webviewController = p_controller;
-			mp_webviewController->get_CoreWebView2(mp_webview.Address());
+			mp_webview_controller = p_controller;
+			mp_webview_controller->get_CoreWebView2(mp_webview.Address());
  
 			// Add a few settings for the webview
 			// The demo step is redundant since the values are the default settings
@@ -421,8 +431,8 @@ void Wnd_WebView::On(const Event_WebViewEnvironmentCreated &)
 #endif
 
 			// Resize WebView to fit the bounds of the parent window
-			mp_webviewController->put_Bounds(ToRECT(ClientRect()));
-			mp_webviewController->put_IsVisible(TRUE);
+			mp_webview_controller->put_Bounds(ToRECT(ClientRect()));
+			mp_webview_controller->put_IsVisible(TRUE);
 
 			Automation::GetApp(); // Must do this so that OM_Help initializes properly
 #if 0
@@ -472,11 +482,59 @@ void Wnd_WebView::On(const Event_WebViewEnvironmentCreated &)
 					return S_OK;
 				}).Get(), &token);
 
+			mp_webview->add_NavigationCompleted(Microsoft::WRL::Callback<ICoreWebView2NavigationCompletedEventHandler>(
+				[this](ICoreWebView2 *webview, ICoreWebView2NavigationCompletedEventArgs *args) -> HRESULT {
+					SetStyles();
+					return S_OK;
+				}).Get(), &token);
+
 			if(m_url || m_source)
 				Navigate();
 
 			return S_OK;
 					}).Get());
+}
+
+void Wnd_WebView::On(const GlobalTextSettingsModified &event)
+{
+	SetStyles();
+}
+
+void Wnd_WebView::On(const GlobalInputSettingsModified &)
+{
+	SetStyles();
+}
+
+void Wnd_WebView::SetStyles()
+{
+	if(!mp_webview)
+		return;
+
+	auto &input_props = m_wnd_main.GetInputWindow().GetProps();
+	auto &output_props = m_wnd_main.GetOutputProps();
+	HybridStringBuilder<1024> script(
+		"{ const styleId = 'clientInputOutputStyleVars';"
+		"var style = document.getElementById(styleId);"
+		"if (style === null) {"
+		" style = document.createElement('style');"
+		" style.id = styleId;"
+		" document.head.appendChild(style);"
+		" style = document.getElementById(styleId);"
+		"}"
+		"style.innerHTML = `"
+		":root {"
+		" \n --client-output-background:", HTML::HTMLColor(output_props.clrBack()),
+		";\n --client-output-foreground:", HTML::HTMLColor(output_props.clrFore()),
+		";\n --client-output-font:'", output_props.propFont().pclName(), "'"
+		";\n --client-output-font-size:", output_props.propFont().Size(), "px"
+		";\n --client-input-background:", HTML::HTMLColor(input_props.clrBack()),
+		";\n --client-input-foreground:", HTML::HTMLColor(input_props.clrFore()),
+		";\n --client-input-font:'", input_props.propFont().pclName(), "'"
+		";\n --client-input-font-size:", input_props.propFont().Size(), "px"
+		";\n}"
+		"`; }"
+	);
+	mp_webview->ExecuteScript(UTF16(script).stringz(), nullptr);
 }
 
 void Wnd_WebView::SetURL(ConstString url, Array<Header> headers)
@@ -510,12 +568,12 @@ void Wnd_WebView::Navigate()
 
 LRESULT Wnd_WebView::On(const Msg::WindowPosChanged &msg)
 {
-	if(mp_webviewController)
+	if(mp_webview_controller)
 	{
 		if(msg.WasResized())
-			mp_webviewController->put_Bounds(ToRECT(ClientRect()));
+			mp_webview_controller->put_Bounds(ToRECT(ClientRect()));
 		if(msg.WasMoved())
-			mp_webviewController->NotifyParentWindowPositionChanged();
+			mp_webview_controller->NotifyParentWindowPositionChanged();
 	}
 
 	return msg.Success();

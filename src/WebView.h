@@ -9,7 +9,7 @@ struct Wnd_WebView
  : DLNode<Wnd_WebView>, 
 	TWindowImpl<Wnd_WebView>,
 	Events::Sends_Deleted,
-	Events::ReceiversOf<Wnd_WebView, Event_WebViewEnvironmentCreated>
+	Events::ReceiversOf<Wnd_WebView, Event_WebViewEnvironmentCreated, GlobalTextSettingsModified, GlobalInputSettingsModified>
 {
 	struct Header
 	{
@@ -23,15 +23,17 @@ struct Wnd_WebView
 	void SetURL(ConstString url, Array<Header> headers={});
 	void SetSource(ConstString source);
 
-	ConstString GetID() const { return m_id; }
+	void SetStyles();
 
-	bool HostObjects() const { return m_host_objects; }
+	ConstString GetID() const { return m_id; }
 
 	Wnd_Docking &GetDocking() const { return *mp_docking; }
 	Wnd_Main &GetWndMain() const { return m_wnd_main; }
 
 	void On(const Event_WebViewEnvironmentCreated &);
 	void On(const Event_WebViewCreated &);
+	void On(const GlobalTextSettingsModified &);
+	void On(const GlobalInputSettingsModified &);
 
 private:
 
@@ -52,7 +54,7 @@ private:
 
 	Collection<Header> m_headers;
 
-	CntPtrTo<ICoreWebView2Controller> mp_webviewController;
+	CntPtrTo<ICoreWebView2Controller> mp_webview_controller;
 	CntPtrTo<ICoreWebView2> mp_webview;
 	Wnd_Docking *mp_docking;
 	CntPtrTo<WebView_OM> mp_webview_om;

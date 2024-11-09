@@ -32,7 +32,7 @@ Prop::Docking g_propDockingClipboard;
 static CntPtrTo<Prop::MainWindowSettings> g_ppropMainWindowSettingsClipboard=MakeCounting<Prop::MainWindowSettings>();
 
 void SetBadgeNumber(int num);
-void CreateDialog_TextWindow(Window wndParent, Text::Wnd &text_window, Prop::TextWindow &propTextWindow);
+void CreateDialog_TextWindow(Window wndParent, Prop::TextWindow &propTextWindow);
 void CreateDialog_Connect(Window wnd, Wnd_MDI &wndMDI);
 void CreateDialog_SmartPaste(Window wndParent, Connection &connection, Prop::Connections &propConnections);
 void CreateDialog_InputWindow(Window wndParent, InputControl &input_window, Prop::InputWindow &propInputWindow);
@@ -150,9 +150,9 @@ void Global_PropChange()
 
 Events::SendersOf<GlobalTextSettingsModified, GlobalInputSettingsModified> g_text_events;
 
-void OnGlobalTextSettingsModified()
+void OnGlobalTextSettingsModified(Prop::TextWindow &prop)
 {
-   g_text_events.Send(GlobalTextSettingsModified{});
+   g_text_events.Send(GlobalTextSettingsModified{prop});
 }
 
 void OnGlobalInputSettingsModified(Prop::InputWindow &prop)
@@ -282,7 +282,7 @@ void SpawnWindow::On(Text::Wnd &wndText, Text::Wnd_View &wndView, const Msg::RBu
 
 void SpawnWindow::On(const GlobalTextSettingsModified &event)
 {
-   if(mp_prop_text_window==&GlobalTextSettings())
+   if(mp_prop_text_window==&event.prop)
       ::SetTextWindowProperties(*mp_text, *mp_prop_text_window);
 }
 
@@ -985,7 +985,7 @@ void Wnd_Main::On(Text::Wnd &wndText, Text::Wnd_View &wndView, const Msg::RButto
 #endif
       menu.AppendSeparator();
       menu.Append(p_props==&GlobalTextSettings() ? MF_CHECKED : MF_UNCHECKED, "Use global settings", [&]() { ToggleGlobalSettings(wndText, p_props); });
-      menu.Append(0, "Settings...", [&]() { CreateDialog_TextWindow(*this, wndText, *p_props); });
+      menu.Append(0, "Settings...", [&]() { CreateDialog_TextWindow(*this, *p_props); });
 
       if(p_line)
          text(FindWord(p_line->GetText(), location_info.m_find_element.m_text_index));
@@ -1227,7 +1227,6 @@ bool SaveDockedWindowSettings(Prop::DockedWindow &propWindow, Wnd_Docking &windo
          Prop::WebViewWindow &prop=propWindow.propWebViewWindow();
          prop.pclURL(pWnd->GetURL());
          prop.pclID(pWnd->GetID());
-         prop.fHostObjects(pWnd->HostObjects());
          return true;
       }
    }
@@ -1796,9 +1795,9 @@ void Wnd_Main::ApplyHistoryVisibility()
 void Wnd_Main::On(const GlobalTextSettingsModified &event)
 {
    // If any of our text windows use the global settings, refresh them
-   if(mp_prop_output==&GlobalTextSettings())
+   if(mp_prop_output==&event.prop)
       ::SetTextWindowProperties(*mp_wnd_text, *mp_prop_output);
-   if(mp_prop_history==&GlobalTextSettings())
+   if(mp_prop_history==&event.prop)
       ::SetTextWindowProperties(*mp_wnd_text_history, *mp_prop_history);
 }
 

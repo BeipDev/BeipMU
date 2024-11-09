@@ -296,10 +296,7 @@ LRESULT Dlg_InputWindow::On(const Msg::Command &msg)
    {
       case IDOK:
          Save(*m_ppropInputWindow);
-         if(m_ppropInputWindow==&GlobalInputSettings() || m_input_window.IsPrimary())
-            OnGlobalInputSettingsModified(*m_ppropInputWindow); // Update them all through an event
-         else
-            m_input_window.ApplyProps();
+         OnGlobalInputSettingsModified(*m_ppropInputWindow);
       case IDCANCEL:
          Close();
          break;

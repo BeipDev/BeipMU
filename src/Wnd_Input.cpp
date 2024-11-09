@@ -1042,7 +1042,7 @@ Wnd_InputPane::~Wnd_InputPane()
 
 void Wnd_InputPane::On(const GlobalInputSettingsModified &event)
 {
-   if(&m_input.GetProps()==&GlobalInputSettings())
+   if(&m_input.GetProps()==&event.prop)
       m_input.ApplyProps();
 }
 
