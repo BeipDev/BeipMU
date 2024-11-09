@@ -135,6 +135,12 @@ Color Wnd_Taskbar::DrawWindow(RectF rcWindow, Wnd_Main &wnd, unsigned tabNumber)
       mp_font_emoji->Draw("⚡", m_font_size, rcText.ptLT()+float2(0, emoji_top), *mp_render_target, *mp_brush_dynamic);
       rcText.left+=width+3.0f;
    }
+   else if(connection.m_mute_audio) // Draw muted icon only if connected
+   {
+      float width=mp_font_emoji->Measure("🔇", m_font_size);
+      mp_font_emoji->Draw("🔇", m_font_size, rcText.ptLT()+float2(0, emoji_top), *mp_render_target, *mp_brush_dynamic);
+      rcText.left+=width+3.0f;
+   }
 
    // Draw world name
    if(rcText.size().x>0) // Only if there's some space

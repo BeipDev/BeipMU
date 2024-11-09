@@ -1,34 +1,16 @@
-#include "resource.h"
 #include "..\Libraries\LibWin32\Resource.h"
 #include "winres.h"
+#include "BuildNumber.h"
+
+#define STRINGIZE2(x) #x
+#define STRINGIZE(x) STRINGIZE2(x)
 
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 #pragma code_page(65001) // UTF-8 file encoding (1252)
 
-1 TEXTINCLUDE 
-BEGIN
-    "resource.h\0"
-END
-
-2 TEXTINCLUDE 
-BEGIN
-    "#include ""winres.h""\r\n"
-    "\0"
-END
-
-3 TEXTINCLUDE 
-BEGIN
-    "\r\n"
-    "\0"
-END
-
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
 IDI_APP                ICON                    "Compy16.ico"
-
-#include "BuildNumber.h"
-#define STRINGIZE2(x) #x
-#define STRINGIZE(x) STRINGIZE2(x)
 
 1 TYPELIB "OM.tlb"
 

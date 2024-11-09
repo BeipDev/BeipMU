@@ -1766,7 +1766,8 @@ void Connection::TriggersExecute(Text::Line &line, Array<CopyCntPtrTo<Prop::Trig
             // Sound
             if(!m_raw_log_replay && ppropTrigger->fPropSound() && ppropTrigger->propSound().fActive())
             {
-               PlaySound(ppropTrigger->propSound().pclSound());
+               if(!m_mute_audio)
+                  PlaySound(ppropTrigger->propSound().pclSound());
                if(mp_trigger_debug)
                   TriggerDebugText("#000040", "blue", "10", "Playing sound");
             }
@@ -1774,10 +1775,13 @@ void Connection::TriggersExecute(Text::Line &line, Array<CopyCntPtrTo<Prop::Trig
             // Speech
             if(!m_raw_log_replay && ppropTrigger->fPropSpeech() && ppropTrigger->propSpeech().fActive())
             {
-               if(ppropTrigger->propSpeech().fWholeLine())
-                  SAPI::GetInstance().Say(line);
-               else
-                  SAPI::GetInstance().Say(FindStringReplacement(search, ppropTrigger->propSpeech().pclSay()));
+               if(!m_mute_audio)
+               {
+                  if(ppropTrigger->propSpeech().fWholeLine())
+                     SAPI::GetInstance().Say(line);
+                  else
+                     SAPI::GetInstance().Say(FindStringReplacement(search, ppropTrigger->propSpeech().pclSay()));
+               }
 
                if(mp_trigger_debug)
                   TriggerDebugText("#000040", "blue", "10", "Saying text");
