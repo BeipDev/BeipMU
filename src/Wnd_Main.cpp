@@ -1516,6 +1516,7 @@ void Wnd_Main::SendInput(InputControl &edInput)
    m_history_pos=~0U; // Reset the current history item
    mp_wnd_text_history->SetUserPaused(false);
    Assert(!mp_wnd_text_history->IsPaused());
+   ApplyHistoryVisibility();
 
    auto string=edInput.GetText();
 
@@ -1610,6 +1611,7 @@ void Wnd_Main::History_SelectUp(InputControl &edInput)
    }
 
    CheckInputHeight();
+   ApplyHistoryVisibility();
 }
 
 void Wnd_Main::History_SelectDown(InputControl &edInput)
@@ -1641,6 +1643,7 @@ void Wnd_Main::History_SelectDown(InputControl &edInput)
    }
 
    CheckInputHeight();
+   ApplyHistoryVisibility();
 }
 
 void Wnd_Main::History_SelectLine(InputControl &edInput)
@@ -1784,9 +1787,10 @@ void Wnd_Main::ApplyMainWindowSettings()
 void Wnd_Main::ApplyHistoryVisibility()
 {
    auto &settings=GetWindowSettings();
-   mp_splitter->SetVisibility(1, settings.fHistory());
-   mp_wnd_text_history->Show(settings.fHistory() ? SW_SHOW : SW_HIDE);
-   mp_wnd_text_history->GetTextList().SelectionClear();
+   bool visible=settings.fHistory() || g_ppropGlobal->fAutoShowHistory() && m_history_pos!=~0U;
+
+   mp_splitter->SetVisibility(1, visible);
+   mp_wnd_text_history->Show(visible ? SW_SHOW : SW_HIDE);
 
    mp_layout->CalcMinSize();
    mp_layout->Update();

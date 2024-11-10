@@ -232,6 +232,7 @@ private:
 
    AL::CheckBox *m_pcbSendUnrecognizedCommands;
    AL::CheckBox *m_pcbPreventSmartQuotes;
+   AL::CheckBox *m_pcbAutoShowHistory;
 
    AL::CheckBox *m_pcbSpellCheck;
    Controls::TComboBox<OwnedString> m_coSpellLanguage;
@@ -247,6 +248,7 @@ void Dlg_Input::Save()
    // Windows
    g_ppropGlobal->fSendUnrecognizedCommands(m_pcbSendUnrecognizedCommands->IsChecked());
    g_ppropGlobal->fPreventSmartQuotes(m_pcbPreventSmartQuotes->IsChecked());
+   g_ppropGlobal->fAutoShowHistory(m_pcbAutoShowHistory->IsChecked());
 
    // SpellCheck
    {
@@ -287,6 +289,10 @@ void Dlg_Input::OnCreate()
 
       m_pcbPreventSmartQuotes=m_layout.CreateCheckBox(-1, "Prevent smart quote mode (no “” quotes, only \")");
       g << m_pcbPreventSmartQuotes;
+
+      m_pcbAutoShowHistory=m_layout.CreateCheckBox(-1, "Automatically show history window while navigating input history");
+      g << m_pcbAutoShowHistory;
+
    }
 
    {
@@ -304,6 +310,7 @@ void Dlg_Input::OnCreate()
 
    m_pcbSendUnrecognizedCommands->Check(g_ppropGlobal->fSendUnrecognizedCommands());
    m_pcbPreventSmartQuotes->Check(g_ppropGlobal->fPreventSmartQuotes());
+   m_pcbAutoShowHistory->Check(g_ppropGlobal->fAutoShowHistory());
 
    // Spell Check
    {
