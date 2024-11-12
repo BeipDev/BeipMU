@@ -36,10 +36,7 @@ void CreateDialog_TextWindow(Window wndParent, Prop::TextWindow &propTextWindow)
 void CreateDialog_Connect(Window wnd, Wnd_MDI &wndMDI);
 void CreateDialog_SmartPaste(Window wndParent, Connection &connection, Prop::Connections &propConnections);
 void CreateDialog_InputWindow(Window wndParent, InputControl &input_window, Prop::InputWindow &propInputWindow);
-void CreateDialog_Find(Window wnd, Text::Wnd &wndText);
-void CreateDialog_Settings(Window wndParent);
 
-void CreateWindow_About(Window wndParent);
 void D2DTest();
 
 void ShowStatistics(Text::Wnd &wnd)
@@ -959,32 +956,32 @@ ConstString FindWord(ConstString string, unsigned index)
    return string.Sub(range);
 }
 
-void Wnd_Main::On(Text::Wnd &wndText, Text::Wnd_View &wndView, const Msg::RButtonDown &msg, const Text::List::LocationInfo &location_info)
+void Wnd_Main::On(Text::Wnd &wnd_text, Text::Wnd_View &wnd_view, const Msg::RButtonDown &msg, const Text::List::LocationInfo &location_info)
 {
-   On(wndText, wndView, msg, location_info, &wndText==mp_wnd_text ? mp_prop_output : mp_prop_history);
+   On(wnd_text, wnd_view, msg, location_info, &wnd_text==mp_wnd_text ? mp_prop_output : mp_prop_history);
 }
 
-void Wnd_Main::On(Text::Wnd &wndText, Text::Wnd_View &wndView, const Msg::RButtonDown &msg, const Text::List::LocationInfo &location_info, CntPtrTo<Prop::TextWindow> &p_props)
+void Wnd_Main::On(Text::Wnd &wnd_text, Text::Wnd_View &wnd_view, const Msg::RButtonDown &msg, const Text::List::LocationInfo &location_info, CntPtrTo<Prop::TextWindow> &p_props)
 {
    auto *p_line=location_info.p_line;
 
    HybridStringBuilder text;
    ContextMenu menu;
 
-   if(!wndText.GetTextList().SelectionGet())
+   if(!wnd_text.GetTextList().SelectionGet())
    {
-      menu.Append(0, "Find...", [&]() { CreateDialog_Find(*this, wndText); });
-      menu.Append(wndText.IsUserPaused() ? MF_CHECKED : 0, "Pause", [&]() { wndText.SetUserPaused(!wndText.IsUserPaused()); });
-      menu.Append(wndText.IsSplit() ? MF_CHECKED : 0, "Split", [&]() { wndText.ToggleSplit(); });
-      menu.Append(0, "Copy screen to clipboard", [&]() { wndView.ScreenToClipboard(); });
+      menu.Append(0, "Find...", [&]() { CreateDialog_Find(*this, wnd_text); });
+      menu.Append(wnd_text.IsUserPaused() ? MF_CHECKED : 0, "Pause", [&]() { wnd_text.SetUserPaused(!wnd_text.IsUserPaused()); });
+      menu.Append(wnd_text.IsSplit() ? MF_CHECKED : 0, "Split", [&]() { wnd_text.ToggleSplit(); });
+      menu.Append(0, "Copy screen to clipboard", [&]() { wnd_view.ScreenToClipboard(); });
       menu.AppendSeparator();
-      menu.Append(0, "Clear", [&]() { wndText.Clear(); });
-      menu.Append(p_line ? 0 : MF_DISABLED, "Delete Line", [&]() { wndText.RemoveLine(UnconstRef(*p_line)); });
+      menu.Append(0, "Clear", [&]() { wnd_text.Clear(); });
+      menu.Append(p_line ? 0 : MF_DISABLED, "Delete Line", [&]() { wnd_text.RemoveLine(UnconstRef(*p_line)); });
 #ifdef _DEBUG
       menu.Append(p_line ? 0 : MF_DISABLED, "Dump Line", [&]() { p_line->Dump(); });
 #endif
       menu.AppendSeparator();
-      menu.Append(p_props==&GlobalTextSettings() ? MF_CHECKED : MF_UNCHECKED, "Use global settings", [&]() { ToggleGlobalSettings(wndText, p_props); });
+      menu.Append(p_props==&GlobalTextSettings() ? MF_CHECKED : MF_UNCHECKED, "Use global settings", [&]() { ToggleGlobalSettings(wnd_text, p_props); });
       menu.Append(0, "Settings...", [&]() { CreateDialog_TextWindow(*this, *p_props); });
 
       if(p_line)
@@ -994,27 +991,27 @@ void Wnd_Main::On(Text::Wnd &wndText, Text::Wnd_View &wndView, const Msg::RButto
    {
       menu.Append(0, "Open as URL", [&]()
       {
-         const Text::List::Selection &selection=wndText.GetTextList().SelectionGet();
+         const Text::List::Selection &selection=wnd_text.GetTextList().SelectionGet();
          if(!selection || selection.m_start.m_line!=selection.m_end.m_line)
             return;
 
          HybridStringBuilder<> string("http:\\\\");
-         wndText.GetTextList().SelectionToText(string);
+         wnd_text.GetTextList().SelectionToText(string);
          OpenURLAsync(string);
       });
       menu.Append(0, "Copy as HTML", [&]()
       {
          HeapStringBuilder string;
-         wndText.GetTextList().SelectionToHTML(string);
+         wnd_text.GetTextList().SelectionToHTML(string);
          ::Clipboard::SetText(string);
       });
       menu.AppendSeparator();
       menu.Append(0, "Delete selected lines", [&]()
          {
-            wndText.RemoveSelectedLines();
+            wnd_text.RemoveSelectedLines();
          });
 
-      wndText.GetTextList().SelectionToText(text);
+      wnd_text.GetTextList().SelectionToText(text);
    }
 
    if(auto *p_banner=location_info.m_find_element.mp_image)
@@ -2414,11 +2411,7 @@ void Wnd_Main::HandleKey(InputControl &edInput, Keys key)
 
 void Wnd_Main::SendNAWS()
 {
-   if(auto *p_server=mp_connection->GetServer(); p_server && p_server->fNAWSOnResize())
-   {
-      auto size=mp_wnd_text->GetSizeInChars();
-      mp_connection->GetTelnet().SendNAWS(size);
-   }
+   mp_connection->GetTelnet().SendNAWS(mp_wnd_text->GetSizeInChars());
 }
 
 void Wnd_Main::SendLine(ConstString _string, ConstString prefix)
@@ -3095,7 +3088,10 @@ LRESULT Wnd_MDI::On(const Msg::ExitSizeMove &msg)
    for(auto &window : m_root_wnd_main)
    {
       if(window.GetConnection().GetTelnet().m_do_naws)
-         window.SendNAWS();
+      {
+         if(auto *p_server=window.GetConnection().GetServer(); p_server && p_server->fNAWSOnResize())
+            window.SendNAWS();
+      }
    }
    return msg.Success();
 }

@@ -7,6 +7,7 @@
 // http://www.zuggsoft.com/zmud/mxp.htm - MXP
 
 #include "Main.h"
+#include "HTML.h"
 #include "Telnet.h"
 
 template<unsigned char... values>
@@ -78,12 +79,16 @@ const uint8 TELOPT_AUTHENTICATION = 37;        /* Authenticate */
 const uint8 TELOPT_ENCRYPT        = 38;        /* Encryption option */
 const uint8 TELOPT_NEW_ENVIRON    = 39;        /* New - Environment variables */
 const uint8 TELOPT_CHARSET        = 42;
+const uint8 TELOPT_SLE            = 45;        // Suppress local echo
 const uint8 TELOPT_MSDP           = 69;
 const uint8 TELOPT_MSSP           = 70;        // MUD Server Status Protocol
 const uint8 TELOPT_MCCP1          = 85;
 const uint8 TELOPT_MCCP2          = 86;        // Mud Client Compression Protocol 2
 const uint8 TELOPT_MCCP3          = 87;
+const uint8 TELOPT_MSP            = 90;
+const uint8 TELOPT_MXP            = 91;
 const uint8 TELOPT_ZMP            = 93;        // Zenith Mud Protocol
+const uint8 TELOPT_SSPI_LOGON     = 139;
 const uint8 TELOPT_GMCP           = 201;       // C9
 const uint8 TELOPT_EXOPL         = 255;        /* extended-options-list */
 
@@ -100,7 +105,6 @@ void TelnetParser::Reset()
 {
    m_buffer.Empty();
    m_state=State::Normal;
-   m_do_naws=false;
 }
 
 void TelnetParser::Parse(Array<const char> buffer)
@@ -334,10 +338,6 @@ void TelnetParser::Parse(Array<const char> buffer)
                   m_state=State::SB_WaitForIAC; continue;
                }
                break;
-
-            case State::SE:
-               m_state=State::Normal;
-               continue;
          }
          m_state=State::Normal; // Don't know what to do, so reset state and fall through
          continue;
@@ -358,4 +358,209 @@ void TelnetParser::SendNAWS(uint16_2 size)
 {
    // TELNET_IAC TELNET_SB TELOPT_NAWS (16-bits X) (16-bits Y) TELNET_IAC TELNET_SE
    m_notify.OnTelnet(FixedStringBuilder<256>("\xFF\xFA\x1F", uint8(size.x>>8), uint8(size.x), uint8(size.y>>8), uint8(size.y), "\xFF\xF0"));
+}
+
+void TelnetDebugger::Parse(Array<const uint8> buffer)
+{
+   m_color=Colors::Invalid;
+   for(uint8 c : buffer)
+   {
+      switch(m_state)
+      {
+         case State::Normal:
+            if(c==TELNET_IAC)
+            {
+               SetColor(Colors::Magenta);
+               m_string("IAC ");
+               m_state=State::IAC;
+            }
+            else
+               Char(c);
+            break;
+
+         case State::IAC:
+         {
+            IAC(c);
+            switch(c)
+            {
+               case TELNET_DONT:
+               case TELNET_DO:
+               case TELNET_WONT:
+               case TELNET_WILL: m_state=State::Negotiate; break;;
+               case TELNET_SB:   m_state=State::SB_Start; break;;
+               default: m_state=State::Normal;
+            }
+            break;
+         }
+
+         case State::Negotiate:
+            OPT(c);
+            m_state=State::Normal;
+            break;
+
+         case State::SB_Start:
+            OPT(c);
+            m_state=State::SB_Data;
+            break;
+
+         case State::SB_Data:
+            if(c==TELNET_IAC) { IAC(c); m_state=State::SB_IAC; break; }
+            Char(c);
+            continue;
+
+         case State::SB_IAC:
+            if(c==TELNET_SE)
+               IAC(c);
+            else
+               m_string("(SB_IAC did not see a TELNET_SE) ");
+            m_state=State::Normal;
+            break;
+      }
+   }
+}
+
+void TelnetDebugger::Char(uint8 c)
+{
+   switch(c)
+   {
+      case 8: SetColor(Colors::Red); m_string("BS "); return;
+      case 9: SetColor(Colors::Red); m_string("TAB "); return;
+      case 10: SetColor(Colors::Red); m_string("LF "); return;
+      case 13: SetColor(Colors::Red); m_string("CR "); return;
+      case 27: SetColor(Colors::Red); m_string("ESC "); return;
+   }
+
+   if(IsBetween<BYTE>(c, 32, 127))
+   {
+      SetColor(Colors::White);
+
+      if(c=='<')
+         m_string("&lt;");
+      else if(c=='&')
+         m_string("&amp;");
+      else
+         m_string(c);
+   }
+   else
+   {
+      SetColor(Colors::Green);
+      m_string(int(c), ' ');
+   }
+}
+
+void TelnetDebugger::IAC(uint8 v)
+{
+   ConstString label;
+   switch(v)
+   {
+      case TELOPT_BINARY: label="BINARY"; break;
+      case TELNET_IAC:    label="IAC"; break;
+      case TELNET_DONT:   label="DONT"; break;
+      case TELNET_DO:     label="DO"; break;
+      case TELNET_WONT:   label="WONT"; break;
+      case TELNET_WILL:   label="WILL"; break;
+      case TELNET_SB:     label="SB"; break;
+      case TELNET_GA:     label="GA"; break;
+      case TELNET_EL:     label="EL"; break;
+      case TELNET_EC:     label="EC"; break;
+      case TELNET_AYT:    label="AYT"; break;
+      case TELNET_AO:     label="AO"; break;
+      case TELNET_IP:     label="IP"; break;
+      case TELNET_BREAK:  label="BREAK"; break;
+      case TELNET_DM:     label="DM"; break;
+      case TELNET_NOP:    label="NOP"; break;
+      case TELNET_SE:     label="SE"; break;
+      case TELNET_EOR:    label="EOR"; break;
+      case TELNET_ABORT:  label="ABORT"; break;
+      case TELNET_SUSP:   label="SUSP"; break;
+      case TELNET_EOF:    label="EOF"; break;
+   }
+
+   SetColor(Colors::Magenta);
+   if(label)
+      m_string(label, ' ');
+   else
+   {
+      m_string("(unk)");
+      SetColor(Colors::Green, false);
+      m_string('(', int(v), ')');
+   }
+}
+
+void TelnetDebugger::OPT(uint8 v)
+{
+   ConstString label="(unk)";
+   switch(v)
+   {
+      case TELOPT_BINARY:         label="BINARY"; break;
+      case TELOPT_ECHO:           label="ECHO"; break;
+      case TELOPT_RCP:            label="RCP"; break;
+      case TELOPT_SGA:            label="SGA"; break;
+      case TELOPT_NAMS:           label="NAMS"; break;
+      case TELOPT_STATUS:         label="STATUS"; break;
+      case TELOPT_TM:             label="TM"; break;
+      case TELOPT_RCTE:           label="RCTE"; break;
+      case TELOPT_NAOL:           label="NAOL"; break;
+      case TELOPT_NAOP:           label="NAOP"; break;
+      case TELOPT_NAOCRD:         label="NAOCRD"; break;
+      case TELOPT_NAOHTS:         label="NAOHTS"; break;
+      case TELOPT_NAOHTD:         label="NAOHTD"; break;
+      case TELOPT_NAOFFD:         label="NAOFFD"; break;
+      case TELOPT_NAOVTS:         label="NAOVTS"; break;
+      case TELOPT_NAOVTD:         label="NAOVTD"; break;
+      case TELOPT_NAOLFD:         label="NAOLFD"; break;
+      case TELOPT_XASCII:         label="XASCII"; break;
+      case TELOPT_LOGOUT:         label="LOGOUT"; break;
+      case TELOPT_BM:             label="BM"; break;
+      case TELOPT_DET:            label="DET"; break;
+      case TELOPT_SUPDUP:         label="SUPDUP"; break;
+      case TELOPT_SUPDUPOUTPUT:   label="SUPDUPOUTPUT"; break;
+      case TELOPT_SNDLOC:         label="SNDLOC"; break;
+      case TELOPT_TTYPE:          label="TTYPE"; break;
+      case TELOPT_EOR:            label="EOR"; break;
+      case TELOPT_TUID:           label="TUID"; break;
+      case TELOPT_OUTMRK:         label="OUTMRK"; break;
+      case TELOPT_TTYLOC:         label="TTYLOC"; break;
+      case TELOPT_3270REGIME:     label="3270REGIME"; break;
+      case TELOPT_X3PAD:          label="X3PAD"; break;
+      case TELOPT_NAWS:           label="NAWS"; break;
+      case TELOPT_TSPEED:         label="TSPEED"; break;
+      case TELOPT_LFLOW:          label="LFLOW"; break;
+      case TELOPT_LINEMODE:       label="LINEMODE"; break;
+      case TELOPT_XDISPLOC:       label="XDISPLOC"; break;
+      case TELOPT_OLD_ENVIRON:    label="OLD_ENVIRON"; break;
+      case TELOPT_AUTHENTICATION: label="AUTHENTICATION"; break;
+      case TELOPT_ENCRYPT:        label="ENCRYPT"; break;
+      case TELOPT_NEW_ENVIRON:    label="NEW_ENVIRON"; break;
+      case TELOPT_CHARSET:        label="CHARSET"; break;
+      case TELOPT_SLE:            label="SLE"; break;
+      case TELOPT_MSDP:           label="MSDP"; break;
+      case TELOPT_MSSP:           label="MSSP"; break;
+      case TELOPT_MCCP1:          label="MCCP1"; break;
+      case TELOPT_MCCP2:          label="MCCP2"; break;
+      case TELOPT_MCCP3:          label="MCCP3"; break;
+      case TELOPT_MSP:            label="MSP"; break;
+      case TELOPT_MXP:            label="MXP"; break;
+      case TELOPT_ZMP:            label="ZMP"; break;
+      case TELOPT_SSPI_LOGON:     label="SSPI_LOGON"; break;
+      case TELOPT_GMCP:           label="GMCP"; break;
+      case TELOPT_EXOPL:          label="EXOPL"; break;
+   }
+
+   SetColor(Colors::LtBlue);
+   m_string(label);
+   SetColor(Colors::Green, false);
+   m_string('(', int(v), ") ");
+}
+
+void TelnetDebugger::SetColor(Color color, bool pad)
+{
+   if(color==m_color)
+      return;
+
+   if(pad && m_string && !m_string.EndsWith(CHAR_LF) && !m_string.EndsWith(' '))
+      m_string(' ');
+
+   m_color=color;
+   m_string("<font color='", HTML::HTMLColor(m_color), "'>");
 }

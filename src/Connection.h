@@ -23,6 +23,19 @@ namespace MCP
 #include "Telnet.h"
 #include "TextToLine.h"
 
+struct NetworkDebugHost : Text::IHost
+{
+   void On(Text::Wnd &wndText, Text::Wnd_View &wnd_view, const Msg::RButtonDown &msg, const Text::List::LocationInfo &location_info) override;
+
+   void Format(StringBuilder &string, Array<const uint8> data, bool recv);
+
+   TelnetDebugger m_telnet_send;
+   TelnetDebugger m_telnet_recv;
+
+   bool m_show_hex{false};
+   bool m_show_telnet{true};
+};
+
 struct Connection
  : DLNode<Connection>,
    IError,
@@ -305,6 +318,7 @@ private:
    UniquePtr<Log> mp_log;
    OwnerPtr<Text::Wnd> mp_network_debug;
    OwnerPtr<Text::Wnd> mp_trigger_debug;
+   NetworkDebugHost m_network_debug_host;
 
    friend struct Puppet;
    friend struct Wnd_CaptureAbort;
