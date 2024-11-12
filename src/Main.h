@@ -2,7 +2,6 @@
 #include "Objects_Sockets2.h"
 #include "Objects_Sockets_TLS.h"
 #include "Text\TextWindow.h"
-#include "Resource.h"
 #include "BuildNumber.h"
 #include "Keys.h"
 
@@ -22,7 +21,7 @@
 #define YARN 1
 #define DWRITE_TEST 1
 #else
-#define BETA_BUILD 3
+#define BETA_BUILD 5
 #define SCRIPTING 0
 #define YARN 0
 #define DWRITE_TEST 0
@@ -126,6 +125,7 @@ extern Events::SendersOf<GlobalTextSettingsModified, GlobalInputSettingsModified
 Prop::TextWindow &GlobalTextSettings();
 Prop::InputWindow &GlobalInputSettings();
 void OnGlobalTextSettingsModified(Prop::TextWindow &prop); // Called by the text dialog when changing settings
+void OnGlobalInputSettingsModified(Prop::InputWindow &prop); // Called by the input dialog when changing settings
 
 void CreateDialog_KeyboardMacros(Window wnd, Prop::Server *ppropServer, Prop::Character *ppropCharacter);
 void CloseDialog_KeyboardMacros();

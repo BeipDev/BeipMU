@@ -309,7 +309,7 @@ Prop MainWindowSettings(RefCounted)
 
    Int  InputSize = 50
    Int  HistorySize = 40
-   Flag History = true
+   Flag History = false // When false, autohistory applies
 }
 
 Prop Windows
@@ -1009,6 +1009,7 @@ Prop Global
    Flag SendUnrecognizedCommands = false
    Flag PreventSmartQuotes = true
 
+   Flag AutoShowHistory = true // When true, history window will appear automatically when navigating history
    Flag NewContentMarker = true
    Flag TaskbarBadge = true
    String VoiceID
