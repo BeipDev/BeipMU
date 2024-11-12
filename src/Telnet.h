@@ -55,10 +55,8 @@ private:
 
 struct TelnetDebugger
 {
-   HybridStringBuilder<> m_string;
-
    void Reset() { m_state=State::Normal; }
-   void Parse(Array<const uint8> buffer);
+   void Parse(StringBuilder& string, Array<const uint8> buffer);
 
 private:
 
@@ -78,6 +76,7 @@ private:
       SB_IAC,
    };
 
+   HybridStringBuilder<> m_string;
    State m_state{State::Normal};
    Color m_color{};
 };

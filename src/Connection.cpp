@@ -63,10 +63,7 @@ void NetworkDebugHost::Format(StringBuilder &string, Array<const uint8> data, bo
    if(m_show_telnet)
    {
       auto &telnet=recv ? m_telnet_recv : m_telnet_send;
-
-      telnet.Parse(data);
-      string(telnet.m_string);
-      telnet.m_string.Clear();
+      telnet.Parse(string, data);
    }
 }
 

@@ -360,7 +360,7 @@ void TelnetParser::SendNAWS(uint16_2 size)
    m_notify.OnTelnet(FixedStringBuilder<256>("\xFF\xFA\x1F", uint8(size.x>>8), uint8(size.x), uint8(size.y>>8), uint8(size.y), "\xFF\xF0"));
 }
 
-void TelnetDebugger::Parse(Array<const uint8> buffer)
+void TelnetDebugger::Parse(StringBuilder& string, Array<const uint8> buffer)
 {
    m_color=Colors::Invalid;
    for(uint8 c : buffer)
@@ -417,6 +417,7 @@ void TelnetDebugger::Parse(Array<const uint8> buffer)
             break;
       }
    }
+   string(m_string); m_string.Clear();
 }
 
 void TelnetDebugger::Char(uint8 c)
