@@ -46,10 +46,37 @@ private:
       SB_TTYPE,
       SB_WaitForIAC, // Should be done, eat until we see IAC
       SB_IAC,
-      SE,
    };
 
    State m_state{State::Normal};
    Collection<char> m_buffer;
    unsigned m_sb_start; // Index in buffer where subnegotation starts
+};
+
+struct TelnetDebugger
+{
+   void Reset() { m_state=State::Normal; }
+   void Parse(StringBuilder& string, Array<const uint8> buffer);
+
+private:
+
+   void Char(uint8 v);
+   void IAC(uint8 v);
+   void OPT(uint8 v);
+
+   void SetColor(Color color, bool pad=true);
+
+   enum struct State
+   {
+      Normal,
+      IAC,
+      Negotiate,
+      SB_Start,
+      SB_Data,
+      SB_IAC,
+   };
+
+   HybridStringBuilder<> m_string;
+   State m_state{State::Normal};
+   Color m_color{};
 };

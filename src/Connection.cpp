@@ -52,91 +52,41 @@ Connection::~Connection()
 {
 }
 
-struct DecodeBytes
+void NetworkDebugHost::Format(StringBuilder &string, Array<const uint8> data, bool recv)
 {
-   DecodeBytes(Array<const BYTE> data, StringBuilder &string) : m_string(string)
+   if(m_show_hex)
    {
       for(auto &c : data)
-      {
-         if(IsBetween<BYTE>(c, 236, 255))
-         {
-            SetColor(Colors::Magenta);
-            switch(c)
-            {
-               case 255: string("TELNET_IAC "); continue;
-               case 254: string("TELNET_DONT "); continue;
-               case 253: string("TELNET_DO "); continue;
-               case 252: string("TELNET_WONT "); continue;
-               case 251: string("TELNET_WILL "); continue;
-               case 250: string("TELNET_SB "); continue;
-               case 249: string("TELNET_GA "); continue;
-               case 248: string("TELNET_EL "); continue;
-               case 247: string("TELNET_EC "); continue;
-               case 246: string("TELNET_AYT "); continue;
-               case 245: string("TELNET_AO "); continue;
-               case 244: string("TELNET_IP "); continue;
-               case 243: string("TELNET_BREAK "); continue;
-               case 242: string("TELNET_DM "); continue;
-               case 241: string("TELNET_NOP "); continue;
-               case 240: string("TELNET_SE "); continue;
-               case 239: string("TELNET_EOR "); continue;
-               case 238: string("TELNET_ABORT "); continue;
-               case 237: string("TELNET_SUSP "); continue;
-               case 236: string("TELNET_EOF "); continue;
-            }
-         }
-
-         // Perhaps use the control char glyphs? https://en.wikipedia.org/wiki/Unicode_control_characters#Control_pictures
-         switch(c)
-         {
-            case 8: SetColor(Colors::Red); string("BS "); continue;
-            case 9: SetColor(Colors::Red); string("TAB "); continue;
-            case 10: SetColor(Colors::Red); string("LF "); continue;
-            case 13: SetColor(Colors::Red); string("CR "); continue;
-            case 27: SetColor(Colors::Red); string("ESC "); continue;
-            default:
-               if(IsBetween<BYTE>(c, 32, 127))
-               {
-                  SetColor(Colors::White);
-
-                  if(c=='<')
-                     string("&lt;");
-                  else if(c=='&')
-                     string("&amp;");
-                  else
-                     string(c);
-               }
-               else
-               {
-                  SetColor(Colors::Green);
-                  string(Strings::Hex32(c, 2), ' ');
-               }
-         }
-      }
+         string(Strings::Hex32(c, 2), ' ');
+      string(CRLF);
    }
-
-   static DWORD ColorRefToHTMLColor(COLORREF clr)
+   if(m_show_telnet)
    {
-      return clr&0x00FF00 | (clr>>16)&0xFF | (clr<<16)&0xFF0000;
+      auto &telnet=recv ? m_telnet_recv : m_telnet_send;
+      telnet.Parse(string, data);
    }
+}
 
-   void SetColor(Color color)
+void NetworkDebugHost::On(Text::Wnd &wnd_text, Text::Wnd_View &wnd_view, const Msg::RButtonDown &msg, const Text::List::LocationInfo &location_info)
+{
+   ContextMenu menu;
+
+   if(!wnd_text.GetTextList().SelectionGet())
    {
-      if(color==m_color)
-         return;
-
-      if(!m_string.EndsWith(CHAR_LF) && !m_string.EndsWith(' '))
-         m_string(' ');
-
-      m_color=color;
-      m_string("<font color='#", Strings::Hex32(ColorRefToHTMLColor(m_color), 6), "'>");
+      menu.Append(m_show_hex ? MF_CHECKED : 0, "Show hex", [&]() { m_show_hex^=true; });
+      menu.Append(m_show_telnet ? MF_CHECKED : 0, "Show telnet + ascii", [&]() { m_show_telnet^=true; });
+      menu.AppendSeparator();
+      menu.Append(0, "Find...", [&]() { CreateDialog_Find(wnd_text, wnd_text); });
+      menu.Append(wnd_text.IsUserPaused() ? MF_CHECKED : 0, "Pause", [&]() { wnd_text.SetUserPaused(!wnd_text.IsUserPaused()); });
+      menu.Append(wnd_text.IsSplit() ? MF_CHECKED : 0, "Split", [&]() { wnd_text.ToggleSplit(); });
+      menu.Append(0, "Copy screen to clipboard", [&]() { wnd_view.ScreenToClipboard(); });
+      menu.AppendSeparator();
+      menu.Append(0, "Clear", [&]() { wnd_text.Clear(); });
    }
 
-private:
+   menu.Do(TrackPopupMenu(menu, TPM_RETURNCMD, GetCursorPos(), wnd_text, nullptr));
+}
 
-   StringBuilder &m_string;
-   Color m_color{};
-};
 
 void Connection::Output(Array<const BYTE> data)
 {
@@ -144,11 +94,7 @@ void Connection::Output(Array<const BYTE> data)
    {
       HybridStringBuilder<> string("<p background-color='maroon' stroke-color='white' stroke-width='2' border-style='round' border='4' padding-bottom='4'> Received ", data.Count(), " bytes");
       mp_network_debug->AddHTML(string); string.Clear();
-      for(auto &c : data)
-         string(Strings::Hex32(c, 2), ' ');
-      string(CRLF);
-      DecodeBytes(data, string);
-      string(CRLF);
+      m_network_debug_host.Format(string, data, true);
       mp_network_debug->AddHTML(string);
    }
 
@@ -162,11 +108,7 @@ void Connection::OnTransmit(Array<const BYTE> data)
 
    HybridStringBuilder<> string("<p background-color='blue' stroke-color='white' stroke-width='2' border-style='round' border='4' padding-bottom='4'> Sent ", data.Count(), " bytes");
    mp_network_debug->AddHTML(string); string.Clear();
-   for(auto &c : data)
-      string(Strings::Hex32(c, 2), ' ');
-   string(CRLF);
-   DecodeBytes(data, string);
-   string(CRLF);
+   m_network_debug_host.Format(string, data, false);
    mp_network_debug->AddHTML(string);
 }
 
@@ -844,6 +786,8 @@ void Connection::Disconnect()
 
    m_telnet_parser.Reset();
    m_telnet_parser.m_do_naws=false;
+   m_network_debug_host.m_telnet_recv.Reset();
+   m_network_debug_host.m_telnet_send.Reset();
    RemovePrompt();
    if(!m_connect_retry)
       m_connect_retries=0;
@@ -2193,14 +2137,16 @@ void Connection::OpenNetworkDebugWindow()
       return;
    }
 
-   static Text::IHost s_dummyHost;
-   mp_network_debug=MakeUnique<Text::Wnd>(nullptr, s_dummyHost);
+   mp_network_debug=MakeUnique<Text::Wnd>(nullptr, m_network_debug_host);
 
    Prop::TextWindow &prop=g_ppropGlobal->propWindows().propMainWindowSettings().propOutput();
    mp_network_debug->SetFont(prop.propFont().pclName(), prop.propFont().Size(), prop.propFont().CharSet());
    mp_network_debug->SetSize(uint2(640,480));
-   mp_network_debug->SetText("Network Debugger");
+
+   FixedStringBuilder<256> string("Network Debugger - "); GetWorldTitle(string, 0);
+   mp_network_debug->SetText(string);
    mp_network_debug->Show(SW_SHOWNOACTIVATE);
+   mp_network_debug->AddHTML("Showing network activity, right click for options");
 }
 
 void Connection::OpenTriggerDebugWindow()

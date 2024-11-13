@@ -135,6 +135,10 @@ void CreateDialog_Aliases(Window wnd, Prop::Server *ppropServer, Prop::Character
 void CloseDialog_Aliases();
 void CreateWindow_Root(ConstString cmdLine={}, int nCmdShow=SW_SHOWDEFAULT); // Create the First Window
 
+void CreateDialog_Settings(Window wndParent);
+void CreateDialog_Find(Window wnd, Text::Wnd &wndText);
+void CreateWindow_About(Window wndParent);
+
 void CreateWindow_Subscribe(Window wndParent);
 
 bool ParseTimeInSeconds(ConstString word, float &seconds);
