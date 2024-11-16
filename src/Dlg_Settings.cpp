@@ -18,6 +18,20 @@ static void SetUIFont(Window window, ConstString face, int size)
    MessageBox(window, "Changes will be applied next time the app starts", "Note:", MB_ICONINFORMATION|MB_OK);
 }
 
+struct Setting
+{
+   virtual ~Setting() {}
+   virtual void Save()=0;
+};
+
+struct Setting_Bool : Setting
+{
+   void Save() override { m_writer(mp_checkbox->IsChecked()); }
+
+   std::function<void(bool v)> m_writer;
+   AL::CheckBox *mp_checkbox;
+};
+
 struct SettingsDialog : Wnd_ChildDialog
 {
    virtual void Save()=0;
@@ -64,6 +78,32 @@ struct SettingsDialog : Wnd_ChildDialog
 
    AL::Group &GetRoot() { return *mp_root; }
 
+   void SaveSettings()
+   {
+      for(auto &p : m_settings)
+         p->Save();
+   }
+
+   AL::CheckBox* AddBool(AL::Group &g, ConstString label, bool value, std::function<void(bool v)> writer)
+   {
+      auto p_setting=MakeUnique<Setting_Bool>();
+      p_setting->m_writer=writer;
+      p_setting->mp_checkbox=m_layout.CreateCheckBox(-1, label);
+      p_setting->mp_checkbox->Check(value);
+      g << p_setting->mp_checkbox;
+
+      auto *p_checkbox=p_setting->mp_checkbox;
+      m_settings.Push(std::move(p_setting));
+      return p_checkbox;
+   }
+
+   AL::CheckBox* AddBool(AL::Group &g, ConstString label, bool &value)
+   {
+      return AddBool(g, label, value, [&value](bool v) { value=v; });
+   }
+
+   Collection<UniquePtr<Setting>> m_settings;
+
 private:
    AL::Group *mp_root{};
    bool m_first{true};
@@ -83,11 +123,6 @@ private:
    // Window Messages
    using SettingsDialog::On;
 
-   AL::CheckBox *m_pcbAskBeforeClosing, *m_pcbAskBeforeDisconnecting;
-   AL::CheckBox *m_pcbActivateDisconnect;
-   AL::CheckBox *m_pcbAutoImageViewer;
-   AL::CheckBox *m_pcbAnimatedImagesStartPaused;
-   AL::CheckBox *m_pcbInlineImages;
    AL::Edit     *mp_inline_image_height;
    AL::Edit     *mp_avatar_width, *mp_avatar_height;
 
@@ -102,20 +137,12 @@ LRESULT Dlg_General::WndProc(const Message &msg)
 void Dlg_General::Save()
 {
    // Windows
-   g_ppropGlobal->propConnections().fActivateDisconnect(m_pcbActivateDisconnect->IsChecked());
-   g_ppropGlobal->fAutoImageViewer(m_pcbAutoImageViewer->IsChecked());
-   g_ppropGlobal->fAnimatedImagesStartPaused(m_pcbAnimatedImagesStartPaused->IsChecked());
-   g_ppropGlobal->fInlineImages(m_pcbInlineImages->IsChecked());
    if(int value;mp_inline_image_height->Get(value))
       g_ppropGlobal->InlineImageHeight(value);
    if(int value;mp_avatar_width->Get(value))
       g_ppropGlobal->AvatarWidth(value);
    if(int value;mp_avatar_height->Get(value))
       g_ppropGlobal->AvatarHeight(value);
-
-   // Alerts
-   g_ppropGlobal->propWindows().fAskBeforeClosing(m_pcbAskBeforeClosing->IsChecked());
-   g_ppropGlobal->propWindows().fAskBeforeDisconnecting(m_pcbAskBeforeDisconnecting->IsChecked());
 
    // Speech Voice
    if(m_coVoice.GetCount()>1)
@@ -142,24 +169,18 @@ void Dlg_General::OnCreate()
       auto &g=CreateSection(STR_Windows);
       g >> AL::Style::Attach_Right;
 
-      m_pcbActivateDisconnect=m_layout.CreateCheckBox(-1, STR_ActivateDisconnect);
-      g << m_pcbActivateDisconnect;
-
-      m_pcbAutoImageViewer=m_layout.CreateCheckBox(-1, "Show image viewer automatically");
-      g << m_pcbAutoImageViewer;
-
+      AddBool(g, STR_ActivateDisconnect, g_ppropGlobal->propConnections().fActivateDisconnect());
+      AddBool(g, "Show image viewer automatically", g_ppropGlobal->fAutoImageViewer());
       {
          auto *p_gh=m_layout.CreateGroup_Horizontal(); g << p_gh;
 
-         m_pcbInlineImages=m_layout.CreateCheckBox(-1, "Show images inline, with height");
-         *p_gh << m_pcbInlineImages;
+         AddBool(*p_gh, "Show images inline, with height", g_ppropGlobal->fInlineImages());
 
          mp_inline_image_height=m_layout.CreateEdit(-1, int2(5, 1), ES_NUMBER);
          *p_gh << mp_inline_image_height << m_layout.CreateStatic("dips");
       }
 
-      m_pcbAnimatedImagesStartPaused=m_layout.CreateCheckBox(-1, "Animated images start as paused");
-      g << m_pcbAnimatedImagesStartPaused;
+      AddBool(g, "Animated images start as paused", g_ppropGlobal->fAnimatedImagesStartPaused());
 
       {
          auto *p_gh=m_layout.CreateGroup_Horizontal(); g << p_gh;
@@ -172,10 +193,8 @@ void Dlg_General::OnCreate()
    {
       auto &g=CreateSection(STR_Alerts);
 
-      m_pcbAskBeforeDisconnecting=m_layout.CreateCheckBox(-1, STR_AskBeforeDisconnecting);
-      m_pcbAskBeforeClosing=m_layout.CreateCheckBox(-1, STR_AskBeforeClosing);
-
-      g << m_pcbAskBeforeDisconnecting << m_pcbAskBeforeClosing;
+      AddBool(g, STR_AskBeforeDisconnecting, g_ppropGlobal->propWindows().fAskBeforeDisconnecting());
+      AddBool(g, STR_AskBeforeClosing, g_ppropGlobal->propWindows().fAskBeforeClosing());
    }
    {
       auto &g=CreateSection("Speech");
@@ -188,17 +207,9 @@ void Dlg_General::OnCreate()
    }
 
    // Windows
-   m_pcbActivateDisconnect->Check(g_ppropGlobal->propConnections().fActivateDisconnect());
-   m_pcbAutoImageViewer->Check(g_ppropGlobal->fAutoImageViewer());
-   m_pcbAnimatedImagesStartPaused->Check(g_ppropGlobal->fAnimatedImagesStartPaused());
-   m_pcbInlineImages->Check(g_ppropGlobal->fInlineImages());
    mp_inline_image_height->Set(g_ppropGlobal->InlineImageHeight());
    mp_avatar_width->Set(g_ppropGlobal->AvatarWidth());
    mp_avatar_height->Set(g_ppropGlobal->AvatarHeight());
-
-   // Alerts
-   m_pcbAskBeforeClosing->Check(g_ppropGlobal->propWindows().fAskBeforeClosing());
-   m_pcbAskBeforeDisconnecting->Check(g_ppropGlobal->propWindows().fAskBeforeDisconnecting());
 
    // Speech
    for(auto &voice : SAPI::GetInstance().GetVoices())
@@ -230,10 +241,6 @@ private:
    using SettingsDialog::On;
    LRESULT On(const Msg::Command &msg);
 
-   AL::CheckBox *m_pcbSendUnrecognizedCommands;
-   AL::CheckBox *m_pcbPreventSmartQuotes;
-   AL::CheckBox *m_pcbAutoShowHistory;
-
    AL::CheckBox *m_pcbSpellCheck;
    Controls::TComboBox<OwnedString> m_coSpellLanguage;
 };
@@ -245,11 +252,6 @@ LRESULT Dlg_Input::WndProc(const Message &msg)
 
 void Dlg_Input::Save()
 {
-   // Windows
-   g_ppropGlobal->fSendUnrecognizedCommands(m_pcbSendUnrecognizedCommands->IsChecked());
-   g_ppropGlobal->fPreventSmartQuotes(m_pcbPreventSmartQuotes->IsChecked());
-   g_ppropGlobal->fAutoShowHistory(m_pcbAutoShowHistory->IsChecked());
-
    // SpellCheck
    {
       bool changed=m_pcbSpellCheck->IsChecked()!=g_ppropGlobal->fSpellCheck();
@@ -284,15 +286,9 @@ void Dlg_Input::OnCreate()
       auto &g=CreateSection("Options");
       g >> AL::Style::Attach_Right;
 
-      m_pcbSendUnrecognizedCommands=m_layout.CreateCheckBox(-1, "Send unrecognized commands to server");
-      g << m_pcbSendUnrecognizedCommands;
-
-      m_pcbPreventSmartQuotes=m_layout.CreateCheckBox(-1, "Prevent smart quote mode (no “” quotes, only \")");
-      g << m_pcbPreventSmartQuotes;
-
-      m_pcbAutoShowHistory=m_layout.CreateCheckBox(-1, "Automatically show history window while navigating input history");
-      g << m_pcbAutoShowHistory;
-
+      AddBool(g, "Send unrecognized commands to server", g_ppropGlobal->fSendUnrecognizedCommands());
+      AddBool(g, "Prevent smart quote mode (no “” quotes, only \")", g_ppropGlobal->fPreventSmartQuotes());
+      AddBool(g, "Automatically show history window while navigating input history", g_ppropGlobal->fAutoShowHistory());
    }
 
    {
@@ -307,10 +303,6 @@ void Dlg_Input::OnCreate()
          gh << m_layout.AddComboBox(m_coSpellLanguage);
       }
    }
-
-   m_pcbSendUnrecognizedCommands->Check(g_ppropGlobal->fSendUnrecognizedCommands());
-   m_pcbPreventSmartQuotes->Check(g_ppropGlobal->fPreventSmartQuotes());
-   m_pcbAutoShowHistory->Check(g_ppropGlobal->fAutoShowHistory());
 
    // Spell Check
    {
@@ -666,15 +658,8 @@ private:
    // Color List
    Controls::ListBox m_lbColors;
 
-   AL::CheckBox *m_pcbPreventInvisible, *m_pcbResetOnNewLine;
-   AL::CheckBox *m_pcbFontBold;
-   AL::CheckBox *m_pcbParseBlinking;
-
-   AL::CheckBox *m_pcbBeep;
    AL::Radio *m_pcbBeepSystem, *m_pcbBeepCustom;
    AL::Edit *m_pedBeepFileName;
-
-   AL::CheckBox *m_pcbParse;
 
    Prop::Ansi   &m_propAnsi{g_ppropGlobal->propAnsi()};
    Prop::Colors &m_propColors{g_ppropGlobal->propAnsi().propColors()};
@@ -695,16 +680,7 @@ LRESULT Dlg_AnsiColors::WndProc(const Message &msg)
 
 void Dlg_AnsiColors::Save()
 {
-   m_propAnsi.fParse(m_pcbParse->IsChecked());
-
-   m_propAnsi.fPreventInvisible(m_pcbPreventInvisible->IsChecked());
-   m_propAnsi.fResetOnNewLine(m_pcbResetOnNewLine->IsChecked());
-   m_propAnsi.fFontBold(m_pcbFontBold->IsChecked());
-   m_propAnsi.FlashSpeed(m_pcbParseBlinking->IsChecked() ? 500 : 0);
-
-   m_propAnsi.fBeep(m_pcbBeep->IsChecked());
    m_propAnsi.fBeepSystem(m_pcbBeepSystem->IsChecked());
-
    m_propAnsi.pclBeepFileName(m_pedBeepFileName->GetText());
 }
 
@@ -744,16 +720,10 @@ void Dlg_AnsiColors::OnCreate()
    }
    {
       auto &g=CreateSection(STR_Appearance);
-      m_pcbPreventInvisible=m_layout.CreateCheckBox(-1, STR_PreventInvisible);
-      m_pcbPreventInvisible->Check(m_propAnsi.fPreventInvisible());
-      m_pcbResetOnNewLine=m_layout.CreateCheckBox(-1, STR_ResetOnNewLine);
-      m_pcbResetOnNewLine->Check(m_propAnsi.fResetOnNewLine());
-      m_pcbFontBold=m_layout.CreateCheckBox(-1, STR_UseFontBold);
-      m_pcbFontBold->Check(m_propAnsi.fFontBold());
-      m_pcbParseBlinking=m_layout.CreateCheckBox(-1, "Parse Blinking");
-      m_pcbParseBlinking->Check(m_propAnsi.FlashSpeed()!=0);
-
-      g << m_pcbPreventInvisible << m_pcbResetOnNewLine << m_pcbFontBold << m_pcbParseBlinking;
+      AddBool(g, STR_PreventInvisible, m_propAnsi.fPreventInvisible());
+      AddBool(g, STR_ResetOnNewLine, m_propAnsi.fResetOnNewLine());
+      AddBool(g, STR_UseFontBold, m_propAnsi.fFontBold());
+      AddBool(g, "Parse Blinking", m_propAnsi.FlashSpeed()!=0, [this](bool v) { m_propAnsi.FlashSpeed(v ? 500 : 0);  });
    }
    {
       auto &g=CreateSection(STR_Beep);
@@ -762,11 +732,9 @@ void Dlg_AnsiColors::OnCreate()
       {
          AL::Group_Vertical *pGV=m_layout.CreateGroup_Vertical(); *pGH << pGV;
 
-         m_pcbBeep=m_layout.CreateCheckBox(-1, STR_EnableBeep);
-         m_pcbBeep->Check(m_propAnsi.fBeep());
+         AddBool(*pGV, STR_EnableBeep, m_propAnsi.fBeep());
          m_pcbBeepSystem=m_layout.CreateRadio(-1, STR_UseSystemBeep, true);
-
-         *pGV << m_pcbBeep << m_pcbBeepSystem;
+         *pGV << m_pcbBeepSystem;
 
          AL::Group_Horizontal *pGH=m_layout.CreateGroup_Horizontal(); *pGV << pGH; *pGH >> AL::Style::Attach_Vert;
          m_pcbBeepCustom=m_layout.CreateRadio(-1, STR_Custom);
@@ -786,11 +754,7 @@ void Dlg_AnsiColors::OnCreate()
    }
    {
       auto &g=CreateSection("Misc");
-
-      m_pcbParse=m_layout.CreateCheckBox(-1, STR_ParseAnsi); m_pcbParse->weight(1);
-      m_pcbParse->Check(m_propAnsi.fParse());
-
-      g << m_pcbParse;
+      AddBool(g, STR_ParseAnsi, m_propAnsi.fParse());
    }
 
    for(auto *p_color : m_propColors.GetDataInfos())
@@ -1118,8 +1082,6 @@ private:
    AL::CheckBox *m_pcbColors;
    AL::ListBox *m_plbColors;
    AL::Button *m_pbtChange, *m_pbtDefault;
-
-   AL::CheckBox *m_pcbDarkMode;
 };
 
 LRESULT Dlg_UITheme::WndProc(const Message &msg)
@@ -1137,8 +1099,6 @@ LRESULT Dlg_UITheme::WndProc(const Message &msg)
 
 void Dlg_UITheme::Save()
 {
-   // UI
-   g_ppropGlobal->fDarkMode(m_pcbDarkMode->IsChecked());
    if(g_ppropGlobal->fPropCustomTheme())
       SaveCustomTheme();
 }
@@ -1150,8 +1110,7 @@ void Dlg_UITheme::OnCreate()
    {
       auto &g=CreateSection("General", 0);
 
-      m_pcbDarkMode=m_layout.CreateCheckBox(-1, "Dark title bar/scrollbars (Requires app restart)");
-      g << m_pcbDarkMode;
+      AddBool(g, "Dark title bar/scrollbars (Requires app restart)", g_ppropGlobal->fDarkMode());
 
       {
          auto *pGH=m_layout.CreateGroup_Horizontal(); g << pGH;
@@ -1194,7 +1153,6 @@ void Dlg_UITheme::OnCreate()
    }
 
    // UI
-   m_pcbDarkMode->Check(g_ppropGlobal->fDarkMode());
    m_pcbColors->Check(g_ppropGlobal->fPropCustomTheme());
    m_lbPresets.SetCurSel(g_ppropGlobal->Theme());
 
@@ -1364,10 +1322,6 @@ private:
 
    AL::Edit *m_pedConnectTimeout, *m_pedConnectRetry;
    AL::CheckBox *m_pcbRetryForever;
-   AL::CheckBox *m_pcbIgnoreErrors;
-
-   AL::CheckBox *m_pcbTCP_KeepAlive;
-   AL::CheckBox *m_pcbTCP_NoDelay;
 };
 
 LRESULT Dlg_Network::WndProc(const Message &msg)
@@ -1387,11 +1341,6 @@ void Dlg_Network::Save()
       ppropConnections->ConnectRetry(value);
 
    ppropConnections->fRetryForever(m_pcbRetryForever->IsChecked());
-   ppropConnections->fIgnoreErrors(m_pcbIgnoreErrors->IsChecked());
-
-   // Networking
-   g_ppropGlobal->fTCP_KeepAlive(m_pcbTCP_KeepAlive->IsChecked());
-   g_ppropGlobal->fTCP_NoDelay(m_pcbTCP_NoDelay->IsChecked());
 }
 
 void Dlg_Network::UpdateEnabled()
@@ -1424,16 +1373,13 @@ void Dlg_Network::OnCreate()
          *pG1 << pConnectRetry << m_pedConnectRetry << m_layout.CreateStatic(STR_Times)
                << m_pcbRetryForever;
       }
-      m_pcbIgnoreErrors=m_layout.CreateCheckBox(-1, "Ignore errors when retrying");
-      g << m_pcbIgnoreErrors;
+      AddBool(g, "Ignore errors when retrying", g_ppropGlobal->propConnections().fIgnoreErrors());
    }
    {
       auto &g=CreateSection("Advanced Settings");
 
-      m_pcbTCP_KeepAlive=m_layout.CreateCheckBox(-1, STR_TCP_KeepAlive);
-      m_pcbTCP_NoDelay=m_layout.CreateCheckBox(-1, STR_TCP_NoDelay);
-
-      g << m_pcbTCP_KeepAlive << m_pcbTCP_NoDelay;
+      AddBool(g, STR_TCP_KeepAlive, g_ppropGlobal->fTCP_KeepAlive());
+      AddBool(g, STR_TCP_NoDelay, g_ppropGlobal->fTCP_NoDelay());
    }
 
    // Connections
@@ -1446,11 +1392,6 @@ void Dlg_Network::OnCreate()
    m_pedConnectRetry->Set(ppropConnections->ConnectRetry());
 
    m_pcbRetryForever->Check(ppropConnections->fRetryForever());
-   m_pcbIgnoreErrors->Check(ppropConnections->fIgnoreErrors());
-
-   // Networking
-   m_pcbTCP_KeepAlive->Check(g_ppropGlobal->fTCP_KeepAlive());
-   m_pcbTCP_NoDelay->Check(g_ppropGlobal->fTCP_NoDelay());
 
    UpdateEnabled();
 }
@@ -1481,9 +1422,6 @@ private:
    AL::Radio *m_pcbActivityNotify_None, *m_pcbActivityNotify_Blink;
    AL::Radio *m_pcbActivityNotify_Solid;
    AL::CheckBox *m_pcbTaskbarBadge{};
-   AL::CheckBox *m_pcbTaskbarOnTop;
-   AL::CheckBox *m_pcb_show_typed;
-   AL::CheckBox *m_pcb_show_logging;
 };
 
 LRESULT Dlg_Taskbar::WndProc(const Message &msg)
@@ -1506,11 +1444,6 @@ void Dlg_Taskbar::Save()
       g_ppropGlobal->fTaskbarBadge(m_pcbTaskbarBadge->IsChecked());
       Wnd_MDI::RefreshBadgeCount();
    }
-
-   // Options
-   g_ppropGlobal->fTaskbarOnTop(m_pcbTaskbarOnTop->IsChecked());
-   g_ppropGlobal->fTaskbarShowTyped(m_pcb_show_typed->IsChecked());
-   g_ppropGlobal->fTaskbarShowLogging(m_pcb_show_logging->IsChecked());
 }
 
 void Dlg_Taskbar::UpdateEnabled()
@@ -1534,10 +1467,9 @@ void Dlg_Taskbar::OnCreate()
 
    {
       auto &g=CreateSection("Options");
-      m_pcbTaskbarOnTop=m_layout.CreateCheckBox(-1, "Taskbar at top");
-      m_pcb_show_typed=m_layout.CreateCheckBox(-1, "Show Typed field");
-      m_pcb_show_logging=m_layout.CreateCheckBox(-1, "Show red dot on tab when logging");
-      g << m_pcbTaskbarOnTop << m_pcb_show_typed << m_pcb_show_logging;
+      AddBool(g, "Taskbar at top", g_ppropGlobal->fTaskbarOnTop());
+      AddBool(g, "Show Typed field", g_ppropGlobal->fTaskbarShowTyped());
+      AddBool(g, "Show red dot on tab when logging", g_ppropGlobal->fTaskbarShowLogging());
 
       if(IsStoreApp())
          m_pcbTaskbarBadge=m_layout.CreateCheckBox(-1, "Show Taskbar Badge for activity");
@@ -1559,11 +1491,6 @@ void Dlg_Taskbar::OnCreate()
 
    if(m_pcbTaskbarBadge)
       m_pcbTaskbarBadge->Check(g_ppropGlobal->fTaskbarBadge());
-
-   // Options
-   m_pcbTaskbarOnTop->Check(g_ppropGlobal->fTaskbarOnTop());
-   m_pcb_show_typed->Check(g_ppropGlobal->fTaskbarShowTyped());
-   m_pcb_show_logging->Check(g_ppropGlobal->fTaskbarShowLogging());
 
    UpdateEnabled();
 }
@@ -1914,7 +1841,6 @@ private:
    void OnCreate() override;
    void Update();
 
-   AL::CheckBox *m_pcbRestoreLogs;
    AL::Edit *m_pedRestoreBufferSize;
 
    Prop::Logging *m_ppropLogging{&g_ppropGlobal->propConnections().propLogging()};
@@ -1927,8 +1853,6 @@ LRESULT Dlg_RestoreLogs::WndProc(const Message &msg)
 
 void Dlg_RestoreLogs::Save()
 {
-   m_ppropLogging->fRestoreLogs(m_pcbRestoreLogs->IsChecked());
-
    if(unsigned value;m_pedRestoreBufferSize->Get(value))
       m_ppropLogging->RestoreBufferSize(value);
 
@@ -1946,10 +1870,7 @@ void Dlg_RestoreLogs::OnCreate()
    g << m_layout.CreateStatic("The restore log is what refills the windows with the contents they\nheld when the app was last closed.\nThe data is stored in the file Restore.dat\n");
 
    {
-      m_pcbRestoreLogs=m_layout.CreateCheckBox(-1, "Enabled");
-      m_pcbRestoreLogs->Check(m_ppropLogging->fRestoreLogs());
-
-      g << m_pcbRestoreLogs;
+      AddBool(g, "Enabled", m_ppropLogging->fRestoreLogs());
 
       {
          AL::Group *pGH=m_layout.CreateGroup_Horizontal(); g << pGH;
@@ -2018,7 +1939,6 @@ LRESULT Dlg_Emoji::WndProc(const Message &msg)
 
 void Dlg_Emoji::Save()
 {
-   g_ppropGlobal->fParseEmoticons(m_pcbEnabled->IsChecked());
 }
 
 void Dlg_Emoji::Update()
@@ -2031,14 +1951,11 @@ void Dlg_Emoji::Update()
 
 void Dlg_Emoji::OnCreate()
 {
-   m_pcbEnabled=m_layout.CreateCheckBox(-1, "Enabled");
    m_pInfo=m_layout.CreateStatic("(Placeholder)");
    m_pbtMakeCopy=m_layout.CreateButton(IDC_MAKE_COPY, "Make an editable copy in config location");
    m_pbtEdit=m_layout.CreateButton(IDC_EDIT, "Edit editable copy in notepad");
    m_pbtReload=m_layout.CreateButton(IDC_RELOAD, "Reload Emoji.txt");
    m_pbtRevert=m_layout.CreateButton(IDC_REVERT, "Delete editable copy and use defaults");
-
-   Update();
 
    auto &g=CreateSection("Auto Emoji");
 
@@ -2053,9 +1970,9 @@ void Dlg_Emoji::OnCreate()
    if(!m_available)
       g << m_layout.CreateStatic("NOTE: No emoji translation files present, requires Assets\\Emoji.txt\nor a copy in the same location as Config.txt to function\n");
 
-   g.Add(m_pcbEnabled, m_pInfo, m_pbtMakeCopy, m_pbtRevert, m_pbtReload, m_pbtEdit);
-
-   m_pcbEnabled->Check(g_ppropGlobal->fParseEmoticons());
+   m_pcbEnabled=AddBool(g, "Enabled", g_ppropGlobal->fParseEmoticons());
+   g.Add(m_pInfo, m_pbtMakeCopy, m_pbtRevert, m_pbtReload, m_pbtEdit);
+   Update();
 }
 
 LRESULT Dlg_Emoji::On(const Msg::CtlColor &msg)
@@ -2377,7 +2294,10 @@ LRESULT Dlg_Settings::On(const Msg::Command &msg)
    {
       case IDOK:
          for(auto &d : m_dialogs)
+         {
             d->Save();
+            d->SaveSettings();
+         }
          Global_PropChange();
          __fallthrough;
       case IDCANCEL:

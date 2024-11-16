@@ -16,7 +16,7 @@
 //   UInt32 - 32-bit Unsigned integer
 //   UInt64 - 64-bit Unsigned integer
 //   Flag   - Flags (true/false)
-//   Byte   - Byte values (values between 0-255)
+//   Uint8  - Byte values (values between 0-255)
 //   Color  - Color values (RGB values, or color names)
 //   Rect   - Rectangle coordinates
 //   float  - Floating point value
@@ -81,7 +81,7 @@ Prop Font
    Flag   Bold      = false
    Flag   Underline = false
    Flag   Strikeout = false
-   Byte   CharSet   = DEFAULT_CHARSET
+   UInt8  CharSet   = DEFAULT_CHARSET
 
    Func "unsigned SizeInPoints() const { return MulDiv(Size(), 72, 96); }"
    Func "Handle<HFONT> CreateFont() const;"

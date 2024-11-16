@@ -1,8 +1,16 @@
 4.00.328
 
+Tabs can now drag between windows and into new windows
 Added voice selector in Settings for speech playback
 Fixed Windows 10 bug where recording icon doesn't appear on taskbar
 Fixed crash on wine when connecting to sample characters
+Add keyboard shortcut for "Close all windows and exit"
+Add .clientOutput and .clientInput CSS styles to WebViews for easy matching of main window styles
+Add AddToInputHistory to WebView API
+Add "Mute Audio" right click option for tabs
+Add "Automatically show history window while navigating input history" global option
+Default input history window to off due to above item, users can still set it to always be visible
+Improve Network Debugger telnet display, now processes more of telnet to better display options and subnegotiations
 
 4.00.327 - 2024-4-14
 
