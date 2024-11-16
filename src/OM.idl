@@ -96,7 +96,7 @@ library BeipMU
 
 //		[propget] HRESULT UserData([out, retval] VARIANT *pVar);
 //		[propput] void UserData([in] VARIANT var);
-	}
+   }
  
    [ uuid(72dcbdbb-e23a-4b9e-a65a-88fe98490ce7) ]
    dispinterface _IWindow_Text_Events
@@ -106,20 +106,20 @@ library BeipMU
          [id(1)] void OnPause([in] VARIANT_BOOL paused);
    }
 
-	[ uuid(E50E3B98-5AE1-4fe7-814A-4B1B1A188EF2), oleautomation, dual, nonextensible ]
-	interface IWindow_Control_Edit : IDispatch
-	{
-		HRESULT SetSel([in] int start, [in] int end);
-		HRESULT GetSelStart([out, retval] int *retval);
-		HRESULT GetSelEnd([out, retval] int *retval);
+   [ uuid(E50E3B98-5AE1-4fe7-814A-4B1B1A188EF2), oleautomation, dual, nonextensible ]
+   interface IWindow_Control_Edit : IDispatch
+   {
+      HRESULT SetSel([in] int start, [in] int end);
+      HRESULT GetSelStart([out, retval] int *retval);
+      HRESULT GetSelEnd([out, retval] int *retval);
 
-		[propget] HRESULT Length([out, retval] int *retval);
+      [propget] HRESULT Length([out, retval] int *retval);
 
-		HRESULT Set([in] BSTR bstr);
-		HRESULT Get([out, retval] BSTR *retval);
+      HRESULT Set([in] BSTR bstr);
+      HRESULT Get([out, retval] BSTR *retval);
 
 //      [local, propget] HRESULT HWND([out, retval] void **hwnd);
-	}
+   }
 
    [ uuid(479a8e11-1a05-464d-afec-6c32a7a3a3b5), oleautomation, dual, nonextensible ]
    interface ILog : IDispatch
@@ -131,38 +131,38 @@ library BeipMU
    }
 
    [ uuid(36A385C5-A258-4210-A61C-EB3890501903), oleautomation, dual, nonextensible ]
-	interface IConnection : IDispatch
-	{
-		HRESULT Send([in] BSTR bstr); // Text about to be sent
-		HRESULT SetOnSend([in, defaultvalue(0)] IDispatch *pDisp, [in, defaultvalue(0)] VARIANT var);
-		// OnSend(bstr Text, var);
-		HRESULT Transmit([in] BSTR bstr); // Send the text to the connection
+   interface IConnection : IDispatch
+   {
+      HRESULT Send([in] BSTR bstr); // Text about to be sent
+      HRESULT SetOnSend([in, defaultvalue(0)] IDispatch *pDisp, [in, defaultvalue(0)] VARIANT var);
+      // OnSend(bstr Text, var);
+      HRESULT Transmit([in] BSTR bstr); // Send the text to the connection
 
-		HRESULT Receive([in] BSTR bstr); // Act as though the given string was received from the connection
-		HRESULT SetOnReceive([in, defaultvalue(0)] IDispatch *pDisp, [in, defaultvalue(0)] VARIANT var);
-		// OnReceive(bstr Text, var);
+      HRESULT Receive([in] BSTR bstr); // Act as though the given string was received from the connection
+      HRESULT SetOnReceive([in, defaultvalue(0)] IDispatch *pDisp, [in, defaultvalue(0)] VARIANT var);
+      // OnReceive(bstr Text, var);
 
-		HRESULT Display([in] BSTR bstr); // 
-		HRESULT SetOnDisplay([in, defaultvalue(0)] IDispatch *pDisp, [in, defaultvalue(0)] VARIANT var);
-		// OnDisplay(ITextWindowLine, var);
+      HRESULT Display([in] BSTR bstr); // 
+      HRESULT SetOnDisplay([in, defaultvalue(0)] IDispatch *pDisp, [in, defaultvalue(0)] VARIANT var);
+      // OnDisplay(ITextWindowLine, var);
 
       HRESULT SetOnGMCP([in, defaultvalue(0)] IDispatch *pDisp, [in, defaultvalue(0)] VARIANT var);
 
-		HRESULT SetOnConnect([in, defaultvalue(0)] IDispatch *pDisp, [in, defaultvalue(0)] VARIANT var);
-		HRESULT SetOnDisconnect([in, defaultvalue(0)] IDispatch *pDisp, [in, defaultvalue(0)] VARIANT var);
+      HRESULT SetOnConnect([in, defaultvalue(0)] IDispatch *pDisp, [in, defaultvalue(0)] VARIANT var);
+      HRESULT SetOnDisconnect([in, defaultvalue(0)] IDispatch *pDisp, [in, defaultvalue(0)] VARIANT var);
 
-		HRESULT IsConnected([out, retval] VARIANT_BOOL *);
+      HRESULT IsConnected([out, retval] VARIANT_BOOL *);
       HRESULT Reconnect([out, retval] VARIANT_BOOL *); // Returns TRUE if reconnect possible
 
       HRESULT IsLogging([out, retval] VARIANT_BOOL *);
       [propget] HRESULT Log([out, retval] ILog **);
 
-		[propget] HRESULT World([out, retval] IWorld **);
-		[propget] HRESULT Character([out, retval] ICharacter **);
+      [propget] HRESULT World([out, retval] IWorld **);
+      [propget] HRESULT Character([out, retval] ICharacter **);
       [propget] HRESULT Puppet([out, retval] IPuppet **);
 
-  		[propget] HRESULT Window_Main([out, retval] IWindow_Main **retval);
-	}
+      [propget] HRESULT Window_Main([out, retval] IWindow_Main **retval);
+   }
 
    [ uuid(02ac3aaa-9650-4087-8d3c-719de645b1a9) ]
    dispinterface _IConnection_Events
@@ -251,58 +251,58 @@ library BeipMU
       [default, source] dispinterface _IWindow_Main_Events;
    }
 
-	[ uuid(E9440711-EB4F-4250-AE95-5DB339E27C98), oleautomation, dual, nonextensible ]
-	interface IWindows : IDispatch
-	{
-		[propget, id(DISPID_VALUE)] HRESULT Item([in] VARIANT var, [out, retval] IWindow_Main** retval);
-		[propget] HRESULT Count([out, retval] long *);
-	}
+   [ uuid(E9440711-EB4F-4250-AE95-5DB339E27C98), oleautomation, dual, nonextensible ]
+   interface IWindows : IDispatch
+   {
+      [propget, id(DISPID_VALUE)] HRESULT Item([in] VARIANT var, [out, retval] IWindow_Main** retval);
+      [propget] HRESULT Count([out, retval] long *);
+   }
 
-	[ uuid(9B7F5272-55B2-43ef-9E46-545F8D866AD8), oleautomation, dual, nonextensible ]
-	interface IWindow_FixedText : IDispatch
-	{
+   [ uuid(9B7F5272-55B2-43ef-9E46-545F8D866AD8), oleautomation, dual, nonextensible ]
+   interface IWindow_FixedText : IDispatch
+   {
       [propget] HRESULT Events([out, retval] IWindow_Events **retval);
       [propget] HRESULT Properties([out, retval] IWindow_Properties **retval);
 
-		[propput] HRESULT CursorX([in] int X);
-		[propget] HRESULT CursorX([out, retval] int *pX);
-		[propput] HRESULT CursorY([in] int Y);
-		[propget] HRESULT CursorY([out, retval] int *pY);
+      [propput] HRESULT CursorX([in] int X);
+      [propget] HRESULT CursorX([out, retval] int *pX);
+      [propput] HRESULT CursorY([in] int Y);
+      [propget] HRESULT CursorY([out, retval] int *pY);
 
-		HRESULT Clear();
-		HRESULT Write([in] BSTR);
-	}
+      HRESULT Clear();
+      HRESULT Write([in] BSTR);
+   }
 
-	[ uuid(2531C240-64EA-4293-B08A-A9C1F9271627), oleautomation, dual, nonextensible ]
-	interface ITimer : IDispatch
-	{
-		[propget] HRESULT UserData([out, retval] VARIANT *pVar);
-		[propput] void UserData([in] VARIANT var);
+   [ uuid(2531C240-64EA-4293-B08A-A9C1F9271627), oleautomation, dual, nonextensible ]
+   interface ITimer : IDispatch
+   {
+      [propget] HRESULT UserData([out, retval] VARIANT *pVar);
+      [propput] void UserData([in] VARIANT var);
 
-		void Kill();
+      void Kill();
       [propget] HRESULT Active([out, retval] VARIANT_BOOL *retval);
-	}
+   }
 
-	[ uuid(71569D4A-704F-4fb3-8F18-CE0E0EE634F3), oleautomation, dual, nonextensible ]
-	interface IWindow_Graphics : IDispatch
-	{
+   [ uuid(71569D4A-704F-4fb3-8F18-CE0E0EE634F3), oleautomation, dual, nonextensible ]
+   interface IWindow_Graphics : IDispatch
+   {
       [propget] HRESULT Events([out, retval] IWindow_Events **retval);
       [propget] HRESULT Properties([out, retval] IWindow_Properties **retval);
 
-		[propget] HRESULT Width([out, retval] int *);
-		[propget] HRESULT Height([out, retval] int *);
+      [propget] HRESULT Width([out, retval] int *);
+      [propget] HRESULT Height([out, retval] int *);
 
-		HRESULT Clear([in, defaultvalue(0)] long lColor);
+      HRESULT Clear([in, defaultvalue(0)] long lColor);
 
-		HRESULT SetPixel([in] int x, [in] int y, [in] long lColor);
-		HRESULT GetPixel([in] int x, [in] int y, [out, retval] long *);
+      HRESULT SetPixel([in] int x, [in] int y, [in] long lColor);
+      HRESULT GetPixel([in] int x, [in] int y, [out, retval] long *);
 
-		HRESULT SetPen([in] long lColor, [in, defaultvalue(0)] int width);
-		HRESULT MoveTo([in] int x, [in] int y);
-		HRESULT LineTo([in] int x, [in] int y);
+      HRESULT SetPen([in] long lColor, [in, defaultvalue(0)] int width);
+      HRESULT MoveTo([in] int x, [in] int y);
+      HRESULT LineTo([in] int x, [in] int y);
 
       HRESULT Text([in] int x, [in] int y, [in] BSTR text);
-	}
+   }
 
    [ uuid(06815526-b219-411c-bf00-afe01930db8b), oleautomation, dual, nonextensible ]
    interface ISocket : IDispatch
@@ -463,7 +463,7 @@ library BeipMU
 
       HRESULT OutputDebugHTML([in] BSTR bstr);
       HRESULT OutputDebugText([in] BSTR bstr);
-	}
+   }
 
    [ uuid(1ca35bdd-168d-4f07-824d-8cb2c3ebed0c) ]
    dispinterface _IApp_Events
@@ -480,10 +480,10 @@ library BeipMU
       [default, source] dispinterface _IApp_Events;
    }
 
-	[ uuid(36A385C7-A258-4210-A61C-EB3890501903), oleautomation, dual, nonextensible ]
-	interface IBeip : IDispatch
-	{
-		[propget] HRESULT Window([out, retval] IWindow_Main** retval);
-		[propget] HRESULT App([out, retval] IApp** retval);
-	}
+   [ uuid(36A385C7-A258-4210-A61C-EB3890501903), oleautomation, dual, nonextensible ]
+   interface IBeip : IDispatch
+   {
+      [propget] HRESULT Window([out, retval] IWindow_Main** retval);
+      [propget] HRESULT App([out, retval] IApp** retval);
+   }
 }

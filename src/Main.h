@@ -21,7 +21,7 @@
 #define YARN 1
 #define DWRITE_TEST 1
 #else
-#define BETA_BUILD 5
+#define BETA_BUILD 6
 #define SCRIPTING 0
 #define YARN 0
 #define DWRITE_TEST 0

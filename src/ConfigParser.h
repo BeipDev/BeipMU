@@ -138,13 +138,13 @@ protected:
 using DataInfo_Color=TDataInfo<Color>;
 using DataInfo_bool=TDataInfo<bool>;
 using DataInfo_float=TDataInfo<float>;
+using DataInfo_uint8=TDataInfo<uint8>;
 using DataInfo_uint32=TDataInfo<uint32>;
 using DataInfo_uint64=TDataInfo<uint64>;
 using DataInfo_int2=TDataInfo<int2>;
 using DataInfo_float2=TDataInfo<float2>;
 using DataInfo_Rect=TDataInfo<Rect>;
 using DataInfo_KEY_ID=TDataInfo<KEY_ID>;
-using DataInfo_BYTE=TDataInfo<BYTE>;
 
 struct DataInfo_int : TDataInfo<int>
 {
