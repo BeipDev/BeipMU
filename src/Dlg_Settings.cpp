@@ -255,7 +255,6 @@ void Dlg_Input::Save()
    // SpellCheck
    {
       bool changed=m_pcbSpellCheck->IsChecked()!=g_ppropGlobal->fSpellCheck();
-      g_ppropGlobal->fSpellCheck(m_pcbSpellCheck->IsChecked());
 
       if(m_coSpellLanguage.GetCount()>1)
       {
@@ -294,8 +293,7 @@ void Dlg_Input::OnCreate()
    {
       auto &g=CreateSection("Spell Check");
 
-      m_pcbSpellCheck=m_layout.CreateCheckBox(-1, "Enable");
-      g << m_pcbSpellCheck;
+      m_pcbSpellCheck=AddBool(g, "Enable", g_ppropGlobal->fSpellCheck());
       {
          auto &gh=*m_layout.CreateGroup_Horizontal(); g << &gh;
          gh << m_layout.CreateStatic("Language:");
@@ -306,8 +304,6 @@ void Dlg_Input::OnCreate()
 
    // Spell Check
    {
-      m_pcbSpellCheck->Check(g_ppropGlobal->fSpellCheck());
-
       if(auto name=GetLocaleInfo(g_ppropGlobal->pclSpellLanguage(), LOCALE_SLOCALIZEDDISPLAYNAME))
       {
          int index=m_coSpellLanguage.AddString(name);
