@@ -1,4 +1,4 @@
-4.00.328
+4.00.328 - 2024-11-18
 
 Tabs can now drag between windows and into new windows
 Added voice selector in Settings for speech playback
