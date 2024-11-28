@@ -3339,6 +3339,11 @@ Test() int
 
 void CreateWindow_Root(ConstString command_line, int nCmdShow)
 {
+//   ConstString test="This is a test/of a string.";
+//   if(auto split=test.Split('/'))
+//      split->first.
+//   if(split)
+
 #if SCRIPTING
    Code_Test();
 #endif

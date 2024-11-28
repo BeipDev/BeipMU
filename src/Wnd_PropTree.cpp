@@ -482,7 +482,7 @@ LRESULT Wnd_PropTree::On(const Msg::Command &msg)
             break;
 
          Prop::Global props;
-         props.Version(g_ciBuildNumber);
+         props.Version(g_build_number);
 
          mp_prop_tree->Export(*selection, props);
 

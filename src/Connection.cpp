@@ -352,6 +352,9 @@ bool Connection::OnGMCP_Parse(ConstString string)
    if(!string.Split(' ', package, string))
       return false;
 
+   // Package names are case insensitive, so convert to lowercase to simplify all later comparisons
+   HybridStringBuilder<256> package_copy{package}; package_copy.ToLower(); package=package_copy;
+
    ConstString name;
    if(!package.Split('.', name, package))
       return false;
@@ -412,12 +415,8 @@ bool Connection::OnGMCP_Parse(ConstString string)
             GMCP::On_Stats(m_wnd_main, string);
             return false;
          }
-         else if(package.StartsWith("tilemap."))
+         else if(auto command=package.RightOf("tilemap."))
          {
-            ConstString command;
-            if(!package.Split('.', package, command))
-               return false;
-
             m_wnd_main.On_TileMap(command, string);
             return false;
          }
@@ -426,12 +425,8 @@ bool Connection::OnGMCP_Parse(ConstString string)
             GetAvatars().OnGMCP(string);
             return false;
          }
-         else if(package.StartsWith("line."))
+         else if(auto command=package.RightOf("line."))
          {
-            ConstString command;
-            if(!package.Split('.', package, command))
-               return false;
-
             if(command=="id")
             {
                JSON_Beip_Line_IDs element{*this};

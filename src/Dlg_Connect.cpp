@@ -373,7 +373,7 @@ void Wnd_Connect::Export()
       return;
 
    Prop::Global props;
-   props.Version(g_ciBuildNumber);
+   props.Version(g_build_number);
 
    props.propConnections().propServers().Push(MakeCounting<Prop::Server>(*selection->GetServer()));
    ConfigExport(filename, &props, g_ppropGlobal->fShowDefaults(), true);

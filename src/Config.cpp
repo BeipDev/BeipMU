@@ -54,7 +54,7 @@ void LoadConfig(ConstString filename, bool fImportingConfig)
 
    delete g_ppropGlobal;
    g_ppropGlobal=new Prop::Global();
-   g_ppropGlobal->Version(g_ciBuildNumber);
+   g_ppropGlobal->Version(g_build_number);
    gp_restore_logs=nullptr;
 
    ErrorConsole error;
@@ -394,14 +394,14 @@ void LoadConfig(Prop::Global &global, ConstString filename, IError &error)
       }
    }
 
-   if(global.Version()>g_ciBuildNumber)
+   if(global.Version()>g_build_number)
    {
       error.Error("Config file is from a newer version, this is not supported. Unless you're sure, it is recommended you quit without saving.");
       global.fLoadErrors(true);
    }
 
-   global.fUpgraded(global.Version()<g_ciBuildNumber);
-   global.Version(g_ciBuildNumber); // Set the current version on the property set
+   global.fUpgraded(global.Version()<g_build_number);
+   global.Version(g_build_number); // Set the current version on the property set
 }
 
 ConstString GetConfigPath()
@@ -581,7 +581,7 @@ void ResetConfig()
 {
    delete g_ppropGlobal;
    g_ppropGlobal=new Prop::Global();
-   g_ppropGlobal->Version(g_ciBuildNumber);
+   g_ppropGlobal->Version(g_build_number);
    g_ppropGlobal->fLoadErrors(true);
    Global_PropChange();
 }
