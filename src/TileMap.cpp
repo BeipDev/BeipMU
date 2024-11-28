@@ -1003,7 +1003,7 @@ void JSON_TileMapInfo::OnString(ConstString name, ConstString value)
    if(name=="encoding")
    {
       for(unsigned i=0;i<_countof(c_encodingNames);i++)
-         if(value==c_encodingNames[i])
+         if(IEquals(value, c_encodingNames[i]))
          {
             m_map.m_encoding=Encoding(i);
             return;

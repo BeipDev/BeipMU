@@ -2132,7 +2132,7 @@ GMCP_BEGIN R"+(beip.stats {
       {
          mp_connection->Receive(ConstString(
             GMCP_BEGIN R"+(Client.Media.Play {
-            "name":"audio/02 Britannic Lands.mp3","url" : "http://prelle.selfhost.eu:4080/","type" : "music","loops" : 1,"continue" : false
+            "name":"2020/12/UltimaV_Stones.mp3","url" : "https://pacati.net/wp-content/uploads/","type" : "music","loops" : 1,"continue" : false
          })+" GMCP_END));
          return;
       }
