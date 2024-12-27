@@ -140,13 +140,13 @@ Usage:
 Current option is only 'every' to make it a repeating timer (be familiar with how to kill timers before using this!)
 
 * To list current pending commands:
-    /delay list
+    `/delay list`
 
 * To kill all upcoming commands
-    /delay killall
+    `/delay killall`
 
 * To kill a pending command
-    /delay kill <id>
+    `/delay kill <id>`
 
 Examples:
 
