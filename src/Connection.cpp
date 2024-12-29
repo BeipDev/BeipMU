@@ -623,10 +623,10 @@ void Connection::Connect(const Sockets::Address &address)
    // In case we are disconnected, then called directly (not on a host name lookup)
    ConstString host_name=m_ppropServer->pclHost().BeforeFirst(':'); // Remove the port
 
-   mp_client->Connect(address, host_name, m_ppropServer->fVerifyCertificate());
-
    // Connection Timeout Timer
    m_timer_connect.Set(std::max(m_propConnections.ConnectTimeout()/1000.0f, 1.0f));
+
+   mp_client->Connect(address, host_name, m_ppropServer->fVerifyCertificate());
 }
 
 Connection *Connection::FindCharacterConnection(const Prop::Character *ppropCharacter)
@@ -1796,8 +1796,8 @@ void Connection::TriggersExecute(Text::Line &line, Array<CopyCntPtrTo<Prop::Trig
 
                if(Scripter *p_scripter=m_wnd_main.GetScripter())
                {
-                  CntPtrTo<OM::TextWindowLine> p_line=new OM::TextWindowLine(line);
-                  CntPtrTo<OM::ArrayUInt> p_array=MakeCounting<OM::ArrayUInt>();
+                  auto p_line=MakeCounting<OM::TextWindowLine>(line);
+                  auto p_array=MakeCounting<OM::ArrayUInt>();
                   
                   p_array->m_array.Allocate(search.ranges().Count()*2);
 
@@ -1865,7 +1865,7 @@ void Connection::TriggersExecute(Text::Line &line, Array<CopyCntPtrTo<Prop::Trig
                auto &multi=*m_new_multiline_triggers.Last();
                multi.m_line_count=0;
                multi.m_line_limit=ppropTrigger->Multiline_Limit();
-               if(time>=0.0f)
+               if(time>0.0f)
                {
                   multi.m_timeout.SetCallback([this, &multi]() { OnMultilineTriggerTimeout(multi); });
                   multi.m_timeout.Set(time);
