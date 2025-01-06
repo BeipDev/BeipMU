@@ -22,11 +22,11 @@
             }
 
             if (dataType === "data" && mapInfo !== null) {
-                const tileUrl = mapInfo["tile-url"];
-                const tileSize = mapInfo["tile-size"].split(',').map(Number);
-                const mapSize = mapInfo["map-size"].split(',').map(Number);
-                const encoding = mapInfo["encoding"];
-                document.title = mapInfo["title"];
+                const tileUrl = mapInfo.tile_url;
+                const tileSize = mapInfo.tile_size.split(',').map(Number);
+                const mapSize = mapInfo.map_size.split(',').map(Number);
+                const encoding = mapInfo.encoding;
+                document.title = mapInfo.title;
                 let mapData;
 
                 switch (encoding) {
@@ -59,20 +59,20 @@
 
         // Example usage
         const test1_info = JSON.stringify({
-            "tile-url": "https://github.com/BeipDev/BeipMU/raw/master/images/Ultima5.png",
+            "tile_url": "https://github.com/BeipDev/BeipMU/raw/master/images/Ultima5.png",
             "title": "Overworld Map",
-            "tile-size": "16,16",
-            "map-size": "10,4",
+            "tile_size": "16,16",
+            "map_size": "10,4",
             "encoding": "hex_4"
         });
 
         const test1_data = JSON.stringify("0123456701234567012345670123456701234567");
 
         const test2_info = JSON.stringify({
-            "tile-url":"https://github.com/BeipDev/BeipMU/raw/master/images/Ultima5.png",
+            "tile_url":"https://github.com/BeipDev/BeipMU/raw/master/images/Ultima5.png",
             "title":"Castle",
-            "tile-size":"16,16",
-            "map-size":"32,32",
+            "tile_size":"16,16",
+            "map_size":"32,32",
             "encoding":"base64_8"
         });
 
