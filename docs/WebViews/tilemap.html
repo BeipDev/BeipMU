@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Tile Map Viewer</title>
+    <style>
+        #mapCanvas { width: 100%; height: 100%; display:block; }
+        body, html { margin: 0; padding: 0;}
+    </style>
+</head>
+<body>
+    <canvas id="mapCanvas"></canvas>
+
+    <script>
+        let mapInfo = null;
+
+        function OnMap(dataType, jsonString) {
+            const data = JSON.parse(jsonString);
+            
+            if (dataType === "info") {
+                mapInfo = data;
+                return;
+            }
+
+            if (dataType === "data" && mapInfo !== null) {
+                const tileUrl = mapInfo["tile-url"];
+                const tileSize = mapInfo["tile-size"].split(',').map(Number);
+                const mapSize = mapInfo["map-size"].split(',').map(Number);
+                const encoding = mapInfo["encoding"];
+                document.title = mapInfo["title"];
+                let mapData;
+
+                switch (encoding) {
+                    case "hex_4": mapData = data.split("").map(hex => parseInt(hex, 16)); break;
+                    case "hex_8": mapData = data.match(/.{1,2}/g).map(hex => parseInt(hex, 16)); break;
+                    case "base64_8": mapData = atob(data).split("").map(c => c.charCodeAt(0)); break;
+                    default: console.error("Unknown encoding"); return;
+                }
+
+                const canvas = document.getElementById("mapCanvas");
+                const context = canvas.getContext("2d");
+                canvas.width = tileSize[0] * mapSize[0];
+                canvas.height = tileSize[1] * mapSize[1];
+
+                const image = new Image();
+                image.src = tileUrl;
+                image.onload = function() {
+                    const bitmap_tile_width = image.width / tileSize[0];
+                    for (let y = 0; y < mapSize[1]; y++) {
+                        for (let x = 0; x < mapSize[0]; x++) {
+                            const tileIndex = mapData[y * mapSize[0] + x];
+                            const sx = (tileIndex % bitmap_tile_width) * tileSize[0];
+                            const sy = Math.floor(tileIndex / bitmap_tile_width) * tileSize[1];
+                            context.drawImage(image, sx, sy, tileSize[0], tileSize[1], x * tileSize[0], y * tileSize[1], tileSize[0], tileSize[1]);
+                        }
+                    }
+                };
+            }
+        }
+
+        // Example usage
+        const test1_info = JSON.stringify({
+            "tile-url": "https://github.com/BeipDev/BeipMU/raw/master/images/Ultima5.png",
+            "title": "Overworld Map",
+            "tile-size": "16,16",
+            "map-size": "10,4",
+            "encoding": "hex_4"
+        });
+
+        const test1_data = JSON.stringify("0123456701234567012345670123456701234567");
+
+        const test2_info = JSON.stringify({
+            "tile-url":"https://github.com/BeipDev/BeipMU/raw/master/images/Ultima5.png",
+            "title":"Castle",
+            "tile-size":"16,16",
+            "map-size":"32,32",
+            "encoding":"base64_8"
+        });
+
+        const test2_data = JSON.stringify(
+"T09PT08FBQUFBQUFBQUFBQUFBQUFBQUFBQVPT09PTwVPpqamTwUFBQUFBQUFBQUFBQUFBQUFBQUFBU+mRERPBU+myKZPT09PT09PT09PT09PT09PT09PT09PT0TIRE8FT0REpk/HRERERERERERERERERERERERERMVPr0SvTwVPT09PT09PT09PTwUFMURERDMFBU9PT09PT09PT09PBQUFT8RPq6ydq6xPBQUxREREMwUFT6usrausT8RPBQUFBQVPRE9ERERERE8FBTFEREQzBQVPRERERK9PRE8FBQUFBU9ET1xdRFxdTwUFMURERDMFBU+rrERERLhETwUFBQUFT0S4RERERERPBQUxREREMwUFT0RERESvT0RPBQUFBQVPRE9ERJEpk08FBTFEREQzBQVPq6ypq6xPRE8FBQUFBU9ET09PT09PTwUFMU9ETzMFBU9PT09PT09ETwUFBQUFT0QFBQUFBQUFBQUFT8ZPBQUFBQUFBQUFBURPBQUFBQVPRAUFBQUFBQUFT09PT09PTwUFBQUFBQUFRE8FBQUFBU9EMjIyMjIyMgVPXF2lXF1PBTIyMjIyMgVETwUFBQUFT0RERERERERPT09ERJBERE9PT0RERERERERPBQUFBQVPRERERERERETFT0REyERET8dERERERERERE8FBQUFBU9ERERERERET09PRERERERPT09ERERERERETwUFBQUFT0QwMDAwMDAwBU+rrEREqU8FMDAwMDAFBURPBQUFBQVPRAVPT09PT08FT09PT09PTwVPT09PT08FRE8FBQUFBU9EBU/IRERETwUFBU/ETwUFBU/IRES/TwVETwUFBQUFT0QFT0SUlZZPT08x+ET4M09PT0SUm5ZPBURPBQUFBQVPRAVPRERERFxdTzFEREQzT0SSRESQRE8FRE8FBQUFBU9EBU9PRERERERPMURERDNPlJyWRERPTwVETwUFBQUFT0RERERERERcXU8xREREM09EkERERERERERPBQUFBQVPRE9E2ERPRERETzFEREQzT1tEW09E2ERPRE8FBQUFBU/GT0RERE9PT09PMURERDNPT09PT0RERE/GTwUFBU9PT09PT09EBQUFBQUxREREMwUFBQUFRE9PT09PT08FT0Svr0/HRERERERERERERERERERERERERMVPr0RETwVPr8hET09PT09PT09PT0RERE9PT09PT09PT0+vyERPBU+vr0RPBQUFBQUFBQUFREREBQUFBQUFBQUFT6+vRE8FT09PT08FBQUFBQUFogVEREQFogUFBQUFBQVPT09PTwUFBQUFBQUFBQUFBQUFBURERAUFBQUFBQUFBQUFBQUFBQ"
+        );
+
+        // Simulate receiving the data
+        OnMap("info", test2_info);
+        OnMap("data", test2_data);
+
+    </script>
+</body>
+</html>
