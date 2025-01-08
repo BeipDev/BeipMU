@@ -53,22 +53,6 @@ STDMETHODIMP MainWindow::QueryInterface(REFIID riid, void **ppvObj)
    return TQueryInterface(riid, ppvObj);
 }
 
-void MainWindow::Advised()
-{
-   CntReceiverOf<MainWindow, Wnd_Main::Event_Activate>::AttachTo(*m_pWnd_Main);
-   CntReceiverOf<MainWindow, Wnd_Main::Event_Command>::AttachTo(*m_pWnd_Main);
-   CntReceiverOf<MainWindow, Wnd_Main::Event_Close>::AttachTo(*m_pWnd_Main);
-   CntReceiverOf<MainWindow, Wnd_Main::Event_Key>::AttachTo(*m_pWnd_Main);
-}
-
-void MainWindow::Unadvised()
-{
-   CntReceiverOf<MainWindow, Wnd_Main::Event_Activate>::Detach();
-   CntReceiverOf<MainWindow, Wnd_Main::Event_Command>::Detach();
-   CntReceiverOf<MainWindow, Wnd_Main::Event_Close>::Detach();
-   CntReceiverOf<MainWindow, Wnd_Main::Event_Key>::Detach();
-}
-
 HRESULT MainWindow::Run(BSTR bstr)
 {
    ZOMBIECHECK
@@ -200,31 +184,12 @@ HRESULT MainWindow::SetOnClose(IDispatch *pDisp, VARIANT var)
 
 void MainWindow::On(Wnd_Main::Event_Command &event)
 {
-   if(fAdvised())
-   {
-      VariantBool fHandled(false);
-      Variant var[]={ &fHandled, event.GetParams(), event.GetCommand() };
-      DISPPARAMS dp = { var, 0, _countof(var), 0 };
-      MultipleInvoke(1, dp, &fHandled);
-      if(fHandled)
-      {
-         event.Stop(true); return;
-      }
-   }
-
    if(m_hookCommand)
       event.Stop(m_hookCommand.CallWithResult(m_hookCommand.var, event.GetParams(), event.GetCommand())==true);
 }
 
 void MainWindow::On(Wnd_Main::Event_Activate &event)
 {
-   if(fAdvised())
-   {
-      Variant var[]={ event.fActivated() };
-      DISPPARAMS dp = { var, 0, _countof(var), 0 };
-      MultipleInvoke(2, dp);
-   }
-
    if(m_hookActivate)
       m_hookActivate(m_hookActivate.var, event.fActivated());
 }
@@ -232,26 +197,12 @@ void MainWindow::On(Wnd_Main::Event_Activate &event)
 
 void MainWindow::On(Wnd_Main::Event_Close &event)
 {
-   if(fAdvised())
-      MultipleInvoke(3);
-
    if(m_hookClose)
       m_hookClose.Call();
 }
 
 void MainWindow::On(Wnd_Main::Event_Key &event)
 {
-   if(fAdvised())
-   {
-      VariantBool fHandled(false);
-      Variant var[]={ &fHandled, static_cast<int32>(event.GetVKey()) };
-      DISPPARAMS dp = { var, 0, _countof(var), 0 };
-      MultipleInvoke(4, dp, &fHandled);
-      if(fHandled)
-      {
-         event.Stop(true); return;
-      }
-   }
 }
 
 STDMETHODIMP Windows::get_Item(VARIANT var, IWindow_Main **retval)

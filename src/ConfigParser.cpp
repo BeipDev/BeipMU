@@ -36,7 +36,7 @@ void Parse(KEY_ID &data, Streams::Input &input)
    {
       int iFKey;
       if(!input.Parse(iFKey))
-         throw Exceptions::Message("");
+         throw Exceptions::Message("Couldn't parse key");
 
       data.iVKey=VK_F1-1+iFKey;
       return;
@@ -53,7 +53,7 @@ void Parse(KEY_ID &data, Streams::Input &input)
 
    Assert(0); // Unknown key being read in!
    data.iVKey=0; // Set it to 'no key'
-   throw Exceptions::Message("");
+   throw Exceptions::Message("Couldn't parse key");
 }
 
 void Write(const KEY_ID &key, Streams::Output &output)
@@ -96,7 +96,7 @@ void Parse(CKeyMacro &data, Streams::Input &input)
       }
    }
 
-   throw Exceptions::Message("");
+   throw Exceptions::Message("Expecting ',' in key macro");
 }
 
 void Write(const CKeyMacro &macro, Streams::Output &output)

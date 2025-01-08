@@ -99,27 +99,18 @@ STDMETHODIMP Socket::SetFlag(int iFlag, VARIANT_BOOL fValue)
 
 void Socket::OnConnect()
 {
-   if(fAdvised())
-      MultipleInvoke(2);
-
    if(m_hookConnect)
       m_hookConnect(this);
 }
 
 void Socket::OnDisconnect(DWORD error)
 {
-   if(fAdvised())
-      MultipleInvoke(3);
-
    if(m_hookDisconnect)
       m_hookDisconnect(this);
 }
 
 void Socket::OnReceive(Array<const BYTE> data)
 {
-   if(fAdvised())
-      MultipleInvoke(1);
-
    if(m_hookReceive)
       m_hookReceive(ConstString(reinterpret_cast<const char *>(&*data.begin()), data.Count()), this);
 }
@@ -151,17 +142,10 @@ SocketServer::SocketServer(unsigned int iPort, IDispatch *pDisp, VARIANT &var)
 
 void SocketServer::OnConnection(SOCKET socket, const Sockets::Address &address)
 {
-   CntPtrTo<ISocket> pSocket=new Socket(socket);
-
-   if(fAdvised())
-   {
-      Variant var[]={ static_cast<IDispatch*>(pSocket) };
-      DISPPARAMS dp={ var, 0, _countof(var), 0 };
-      MultipleInvoke(1, dp);
+   if(m_hookConnection) {
+      auto p_socket=MakeCounting<Socket>(socket);
+      m_hookConnection(m_hookConnection.var, static_cast<IDispatch *>(p_socket));
    }
-
-   if(m_hookConnection)
-      m_hookConnection(m_hookConnection.var, static_cast<IDispatch*>(pSocket));
 }
 
 HRESULT SocketServer::Shutdown()

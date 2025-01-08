@@ -8,8 +8,6 @@ namespace OM
 
 class Socket
  : public Dispatch<ISocket>,
-   public ConnectionPoint<Socket, _ISocket_Events>,
-   public ConnectionPointContainer<Socket, _ISocket_Events>,
    public Sockets::Socket::INotify,
    public Sockets::GetHost::INotify
 {
@@ -20,10 +18,6 @@ public:
 
    // IUnknown
    STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
-
-   // Connection Point Callbacks (we get all events anyways, no action to be taken)
-   void Advised() { }
-   void Unadvised() { }
 
    // ISocket
    STDMETHODIMP Connect(BSTR host, unsigned int iPort) override;
@@ -62,8 +56,6 @@ private:
 
 class SocketServer
  : public Dispatch<ISocketServer>,
-   public ConnectionPoint<SocketServer, _ISocketServer_Events>,
-   public ConnectionPointContainer<SocketServer, _ISocketServer_Events>,
    public Sockets::Server::INotify
 {
 public:
@@ -73,10 +65,6 @@ public:
 
    // IUnknown
    STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj) override;
-
-   // Connection Point Callbacks (we get all events anyways, no action to be taken)
-   void Advised() { }
-   void Unadvised() { }
 
    // ISocketServer
    STDMETHODIMP Shutdown() override;

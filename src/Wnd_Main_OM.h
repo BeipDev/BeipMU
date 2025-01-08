@@ -19,8 +19,6 @@ private:
 
 class MainWindow
 :  public Dispatch<IWindow_Main>,
-   public ConnectionPoint<MainWindow, _IWindow_Main_Events>,
-   public ConnectionPointContainer<MainWindow, _IWindow_Main_Events>,
    public CntReceiverOf<MainWindow, Wnd_Main::Event_Command>,
    public CntReceiverOf<MainWindow, Wnd_Main::Event_Activate>,
    public CntReceiverOf<MainWindow, Wnd_Main::Event_Close>,
@@ -32,9 +30,6 @@ public:
    void Destroyed() { m_pWnd_Main=nullptr; }
 
    USE_INHERITED_UNKNOWN(IWindow_Main)
-
-   void Advised();
-   void Unadvised();
 
    // IUnknown
    STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj) override;
