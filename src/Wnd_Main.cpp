@@ -21,7 +21,6 @@
 #include "Speller.h"
 #include "FindString.h"
 #ifdef YARN
-#include "DirectX\DirectX.h"
 #include "Server\Protocol.h"
 #include "Yarn\IYarn_Tilemap.h"
 namespace Yarn { struct Wnd_Windows; }
@@ -41,24 +40,24 @@ void D2DTest();
 
 void ShowStatistics(Text::Wnd &wnd)
 {
-   uint64 totalSecondsConnected=0;
-   uint64 totalBytes=0;
-   uint64 totalConnections=0;
+   uint64 total_seconds_connected=0;
+   uint64 total_bytes=0;
+   uint64 total_connections=0;
 
-   for(auto &pServer : g_ppropGlobal->propConnections().propServers())
-      for(auto &pCharacter : pServer->propCharacters())
+   for(auto &p_server : g_ppropGlobal->propConnections().propServers())
+      for(auto &p_character : p_server->propCharacters())
       {
-         totalSecondsConnected+=pCharacter->SecondsConnected();
-         totalBytes+=pCharacter->BytesReceived()+pCharacter->BytesSent();
-         totalConnections+=pCharacter->ConnectionCount();
+         total_seconds_connected+=p_character->SecondsConnected();
+         total_bytes+=p_character->BytesReceived()+p_character->BytesSent();
+         total_connections+=p_character->ConnectionCount();
       }
 
    HybridStringBuilder string(
       R"(<p background-color='#004000' stroke-color='#008000' stroke-width='2' border='10' border-style='round' indent='5' padding='2'><font color='white' face='Arial'>)"
       "<font color='yellow'>Total time connected: <font color='white'>");
-   Time::SecondsToStringAbbreviated(string, totalSecondsConnected);
-   string(CRLF "<font color='yellow'>Total data: <font color='white'>"); ByteCountToStringAbbreviated(string, totalBytes);
-   string(CRLF "<font color='yellow'>Total connections: <font color='white'>", Strings::CommaUInt64(totalConnections));
+   Time::SecondsToStringAbbreviated(string, total_seconds_connected);
+   string(CRLF "<font color='yellow'>Total data: <font color='white'>"); ByteCountToStringAbbreviated(string, total_bytes);
+   string(CRLF "<font color='yellow'>Total connections: <font color='white'>", Strings::CommaUInt64(total_connections));
 
    wnd.AddHTML(string);
 }
@@ -3404,4 +3403,5 @@ void CreateWindow_Root(ConstString command_line, int nCmdShow)
 #if DWRITE_TEST
    D2DTest();
 #endif
+   CreateWndGTest();
 }

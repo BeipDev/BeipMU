@@ -2144,11 +2144,11 @@ bool Dlg_Trigger::SetTrigger(Prop::Trigger *ppropNewTrigger, bool fKeepChanges)
    m_pcbAway->Check(m_ppropTrigger->fAway());
    m_pcbPresent->Check(!m_ppropTrigger->fAway());
    m_pcbCooldown->Check(m_ppropTrigger->fCooldown());
-   m_pedCooldownTime->SetText(Strings::TValue<float>(m_ppropTrigger->CooldownTime()));
+   m_pedCooldownTime->SetText(Strings::to_string(m_ppropTrigger->CooldownTime()));
    m_pcbMultiline->Check(m_ppropTrigger->fMultiline());
    m_pedMultilineLines->Set(m_ppropTrigger->Multiline_Limit());
    if(m_ppropTrigger->Multiline_Time()!=0.0f)
-      m_pedMultilineTime->SetText(Strings::TValue<float>(m_ppropTrigger->Multiline_Time()));
+      m_pedMultilineTime->SetText(Strings::to_string(m_ppropTrigger->Multiline_Time()));
    else
       m_pedMultilineTime->SetText({});
 

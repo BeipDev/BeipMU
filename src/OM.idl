@@ -8,7 +8,6 @@
 //#define _MIDL_DECLARE_WIREM_HANDLE // Used for handles like HWND, etc. Not currently needed
 midl_pragma warning(disable: 2111) // identifier length exceeds 31 characters
 midl_pragma warning(disable: 2366) // cannot assign a default value : var
-// import "ocidl.idl";
 
 [
    uuid(36A385C0-A258-4210-A61C-EB3890501903),
@@ -97,14 +96,7 @@ library BeipMU
 //		[propget] HRESULT UserData([out, retval] VARIANT *pVar);
 //		[propput] void UserData([in] VARIANT var);
    }
- 
-   [ uuid(72dcbdbb-e23a-4b9e-a65a-88fe98490ce7) ]
-   dispinterface _IWindow_Text_Events
-   {
-      properties:
-      methods:
-         [id(1)] void OnPause([in] VARIANT_BOOL paused);
-   }
+
 
    [ uuid(E50E3B98-5AE1-4fe7-814A-4B1B1A188EF2), oleautomation, dual, nonextensible ]
    interface IWindow_Control_Edit : IDispatch
@@ -164,26 +156,6 @@ library BeipMU
       [propget] HRESULT Window_Main([out, retval] IWindow_Main **retval);
    }
 
-   [ uuid(02ac3aaa-9650-4087-8d3c-719de645b1a9) ]
-   dispinterface _IConnection_Events
-   {
-      properties:
-      methods:
-         [id(1)] void OnConnect();
-         [id(2)] void OnDisconnect();
-         [id(3)] void OnSend([in] BSTR text, [in, out] VARIANT_BOOL *handled);
-         [id(4)] void OnReceive([in] BSTR text, [in, out] VARIANT_BOOL *handled);
-         [id(5)] void OnDisplay([in] ITextWindowLine *line, [in, out] VARIANT_BOOL *handled);
-         [id(6)] void OnLogging([in] VARIANT_BOOL state);
-   }
-
-   [ uuid(3d9792c9-2639-4a3b-9127-215ce2ae7ef5) ]
-   coclass Connection
-   {
-      [default] interface IConnection;
-      [default, source] dispinterface _IConnection_Events;
-   }
-
    typedef enum tagSide
    {
       Side_Left,
@@ -231,24 +203,6 @@ library BeipMU
 
 //      [local, propget] HRESULT HWND([out, retval] long *hwnd);
 //      [local] HRESULT MakeDocking([in] __int3264 hwnd, [out, retval] IDocking **pDocking);
-   }
-
-   [ uuid(afb7d777-4d09-48cd-849f-2fc7fe25a7bf) ]
-   dispinterface _IWindow_Main_Events
-   {
-      properties:
-      methods:
-         [id(1)] void OnCommand([in] BSTR command, [in] BSTR params, [in, out] VARIANT_BOOL *handled);
-         [id(2)] void OnActivate([in] VARIANT_BOOL fActivated);
-         [id(3)] void OnClose();
-         [id(4)] void OnKey([in] long vkey, [in, out] VARIANT_BOOL *handled);
-   }
-
-   [ uuid(2f71157c-d178-4f3c-ab6b-a183c773e372) ]
-   coclass Window_Main
-   {
-      [default] interface IWindow_Main;
-      [default, source] dispinterface _IWindow_Main_Events;
    }
 
    [ uuid(E9440711-EB4F-4250-AE95-5DB339E27C98), oleautomation, dual, nonextensible ]
@@ -364,44 +318,11 @@ library BeipMU
       HRESULT AddToInputHistory([in] BSTR text);
    }
 
-   [ uuid(4703fc42-40af-4b8a-94f2-e09dff9ab8e0) ]
-   dispinterface _ISocket_Events
-   {
-      properties:
-      methods:
-         [id(1)] void OnReceive();
-         [id(2)] void OnConnect();
-         [id(3)] void OnDisconnect();
-   }
-
-   [ uuid(ddfb49b9-3d86-400c-8034-0f08d0bf637a) ]
-   coclass Socket
-   {
-      [default] interface ISocket;
-      [default, source] dispinterface _ISocket_Events;
-   }
-
-
    [ uuid(5b53fd39-46a8-4519-86a4-0442d98d79aa), oleautomation, dual, nonextensible ]
    interface ISocketServer : IDispatch
    {
       HRESULT Shutdown();
       // OnConnection(ISocket sock);
-   }
-
-   [ uuid(1497b3f5-43e9-4edf-bd91-01efcd2598a7) ]
-   dispinterface _ISocketServer_Events
-   {
-      properties:
-      methods:
-         [id(1)] void OnConnection([in] ISocket *pSocket);
-   }
-
-   [ uuid(1b99abe3-48c7-4fe1-8f1f-85722612e50b) ]
-   coclass SocketServer
-   {
-      [default] interface ISocketServer;
-      [default, source] dispinterface _ISocketServer_Events;
    }
 
    [ uuid(334038f2-b7e7-4a0d-af86-eca67b6f82ff), oleautomation, dual, nonextensible ]
@@ -463,21 +384,6 @@ library BeipMU
 
       HRESULT OutputDebugHTML([in] BSTR bstr);
       HRESULT OutputDebugText([in] BSTR bstr);
-   }
-
-   [ uuid(1ca35bdd-168d-4f07-824d-8cb2c3ebed0c) ]
-   dispinterface _IApp_Events
-   {
-      properties:
-      methods:
-         [id(1)] void OnNewWindow([in] IWindow_Main *window);
-   }
-
-   [ uuid(f68111ba-44ec-46f5-9ada-0fd22a077b37) ]
-   coclass App
-   {
-      [default] interface IApp;
-      [default, source] dispinterface _IApp_Events;
    }
 
    [ uuid(36A385C7-A258-4210-A61C-EB3890501903), oleautomation, dual, nonextensible ]

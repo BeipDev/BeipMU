@@ -1,11 +1,9 @@
 #include "Main.h"
 #include "Automation.h"
 #pragma comment(lib, "gdi32")
-#pragma comment(lib, "ole32")
 #pragma comment(lib, "comdlg32")
 #pragma comment(lib, "shell32")
 #pragma comment(lib, "winmm.lib") // For PlaySound
-#include "DirectX\DirectX.h"
 #pragma comment(lib, "shcore.lib") // GetDpiForMonitor
 
 void SetGenerateMinidumpOnCrash();

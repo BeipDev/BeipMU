@@ -169,281 +169,6 @@ private:
 };
 
 template<typename T>
-struct CntPtrArray
-{
-   CntPtrArray() noexcept
-   {
-   }
-
-   ~CntPtrArray() noexcept
-   {
-      for(unsigned i=0;i<m_iUsed;i++)
-         if(m_pObjects[i])
-            m_pObjects[i]->Release();
-
-      free(m_pObjects);
-   }
-
-   int Add(T *pT)
-   {
-      m_iItems++;
-      if(m_iUsed<m_iSize)
-         return Append(pT);
-
-      // Look for unused spots
-      for(unsigned i=0;i<m_iSize;i++)
-         if(m_pObjects[i]==nullptr)
-         {
-            Store(i, pT); return i;
-         }
-
-      // Grow!
-      m_pObjects=(T **)realloc(m_pObjects, sizeof(T *)*(m_iSize+16));
-      for(int i=0;i<16;i++)
-         m_pObjects[m_iSize+i]=nullptr;
-      m_iSize+=16;
-
-      return Append(pT);
-   }
-
-   void Remove(unsigned i)
-   {
-      m_iItems--;
-      Assert(m_pObjects[i]);
-      T *pObject=m_pObjects[i]; m_pObjects[i]=nullptr; pObject->Release(); 
-   }
-
-   T *operator[](unsigned i) { if(i>m_iSize) return nullptr; return m_pObjects[i]; }
-   unsigned Count() const { return m_iItems; }
-
-private:
-   void Store(unsigned iPosition, T *pT) { m_pObjects[iPosition]=pT; pT->AddRef(); }
-   int Append(T *pT) { Store(m_iUsed, pT); return m_iUsed++; }
-
-   T **m_pObjects{};
-   unsigned m_iSize{};
-   unsigned m_iUsed{};
-   unsigned m_iItems{};
-};
-
-struct EnumConnections : General::Unknown<IEnumConnections>
-{
-   EnumConnections(OwnedArray<CONNECTDATA> &&data) : m_data(std::move(data)) { }
-   ~EnumConnections() noexcept
-   {
-      for(auto &x : m_data)
-         x.pUnk->Release();
-   }
-
-   STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj) override
-   {
-      return TQueryInterface(riid, ppvObj);
-   }
-
-   // EnumConnectionPoints
-   STDMETHODIMP Next(ULONG cConnections, CONNECTDATA *rgcd, ULONG *pcFetched) override
-   {
-      if(cConnections==0)
-         return E_INVALIDARG;
-      if(rgcd==nullptr || (cConnections!=1 && pcFetched==nullptr) )
-         return E_POINTER;
-
-      ULONG cFetched=cConnections;
-
-      PinBelow(cFetched, ULONG(m_data.Count()-m_iItem));
-
-      for(unsigned int i=m_iItem;i<m_iItem+cFetched;i++)
-      {
-         rgcd[i]=m_data[i]; rgcd[i].pUnk->AddRef();
-      }
-
-      if(pcFetched)
-         *pcFetched=cFetched;
-
-      m_iItem+=cFetched;
-      return cConnections==cFetched ? S_OK : S_FALSE;
-   }
-
-   STDMETHODIMP Skip(ULONG cSkip) override
-   {
-      if(cSkip==0)
-         return E_INVALIDARG;
-
-      if(m_iItem+cSkip>m_data.Count())
-      {
-         m_iItem=m_data.Count(); return S_FALSE;
-      }
-
-      m_iItem+=cSkip; return S_OK;
-   }
-
-   STDMETHODIMP Reset() override
-   {
-      m_iItem=0; return S_OK;
-   }
-
-   STDMETHODIMP Clone(IEnumConnections **ppEnum) override
-   {
-      OwnedArray<CONNECTDATA> data(m_data);
-      for(auto &x : data)
-         x.pUnk->AddRef();
-
-      EnumConnections *pEnum=new EnumConnections(std::move(data)); pEnum->m_iItem=m_iItem;
-      *ppEnum=pEnum; (*ppEnum)->AddRef();
-      return S_OK;
-   }
-
-private:
-   unsigned m_iItem{};
-   OwnedArray<CONNECTDATA> m_data;
-};
-
-template<typename T, typename TEvents>
-struct __declspec(novtable) ConnectionPoint : IConnectionPoint
-{
-   STDMETHODIMP GetConnectionInterface(IID *pIID) override
-   {
-      *pIID=__uuidof(TEvents); return S_OK;
-   }
-
-   STDMETHODIMP GetConnectionPointContainer(IConnectionPointContainer **ppCPC) override
-   {
-      T *pT=static_cast<T *>(this);
-      return pT->QueryInterface(__uuidof(**ppCPC), (void **)ppCPC);
-   }
-
-   STDMETHODIMP Advise(IUnknown *pUnkSink, DWORD *pdwCookie) override
-   {
-      if(pUnkSink==nullptr || pdwCookie==nullptr)
-         return E_POINTER;
-
-      CntPtrTo<TEvents> pIEvents; pUnkSink->QueryInterface(pIEvents.Address()); 
-      if(!pIEvents)
-         return CONNECT_E_CANNOTCONNECT;
-
-      DebugOnly(OutputDebugString("Advised: " STRINGIZE(T) "\n");)
-
-      *pdwCookie=m_events.Add(pIEvents)+1;
-      if(m_events.Count()==1) // First event?
-         static_cast<T *>(this)->Advised();
-      return S_OK;
-   }
-
-   STDMETHODIMP Unadvise(DWORD dwCookie) override
-   {
-      unsigned int iIndex=dwCookie-1; // Because we added one when passing it in
-      if(m_events[iIndex]==nullptr)
-         return CONNECT_E_NOCONNECTION;
-
-      DebugOnly(OutputDebugString("Unadvised: " STRINGIZE(T) "\n");)
-
-      m_events.Remove(iIndex);
-      if(m_events.Count()==0) // No more events?
-         static_cast<T *>(this)->Unadvised();
-      return S_OK;
-   }
-
-   STDMETHODIMP EnumConnections(IEnumConnections **ppEnum) override
-   {
-      OwnedArray<CONNECTDATA> data(m_events.Count());
-      for(unsigned int iEvent=0, iIndex=0;iEvent<m_events.Count();iEvent++,iIndex++)
-      {
-         while(m_events[iIndex]==nullptr)
-            iIndex++;
-
-         data[iEvent].pUnk=m_events[iIndex]; data[iEvent].pUnk->AddRef();
-         data[iEvent].dwCookie=iIndex+1;
-      }
-
-      *ppEnum=new OM::EnumConnections(std::move(data)); (*ppEnum)->AddRef(); return S_OK;
-   }
-
-   HRESULT MultipleInvoke(DISPID dispid, DISPPARAMS &dp, VariantBool *pHandled=nullptr)
-   {
-      HRESULT hr=E_FAIL;
-
-      for(unsigned int iEvent=0, iIndex=0;iEvent<m_events.Count();iEvent++,iIndex++)
-      {
-         while(m_events[iIndex]==nullptr)
-            iIndex++;
-
-         hr=m_events[iIndex]->Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_METHOD, &dp, nullptr, 0, 0);
-         if(pHandled && *pHandled) break;
-      }
-      return hr;
-   }
-
-   HRESULT MultipleInvoke(DISPID dispid)
-   {
-      VariantBool fHandled(false); // Dummy that will never be set
-      DISPPARAMS dp={0, 0, 0, 0};
-      return MultipleInvoke(dispid, dp, &fHandled);
-   }
-
-   bool fAdvised() const { return m_events.Count()>0; }
-
-private:
-   CntPtrArray<TEvents> m_events;
-};
-
-/*
-template<class T, class TEvents>
-class EnumConnectionPoints : Unknown<IEnumConnectionPoints>
-{
-public:
-
-   STDMETHODIMP QueryInterface(
-
-   // EnumConnectionPoints
-   STDMETHODIMP Next(ULONG cConnections, LPCONNECTIONPOINT *ppCP, ULONG *pcFetched)
-   {
-      return E_FAIL;
-   }
-
-   STDMETHODIMP Skip(ULONG cConnections)
-   {
-      return E_FAIL;
-   }
-
-   STDMETHODIMP Reset()
-   {
-      return E_FAIL;
-   }
-
-   STDMETHODIMP Clone(IEnumConnectionPoints *ppEnum)
-   {
-      return E_FAIL;
-   }
-};
-*/
-
-template<typename T, typename TEvents>
-struct __declspec(novtable) ConnectionPointContainer : IConnectionPointContainer
-{
-   STDMETHODIMP EnumConnectionPoints(IEnumConnectionPoints **ppEnum) override
-   {
-      if(ppEnum==nullptr)
-         return E_POINTER;
-
-      Assert(false); // Untested!
-      return E_FAIL;
-//      *ppEnum=new OM::EnumConnectionPoints<T, TEvents>(); *ppEnum->AddRef(); return S_OK;
-   }
-
-   STDMETHODIMP FindConnectionPoint(REFIID riid, IConnectionPoint **ppCP) override
-   {
-      if(ppCP==nullptr)
-         return E_POINTER;
-
-      if(riid!=__uuidof(TEvents))
-         return CONNECT_E_NOCONNECTION;
-
-      *ppCP=static_cast<IConnectionPoint *>(static_cast<T *>(this)); (*ppCP)->AddRef();
-      return S_OK;
-   }
-};
-
-template<typename T>
 struct __declspec(novtable) ProvideClassInfo : IProvideClassInfo
 {
    ProvideClassInfo()
@@ -522,10 +247,10 @@ void ClearHooks();
 
 struct Hook
 {
-   operator bool() const { return m_pDisp.mp_disp!=nullptr; }
+   operator bool() const { return mp_disp.mp_disp!=nullptr; }
 
-   void Clear() { m_pDisp.mp_disp=nullptr; m_pDisp.mp_dispex=nullptr;  }
-   void Set(IDispatch *pNewDisp) { m_pDisp.mp_disp=pNewDisp; m_pDisp.mp_dispex=nullptr;  pNewDisp->QueryInterface(m_pDisp.mp_dispex.Address()); }
+   void Clear() { mp_disp.mp_disp=nullptr; mp_disp.mp_dispex=nullptr;  }
+   void Set(IDispatch *pNewDisp) { mp_disp.mp_disp=pNewDisp; mp_disp.mp_dispex=nullptr;  pNewDisp->QueryInterface(mp_disp.mp_dispex.Address()); }
 
    HRESULT operator()()
    {
@@ -550,7 +275,7 @@ struct Hook
 protected:
    HRESULT Invoke(Variant *pvars, unsigned int iVars, Variant *pResult);
 private:
-   DispatchNode m_pDisp; // The dispatch of the event hook
+   DispatchNode mp_disp; // The dispatch of the event hook
 };
 
 struct HookVariant : Hook
@@ -595,9 +320,7 @@ HRESULT ManageHook(TBase *pBase, HookVariant &hook, TSender &sender, IDispatch *
    return S_OK;
 }
 
-HRESULT LoadTypeInfoFromThisModule(REFIID riid, ITypeInfo **ppti);
 OwnedBSTR ReadFileAsBSTR(ConstString fileName);
-
 HRESULT SystemTimeToVariant(VARIANT &var, const Time::Time &time);
 
 };

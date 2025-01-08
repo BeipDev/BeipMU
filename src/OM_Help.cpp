@@ -3,10 +3,7 @@
 //
 
 #include "Main.h"
-#include <propvarutil.h>
-
 #include "OM_Help.h"
-#pragma comment(lib, "propsys.lib")
 
 IServiceProvider *GetServiceProvider();
 
@@ -83,10 +80,10 @@ void Variant::operator=(ConstString string)
 HRESULT Hook::Invoke(Variant *pvars, unsigned varCount, Variant *pResult)
 {
    DISPPARAMS dp = { pvars, 0, varCount, 0 };
-   if(m_pDisp.mp_dispex)
-      return m_pDisp.mp_dispex->InvokeEx(DISPID_VALUE, LOCALE_USER_DEFAULT, DISPATCH_METHOD, &dp, pResult, 0, GetServiceProvider());
+   if(mp_disp.mp_dispex)
+      return mp_disp.mp_dispex->InvokeEx(DISPID_VALUE, LOCALE_USER_DEFAULT, DISPATCH_METHOD, &dp, pResult, 0, GetServiceProvider());
    else
-      return m_pDisp.mp_disp->Invoke(DISPID_VALUE, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_METHOD, &dp, pResult, 0, 0);
+      return mp_disp.mp_disp->Invoke(DISPID_VALUE, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_METHOD, &dp, pResult, 0, 0);
 }
 
 bool HookVariant::Call()
