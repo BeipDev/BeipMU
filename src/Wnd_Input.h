@@ -2,7 +2,7 @@ bool IsWordBreak(char c);
 struct Wnd_InputPane;
 struct ITextDocument;
 
-struct InputControl : IEditHost, Controls::RichEdit
+struct InputControl : IEditHost, Controls::RichEdit, Events::Sends_Deleted
 {
    InputControl(Wnd_Main &wnd_main, Prop::InputWindow &props, Wnd_InputPane *p_input_pane=nullptr, IEditHost *pIEditHost=nullptr);
    InputControl(const InputControl &)=delete;

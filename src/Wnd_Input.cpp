@@ -1028,12 +1028,17 @@ Wnd_InputPane::Wnd_InputPane(Wnd_Main &wndMain, Prop::InputWindow &props)
 
 void Wnd_InputPane::UpdateTitle()
 {
-   FixedStringBuilder<256> title("Input");
-   auto &prefix=m_input.GetProps().pclPrefix();
-   if(prefix)
-      title(" - ", prefix);
+   auto &props=m_input.GetProps();
+   FixedStringBuilder<256> string;
+   if(auto &title=props.pclTitle())
+      string(title);
+   else
+      string("Input");
 
-   SetText(title);
+   if(auto &prefix=props.pclPrefix())
+      string(" - ", prefix);
+
+   SetText(string);
 }
 
 Wnd_InputPane::~Wnd_InputPane()

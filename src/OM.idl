@@ -99,7 +99,7 @@ library BeipMU
 
 
    [ uuid(E50E3B98-5AE1-4fe7-814A-4B1B1A188EF2), oleautomation, dual, nonextensible ]
-   interface IWindow_Control_Edit : IDispatch
+   interface IWindow_Input : IDispatch
    {
       HRESULT SetSel([in] int start, [in] int end);
       HRESULT GetSelStart([out, retval] int *retval);
@@ -107,10 +107,13 @@ library BeipMU
 
       [propget] HRESULT Length([out, retval] int *retval);
 
+      [propget] HRESULT Prefix([out, retval] BSTR *retval);
+      [propput] HRESULT Prefix([in] BSTR bstr);
+      [propget] HRESULT Title([out, retval] BSTR *retval);
+      [propput] HRESULT Title([in] BSTR bstr);
+
       HRESULT Set([in] BSTR bstr);
       HRESULT Get([out, retval] BSTR *retval);
-
-//      [local, propget] HRESULT HWND([out, retval] void **hwnd);
    }
 
    [ uuid(479a8e11-1a05-464d-afec-6c32a7a3a3b5), oleautomation, dual, nonextensible ]
@@ -175,7 +178,8 @@ library BeipMU
    {
       [propget] HRESULT Output([out, retval] IWindow_Text** retval);
       [propget] HRESULT History([out, retval] IWindow_Text** retval);
-      [propget] HRESULT Input([out, retval] IWindow_Control_Edit** retval);
+      [propget] HRESULT Input([out, retval] IWindow_Input** retval); // Gets the default input window
+      HRESULT GetInput([in] BSTR title, [out, retval] IWindow_Input **retval); // Gets secondary input windows by name
       [propget] HRESULT Connection([out, retval] IConnection** retval);
 
       [propget] HRESULT UserData([out, retval] VARIANT *pVar);
@@ -201,8 +205,8 @@ library BeipMU
       HRESULT SetVariable([in] BSTR name, [in] BSTR value);
       HRESULT DeleteVariable([in] BSTR name);
 
-//      [local, propget] HRESULT HWND([out, retval] long *hwnd);
-//      [local] HRESULT MakeDocking([in] __int3264 hwnd, [out, retval] IDocking **pDocking);
+      HRESULT SetOnSpawnTabActivate([in] BSTR title, [in, defaultvalue(0)] IDispatch *pDisp, [in, defaultvalue(0)] VARIANT var);
+      // OnSpawnTabActivate(BSTR tab_name, var);
    }
 
    [ uuid(E9440711-EB4F-4250-AE95-5DB339E27C98), oleautomation, dual, nonextensible ]

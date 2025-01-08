@@ -1,3 +1,8 @@
+4.00.329
+
+Fix issue with multiline triggers with a 0 timeout duration not being infinite time
+
+
 4.00.328 - 2024-11-18
 
 Tabs can now drag between windows and into new windows

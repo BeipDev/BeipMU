@@ -295,6 +295,16 @@ void SpawnWindow::AfterRestore()
    Msg::VScroll(SB_BOTTOM).Post(*mp_text);
 }
 
+SpawnTabsWindow *Wnd_Main::FindSpawnTabsWindow(ConstString title)
+{
+   for(auto &tab_window : m_spawn_tabs_windows)
+   {
+      if(tab_window.m_title==title)
+         return &tab_window;
+   }
+   return nullptr;
+}
+
 SpawnWindow &Wnd_Main::GetSpawnWindow(const Prop::Trigger_Spawn &trigger, ConstString title, bool fHilight)
 {
    if(!title)
@@ -514,6 +524,8 @@ void SpawnTabsWindow::TabChange(unsigned tabOld)
    m_spawn_windows[tabOld].mp_text->SetAway(true);
    // New window is not
    m_spawn_windows[mp_tabs->GetVisible()].mp_text->SetAway(false);
+
+   m_events.Send(Event_Activate{m_spawn_windows[mp_tabs->GetVisible()].m_title});
 }
 
 void SpawnTabsWindow::TabClosed(unsigned tab)
@@ -2168,6 +2180,15 @@ bool Wnd_Main::EditKey(InputControl &edInput, const Msg::Key &msg)
    return fProcessed;
 }
 
+InputControl *Wnd_Main::FindInputWindow(ConstString title)
+{
+   for(auto *p_pane : m_input_panes)
+      if(p_pane->m_input.GetProps().pclTitle()==title)
+         return &p_pane->m_input;
+
+   return nullptr;
+}
+
 void Wnd_Main::CheckInputHeight()
 {
    // We only auto resize the primary input
@@ -3402,6 +3423,6 @@ void CreateWindow_Root(ConstString command_line, int nCmdShow)
 #endif
 #if DWRITE_TEST
    D2DTest();
-#endif
    CreateWndGTest();
+#endif
 }

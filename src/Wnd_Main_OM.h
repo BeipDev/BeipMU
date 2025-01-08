@@ -53,11 +53,13 @@ public:
       return S_OK;
    }
 
-   STDMETHODIMP get_Input(IWindow_Control_Edit **retval) override
+   STDMETHODIMP get_Input(IWindow_Input **retval) override
    {
-      m_pInput->AddRef(); *retval=m_pInput;
+      mp_input->AddRef(); *retval=mp_input;
       return S_OK;
    }
+
+   STDMETHODIMP GetInput(BSTR title, IWindow_Input **retval);
 
    STDMETHODIMP get_UserData(VARIANT *pVar) override { VariantCopy(pVar, &m_varUserData); return S_OK; }
    void STDMETHODCALLTYPE put_UserData(VARIANT var) override { m_varUserData=var; }
@@ -81,6 +83,8 @@ public:
    STDMETHODIMP SetVariable(BSTR name, BSTR value) override;
    STDMETHODIMP DeleteVariable(BSTR name) override;
 
+   STDMETHODIMP SetOnSpawnTabActivate(BSTR title, IDispatch *pDisp, VARIANT var) override;
+
 //   STDMETHODIMP get_HWND(long *hwnd);
 //   STDMETHODIMP MakeDocking(__int3264 hwnd, IDocking **retval) override;
 
@@ -94,7 +98,7 @@ private:
    CntPtrTo<IWindow_Text> m_pTextWindowOutput;
    CntPtrTo<IWindow_Text> m_pTextWindowHistory;
    CntPtrTo<IConnection> mp_connection;
-   CntPtrTo<IWindow_Control_Edit> m_pInput;
+   CntPtrTo<IWindow_Input> mp_input;
    Wnd_Main *m_pWnd_Main;
 
    VariantNode m_varUserData;
@@ -103,6 +107,18 @@ private:
    HookVariant m_hookActivate;
    HookVariant m_hookDeactivate;
    HookVariant m_hookClose;
+
+   struct SpawnTabActivate
+    : DLNode<SpawnTabActivate>,
+      CntReceiverOf<SpawnTabActivate, SpawnTabsWindow::Event_Activate>
+   {
+      void On(SpawnTabsWindow::Event_Activate &event);
+
+      OwnedString m_title;
+      HookVariant m_hook;
+   };
+
+   OwnedDLNodeList<SpawnTabActivate> m_spawn_tab_activates;
 };
 
 struct Windows : Dispatch<IWindows>

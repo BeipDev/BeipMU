@@ -42,6 +42,7 @@ private:
    AL::Edit *m_pedMinimumHeight, *m_pedMaximumHeight;
 
    AL::Edit *m_pedPrefix;
+   AL::Edit *m_pedTitle;
 
    AL::Edit *m_ped_margins[4];
 
@@ -114,11 +115,16 @@ void Dlg_InputWindow::Load(const Prop::InputWindow &prop)
    else
    {
       if(m_ppropInputWindow!=&GlobalInputSettings())
+      {
          m_pedPrefix->SetText(prop.pclPrefix());
+         m_pedTitle->SetText(prop.pclTitle());
+      }
       else
       {
          m_pedPrefix->Enable(false);
          m_pedPrefix->SetText("Disabled due to 'Use Global Settings'");
+         m_pedTitle->Enable(false);
+         m_pedTitle->SetText("Disabled due to 'Use Global Settings'");
       }
    }
 
@@ -156,7 +162,10 @@ void Dlg_InputWindow::Save(Prop::InputWindow &prop)
    else
    {
       if(m_ppropInputWindow!=&GlobalInputSettings())
+      {
          prop.pclPrefix(m_pedPrefix->GetText());
+         prop.pclTitle(m_pedTitle->GetText());
+      }
    }
 
    prop.clrLocalEchoColor(m_clrLocalEcho);
@@ -228,10 +237,18 @@ LRESULT Dlg_InputWindow::On(const Msg::Create &msg)
       }
       else
       {
-         m_pedPrefix=m_layout.CreateEdit(-1, int2(20,1), ES_AUTOHSCROLL);
+         {
+            m_pedPrefix=m_layout.CreateEdit(-1, int2(20, 1), ES_AUTOHSCROLL);
 
-         auto *pGH=m_layout.CreateGroup_Horizontal(); *pGV << pGH;
-         *pGH << m_layout.CreateStatic("Send Prefix: ") << m_pedPrefix;
+            auto *pGH=m_layout.CreateGroup_Horizontal(); *pGV << pGH;
+            *pGH << m_layout.CreateStatic("Send Prefix: ") << m_pedPrefix;
+         }
+         {
+            m_pedTitle=m_layout.CreateEdit(-1, int2(20, 1), ES_AUTOHSCROLL);
+
+            auto *pGH=m_layout.CreateGroup_Horizontal(); *pGV << pGH;
+            *pGH << m_layout.CreateStatic("Title: ") << m_pedTitle;
+         }
       }
 
       {

@@ -10,7 +10,7 @@
 #include "Connection_OM.h"
 #include "Wnd_Text_OM.h"
 #include "Wnd_Main_OM.h"
-#include "Wnd_Control_Edit.h"
+#include "OM_Window_Input.h"
 
 namespace OM
 {
@@ -41,7 +41,7 @@ MainWindow::MainWindow(Wnd_Main *pWnd_Main)
    m_pTextWindowOutput=new Window_Text(pWnd_Main->mp_wnd_text);
    m_pTextWindowHistory=new Window_Text(pWnd_Main->mp_wnd_text_history);
    mp_connection=new Connection(&pWnd_Main->GetConnection());
-   m_pInput=new Window_Control_Edit(pWnd_Main->m_input);
+   mp_input=new Window_Input(pWnd_Main->m_input);
 }
 
 MainWindow::~MainWindow()
@@ -157,6 +157,16 @@ HRESULT MainWindow::MakeDocking(__int3264 _hwnd, IDocking **retval)
 }
 #endif
 
+HRESULT MainWindow::GetInput(BSTR title, IWindow_Input **retval)
+{
+   ZOMBIECHECK
+   auto p_input=m_pWnd_Main->FindInputWindow(BSTRToLStr(title));
+   if(!p_input)
+      return E_INVALIDARG;
+   *retval=new Window_Input(*p_input); (*retval)->AddRef();
+   return S_OK;
+}
+
 HRESULT STDMETHODCALLTYPE MainWindow::Close()
 {
    ZOMBIECHECK
@@ -181,6 +191,41 @@ HRESULT MainWindow::SetOnClose(IDispatch *pDisp, VARIANT var)
    ZOMBIECHECK
    return ManageHook<Wnd_Main::Event_Close>(this, m_hookClose, *m_pWnd_Main, pDisp, var);
 }
+
+HRESULT MainWindow::SetOnSpawnTabActivate(BSTR title16, IDispatch *pDisp, VARIANT var)
+{
+   ZOMBIECHECK
+   auto title=BSTRToLStr(title16);
+   SpawnTabActivate *p_hook{};
+   for(auto &hook : m_spawn_tab_activates)
+   {
+      if(hook.m_title==title)
+      {
+         p_hook=&hook;
+         break;
+      }
+   }
+
+   if(!p_hook)
+   {
+      p_hook=new SpawnTabActivate();
+      p_hook->DLNode::Link(m_spawn_tab_activates.Prev());
+      p_hook->m_title=title;
+   }
+
+   auto *p_window=m_pWnd_Main->FindSpawnTabsWindow(title);
+   if(!p_window)
+      return E_FAIL;
+
+   return ManageHook<SpawnTabsWindow::Event_Activate>(p_hook, p_hook->m_hook, *p_window, pDisp, var);
+}
+
+void MainWindow::SpawnTabActivate::On(SpawnTabsWindow::Event_Activate &event)
+{
+   if(m_hook)
+      m_hook(m_hook.var, event.tab);
+}
+
 
 void MainWindow::On(Wnd_Main::Event_Command &event)
 {

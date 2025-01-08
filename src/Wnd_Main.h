@@ -147,6 +147,11 @@ struct SpawnTabsWindow
 
    DLNodeList<SpawnWindow> &GetTabs() { return m_spawn_windows; }
 
+   struct Event_Activate { ConstString tab; };
+
+   Events::SendersOf<Event_Activate> m_events;
+   template<typename TEvent> operator Events::SenderOf<TEvent> &() { return m_events.Get<TEvent>(); }
+
 private:
 
    friend TWindowImpl;
@@ -218,6 +223,7 @@ struct Wnd_Main
 
    InputControl &GetInputWindow() noexcept { return m_input; }
    InputControl &GetActiveInputWindow() { return *mp_input_active; }
+   InputControl *FindInputWindow(ConstString title);
    void CheckInputHeight();
    Text::Wnd &GetOutputWindow() { return *mp_wnd_text; }
    Prop::TextWindow &GetOutputProps() { return *mp_prop_output; }
@@ -236,6 +242,7 @@ struct Wnd_Main
 
    void TabColor(Color color);
 
+   SpawnTabsWindow *FindSpawnTabsWindow(ConstString title);
    SpawnWindow &GetSpawnWindow(const Prop::Trigger_Spawn &trigger, ConstString title, bool fHilight);
    Wnd_Image *GetImageWindow() { return mp_wnd_image; }
    Wnd_Image &EnsureImageWindow();
