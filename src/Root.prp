@@ -167,6 +167,7 @@ Prop InputWindow(RefCounted)
 
    Rect   Margins           = "0,0,0,0"
 
+   String Title // Window title (if blank is shown as 'Input')
    String Prefix // Send prefix
 
    Func "bool operator==(const InputWindow &prop) const=default;"

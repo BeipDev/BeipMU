@@ -6,12 +6,11 @@
 namespace OM
 {
 
-class Socket
- : public Dispatch<ISocket>,
-   public Sockets::Socket::INotify,
-   public Sockets::GetHost::INotify
+struct Socket
+ : Dispatch<ISocket>,
+   Sockets::Socket::INotify,
+   Sockets::GetHost::INotify
 {
-public:
    Socket(SOCKET socket=INVALID_SOCKET);
 
    USE_INHERITED_UNKNOWN(ISocket)
@@ -54,11 +53,10 @@ private:
    Hook m_hookConnect, m_hookDisconnect, m_hookReceive;
 };
 
-class SocketServer
- : public Dispatch<ISocketServer>,
-   public Sockets::Server::INotify
+struct SocketServer
+ : Dispatch<ISocketServer>,
+   Sockets::Server::INotify
 {
-public:
    SocketServer(unsigned int iPort, IDispatch *pDisp, VARIANT &var);
 
    USE_INHERITED_UNKNOWN(ISocketServer)

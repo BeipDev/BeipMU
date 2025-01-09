@@ -17,14 +17,32 @@ private:
    NotifiedPtrTo<Wnd_Docking> m_pWnd;
 };
 
-class MainWindow
-:  public Dispatch<IWindow_Main>,
-   public CntReceiverOf<MainWindow, Wnd_Main::Event_Command>,
-   public CntReceiverOf<MainWindow, Wnd_Main::Event_Activate>,
-   public CntReceiverOf<MainWindow, Wnd_Main::Event_Close>,
-   public CntReceiverOf<MainWindow, Wnd_Main::Event_Key>
+struct SpawnTabs
+ : DLNode<SpawnTabs>,
+   Dispatch<IWindow_SpawnTabs>,
+   CntReceiverOf<SpawnTabs, SpawnTabsWindow::Event_Activate>,
+   Events::TReceiverOf<SpawnTabs, Events::Event_Deleted>
 {
-public:
+   SpawnTabs(MainWindow &main_window, SpawnTabsWindow &window);
+
+   STDMETHODIMP SetOnTabActivate(IDispatch *pDisp, VARIANT var) override;
+   void On(SpawnTabsWindow::Event_Activate &event);
+   void On(Events::Event_Deleted &event);
+
+   MainWindow &m_main_window;
+   SpawnTabsWindow *mp_window;
+
+private:
+   HookVariant m_hook_tab_activate;
+};
+
+struct MainWindow
+ : Dispatch<IWindow_Main>,
+   CntReceiverOf<MainWindow, Wnd_Main::Event_Command>,
+   CntReceiverOf<MainWindow, Wnd_Main::Event_Activate>,
+   CntReceiverOf<MainWindow, Wnd_Main::Event_Close>,
+   CntReceiverOf<MainWindow, Wnd_Main::Event_Key>
+{
    MainWindow(Wnd_Main *pWnd_Main);
    ~MainWindow() noexcept;
    void Destroyed() { m_pWnd_Main=nullptr; }
@@ -53,11 +71,14 @@ public:
       return S_OK;
    }
 
-   STDMETHODIMP get_Input(IWindow_Control_Edit **retval) override
+   STDMETHODIMP get_Input(IWindow_Input **retval) override
    {
-      m_pInput->AddRef(); *retval=m_pInput;
+      mp_input->AddRef(); *retval=mp_input;
       return S_OK;
    }
+
+   STDMETHODIMP GetInput(BSTR title, IWindow_Input **retval);
+   STDMETHODIMP GetSpawnTabs(BSTR title, IWindow_SpawnTabs **retval);
 
    STDMETHODIMP get_UserData(VARIANT *pVar) override { VariantCopy(pVar, &m_varUserData); return S_OK; }
    void STDMETHODCALLTYPE put_UserData(VARIANT var) override { m_varUserData=var; }
@@ -81,20 +102,18 @@ public:
    STDMETHODIMP SetVariable(BSTR name, BSTR value) override;
    STDMETHODIMP DeleteVariable(BSTR name) override;
 
-//   STDMETHODIMP get_HWND(long *hwnd);
-//   STDMETHODIMP MakeDocking(__int3264 hwnd, IDocking **retval) override;
-
    // Events
    void On(Wnd_Main::Event_Command &event);
    void On(Wnd_Main::Event_Activate &event);
    void On(Wnd_Main::Event_Close &event);
    void On(Wnd_Main::Event_Key &event);
+   void On(Events::Event_Deleted &event, SpawnTabs &tab);
 
 private:
    CntPtrTo<IWindow_Text> m_pTextWindowOutput;
    CntPtrTo<IWindow_Text> m_pTextWindowHistory;
    CntPtrTo<IConnection> mp_connection;
-   CntPtrTo<IWindow_Control_Edit> m_pInput;
+   CntPtrTo<IWindow_Input> mp_input;
    Wnd_Main *m_pWnd_Main;
 
    VariantNode m_varUserData;
@@ -103,6 +122,8 @@ private:
    HookVariant m_hookActivate;
    HookVariant m_hookDeactivate;
    HookVariant m_hookClose;
+
+   Collection<CntPtrTo<SpawnTabs>> m_spawn_tabs;
 };
 
 struct Windows : Dispatch<IWindows>

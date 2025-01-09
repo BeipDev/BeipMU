@@ -10,7 +10,7 @@
 #include "Connection_OM.h"
 #include "Wnd_Text_OM.h"
 #include "Wnd_Main_OM.h"
-#include "Wnd_Control_Edit.h"
+#include "OM_Window_Input.h"
 
 namespace OM
 {
@@ -33,6 +33,32 @@ HRESULT Docking::Dock(Side side)
 }
 
 #undef ZOMBIECHECK
+#define ZOMBIECHECK if(!mp_window) return E_ZOMBIE;
+
+SpawnTabs::SpawnTabs(MainWindow &main_window, SpawnTabsWindow &window)
+   : m_main_window{main_window}, mp_window{&window}
+{
+   ReceiverOf<Events::Event_Deleted>::AttachTo(*mp_window);
+}
+
+HRESULT SpawnTabs::SetOnTabActivate(IDispatch *pDisp, VARIANT var)
+{
+   ZOMBIECHECK
+   return ManageHook<SpawnTabsWindow::Event_Activate>(this, m_hook_tab_activate, *mp_window, pDisp, var);
+}
+
+void SpawnTabs::On(SpawnTabsWindow::Event_Activate &event)
+{
+   if(m_hook_tab_activate)
+      m_hook_tab_activate(m_hook_tab_activate.var, event.tab);
+}
+
+void SpawnTabs::On(Events::Event_Deleted &event)
+{
+   m_main_window.On(event, *this);
+}
+
+#undef ZOMBIECHECK
 #define ZOMBIECHECK if(!m_pWnd_Main) return E_ZOMBIE;
 
 MainWindow::MainWindow(Wnd_Main *pWnd_Main)
@@ -41,7 +67,7 @@ MainWindow::MainWindow(Wnd_Main *pWnd_Main)
    m_pTextWindowOutput=new Window_Text(pWnd_Main->mp_wnd_text);
    m_pTextWindowHistory=new Window_Text(pWnd_Main->mp_wnd_text_history);
    mp_connection=new Connection(&pWnd_Main->GetConnection());
-   m_pInput=new Window_Control_Edit(pWnd_Main->m_input);
+   mp_input=new Window_Input(pWnd_Main->m_input);
 }
 
 MainWindow::~MainWindow()
@@ -136,26 +162,43 @@ HRESULT MainWindow::DeleteVariable(BSTR name)
    return S_OK;
 }
 
-
-#if 0
-HRESULT MainWindow::get_HWND(long *hwnd)
+HRESULT MainWindow::GetInput(BSTR title, IWindow_Input **retval)
 {
    ZOMBIECHECK
-   *hwnd=(long)(HWND)*m_pWnd_Main;
-   return S_OK;
-}
-
-HRESULT MainWindow::MakeDocking(__int3264 _hwnd, IDocking **retval)
-{
-   ZOMBIECHECK
-   HWND hwnd=reinterpret_cast<HWND>(_hwnd);
-   if(!IsWindow(hwnd))
+   auto p_input=m_pWnd_Main->FindInputWindow(BSTRToLStr(title));
+   if(!p_input)
       return E_INVALIDARG;
-   Wnd_Docking *pWnd=&m_pWnd_Main->CreateDocking(hwnd);
-   *retval=new Docking(pWnd); (*retval)->AddRef();
+   *retval=new Window_Input(*p_input); (*retval)->AddRef();
    return S_OK;
 }
-#endif
+
+HRESULT MainWindow::GetSpawnTabs(BSTR title16, IWindow_SpawnTabs **retval)
+{
+   ZOMBIECHECK
+   auto title=BSTRToLStr(title16);
+   for(SpawnTabs *p_window : m_spawn_tabs)
+   {
+      if(p_window->mp_window->m_title==title)
+      {
+         *retval=p_window; (*retval)->AddRef();
+         return S_OK;
+      }
+   }
+
+   auto *p_window=m_pWnd_Main->FindSpawnTabsWindow(title);
+   if(!p_window)
+      return E_FAIL;
+
+   auto p_spawn_tabs=MakeCounting<SpawnTabs>(*this, *p_window);
+   m_spawn_tabs.Push(p_spawn_tabs);
+   *retval=p_spawn_tabs; (*retval)->AddRef();
+   return S_OK;
+}
+
+void MainWindow::On(Events::Event_Deleted &event, SpawnTabs &tabs)
+{
+   m_spawn_tabs.FindAndUnsortedDelete(&tabs);
+}
 
 HRESULT STDMETHODCALLTYPE MainWindow::Close()
 {
@@ -193,7 +236,6 @@ void MainWindow::On(Wnd_Main::Event_Activate &event)
    if(m_hookActivate)
       m_hookActivate(m_hookActivate.var, event.fActivated());
 }
-
 
 void MainWindow::On(Wnd_Main::Event_Close &event)
 {

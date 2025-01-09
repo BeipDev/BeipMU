@@ -97,9 +97,15 @@ library BeipMU
 //		[propput] void UserData([in] VARIANT var);
    }
 
+   [ uuid(9D4D0B72-ABAD-40C7-91E6-29B07F6DC721), oleautomation, dual, nonextensible ]
+   interface IWindow_SpawnTabs : IDispatch
+   {
+      HRESULT SetOnTabActivate([in, defaultvalue(0)] IDispatch *pDisp, [in, defaultvalue(0)] VARIANT var);
+      // OnTabActivate(BSTR tab_name, var);
+   }
 
    [ uuid(E50E3B98-5AE1-4fe7-814A-4B1B1A188EF2), oleautomation, dual, nonextensible ]
-   interface IWindow_Control_Edit : IDispatch
+   interface IWindow_Input : IDispatch
    {
       HRESULT SetSel([in] int start, [in] int end);
       HRESULT GetSelStart([out, retval] int *retval);
@@ -107,10 +113,13 @@ library BeipMU
 
       [propget] HRESULT Length([out, retval] int *retval);
 
+      [propget] HRESULT Prefix([out, retval] BSTR *retval);
+      [propput] HRESULT Prefix([in] BSTR bstr);
+      [propget] HRESULT Title([out, retval] BSTR *retval);
+      [propput] HRESULT Title([in] BSTR bstr);
+
       HRESULT Set([in] BSTR bstr);
       HRESULT Get([out, retval] BSTR *retval);
-
-//      [local, propget] HRESULT HWND([out, retval] void **hwnd);
    }
 
    [ uuid(479a8e11-1a05-464d-afec-6c32a7a3a3b5), oleautomation, dual, nonextensible ]
@@ -175,11 +184,14 @@ library BeipMU
    {
       [propget] HRESULT Output([out, retval] IWindow_Text** retval);
       [propget] HRESULT History([out, retval] IWindow_Text** retval);
-      [propget] HRESULT Input([out, retval] IWindow_Control_Edit** retval);
+      [propget] HRESULT Input([out, retval] IWindow_Input** retval); // Gets the default input window
       [propget] HRESULT Connection([out, retval] IConnection** retval);
 
       [propget] HRESULT UserData([out, retval] VARIANT *pVar);
       [propput] void UserData([in] VARIANT var);
+
+      HRESULT GetInput([in] BSTR title, [out, retval] IWindow_Input **retval); // Gets secondary input windows by name
+      HRESULT GetSpawnTabs([in] BSTR title, [out, retval] IWindow_SpawnTabs **retval); // Get spawn tabs window by name
 
       HRESULT Close();
 
@@ -200,9 +212,6 @@ library BeipMU
       HRESULT GetVariable([in] BSTR name, [out, retval] BSTR *value);
       HRESULT SetVariable([in] BSTR name, [in] BSTR value);
       HRESULT DeleteVariable([in] BSTR name);
-
-//      [local, propget] HRESULT HWND([out, retval] long *hwnd);
-//      [local] HRESULT MakeDocking([in] __int3264 hwnd, [out, retval] IDocking **pDocking);
    }
 
    [ uuid(E9440711-EB4F-4250-AE95-5DB339E27C98), oleautomation, dual, nonextensible ]

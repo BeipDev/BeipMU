@@ -1,11 +1,12 @@
 #include "OM_Help.h"
+struct InputControl;
 
 namespace OM
 {
 
-struct Window_Control_Edit : Dispatch<IWindow_Control_Edit>
+struct Window_Input : Dispatch<IWindow_Input>
 {
-   Window_Control_Edit(Controls::Edit wnd);
+   Window_Input(InputControl &input);
 
    STDMETHODIMP Set(BSTR bstr) override;
    STDMETHODIMP Get(BSTR *retval) override;
@@ -16,10 +17,13 @@ struct Window_Control_Edit : Dispatch<IWindow_Control_Edit>
 
    STDMETHODIMP get_Length(int *retval) override;
 
-//   STDMETHODIMP get_HWND(void **hwnd) override;
+   STDMETHODIMP get_Prefix(BSTR *retval) override;
+   STDMETHODIMP put_Prefix(BSTR bstr) override;
+   STDMETHODIMP get_Title(BSTR *retval) override;
+   STDMETHODIMP put_Title(BSTR bstr) override;
 
 private:
-   Controls::Edit m_edit;
+   NotifiedPtrTo<InputControl> mp_input;
 };
 
 };
