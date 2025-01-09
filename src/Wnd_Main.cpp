@@ -305,13 +305,13 @@ SpawnTabsWindow *Wnd_Main::FindSpawnTabsWindow(ConstString title)
    return nullptr;
 }
 
-SpawnWindow &Wnd_Main::GetSpawnWindow(const Prop::Trigger_Spawn &trigger, ConstString title, bool fHilight)
+SpawnWindow *Wnd_Main::GetSpawnWindow(const Prop::Trigger_Spawn &trigger, ConstString title, bool hilight, bool use_existing)
 {
    if(!title)
    {
       if(!mp_null_spawn)
          mp_null_spawn=MakeUnique<SpawnWindow>(*this);
-      return *mp_null_spawn;
+      return mp_null_spawn;
    }
 
    if(trigger.pclTabGroup())
@@ -329,23 +329,29 @@ SpawnWindow &Wnd_Main::GetSpawnWindow(const Prop::Trigger_Spawn &trigger, ConstS
 
       if(!p_tab_window)
       {
+         if(use_existing)
+            return nullptr;
+
          p_tab_window=new SpawnTabsWindow(m_spawn_tabs_windows.Prev(), *this, trigger.pclTabGroup());
          p_tab_window->GetDocking().Dock(Docking::Side::Right);
       }
 
-      return p_tab_window->GetTab(title, nullptr, fHilight);
+      return p_tab_window->GetTab(title, nullptr, hilight, use_existing);
    }
 
    for(auto &window : m_spawn_windows)
    {
       if(window.m_title==title)
-         return window;
+         return &window;
    }
+
+   if(use_existing)
+      return nullptr;
 
    auto &spawn=*new SpawnWindow(m_spawn_windows.Prev(), *this, title, *CopyIfNotGlobal(*mp_prop_output));
    if(spawn)
       spawn.GetDocking().Dock(Docking::Side::Right);
-   return spawn;
+   return &spawn;
 }
 
 Wnd_Image &Wnd_Main::EnsureImageWindow()
@@ -458,7 +464,7 @@ SpawnTabsWindow::~SpawnTabsWindow()
 {
 }
 
-SpawnWindow &SpawnTabsWindow::GetTab(ConstString title, Prop::TextWindow *pprops, bool hilight)
+SpawnWindow *SpawnTabsWindow::GetTab(ConstString title, Prop::TextWindow *pprops, bool hilight, bool use_existing)
 {
    // Look for an existing tab
    for(unsigned i=0;i<m_spawn_windows.Count();i++)
@@ -467,9 +473,12 @@ SpawnWindow &SpawnTabsWindow::GetTab(ConstString title, Prop::TextWindow *pprops
       {
          if(hilight)
             mp_tabs->SetHilight(i);
-         return m_spawn_windows[i];
+         return &m_spawn_windows[i];
       }
    }
+
+   if(use_existing)
+      return nullptr;
 
    // Create a new tab, make a copy of the text window settings using a previous tab or the output settings
    CntPtrTo<Prop::TextWindow> p_prop_text_window{pprops};
@@ -490,7 +499,7 @@ SpawnWindow &SpawnTabsWindow::GetTab(ConstString title, Prop::TextWindow *pprops
       spawn_window.mp_text->SetAway(true);
    }
    mp_tabs->Invalidate(true);
-   return spawn_window;
+   return &spawn_window;
 }
 
 void SpawnTabsWindow::SetAway(bool fAway)
@@ -1266,7 +1275,7 @@ Wnd_Docking *Wnd_Main::RestoreDockedWindowSettings(Prop::DockedWindow &propWindo
          auto &wnd=*new SpawnTabsWindow(m_spawn_tabs_windows.Prev(), *this, props.pclTitle());
 
          for(auto &pTab : props.propTabs())
-            wnd.GetTab(pTab->pclTitle(), pTab->fPropTextWindow() ? &pTab->propTextWindow() : nullptr, false);
+            wnd.GetTab(pTab->pclTitle(), pTab->fPropTextWindow() ? &pTab->propTextWindow() : &GlobalTextSettings(), false, false);
 
          return &wnd.GetDocking();
       }

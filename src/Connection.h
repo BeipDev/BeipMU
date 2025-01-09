@@ -204,7 +204,7 @@ struct Connection
    struct Event_Log { };
 
    Events::SendersOf<Event_Log, Event_Send, Event_Receive, Event_Display, Event_Activity, Event_Connect, Event_Disconnect, Event_GMCP> m_events;
-   template<class TEvent> operator Events::SenderOf<TEvent> &() { return m_events.Get<TEvent>(); }
+   template<typename TEvent> operator Events::SenderOf<TEvent> &() { return m_events.Get<TEvent>(); }
 
    OwnedString m_grab_prefix; // If non empty, we're watching for a grab prefix to put into the input window
 

@@ -1620,22 +1620,25 @@ void Connection::TriggersExecute(Text::Line &line, Array<CopyCntPtrTo<Prop::Trig
                if(prop.fActive() && !mp_captured_spawn_window && !state.mp_spawn_window)
                {
                   FindStringReplacement replacement(search, prop.pclTitle());
-                  state.mp_spawn_window=&GetMainWindow().GetSpawnWindow(prop, replacement, !state.m_no_activity);
-                  state.mp_spawn_window->m_gag_log=prop.fGagLog();
-                  state.mp_spawn_trigger=ppropTrigger;
-
-                  // If there is no capture until set, and we have one, set this trigger as the capture until
-                  if(prop.pclCaptureUntil())
-                     state.mp_spawn_window->mp_capture_until=ppropTrigger;
-
-                  if(mp_trigger_debug)
+                  state.mp_spawn_window=GetMainWindow().GetSpawnWindow(prop, replacement, !state.m_no_activity, m_raw_log_replay);
+                  if(state.mp_spawn_window)
                   {
-                     FixedStringBuilder<256> string("Redirecting to spawn window: <b>", Text::NoHTML{replacement}, "</b>");
-                     if(prop.pclTabGroup())
-                        string(" on tab: <b>", Text::NoHTML{prop.pclTabGroup()});
-                     TriggerDebugText("#000040", "blue", "10", string);
+                     state.mp_spawn_window->m_gag_log=prop.fGagLog();
+                     state.mp_spawn_trigger=ppropTrigger;
+
+                     // If there is no capture until set, and we have one, set this trigger as the capture until
                      if(prop.pclCaptureUntil())
-                        TriggerDebugText("#000040", "blue", "10", FixedStringBuilder<256>("Capture until set: <b>", Text::NoHTML{prop.pclCaptureUntil()}));
+                        state.mp_spawn_window->mp_capture_until=ppropTrigger;
+
+                     if(mp_trigger_debug)
+                     {
+                        FixedStringBuilder<256> string("Redirecting to spawn window: <b>", Text::NoHTML{replacement}, "</b>");
+                        if(prop.pclTabGroup())
+                           string(" on tab: <b>", Text::NoHTML{prop.pclTabGroup()});
+                        TriggerDebugText("#000040", "blue", "10", string);
+                        if(prop.pclCaptureUntil())
+                           TriggerDebugText("#000040", "blue", "10", FixedStringBuilder<256>("Capture until set: <b>", Text::NoHTML{prop.pclCaptureUntil()}));
+                     }
                   }
                }
             }
