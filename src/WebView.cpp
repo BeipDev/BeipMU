@@ -42,7 +42,7 @@ struct WebView2EnvironmentCreator : General::Unknown<ICoreWebView2CreateCoreWebV
 
 struct WebView_OM
  : OM::Dispatch<OM::IWebView>,
-	OM::CntReceiversOf<WebView_OM, ::Connection::Event_Connect, ::Connection::Event_Disconnect, ::Connection::Event_Receive, ::Connection::Event_Display,
+	Events::ReceiversOf<WebView_OM, ::Connection::Event_Connect, ::Connection::Event_Disconnect, ::Connection::Event_Receive, ::Connection::Event_Display,
 	::Connection::Event_Send, ::Connection::Event_GMCP>
 {
 	WebView_OM(Wnd_WebView &wnd_webview) : mp_wnd_webview{&wnd_webview} { }
@@ -87,7 +87,8 @@ struct WebView_OM
 		{
 			p_displayer=m_displays.Push(MakeUnique<Displayer>());
 			p_displayer->m_id=id;
-			CntReceiverOf<WebView_OM, ::Connection::Event_Display>::AttachTo(m_connection);
+			if(m_displays.Count()+m_captures.Count()==1)
+				AttachTo<::Connection::Event_Display>(m_connection);
 		}
 
 		p_displayer->m_hook.Set(p_disp);
@@ -104,7 +105,8 @@ struct WebView_OM
 			if(p_hook->m_id==id)
 			{
 				m_displays.UnsortedDelete(index);
-				CntReceiverOf<WebView_OM, ::Connection::Event_Display>::Detach();
+				if(m_displays.Count()+m_captures.Count()==0)
+					Detach<::Connection::Event_Display>();
 				break;
 			}
 		}
@@ -128,7 +130,8 @@ struct WebView_OM
 		{
 			p_capture=m_captures.Push(MakeUnique<Capture>());
 			p_capture->m_id=id;
-			CntReceiverOf<WebView_OM, ::Connection::Event_Display>::AttachTo(m_connection);
+			if(m_displays.Count()+m_captures.Count()==1)
+				AttachTo<::Connection::Event_Display>(m_connection);
 		}
 
 		p_capture->m_hook_capture_line.Set(p_capture_line);
@@ -152,7 +155,8 @@ struct WebView_OM
 					break;
 
 				m_captures.UnsortedDelete(index);
-				CntReceiverOf<WebView_OM, ::Connection::Event_Display>::Detach();
+				if(m_displays.Count()+m_captures.Count()==0)
+					Detach<::Connection::Event_Display>();
 				*retval=OM::ToVariantBool(true);
 				break;
 			}
@@ -186,7 +190,8 @@ struct WebView_OM
 		p_handler->m_prefix=std::move(package_prefix);
 		p_handler->m_hook.Set(p_callback);
 
-		CntReceiverOf<WebView_OM, ::Connection::Event_GMCP>::AttachTo(m_connection);
+		if(m_gmcp_handlers.Count()==1)
+			AttachTo<::Connection::Event_GMCP>(m_connection);
 		return S_OK;
 	}
 
@@ -199,7 +204,8 @@ struct WebView_OM
 			if(p_handler->m_prefix==package_prefix)
 			{
 				m_gmcp_handlers.UnsortedDelete(index);
-				CntReceiverOf<WebView_OM, ::Connection::Event_GMCP>::Detach();
+				if(m_gmcp_handlers.Count()==0)
+					Detach<::Connection::Event_GMCP>();
 				return S_OK;
 			}
 		}
