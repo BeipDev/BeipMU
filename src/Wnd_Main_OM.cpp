@@ -38,7 +38,7 @@ HRESULT Docking::Dock(Side side)
 SpawnTabs::SpawnTabs(MainWindow &main_window, SpawnTabsWindow &window)
    : m_main_window{main_window}, mp_window{&window}
 {
-   ReceiverOf<Events::Event_Deleted>::AttachTo(*mp_window);
+   AttachTo<Events::Event_Deleted>(*mp_window);
 }
 
 HRESULT SpawnTabs::SetOnTabActivate(IDispatch *pDisp, VARIANT var)
