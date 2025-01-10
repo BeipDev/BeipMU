@@ -227,6 +227,30 @@ struct WebView_OM
 		return S_OK;
 	}
 
+	STDMETHODIMP GetPropertyString(BSTR bstr, BSTR *out) override
+	{
+		auto property=BSTRToLStr(bstr);
+		if(property=="WorldName")
+		{
+			*out=LStrToBSTR(mp_wnd_webview->GetWndMain().GetConnection().GetServer()->pclName());
+			return S_OK;
+		}
+		else if(property=="CharacterName")
+		{
+			*out=LStrToBSTR(mp_wnd_webview->GetWndMain().GetConnection().GetCharacter()->pclName());
+			return S_OK;
+		}
+		else if(property=="PuppetName")
+		{
+			if(auto *p_puppet=mp_wnd_webview->GetWndMain().GetConnection().GetPuppet())
+				*out=LStrToBSTR(p_puppet->pclName());
+			else
+				*out=nullptr;
+			return S_OK;
+		}
+		return S_FALSE;
+	}
+
 	void On(Connection::Event_Receive &event)
 	{
 		if(m_hook_receive)
@@ -444,9 +468,9 @@ void Wnd_WebView::On(const Event_WebViewEnvironmentCreated &)
 #if 0
 			OM::Variant v1{Automation::GetApp()};
 			mp_webview->AddHostObjectToScript(L"app", &v1);
-#endif
 			OM::Variant v2{m_wnd_main.GetDispatch()};
 			mp_webview->AddHostObjectToScript(L"window", &v2);
+#endif
 
 			EventRegistrationToken token;
 			mp_webview->add_DocumentTitleChanged(Microsoft::WRL::Callback<ICoreWebView2DocumentTitleChangedEventHandler>(
