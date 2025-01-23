@@ -468,9 +468,9 @@ bool Connection::OnGMCP_Parse(ConstString string)
          }
       }
    }
-   catch(const Exceptions::Message &message)
+   catch(const std::exception &message)
    {
-      ConsoleText(message);
+      ConsoleText(SzToString(message.what()));
    }
 
    return false;
@@ -1994,7 +1994,7 @@ void Connection::AutoLogStart() try
       m_events.Send(Event_Log());
       m_auto_log=true;
    }
-} catch(const std::runtime_error &)
+} catch(const std::exception &)
 {
 }
 
@@ -2024,7 +2024,7 @@ void Connection::LogStart(ConstString filename, unsigned type) try
 
    if(p_start)
       mp_log->LogTextList(GetOutput().GetTextList(), p_start);
-} catch(const std::runtime_error &)
+} catch(const std::exception &)
 {
 }
 

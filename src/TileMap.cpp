@@ -539,7 +539,7 @@ void Wnd_TileMap::OnMapData(ConstString value)
       case Encoding::Hex_4:
       {
          if(value.Count()!=size)
-            throw Exceptions::Message(FixedStringBuilder<256>("Expected ", size, " characters but received ", value.Count()));
+            throw std::runtime_error{FixedStringBuilder<256>("Expected ", size, " characters but received ", value.Count()).Terminate()};
 
          auto dest=m_map_data.begin();
          for(unsigned i=0;i<size;i++)
@@ -554,7 +554,7 @@ void Wnd_TileMap::OnMapData(ConstString value)
       case Encoding::Hex_8:
       {
          if(value.Count()!=size*2)
-            throw Exceptions::Message(FixedStringBuilder<256>("Expected ", size*2, " characters but received ", value.Count()));
+            throw std::runtime_error{FixedStringBuilder<256>("Expected ", size*2, " characters but received ", value.Count()).Terminate()};
 
          auto dest=m_map_data.begin();
          for(unsigned i=0;i<size;i++)
@@ -992,9 +992,9 @@ void JSON_TileMapInfo::OnString(ConstString name, ConstString value)
       value.To(tile_size);
 
       if(tile_size.x==0 || tile_size.y==0)
-         throw Exceptions::Message("tileSize cannot be zero");
+         throw std::runtime_error{"tileSize cannot be zero"};
       if(tile_size.x>256 || tile_size.y>256)
-         throw Exceptions::Message("tileSize is too large, maximum size is 256 in each dimension");
+         throw std::runtime_error{"tileSize is too large, maximum size is 256 in each dimension"};
 
       m_map.m_tile_size=tile_size;
       return;
@@ -1008,7 +1008,7 @@ void JSON_TileMapInfo::OnString(ConstString name, ConstString value)
             m_map.m_encoding=Encoding(i);
             return;
          }
-      throw Exceptions::Message("Unknown encoding");
+      throw std::runtime_error{"Unknown encoding"};
       return;
    }
 
@@ -1018,9 +1018,9 @@ void JSON_TileMapInfo::OnString(ConstString name, ConstString value)
       value.To(map_size);
 
       if(map_size.x==0 || map_size.y==0)
-         throw Exceptions::Message("mapSize cannot be zero");
+         throw std::runtime_error{"mapSize cannot be zero"};
       if(map_size.x>256 || map_size.y>256)
-         throw Exceptions::Message("mapSize is too large, maximum size is 256 in each dimension");
+         throw std::runtime_error{"mapSize is too large, maximum size is 256 in each dimension"};
 
       m_map.SetMapSize(map_size);
       return;
@@ -1060,7 +1060,7 @@ struct JSON_TileMapData : JSON::Element
    {
       auto *pMap=m_maps.Find(name);
       if(!pMap)
-         throw Exceptions::Message(FixedStringBuilder<256>("Received map data for non existant map: ", name));
+         throw std::runtime_error{FixedStringBuilder<256>("Received map data for non existant map: ", name).Terminate()};
 
       if(pMap->IsEditing()) // Ignore updates
          return;
