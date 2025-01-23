@@ -8,6 +8,10 @@ window.onload = async function() {
   client.SetOnDisplay(1, onDisplay, ".*", false /*gag*/);
   client.SetOnDisplayCapture(1, onCapture, onCaptureChanged, "{{begin capture1}}", "{{end capture1}}");
   client.SetOnDisplayCapture(2, onCapture, onCaptureChanged, "{{begin capture2}}", "{{end capture2}}");
+
+  document.getElementById("world_name").innerText = await client.GetPropertyString("WorldName");
+  document.getElementById("character_name").innerText = await client.GetPropertyString("CharacterName");
+  document.getElementById("puppet_name").innerText = await client.GetPropertyString("PuppetName");
 }
 
 function handleKeyPress(event) {
@@ -99,9 +103,13 @@ function AddListItem(id, string)
     This is a web page! <b>Can you tell?</b><br>
     <h2>Example features:</h2>
 
+    <p>Current World: <span id="world_name"></span><br>
+    Current Character: <span id="character_name"></span><br>
+    Current Puppet: <span id="puppet_name"></span></p>
+
     <h3>Sending text</h3>
     Button to send to the current connection. Sends "Button clicked"<br>
-    <button onclick="window.chrome.webview.hostObjects.window.output.write('Button clicked!')">Send Example</button><br>
+    <button onclick="client.display('Button clicked!')">Send Example</button><br>
     <br>
     Edit box to send the typed text when you press enter:<br>
     <input type="text" id="textBox" onkeydown="handleKeyPress(event)" />

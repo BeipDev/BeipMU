@@ -325,6 +325,7 @@ library BeipMU
 
       HRESULT ProcessAliases([in] BSTR text, [out, retval] BSTR *result);
       HRESULT AddToInputHistory([in] BSTR text);
+      HRESULT GetPropertyString([in] BSTR property, [out, retval] BSTR *result);
    }
 
    [ uuid(5b53fd39-46a8-4519-86a4-0442d98d79aa), oleautomation, dual, nonextensible ]
