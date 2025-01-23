@@ -1129,7 +1129,7 @@ void Connection::Display(UniquePtr<Text::Line> &&p_line)
    {
       if(p_capture_until->propSpawn().fOnlyChildrenDuringCapture())
       {
-         TriggersExecute(*p_line, p_capture_until->propTriggers(), state);
+         RunTriggers(*p_line, p_capture_until->propTriggers(), state);
          state.m_stop=true; // Don't process any other triggers
       }
    }
@@ -1140,7 +1140,7 @@ void Connection::Display(UniquePtr<Text::Line> &&p_line)
       for(unsigned i=0;i<m_multiline_triggers.Count();i++)
       {
          auto &multiline=*m_multiline_triggers[i];
-         TriggersExecute(*p_line, *multiline.mp_triggers, state);
+         RunTriggers(*p_line, *multiline.mp_triggers, state);
          if(multiline.m_line_limit!=0 && ++multiline.m_line_count>=multiline.m_line_limit)
          {
             m_multiline_triggers.Delete(i--);
@@ -1149,19 +1149,19 @@ void Connection::Display(UniquePtr<Text::Line> &&p_line)
          }
       }
 
-      TriggersExecute(*p_line, m_propConnections.propTriggers().WithoutLast(m_propConnections.propTriggers().AfterCount()), state);
+      RunTriggers(*p_line, m_propConnections.propTriggers().WithoutLast(m_propConnections.propTriggers().AfterCount()), state);
 
       if(m_ppropServer && m_ppropServer->propTriggers().fActive())
       {
-         TriggersExecute(*p_line, m_ppropServer->propTriggers().WithoutLast(m_ppropServer->propTriggers().AfterCount()), state);
+         RunTriggers(*p_line, m_ppropServer->propTriggers().WithoutLast(m_ppropServer->propTriggers().AfterCount()), state);
 
          if(m_ppropCharacter && m_ppropCharacter->propTriggers().fActive())
-            TriggersExecute(*p_line, m_ppropCharacter->propTriggers(), state);
+            RunTriggers(*p_line, m_ppropCharacter->propTriggers(), state);
 
-         TriggersExecute(*p_line, m_ppropServer->propTriggers().Last(m_ppropServer->propTriggers().AfterCount()), state);
+         RunTriggers(*p_line, m_ppropServer->propTriggers().Last(m_ppropServer->propTriggers().AfterCount()), state);
       }
 
-      TriggersExecute(*p_line, m_propConnections.propTriggers().Last(m_propConnections.propTriggers().AfterCount()), state);
+      RunTriggers(*p_line, m_propConnections.propTriggers().Last(m_propConnections.propTriggers().AfterCount()), state);
 
       // Add new multiline triggers to beginning of list, such that the last one added to the list will be first
       while(m_new_multiline_triggers)
@@ -1437,7 +1437,7 @@ void Connection::OnMultilineTriggerTimeout(MultilineTrigger &v)
    Assert(false); // Why didn't we find the trigger?
 }
 
-void Connection::TriggersExecute(Text::Line &line, Array<CopyCntPtrTo<Prop::Trigger>> triggers, TriggerState &state)
+void Connection::RunTriggers(Text::Line &line, Array<CopyCntPtrTo<Prop::Trigger>> triggers, TriggerState &state)
 {
    if(state.m_stop)
       return;
@@ -1881,7 +1881,7 @@ void Connection::TriggersExecute(Text::Line &line, Array<CopyCntPtrTo<Prop::Trig
          {
             // Do the nested triggers
             if(ppropTrigger->fPropTriggers() && ppropTrigger->propTriggers().fActive())
-               TriggersExecute(line, ppropTrigger->propTriggers(), state);
+               RunTriggers(line, ppropTrigger->propTriggers(), state);
          }
       }
 

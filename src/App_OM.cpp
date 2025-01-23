@@ -216,7 +216,15 @@ STDMETHODIMP Triggers::get_Item(VARIANT var, ITrigger** retval)
       return RefReturner(retval)(MakeCounting<Trigger>(*(*m_propTriggers)[iTrigger], m_propTriggers));
    }
 
-   return E_FAIL;
+   if(var.bstrVal)
+   {
+      BSTRToLStr string(var.bstrVal);
+      for(auto &v : *m_propTriggers)
+         if(v->pclDescription()==string)
+            return RefReturner(retval)(MakeCounting<Trigger>(*v, m_propTriggers));
+   }
+
+   return S_FALSE;
 }
 
 STDMETHODIMP Triggers::get_Count(long *retval)
@@ -250,6 +258,66 @@ STDMETHODIMP Triggers::Move(long from, long to)
 
    return E_FAIL; // NYI
 }
+
+
+Alias::Alias(Prop::Alias &prop_alias, Prop::Aliases *p_prop_aliases)
+   : m_prop_alias{prop_alias}, mp_prop_aliases{p_prop_aliases}
+{
+}
+
+STDMETHODIMP Alias::get_StopProcessing(VARIANT_BOOL *retval)
+{
+   *retval=VariantBool(m_prop_alias->fStopProcessing()); return S_OK;
+}
+
+STDMETHODIMP Alias::put_StopProcessing(VARIANT_BOOL flag)
+{
+   m_prop_alias->fStopProcessing(VariantBool(flag)); return S_OK;
+}
+
+STDMETHODIMP Alias::get_Folder(VARIANT_BOOL *retval)
+{
+   *retval=VariantBool(m_prop_alias->fFolder()); return S_OK;
+}
+
+STDMETHODIMP Alias::put_Folder(VARIANT_BOOL flag)
+{
+   m_prop_alias->fFolder(VariantBool(flag)); return S_OK;
+}
+
+Aliases::Aliases(Prop::Aliases &prop_aliases) : m_prop_aliases{prop_aliases}
+{
+}
+
+STDMETHODIMP Aliases::get_Item(VARIANT var, IAlias **retval)
+{
+   Variant v2;
+   if(v2.Convert<uint32>(var))
+   {
+      unsigned index=v2.Get<uint32>();
+      if(index>=m_prop_aliases->Count())
+         return E_INVALIDARG;
+
+      return RefReturner(retval)(MakeCounting<Alias>(*(*m_prop_aliases)[index], m_prop_aliases));
+   }
+
+   if(var.bstrVal)
+   {
+      BSTRToLStr string(var.bstrVal);
+
+      for(auto &v : *m_prop_aliases)
+         if(v->pclDescription()==string)
+            return RefReturner(retval)(MakeCounting<Alias>(*v, m_prop_aliases));
+   }
+
+   return S_FALSE;
+}
+
+STDMETHODIMP Aliases::get_Count(long *retval)
+{
+   *retval=m_prop_aliases->Count(); return S_OK;
+}
+
 
 Puppet::Puppet(Prop::Puppet &propPuppet) : m_propPuppet(propPuppet)
 {
@@ -328,6 +396,11 @@ STDMETHODIMP Puppet::put_ConnectWithPlayer(VARIANT_BOOL flag)
 STDMETHODIMP Puppet::get_Triggers(ITriggers **retval)
 {
    return RefReturner(retval)(MakeCounting<Triggers>(m_propPuppet->propTriggers()));
+}
+
+STDMETHODIMP Puppet::get_Aliases(IAliases **retval)
+{
+   return RefReturner(retval)(MakeCounting<Aliases>(m_propPuppet->propAliases()));
 }
 
 Puppets::Puppets(Prop::Puppets &propPuppets) : m_propPuppets(propPuppets)
@@ -438,6 +511,11 @@ STDMETHODIMP Character::get_Triggers(ITriggers **retval)
    return RefReturner(retval)(MakeCounting<Triggers>(m_propCharacter->propTriggers()));
 }
 
+STDMETHODIMP Character::get_Aliases(IAliases **retval)
+{
+   return RefReturner(retval)(MakeCounting<Aliases>(m_propCharacter->propAliases()));
+}
+
 STDMETHODIMP Character::get_Puppets(IPuppets **retval)
 {
    return RefReturner(retval)(MakeCounting<Puppets>(m_propCharacter->propPuppets()));
@@ -534,6 +612,11 @@ STDMETHODIMP World::get_Triggers(ITriggers **retval)
    return RefReturner(retval)(MakeCounting<Triggers>(m_propServer->propTriggers()));
 }
 
+STDMETHODIMP World::get_Aliases(IAliases **retval)
+{
+   return RefReturner(retval)(MakeCounting<Aliases>(m_propServer->propAliases()));
+}
+
 Worlds::Worlds() : m_propServers(g_ppropGlobal->propConnections().propServers())
 {
 }
@@ -617,6 +700,11 @@ HRESULT App::get_Windows(IWindows **retval)
 HRESULT App::get_Triggers(ITriggers **retval)
 {
    return RefReturner(retval)(MakeCounting<Triggers>(g_ppropGlobal->propConnections().propTriggers()));
+}
+
+HRESULT App::get_Aliases(IAliases **retval)
+{
+   return RefReturner(retval)(MakeCounting<Aliases>(g_ppropGlobal->propConnections().propAliases()));
 }
 
 STDMETHODIMP App::SetOnNewWindow(IDispatch *pDisp, VARIANT var)

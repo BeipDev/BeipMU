@@ -169,6 +169,7 @@ void Dlg_General::OnCreate()
       auto &g=CreateSection(STR_Windows);
       g >> AL::Style::Attach_Right;
 
+      AddBool(g, "Lock window layouts", g_ppropGlobal->fLockLayout());
       AddBool(g, STR_ActivateDisconnect, g_ppropGlobal->propConnections().fActivateDisconnect());
       AddBool(g, "Show image viewer automatically", g_ppropGlobal->fAutoImageViewer());
       {

@@ -374,7 +374,7 @@ struct PropTree : IPropTree
       if(!item.ppropAliases())
          return nullptr;
 
-      return MakeUnique<PropTreeItem_Alias>(*item.ppropAliases()->Push(MakeUnique<Prop::Alias>()));
+      return MakeUnique<PropTreeItem_Alias>(*item.ppropAliases()->Push(MakeCounting<Prop::Alias>()));
    }
 
    UniquePtr<IPropTreeItem> CopyChild(IPropTreeItem &item, IPropTreeItem &child) override
@@ -382,10 +382,9 @@ struct PropTree : IPropTree
       if(!child.ppropAlias())
          return nullptr;
 
-      auto ppropAlias=MakeUnique<Prop::Alias>(*child.ppropAlias());
+      auto ppropAlias=MakeCounting<Prop::Alias>(*child.ppropAlias());
       auto pItem=MakeUnique<PropTreeItem_Alias>(*ppropAlias);
 
-      ppropAlias.Extract(); // TODO: The alias isn't owned by the IPropTreeItem, so if the InsertChild doesn't happen this object can leak
       return pItem;
    }
 
@@ -397,7 +396,7 @@ struct PropTree : IPropTree
 
    void ExtractChild(IPropTreeItem &item, IPropTreeItem *pti) override
    {
-      item.ppropAliases()->FindAndDelete(pti->ppropAlias()).Extract();
+      item.ppropAliases()->FindAndDelete(pti->ppropAlias());
    }
 
    void InsertChild(IPropTreeItem &item, IPropTreeItem *pti, IPropTreeItem *ptiNextTo, bool fAfter) override
@@ -444,15 +443,15 @@ void PropTree::Export(IPropTreeItem &item, Prop::Global &props)
    auto &aliases=props.propConnections().propAliases();
 
    if(auto *p_alias=item.ppropAlias())
-      aliases.Push(MakeUnique<Prop::Alias>(*p_alias));
+      aliases.Push(MakeCounting<Prop::Alias>(*p_alias));
    else if(auto *pAliases=item.ppropAliases())
    {
       // If we selected a container only (global/server/char), copy it's contents
-      auto &pFolder=aliases.Push(MakeUnique<Prop::Alias>());
+      auto &pFolder=aliases.Push(MakeCounting<Prop::Alias>());
       pFolder->pclDescription(item.Label());
 
       for(auto &pAlias : *pAliases)
-         pFolder->propAliases().Push(MakeUnique<Prop::Alias>(*pAlias));
+         pFolder->propAliases().Push(MakeCounting<Prop::Alias>(*pAlias));
    }
 }
 

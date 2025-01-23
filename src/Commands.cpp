@@ -204,6 +204,7 @@ try
          "/reconnect $ - Reconnects if disconnected (with 'all' parameter it applies to every window)",
          "/resetscript - Reset the scripting engine (possibly switching languages)",
          "/roll [count]d[sides](+bonus) - Dice roll. Example /roll 10d6",
+         "/script $ - Run single line script",
          "/set $=$ - Set environment variable",
          "/setinput $ - Sets any text after the \"/setinput \" into the active input window",
          "/silence - Stop all playing sounds",

@@ -56,6 +56,22 @@ interface ITriggers : IDispatch
 //   HRESULT Move([in] long from, [in] long to);
 }
 
+[ uuid(891F5181-E618-4EAD-B89F-A6B988129C02), oleautomation, dual, nonextensible ]
+interface IAlias : IDispatch
+{
+   [propget] HRESULT StopProcessing([out, retval] VARIANT_BOOL *);
+   [propput] HRESULT StopProcessing([in] VARIANT_BOOL);
+   [propget] HRESULT Folder([out, retval] VARIANT_BOOL *);
+   [propput] HRESULT Folder([in] VARIANT_BOOL);
+}
+
+[ uuid(D9BDF164-DFD3-433B-9CA8-CE312E08DF00), oleautomation, dual, nonextensible ]
+interface IAliases : IDispatch
+{
+   [propget, id(DISPID_VALUE)] HRESULT Item([in] VARIANT var, [out, retval] IAlias **);
+   [propget] HRESULT Count([out, retval] long *);
+}
+
 [ uuid(2f45ae30-3f0c-487a-be87-f79acf9b0608), oleautomation, dual, nonextensible ]
 interface IPuppet : IDispatch
 {
@@ -77,6 +93,7 @@ interface IPuppet : IDispatch
    [propput] HRESULT ConnectWithPlayer([in] VARIANT_BOOL);
 
    [propget] HRESULT Triggers([out, retval] ITriggers **);
+   [propget] HRESULT Aliases([out, retval] IAliases **);
 }
 
 [ uuid(432dfd7e-be27-469e-b848-b50452405dda), oleautomation, dual, nonextensible ]
@@ -104,6 +121,7 @@ interface ICharacter : IDispatch
    [propget] HRESULT TimeCreated([out, retval] VARIANT *date);
 
    [propget] HRESULT Triggers([out, retval] ITriggers **);
+   [propget] HRESULT Aliases([out, retval] IAliases **);
    [propget] HRESULT Puppets([out, retval] IPuppets **);
 }
 
@@ -131,6 +149,7 @@ interface IWorld : IDispatch
 
 	[propget] HRESULT Characters([out, retval] ICharacters **);
    [propget] HRESULT Triggers([out, retval] ITriggers **);
+   [propget] HRESULT Aliases([out, retval] IAliases **);
 }
 
 [ uuid(C79D75D4-6F7F-47b0-BD1A-EEA0FF8DE39F), oleautomation, dual, nonextensible ]
