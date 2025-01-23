@@ -4,7 +4,9 @@ Fix issue with multiline triggers with a 0 timeout duration not being infinite t
 Remove connection point OLE code, hasn't been used in decades
 Add window title setting to input windows (mainly useful for scripts)
 Add IWindowMain::GetSpawnTabs and IWindowMain::GetInput to allow scripts to do actions on spawn tab switching
-With restore logs, spawn triggers will only add to existing windows/tabs vs creating new ones
+Add IAlias and IAliases and Aliases properties where Triggers also are in scripts
+Changed restore logs so that spawn triggers will only add to existing windows/tabs vs creating new ones
+Add 'Lock Window Layouts' to the General settings to prevent docked windows from undocking or moving
 
 4.00.328 - 2024-11-18
 
