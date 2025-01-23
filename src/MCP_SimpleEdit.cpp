@@ -19,12 +19,12 @@ Editor::Editor(Parser &parser, const Message &msg)
    parser.connection().Text(FixedStringBuilder<256>("mcp-simpleedit Editing:\"", m_name, "\" Type:", m_type));
 
    if(!m_filename)
-      throw std::runtime_error{""};
+      throw std::exception{};
 
    {
       File::Write_Only file;
       if(!file.Create(m_filename))
-         throw std::runtime_error{""};
+         throw std::exception{};
 
       const Keylist *p_list=msg.GetKeylist("content");
       if(p_list)
@@ -168,7 +168,7 @@ void Package_SimpleEdit::On(const Message &msg)
    {
       (new Editor(m_parser, msg))->Link(m_editors.Prev());
    }
-   catch(const std::runtime_error &)
+   catch(const std::exception &)
    {  
       m_parser.connection().Text("mcp-simpleedit Error - couldn't create temp file");
    }

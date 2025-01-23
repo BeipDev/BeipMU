@@ -1111,7 +1111,7 @@ void Wnd_Main::InitScripter()
    {
       new Scripter(g_ppropGlobal->pclScriptLanguage());
    }
-   catch(const std::runtime_error &)
+   catch(const std::exception &)
    {
       MessageBox(*this, STR_ErrorInitingScript, STR_Note, MB_OK|MB_ICONEXCLAMATION);
    }
@@ -1327,7 +1327,7 @@ Wnd_Docking *Wnd_Main::RestoreDockedWindowSettings(Prop::DockedWindow &propWindo
             return nullptr;
 
          try { mp_wnd_map=MakeUnique<Maps::Wnd>(*this); }
-         catch(const std::runtime_error &)
+         catch(const std::exception &)
          {
             return nullptr; // Probably on Wine where we failed to create Direct2D
          }
@@ -1358,7 +1358,7 @@ Wnd_Docking *Wnd_Main::RestoreDockedWindowSettings(Prop::DockedWindow &propWindo
             return nullptr;
 
          try { mp_yarn_tilemap=IYarn_TileMap::Create(*this); }
-         catch(const std::runtime_error &)
+         catch(const std::exception &)
          {
             return nullptr; // Probably failed to create Direct2D
          }
@@ -1981,7 +1981,7 @@ LRESULT Wnd_Main::On(const Msg::Command &msg)
             {
                EnsureMapWindow();
             }
-            catch(const std::runtime_error &)
+            catch(const std::exception &)
             {
                // Nothing to do, the user would have already seen the Direct2D error on startup
             }
@@ -3359,9 +3359,9 @@ Test() int
    {
       ConsoleText(FixedStringBuilder<256>("Compile error: ", e, "  On Line:", e.m_line_number));
    }
-   catch(const Exceptions::Message &e)
+   catch(const std::exception &e)
    {
-      ConsoleText(e);
+      ConsoleText(SzToString(e.what()));
    }
 #endif
 }
@@ -3413,7 +3413,7 @@ void CreateWindow_Root(ConstString command_line, int nCmdShow)
          script_path=script_path_fixed;
       }
 
-      if(auto *pScripter=Wnd_MDI::GetInstance().GetActiveWindow().GetScripter();pScripter && pScripter->RunFile(script_path)==false)
+      if(auto *p_scripter=Wnd_MDI::GetInstance().GetActiveWindow().GetScripter();p_scripter && p_scripter->RunFile(script_path)==false)
          ConsoleHTML(STR_CantLoadStartupScript);
    }
 

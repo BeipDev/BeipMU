@@ -36,7 +36,7 @@ void Parse(KEY_ID &data, Streams::Input &input)
    {
       int iFKey;
       if(!input.Parse(iFKey))
-         throw Exceptions::Message("Couldn't parse key");
+         throw std::runtime_error{"Couldn't parse key"};
 
       data.iVKey=VK_F1-1+iFKey;
       return;
@@ -53,7 +53,7 @@ void Parse(KEY_ID &data, Streams::Input &input)
 
    Assert(0); // Unknown key being read in!
    data.iVKey=0; // Set it to 'no key'
-   throw Exceptions::Message("Couldn't parse key");
+   throw std::runtime_error{"Couldn't parse key"};
 }
 
 void Write(const KEY_ID &key, Streams::Output &output)
@@ -96,7 +96,7 @@ void Parse(CKeyMacro &data, Streams::Input &input)
       }
    }
 
-   throw Exceptions::Message("Expecting ',' in key macro");
+   throw std::runtime_error{"Expecting ',' in key macro"};
 }
 
 void Write(const CKeyMacro &macro, Streams::Output &output)
@@ -140,7 +140,7 @@ void TDataInfo<bool>::Read(void *data, ConstString input) const
       return;
    }
 
-   throw Exceptions::Message("Couldn't parse flag");
+   throw std::runtime_error{"Couldn't parse flag"};
 }
 
 void TDataInfo<Color>::Write(const void *data, Streams::Output &output) const
@@ -158,7 +158,7 @@ template<typename T>
 void TDataInfo<T>::Read(void *data, ConstString input) const
 {
    if(!input.To(Cast(data)))
-      throw Exceptions::Message("Couldn't parse value");
+      throw std::runtime_error{"Couldn't parse value"};
 }
 
 template void TDataInfo<int>::Read(void *, ConstString) const;
@@ -170,7 +170,7 @@ void TDataInfo<Color>::Read(void *data, ConstString input_string) const
 {
    auto input=Streams::Input(input_string);
    if(!input.Parse(Cast(data)))
-      throw Exceptions::Message("Couldn't parse color");
+      throw std::runtime_error{"Couldn't parse color"};
 }
 
 void TDataInfo<BYTE>::Read(void *data, ConstString input) const
@@ -178,10 +178,10 @@ void TDataInfo<BYTE>::Read(void *data, ConstString input) const
    int iValue;
 
    if(!input.To(iValue))
-      throw Exceptions::Message("Couldn't parse value");
+      throw std::runtime_error{"Couldn't parse value"};
 
    if(iValue<0 || iValue>255)
-      throw Exceptions::Message("BYTE Value out of range");
+      throw std::runtime_error{"BYTE Value out of range"};
 }
 
 void TDataInfo<Rect>::Write(const void *data, Streams::Output &output) const
@@ -200,7 +200,7 @@ void TDataInfo<Rect>::Read(void *data, ConstString input_string) const
    if(input.CharGet()!='(' ||
       !input.Parse(iLeft) || input.CharGet()!=',' || !input.Parse(iTop) || input.CharGet()!=',' || !input.Parse(iRight) || input.CharGet()!=',' || !input.Parse(iBottom) || 
       input.CharGet()!=')')
-      throw Exceptions::Message("Can't parse rectangle");
+      throw std::runtime_error{"Can't parse rectangle"};
 
    Cast(data)=Rect(iLeft, iTop, iRight, iBottom);
 }
@@ -211,11 +211,11 @@ void DataInfo_int::Read(void *data, ConstString input) const
    int iValue;
 
    if(!input.To(iValue))
-      throw Exceptions::Message("Can't parse integer");
+      throw std::runtime_error{"Can't parse integer"};
 
 
    if(!IsBetween(iValue, m_range))
-      throw Exceptions::Message("Int Value out of range");
+      throw std::runtime_error{"Int Value out of range"};
 
    Cast(data)=iValue;
 }
@@ -226,7 +226,7 @@ void DataInfo_String::Read(void *data, ConstString input_string) const
 
    Strings::HeapStringBuilder string(m_maxLength);
    if(!input.Parse_String(string))
-      throw Exceptions::Message(FixedStringBuilder<256>("String too long (exceeds ", m_maxLength, " characters)"));
+      throw std::runtime_error{FixedStringBuilder<256>("String too long (exceeds ", m_maxLength, " characters)").Terminate()};
 
    Cast(data)=string;
 }
@@ -243,7 +243,7 @@ void TDataInfo<int2>::Read(void* data, ConstString input_string) const
 
    int2 &value=Cast(data);
    if(input.CharGet()!='{' || !input.Parse(value.x) || input.CharGet()!=',' || !input.Parse(value.y) || input.CharGet()!='}')
-      throw Exceptions::Message("Can't parse int2");
+      throw std::runtime_error{"Can't parse int2"};
 }
 
 void TDataInfo<float2>::Write(const void *data, Streams::Output &output) const
@@ -258,7 +258,7 @@ void TDataInfo<float2>::Read(void* data, ConstString input_string) const
 
    float2 &value=Cast(data);
    if(input.CharGet()!='{' || !input.Parse(value.x) || input.CharGet()!=',' || !input.Parse(value.y) || input.CharGet()!='}')
-      throw Exceptions::Message("Can't parse float2");
+      throw std::runtime_error{"Can't parse float2"};
 }
 
 void DataInfo_KeyMacro::Read(void *data, ConstString input_string) const
@@ -284,7 +284,7 @@ void DataInfo_Enum::Read(void *data, ConstString input_string) const
       }
    }
 
-   throw Exceptions::Message("Unknown enum value");
+   throw std::runtime_error{"Unknown enum value"};
 }
 
 void DataInfo_Enum::Write(const void *data, Streams::Output &output) const
@@ -313,13 +313,13 @@ void DataInfo_Time::Read(void *data, ConstString input_string) const
       !input.Parse(iMinute) || input.CharGet()!='-' ||
       !input.Parse(iSecond) || input.CharGet()!='-' ||
       !input.Parse(iMilliseconds))
-      throw Exceptions::Message("Time parse error");
+      throw std::runtime_error{"Time parse error"};
 
    // Sanity Check
    if(iMonth==0 || iMonth>12 ||
       iDay==0 || iDay>34 ||
       iHour>24 || iMinute>60 || iSecond>60)
-      throw Exceptions::Message("Time value out of range");
+      throw std::runtime_error{"Time value out of range"};
 
    Time::Time time;
 
@@ -341,7 +341,7 @@ void DataInfo_GUID::Read(void *data, ConstString input_string) const
 
    FixedStringBuilder<38> guid; input.Parse_String(guid);
    if(guid.Length()!=38)
-      throw Exceptions::Message("Guid has an invalid length");
+      throw std::runtime_error{"Guid has an invalid length"};
 
    Cast(data)=StringToGUID(guid);
 }
@@ -547,10 +547,10 @@ bool ConfigImport::Parse_Data(IParserIO *pIO, ConstString value)
          {
             p_info->Read(pIO, value);
          }
-         catch(const Exceptions::Message &message)
+         catch(const std::exception &message)
          {
-            if(message)
-               ParseError(message);
+            if(message.what())
+               ParseError(SzToString(message.what()));
             else
                ParseError(FixedStringBuilder<256>("Could not parse data value of '", m_strKey, '\''));
          }
