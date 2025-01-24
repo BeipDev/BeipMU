@@ -3210,20 +3210,29 @@ void Wnd_MDI::Connect(Prop::Server *ppropServer, Prop::Character *ppropCharacter
       return;
    }
 
-   // Look for an empty window
-   for(auto &window : m_root_wnd_main)
+   auto UseWindow = [&](Wnd_Main &window)
    {
       Connection &connection=window.GetConnection();
-      if(!connection.IsConnected() && !connection.GetServer())
-      {
-         connection.Associate(ppropServer, ppropCharacter, ppropPuppet);
-         window.ResetWindowSettings();
-         connection.Connect(false);
-         if(fSetActiveWindow)
-            SetActiveWindow(window);
+      if(connection.IsConnected() || connection.GetServer())
+         return false;
+
+      connection.Associate(ppropServer, ppropCharacter, ppropPuppet);
+      window.ResetWindowSettings();
+      connection.Connect(false);
+      if(fSetActiveWindow)
+         SetActiveWindow(window);
+      return true;
+   };
+
+   // Look for an empty window
+   // Check active window
+   if(UseWindow(GetActiveWindow()))
+      return;
+
+   // Check all windows
+   for(auto &window : m_root_wnd_main)
+      if(UseWindow(window))
          return;
-      }
-   }
 
    Wnd_Main &window=*new Wnd_Main(*this, ppropServer, ppropCharacter, ppropPuppet);
    if(fSetActiveWindow)
