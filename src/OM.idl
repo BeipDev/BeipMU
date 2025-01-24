@@ -357,6 +357,7 @@ library BeipMU
       [propget] HRESULT Worlds([out, retval] IWorlds **retval);
       [propget] HRESULT Windows([out, retval] IWindows **retval);
       [propget] HRESULT Triggers([out, retval] ITriggers **retval);
+      [propget] HRESULT Aliases([out, retval] IAliases **retval);
 
       [propget] HRESULT ConfigPath([out, retval] BSTR *retval);
 

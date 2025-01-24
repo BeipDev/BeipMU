@@ -1,6 +1,8 @@
 - [Interface List](#interface-list)
   * [Interface Descriptions](#interface-descriptions)
   * [Windows OLE Types](#windows-ole-types)
+  * [Alias](#alias)
+  * [Aliases](#aliases)
   * [App](#app)
   * [ArrayUInt](#arrayuint)
   * [Character](#character)
@@ -90,6 +92,21 @@ An example in JavaScript to tell the difference of the Date/Undefined by compari
 
 #Available Interfaces
 
+## Alias
+
+    bool StopProcessing
+    bool Folder
+
+## Aliases
+
+    [default] Alias Item(VARIANT var) 
+
+Returns alias 'var'. var can be be a number or a string.
+
+Note: instead of aliases.item(5), aliases(5) can also be used since it's a default 
+
+    [read] unsigned int Count
+
 ## App
 
     unsigned int BuildNumber
@@ -119,6 +136,10 @@ The global list of main windows
     Triggers Triggers 
 
 The global list of triggers 
+
+    Aliases Aliases
+
+The global list of aliases
 
     Trigger NewTrigger() 
 
@@ -359,6 +380,7 @@ If MatchText defines a regular expression or just a string. When this flag is on
     [read/write] bool ConnectWithPlayer 
 
     [read] Triggers Triggers 
+    [read] Aliases Aliases
 
 ## Puppets
 
@@ -502,7 +524,8 @@ See the help topic on Triggers for an explanation on each of these flags.
     [read/write] bool AwayPresent 
     [read/write] bool AwayPresentOnce 
     [read/write] bool Away 
-    Triggers Triggers 
+    Triggers Triggers
+    Aliases Aliases
 
 The list of triggers that are nested under this trigger 
 

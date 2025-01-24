@@ -301,7 +301,7 @@ Parser::Parser(Connection &connection, ConstString string)
       else
       {
          m_connection.Text("MCP - Using GetTickCount() instead of CryptGenRandom.  No big deal\n");
-         iData=GetTickCountQPC(); // Anything better?
+         iData=Time::GetTickCountQPC(); // Anything better?
       }
 
       m_auth_key.Allocate(8);

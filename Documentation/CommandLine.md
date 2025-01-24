@@ -39,6 +39,7 @@
   - [/receive](#receive)
   - [/resetscript](#resetscript)
   - [/roll](#roll)
+  - [/script](#script)
   - [/set](#set)
   - [/setinput](#setinput)
   - [/silence](#silence)
@@ -422,6 +423,17 @@ Examples:
     /roll 1d20
 
 Dice roll, uses standard syntax of (number of dice)d(number of sides) with an optional +extra number. Outputs every die rolled, the totals, and the average.
+
+## /script
+Usage:
+
+    /script <script to run>
+
+Example:
+
+    /script window.output.write("Hello!");
+
+Run a one line script (no newlines allowed). Useful for putting a script in a send trigger along with other commands
 
 ## /set
 Usage:

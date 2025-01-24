@@ -23,19 +23,19 @@ struct FindString : Dispatch<IFindString>
 {
    FindString(Prop::Trigger &propTrigger);
 
-   STDMETHODIMP get_MatchText(BSTR *);
-   STDMETHODIMP put_MatchText(BSTR);
+   STDMETHODIMP get_MatchText(BSTR *) override;
+   STDMETHODIMP put_MatchText(BSTR) override;
 
-   STDMETHODIMP get_RegularExpression(VARIANT_BOOL *);
-   STDMETHODIMP put_RegularExpression(VARIANT_BOOL);
-   STDMETHODIMP get_MatchCase(VARIANT_BOOL *);
-   STDMETHODIMP put_MatchCase(VARIANT_BOOL);
-   STDMETHODIMP get_StartsWith(VARIANT_BOOL *);
-   STDMETHODIMP put_StartsWith(VARIANT_BOOL);
-   STDMETHODIMP get_EndsWith(VARIANT_BOOL *);
-   STDMETHODIMP put_EndsWith(VARIANT_BOOL);
-   STDMETHODIMP get_WholeWord(VARIANT_BOOL *);
-   STDMETHODIMP put_WholeWord(VARIANT_BOOL);
+   STDMETHODIMP get_RegularExpression(VARIANT_BOOL *) override;
+   STDMETHODIMP put_RegularExpression(VARIANT_BOOL) override;
+   STDMETHODIMP get_MatchCase(VARIANT_BOOL *) override;
+   STDMETHODIMP put_MatchCase(VARIANT_BOOL) override;
+   STDMETHODIMP get_StartsWith(VARIANT_BOOL *) override;
+   STDMETHODIMP put_StartsWith(VARIANT_BOOL) override;
+   STDMETHODIMP get_EndsWith(VARIANT_BOOL *) override;
+   STDMETHODIMP put_EndsWith(VARIANT_BOOL) override;
+   STDMETHODIMP get_WholeWord(VARIANT_BOOL *) override;
+   STDMETHODIMP put_WholeWord(VARIANT_BOOL) override;
 
 private:
    Prop::FindString *m_ppropFindString;
@@ -46,25 +46,25 @@ struct Trigger : Dispatch<ITrigger>
 {
    Trigger(Prop::Trigger &propTrigger, Prop::Triggers *ppropTriggers);
 
-   STDMETHODIMP Delete(VARIANT_BOOL *);
+   STDMETHODIMP Delete(VARIANT_BOOL *) override;
 
-   STDMETHODIMP get_FindString(IFindString **);
+   STDMETHODIMP get_FindString(IFindString **) override;
 
-   STDMETHODIMP get_Disabled(VARIANT_BOOL *);
-   STDMETHODIMP put_Disabled(VARIANT_BOOL );
-   STDMETHODIMP get_StopProcessing(VARIANT_BOOL *);
-   STDMETHODIMP put_StopProcessing(VARIANT_BOOL );
-   STDMETHODIMP get_OncePerLine(VARIANT_BOOL *);
-   STDMETHODIMP put_OncePerLine(VARIANT_BOOL );
+   STDMETHODIMP get_Disabled(VARIANT_BOOL *) override;
+   STDMETHODIMP put_Disabled(VARIANT_BOOL ) override;
+   STDMETHODIMP get_StopProcessing(VARIANT_BOOL *) override;
+   STDMETHODIMP put_StopProcessing(VARIANT_BOOL ) override;
+   STDMETHODIMP get_OncePerLine(VARIANT_BOOL *) override;
+   STDMETHODIMP put_OncePerLine(VARIANT_BOOL ) override;
 
-   STDMETHODIMP get_AwayPresent(VARIANT_BOOL *);
-   STDMETHODIMP put_AwayPresent(VARIANT_BOOL );
-   STDMETHODIMP get_AwayPresentOnce(VARIANT_BOOL *);
-   STDMETHODIMP put_AwayPresentOnce(VARIANT_BOOL );
-   STDMETHODIMP get_Away(VARIANT_BOOL *);
-   STDMETHODIMP put_Away(VARIANT_BOOL );
+   STDMETHODIMP get_AwayPresent(VARIANT_BOOL *) override;
+   STDMETHODIMP put_AwayPresent(VARIANT_BOOL ) override;
+   STDMETHODIMP get_AwayPresentOnce(VARIANT_BOOL *) override;
+   STDMETHODIMP put_AwayPresentOnce(VARIANT_BOOL ) override;
+   STDMETHODIMP get_Away(VARIANT_BOOL *) override;
+   STDMETHODIMP put_Away(VARIANT_BOOL ) override;
 
-   STDMETHODIMP get_Triggers(ITriggers **);
+   STDMETHODIMP get_Triggers(ITriggers **) override;
 
 private:
    CntRefTo<Prop::Trigger> m_propTrigger;
@@ -76,8 +76,8 @@ struct Triggers : Dispatch<ITriggers>
 {
    Triggers(Prop::Triggers &propTriggers);
 
-   STDMETHODIMP get_Item(VARIANT var, ITrigger **retval);
-   STDMETHODIMP get_Count(long *retval);
+   STDMETHODIMP get_Item(VARIANT var, ITrigger **retval) override;
+   STDMETHODIMP get_Count(long *retval) override;
 
    STDMETHODIMP Delete(long index);
    STDMETHODIMP AddCopy(ITrigger *, ITrigger **);
@@ -85,6 +85,31 @@ struct Triggers : Dispatch<ITriggers>
 
 private:
    CntRefTo<Prop::Triggers> m_propTriggers;
+};
+
+struct Alias : Dispatch<IAlias>
+{
+   Alias(Prop::Alias &prop_alias, Prop::Aliases *prop_aliases);
+
+   STDMETHODIMP get_StopProcessing(VARIANT_BOOL *) override;
+   STDMETHODIMP put_StopProcessing(VARIANT_BOOL) override;
+   STDMETHODIMP get_Folder(VARIANT_BOOL *) override;
+   STDMETHODIMP put_Folder(VARIANT_BOOL) override;
+
+private:
+   CntRefTo<Prop::Alias> m_prop_alias;
+   CntPtrTo<Prop::Aliases> mp_prop_aliases;
+};
+
+struct Aliases : Dispatch<IAliases>
+{
+   Aliases(Prop::Aliases &prop_aliases);
+
+   STDMETHODIMP get_Item(VARIANT var, IAlias **retval) override;
+   STDMETHODIMP get_Count(long *retval) override;
+
+private:
+   CntRefTo<Prop::Aliases> m_prop_aliases;
 };
 
 struct Puppet : Dispatch<IPuppet>
@@ -107,6 +132,7 @@ struct Puppet : Dispatch<IPuppet>
    STDMETHODIMP put_ConnectWithPlayer(VARIANT_BOOL);
 
    STDMETHODIMP get_Triggers(ITriggers **);
+   STDMETHODIMP get_Aliases(IAliases **);
 
 private:
    CntRefTo<Prop::Puppet> m_propPuppet;
@@ -143,6 +169,7 @@ struct Character : Dispatch<ICharacter>
    STDMETHODIMP get_TimeCreated(VARIANT *date);
 
    STDMETHODIMP get_Triggers(ITriggers **retval);
+   STDMETHODIMP get_Aliases(IAliases **retval);
    STDMETHODIMP get_Puppets(IPuppets **retval);
 
 private:
@@ -176,6 +203,7 @@ struct World : Dispatch<IWorld>
 
    STDMETHODIMP get_Characters(ICharacters **retval);
    STDMETHODIMP get_Triggers(ITriggers **retval);
+   STDMETHODIMP get_Aliases(IAliases **retval);
 
 private:
    CntRefTo<Prop::Server> m_propServer;
@@ -215,6 +243,7 @@ struct App
    STDMETHODIMP get_Worlds(IWorlds **retval) override;
    STDMETHODIMP get_Windows(IWindows **retval) override;
    STDMETHODIMP get_Triggers(ITriggers **retval) override;
+   STDMETHODIMP get_Aliases(IAliases **retval) override;
 
    STDMETHODIMP ActiveXObject(BSTR name, IDispatch **retval) override;
 

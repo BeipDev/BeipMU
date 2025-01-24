@@ -137,6 +137,7 @@ void ErrorCollection::Text(ConstString string)
 
 void Global_PropChange()
 {
+   Wnd_Docking::s_lock_layout=g_ppropGlobal->fLockLayout();
    Text::Wnd::ShowTip_SelectionCopy(g_ppropGlobal->fShowTip_SelectionCopy());
    Text::Wnd::SetShowNewContent(g_ppropGlobal->fNewContentMarker());
 

@@ -259,7 +259,7 @@ private:
       SpawnWindow *mp_spawn_window{};
       CntPtrTo<Prop::Trigger> mp_spawn_trigger;
    };
-   void TriggersExecute(Text::Line &line, Array<CopyCntPtrTo<Prop::Trigger>> triggers, TriggerState &state);
+   void RunTriggers(Text::Line &line, Array<CopyCntPtrTo<Prop::Trigger>> triggers, TriggerState &state);
    void TriggerDebugText(ConstString background_color, ConstString stroke_color, ConstString indent, ConstString message);
 
    Text::Wnd &GetOutput();
