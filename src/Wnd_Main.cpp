@@ -137,7 +137,7 @@ void ErrorCollection::Text(ConstString string)
 
 void Global_PropChange()
 {
-   Wnd_Docking::s_lock_layout=g_ppropGlobal->fLockLayout();
+   Windows::Controls::s_layout_uses_control=g_ppropGlobal->fLayoutWithCtrl();
    Text::Wnd::ShowTip_SelectionCopy(g_ppropGlobal->fShowTip_SelectionCopy());
    Text::Wnd::SetShowNewContent(g_ppropGlobal->fNewContentMarker());
 
@@ -3172,7 +3172,7 @@ ATOM Wnd_MDI::Register()
    return wc.Register();
 }
 
-void Wnd_MDI::Connect(Prop::Server *ppropServer, Prop::Character *ppropCharacter, Prop::Puppet *ppropPuppet, bool fSetActiveWindow)
+void Wnd_MDI::Connect(Prop::Server *ppropServer, Prop::Character *ppropCharacter, Prop::Puppet *ppropPuppet, bool set_active_window)
 {
    if(ppropServer && !ppropCharacter)
    {
@@ -3201,12 +3201,12 @@ void Wnd_MDI::Connect(Prop::Server *ppropServer, Prop::Character *ppropCharacter
    }
 
    // Look for an existing window
-   if(auto *pWndMain=FindExistingWindow(ppropServer, ppropCharacter, ppropPuppet))
+   if(auto *p_window=FindExistingWindow(ppropServer, ppropCharacter, ppropPuppet))
    {
-      Connection &connection=pWndMain->GetConnection();
+      Connection &connection=p_window->GetConnection();
       connection.Reconnect();
-      if(fSetActiveWindow)
-         pWndMain->GetMDI().SetActiveWindow(*pWndMain);
+      if(set_active_window)
+         p_window->GetMDI().SetActiveWindow(*p_window);
       return;
    }
 
@@ -3219,7 +3219,7 @@ void Wnd_MDI::Connect(Prop::Server *ppropServer, Prop::Character *ppropCharacter
       connection.Associate(ppropServer, ppropCharacter, ppropPuppet);
       window.ResetWindowSettings();
       connection.Connect(false);
-      if(fSetActiveWindow)
+      if(set_active_window)
          SetActiveWindow(window);
       return true;
    };
@@ -3235,7 +3235,7 @@ void Wnd_MDI::Connect(Prop::Server *ppropServer, Prop::Character *ppropCharacter
          return;
 
    Wnd_Main &window=*new Wnd_Main(*this, ppropServer, ppropCharacter, ppropPuppet);
-   if(fSetActiveWindow)
+   if(set_active_window)
       SetActiveWindow(window);
 }
 

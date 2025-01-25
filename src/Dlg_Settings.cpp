@@ -169,7 +169,7 @@ void Dlg_General::OnCreate()
       auto &g=CreateSection(STR_Windows);
       g >> AL::Style::Attach_Right;
 
-      AddBool(g, "Lock window layouts", g_ppropGlobal->fLockLayout());
+      AddBool(g, "Changing Layout requires holding down Control", g_ppropGlobal->fLayoutWithCtrl());
       AddBool(g, STR_ActivateDisconnect, g_ppropGlobal->propConnections().fActivateDisconnect());
       AddBool(g, "Show image viewer automatically", g_ppropGlobal->fAutoImageViewer());
       {
@@ -1347,6 +1347,10 @@ void Dlg_Network::UpdateEnabled()
 
 void Dlg_Network::OnCreate()
 {
+   {
+      auto &g=CreateSection("Network Messages");
+      AddBool(g, "Show connect/disconnect in spawn windows", g_ppropGlobal->fNetworkMessagesInSpawns());
+   }
    {
       auto &g=CreateSection("Connections"); g >> AL::Style::Attach_Right;
 
