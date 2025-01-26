@@ -1009,7 +1009,8 @@ Prop Global
    Flag ShowWelcome = true
    Flag SendUnrecognizedCommands = false
    Flag PreventSmartQuotes = true
-   Flag LockLayout = false
+   Flag LayoutWithCtrl = false
+   Flag NetworkMessagesInSpawns = true
 
    Flag AutoShowHistory = true // When true, history window will appear automatically when navigating history
    Flag NewContentMarker = true

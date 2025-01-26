@@ -789,7 +789,10 @@ void Connection::Disconnect()
 
    if(!m_ppropPuppet && !m_connect_retry)
    {
-      m_wnd_main.BroadcastHTML(STR_Disconnected);
+      if(g_ppropGlobal->fNetworkMessagesInSpawns())
+         m_wnd_main.BroadcastHTML(STR_Disconnected);
+      else
+         Text(STR_Disconnected);
       m_events.Send(Event_Activity());
    }
 
@@ -969,7 +972,10 @@ void Connection::Connected()
 
    if(!m_ppropPuppet)
    {
-      m_wnd_main.BroadcastHTML(STR_Connected);
+      if(g_ppropGlobal->fNetworkMessagesInSpawns())
+         m_wnd_main.BroadcastHTML(STR_Connected);
+      else
+         Text(STR_Connected);
       m_events.Send(Event_Activity());
    }
 

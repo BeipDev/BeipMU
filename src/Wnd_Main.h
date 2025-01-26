@@ -553,7 +553,7 @@ struct Wnd_MDI : TWindowImpl<Wnd_MDI>, DLNode<Wnd_MDI>
 
    void AddWindow(Wnd_Main &window);
    void DeleteWindow(Wnd_Main &window);
-   void Connect(Prop::Server *ppropServer, Prop::Character *ppropCharacter, Prop::Puppet *ppropPuppet, bool fSetActiveWindow);
+   void Connect(Prop::Server *ppropServer, Prop::Character *ppropCharacter, Prop::Puppet *ppropPuppet, bool set_active_window);
 
    Wnd_Main &GetActiveWindow() { AssumeAssert(mp_active_wnd_main); return *mp_active_wnd_main; }
    int GetActiveWindowIndex() const;
