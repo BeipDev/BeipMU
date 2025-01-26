@@ -792,7 +792,7 @@ void Connection::Disconnect()
       if(g_ppropGlobal->fNetworkMessagesInSpawns())
          m_wnd_main.BroadcastHTML(STR_Disconnected);
       else
-         m_wnd_main.Text(STR_Disconnected);
+         Text(STR_Disconnected);
       m_events.Send(Event_Activity());
    }
 
