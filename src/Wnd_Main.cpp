@@ -36,8 +36,6 @@ void CreateDialog_Connect(Window wnd, Wnd_MDI &wndMDI);
 void CreateDialog_SmartPaste(Window wndParent, Connection &connection, Prop::Connections &propConnections);
 void CreateDialog_InputWindow(Window wndParent, InputControl &input_window, Prop::InputWindow &propInputWindow);
 
-void D2DTest();
-
 void ShowStatistics(Text::Wnd &wnd)
 {
    uint64 total_seconds_connected=0;
@@ -1453,48 +1451,48 @@ void Wnd_Main::RestoreDockingConfiguration(Prop::Docking &propDocking)
    {
       RestorerOf _(m_suspend_layout); m_suspend_layout=true;
 
-      Prop::DockedPanes &propPanes=propDocking.propDockedPanes();
+      Prop::DockedPanes &prop_panes=propDocking.propDockedPanes();
 
-      int2 clientSize=ClientRect().size();
+      int2 client_size=ClientRect().size();
       // The client size can't be zero, otherwise we'll crash on layout (not sure how this can happen, but it has)
-      PinAbove(clientSize.x, 128);
-      PinAbove(clientSize.y, 128);
+      PinAbove(client_size.x, 128);
+      PinAbove(client_size.y, 128);
 
-      int2 originalClient=propDocking.ClientSize();
-      if(originalClient.x<1 || originalClient.y<1)
+      int2 original_client=propDocking.ClientSize();
+      if(original_client.x<1 || original_client.y<1)
          return; // Bogus size or default initialized, either way exit
 
-      for(auto &propFrame : propPanes)
+      for(auto &prop_frame : prop_panes)
       {
-         auto side=Docking::Side(propFrame->Side());
-         int2 frameSize=clientSize;
-         int2 originalFrameSize=originalClient;
-         bool isHorizontal=Docking::ToDirection(side)==Direction::Horizontal;
+         auto side=Docking::Side(prop_frame->Side());
+         int2 frame_size=client_size;
+         int2 original_frame_size=original_client;
+         bool is_horizontal=Docking::ToDirection(side)==Direction::Horizontal;
 
          // Setup size so that size.x corresponds to the frame's size, and size.y to the space for docked windows in it
          // So for a vertical (left/right) frame, nothing changes, but for a horizontal one x and y swap
-         if(isHorizontal)
+         if(is_horizontal)
          {
-            std::swap(frameSize.x, frameSize.y);
-            std::swap(originalFrameSize.x, originalFrameSize.y);
+            std::swap(frame_size.x, frame_size.y);
+            std::swap(original_frame_size.x, original_frame_size.y);
          }
 
-         frameSize.x=max(propFrame->Size()*frameSize.x/originalFrameSize.x, 10*g_dpiScale);
-         Docking::Frame &frame=CreateFrame(side, frameSize.x);
+         frame_size.x=max(prop_frame->Size()*frame_size.x/original_frame_size.x, 10*g_dpiScale);
+         Docking::Frame &frame=CreateFrame(side, frame_size.x);
 
-         for(auto &ppropWindow : propFrame->propWindows())
+         for(auto &p_prop_window : prop_frame->propWindows())
          {
-            Wnd_Docking *pWnd=RestoreDockedWindowSettings(*ppropWindow);
-            if(!pWnd)
+            Wnd_Docking *p_wnd=RestoreDockedWindowSettings(*p_prop_window);
+            if(!p_wnd)
                continue;
 
-            pWnd->SetVerticalCaption(ppropWindow->fVerticalCaption());
-            pWnd->SetHideCaption(ppropWindow->fHideCaption());
-            int2 size(frameSize.x, ppropWindow->Size()*frameSize.y/originalFrameSize.y);
-            if(isHorizontal)
+            p_wnd->SetVerticalCaption(p_prop_window->fVerticalCaption());
+            p_wnd->SetHideCaption(p_prop_window->fHideCaption());
+            int2 size(frame_size.x, p_prop_window->Size()*frame_size.y/original_frame_size.y);
+            if(is_horizontal)
                std::swap(size.x, size.y);
 
-            frame.Add(*pWnd, nullptr, &size);
+            frame.Add(*p_wnd, nullptr, &size);
          }
 
          if(frame.m_window_count==0)
@@ -1504,15 +1502,15 @@ void Wnd_Main::RestoreDockingConfiguration(Prop::Docking &propDocking)
          }
       }
 
-      for(auto &ppropWindow : propDocking.propFloatingWindows())
+      for(auto &p_prop_window : propDocking.propFloatingWindows())
       {
-         Wnd_Docking *pWnd=RestoreDockedWindowSettings(*ppropWindow);
-         if(!pWnd)
+         Wnd_Docking *p_wnd=RestoreDockedWindowSettings(*p_prop_window);
+         if(!p_wnd)
             continue;
 
-         pWnd->SetPosition(ppropWindow->rcRect());
-         pWnd->EnsureOnScreen();
-         pWnd->Show(SW_SHOWNOACTIVATE);
+         p_wnd->SetPosition(p_prop_window->rcRect());
+         p_wnd->EnsureOnScreen();
+         p_wnd->Show(SW_SHOWNOACTIVATE);
       }
    }
    DockingChange();
@@ -3441,7 +3439,6 @@ void CreateWindow_Root(ConstString command_line, int nCmdShow)
    MessageBox(*Wnd_MDI::s_root_node.Next(), "This is a beta build, expect things to not be perfect.\nAnd as always, please try to break it!", "BETA reminder", MB_ICONEXCLAMATION|MB_OK);
 #endif
 #if DWRITE_TEST
-   D2DTest();
    CreateWndGTest();
 #endif
 }

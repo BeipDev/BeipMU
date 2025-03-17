@@ -165,14 +165,11 @@ struct WebView_OM
 		return S_OK;
 	}
 
-	STDMETHODIMP SendGMCP(BSTR gmcp) override
+	STDMETHODIMP SendGMCP(BSTR package, BSTR json) override
 	{
 		if(!m_connection.IsConnected())
 			return E_FAIL;
-
-		m_connection.RawSend(ConstString{GMCP_BEGIN});
-		m_connection.RawSend(UTF8(gmcp));
-		m_connection.RawSend(ConstString{GMCP_END});
+		m_connection.SendGMCP(UTF8(package), UTF8(json));
 		return S_OK;
 	}
 
@@ -347,7 +344,7 @@ struct WebView_OM
 
 		for(auto &p_handler : m_gmcp_handlers)
 		{
-			if(p_handler->m_prefix==prefix)
+			if(auto remainder=package.RightOf(p_handler->m_prefix);remainder && remainder.StartsWith('.'))
 			{
 				p_handler->m_hook(string, package);
 				return;

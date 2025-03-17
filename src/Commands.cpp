@@ -2060,7 +2060,7 @@ try
 
       if(IEquals(wl[1], "gmcp_fs"))
       {
-         mp_connection->RawSend(ConstString(GMCP_BEGIN R"+(beip.line.id.request 235)+" GMCP_END));
+         mp_connection->SendGMCP("beip.line.id.request", "235");
          return;
       }
 

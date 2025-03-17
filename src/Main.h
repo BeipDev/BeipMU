@@ -24,7 +24,7 @@
 #define BETA_BUILD 0
 #define SCRIPTING 0
 #define YARN 0
-#define DWRITE_TEST 0
+#define DWRITE_TEST 1
 #endif
 
 namespace OM

@@ -323,7 +323,10 @@ struct JSON_WebView_Open : JSON::Element
 void Connection::OnGMCP(ConstString string)
 {
    if(m_GMCP_dump)
-      ConsoleText(string);
+   {
+      HybridStringBuilder<> text("<font color='red'>GMCP Received:</font> ", Text::NoHTML{string});
+      ConsoleHTML(text);
+   }
 
    if(OnGMCP_Parse(string))
    {
@@ -550,6 +553,21 @@ void Connection::Send(ConstString string, bool send_event, bool raw)
 
       if(!m_ppropPuppet)
          mp_client->Input(ConstString(CRLF));
+   }
+}
+
+void Connection::SendGMCP(ConstString package, ConstString json)
+{
+   RawSend(ConstString{GMCP_BEGIN});
+   RawSend(package);
+   RawSend(ConstString(" "));
+   RawSend(json);
+   RawSend(ConstString{GMCP_END});
+
+   if(m_GMCP_dump)
+   {
+      HybridStringBuilder<> string("<font color='blue'>GMCP Sent:</font> ", Text::NoHTML{package}, " ", Text::NoHTML{json});
+      ConsoleHTML(string);
    }
 }
 

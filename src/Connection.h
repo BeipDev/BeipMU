@@ -72,7 +72,8 @@ struct Connection
 
    // When event is true, an OnSend event will be generated.
    void Send(ConstString string, bool send_event=true, bool raw=false);
-   void RawSend(Array<const BYTE> data) { mp_client->Input(data); }
+   void SendGMCP(ConstString package, ConstString json);
+   void RawSend(Array<const uint8> data) { mp_client->Input(data); }
 
    // Send the input line to the output window, styles and everything get parsed
    void Text(ConstString string);
@@ -194,8 +195,8 @@ struct Connection
 
       ConstString GetString() const { return m_lstr; }
 
-      private:
-         ConstString m_lstr;
+   private:
+      ConstString m_lstr;
    };
 
    struct Event_Activity { };

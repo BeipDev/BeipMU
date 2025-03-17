@@ -318,7 +318,7 @@ library BeipMU
       // OnDisplayCapture(id, line)
       // OnDisplayCaptureChanged(id, line, bool starting)
 
-      HRESULT SendGMCP([in] BSTR gmcp);
+      HRESULT SendGMCP([in] BSTR package, [in] BSTR json);
       HRESULT SetOnGMCP([in] BSTR package_prefix, [in] IDispatch *p_callback);
       HRESULT ClearOnGMCP([in] BSTR package_prefix);
       // OnGMCP(BSTR package, BSTR json)
