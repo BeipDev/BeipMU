@@ -317,27 +317,27 @@ void Dlg::UpdateExample()
 //
 struct PropTreeItem_Alias : IPropTreeItem
 {
-   PropTreeItem_Alias(Prop::Alias &propAlias) : m_propAlias(propAlias) { }
+   PropTreeItem_Alias(Prop::Alias *p_prop_alias) : mp_prop_alias(p_prop_alias) { }
 
-   ConstString Label() const override { return m_propAlias.pclDescription() ? m_propAlias.pclDescription() : m_propAlias.propFindString().pclMatchText(); }
+   ConstString Label() const override { return mp_prop_alias->pclDescription() ? mp_prop_alias->pclDescription() : mp_prop_alias->propFindString().pclMatchText(); }
 
    bool fCanRename() const override { return true; }
    void Rename(ConstString string) override
    {
-      m_propAlias.pclDescription() ? m_propAlias.pclDescription(string) : m_propAlias.propFindString().pclMatchText(string);
+      mp_prop_alias->pclDescription() ? mp_prop_alias->pclDescription(string) : mp_prop_alias->propFindString().pclMatchText(string);
    }
 
    bool fCanDelete() const override { return true; }
    bool fCanMove() const override { return true; }
    bool fSort() const override { return false; }
-   eTIB eBitmap() const override { return m_propAlias.fFolder() ? TIB_FOLDER_CLOSED : TIB_ALIAS; }
+   eTIB eBitmap() const override { return mp_prop_alias->fFolder() ? TIB_FOLDER_CLOSED : TIB_ALIAS; }
 
-   Prop::Alias *ppropAlias() override { return &m_propAlias; }
-   Prop::Aliases *ppropAliases() override { return &m_propAlias.propAliases(); }
+   Prop::Alias *ppropAlias() override { return mp_prop_alias; }
+   Prop::Aliases *ppropAliases() override { return &mp_prop_alias->propAliases(); }
 
 private:
 
-   Prop::Alias &m_propAlias;
+   CntPtrTo<Prop::Alias> mp_prop_alias;
 };
 
 //
@@ -365,8 +365,8 @@ struct PropTree : IPropTree
       if(!item.ppropAliases())
          return;
 
-      for(auto &pAlias : make_reverse_container(*item.ppropAliases()))
-         callback(MakeUnique<PropTreeItem_Alias>(*pAlias));
+      for(auto &p_alias : make_reverse_container(*item.ppropAliases()))
+         callback(MakeUnique<PropTreeItem_Alias>(p_alias));
    }
 
    UniquePtr<IPropTreeItem> NewChild(IPropTreeItem &item) override
@@ -374,7 +374,7 @@ struct PropTree : IPropTree
       if(!item.ppropAliases())
          return nullptr;
 
-      return MakeUnique<PropTreeItem_Alias>(*item.ppropAliases()->Push(MakeUnique<Prop::Alias>()));
+      return MakeUnique<PropTreeItem_Alias>(item.ppropAliases()->Push(MakeCounting<Prop::Alias>()));
    }
 
    UniquePtr<IPropTreeItem> CopyChild(IPropTreeItem &item, IPropTreeItem &child) override
@@ -382,10 +382,9 @@ struct PropTree : IPropTree
       if(!child.ppropAlias())
          return nullptr;
 
-      auto ppropAlias=MakeUnique<Prop::Alias>(*child.ppropAlias());
-      auto pItem=MakeUnique<PropTreeItem_Alias>(*ppropAlias);
+      auto p_prop_alias=MakeCounting<Prop::Alias>(*child.ppropAlias());
+      auto pItem=MakeUnique<PropTreeItem_Alias>(p_prop_alias);
 
-      ppropAlias.Extract(); // TODO: The alias isn't owned by the IPropTreeItem, so if the InsertChild doesn't happen this object can leak
       return pItem;
    }
 
@@ -397,7 +396,7 @@ struct PropTree : IPropTree
 
    void ExtractChild(IPropTreeItem &item, IPropTreeItem *pti) override
    {
-      item.ppropAliases()->FindAndDelete(pti->ppropAlias()).Extract();
+      item.ppropAliases()->FindAndDelete(pti->ppropAlias());
    }
 
    void InsertChild(IPropTreeItem &item, IPropTreeItem *pti, IPropTreeItem *ptiNextTo, bool fAfter) override
@@ -434,7 +433,7 @@ UniquePtr<IPropTreeItem> PropTree::Import(IPropTreeItem &item, Prop::Global &pro
    }
 
    auto p_prop_alias=props.propConnections().propAliases().Delete(0);
-   auto new_item=MakeUnique<PropTreeItem_Alias>(*p_prop_alias);
+   auto new_item=MakeUnique<PropTreeItem_Alias>(p_prop_alias);
    item.ppropAliases()->Push(std::move(p_prop_alias));
    return new_item;
 }
@@ -444,15 +443,15 @@ void PropTree::Export(IPropTreeItem &item, Prop::Global &props)
    auto &aliases=props.propConnections().propAliases();
 
    if(auto *p_alias=item.ppropAlias())
-      aliases.Push(MakeUnique<Prop::Alias>(*p_alias));
+      aliases.Push(MakeCounting<Prop::Alias>(*p_alias));
    else if(auto *pAliases=item.ppropAliases())
    {
       // If we selected a container only (global/server/char), copy it's contents
-      auto &pFolder=aliases.Push(MakeUnique<Prop::Alias>());
+      auto &pFolder=aliases.Push(MakeCounting<Prop::Alias>());
       pFolder->pclDescription(item.Label());
 
       for(auto &pAlias : *pAliases)
-         pFolder->propAliases().Push(MakeUnique<Prop::Alias>(*pAlias));
+         pFolder->propAliases().Push(MakeCounting<Prop::Alias>(*pAlias));
    }
 }
 

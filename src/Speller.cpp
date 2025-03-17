@@ -80,7 +80,7 @@ struct Speller_Hunspell : ISpeller
    {
       LibHunspell::Init();
       if(!LibHunspell::gp_hunspell)
-         throw std::runtime_error{""};
+         throw std::exception{};
    }
 
    bool Check(ConstWString word) override
@@ -162,7 +162,7 @@ struct Spellers
    {
       mp_spell_checker_factory.CoCreateInstance(__uuidof(SpellCheckerFactory), CLSCTX_INPROC_SERVER);
       if(!mp_spell_checker_factory)
-         throw std::runtime_error{""};
+         throw std::exception{};
    }
 
    void GetLanguages(Controls::TComboBox<OwnedString> &list);
@@ -214,7 +214,7 @@ Spellers *GetSpellers()
          sp_spellers=MakeUnique<Spellers>();
          CallAtShutdown([](){ sp_spellers=nullptr; });
       }
-      catch(const std::runtime_error &)
+      catch(const std::exception &)
       {
       }
    }
@@ -242,7 +242,7 @@ void SetLanguage(ConstString language)
             gp_speller=MakeUnique<Speller_Hunspell>();
             CallAtShutdown([](){ gp_speller=nullptr; });
          }
-         catch(const std::runtime_error &)
+         catch(const std::exception &)
          {
          }
       }

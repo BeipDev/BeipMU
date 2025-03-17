@@ -527,13 +527,9 @@ Avatar_Info &Avatars::Lookup(ConstString id)
    if(auto iter=m_map.find(id);iter!=m_map.end())
       return iter->second;
 
+   // We don't know about it, so request it from the server
    if(m_connection.IsConnected())
-   {
-      // We don't know about it, so request it from the server
-      m_connection.RawSend(ConstString(GMCP_BEGIN "beip.id.request \""));
-      m_connection.RawSend(id);
-      m_connection.RawSend(ConstString("\"" GMCP_END));
-   }
+      m_connection.SendGMCP("beip.id.request", FixedStringBuilder<256>("\"", id, "\""));
 
    return m_map.try_emplace(id).first->second;
 }

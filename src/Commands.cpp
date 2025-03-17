@@ -26,7 +26,7 @@ bool ParseFlag(ConstString value)
    else if(IEquals(value, "true") || IEquals(value, "t"))
       return true;
    else
-      throw Exceptions::Message("Value is not t/f or true/false");
+      throw std::runtime_error{"Value is not t/f or true/false"};
 }
 
 struct WordList : Collection<ConstString>
@@ -204,6 +204,7 @@ try
          "/reconnect $ - Reconnects if disconnected (with 'all' parameter it applies to every window)",
          "/resetscript - Reset the scripting engine (possibly switching languages)",
          "/roll [count]d[sides](+bonus) - Dice roll. Example /roll 10d6",
+         "/script $ - Run single line script",
          "/set $=$ - Set environment variable",
          "/setinput $ - Sets any text after the \"/setinput \" into the active input window",
          "/silence - Stop all playing sounds",
@@ -276,7 +277,7 @@ try
                   rect=Rect(pos, pos+size);
                }
                else
-                  throw Exceptions::Message("Invalid rect");
+                  throw std::runtime_error{"Invalid rect"};
             }
             else if(IEquals(name, "state"))
             {
@@ -284,7 +285,7 @@ try
                   show_command=SW_SHOWMAXIMIZED;
             }
             else
-               throw Exceptions::Message(FixedStringBuilder<256>("Unknown attribute: ", name));
+               throw std::runtime_error{FixedStringBuilder<256>("Unknown attribute: ", name).Terminate()};
          }
 
          OwnedString url, source;
@@ -1065,12 +1066,12 @@ try
             else if(IEquals(name, "capture"))
             {
                if(!value.To(capture_line_count))
-                  throw Exceptions::Message("Capture attribute is not a number");
+                  throw std::runtime_error{"Capture attribute is not a number"};
             }
             else if(IEquals(name, "capture_skip"))
             {
                if(!value.To(capture_skip_count))
-                  throw Exceptions::Message("Capture_skip attribute is not a number");
+                  throw std::runtime_error{"Capture_skip attribute is not a number"};
             }
 #if 0
             else if(IEquals(name, "dockable"))
@@ -1087,7 +1088,7 @@ try
             else if(IEquals(name, "append"))
                append=value;
             else
-               throw Exceptions::Message(FixedStringBuilder<256>("Unknown attribute: ", name));
+               throw std::runtime_error{FixedStringBuilder<256>("Unknown attribute: ", name).Terminate()};
          }
 
          OwnedString title;
@@ -2059,7 +2060,7 @@ try
 
       if(IEquals(wl[1], "gmcp_fs"))
       {
-         mp_connection->RawSend(ConstString(GMCP_BEGIN R"+(beip.line.id.request 235)+" GMCP_END));
+         mp_connection->SendGMCP("beip.line.id.request", "235");
          return;
       }
 
@@ -2230,7 +2231,7 @@ GMCP_BEGIN R"+(beip.tilemap.data { "Laboratory":"k+ZFAXzaLKxIgE1/5ixHhtsMYBBzLFl
    else
       mp_wnd_text->AddHTML("<icon error> <font color='red'>Unrecognized Command, use // to send text directly to the mu*, /help for a list of commands, or set 'Send unrecognized commands' in settings/input window");
 }
-catch(const Exceptions::Message &message)
+catch(const std::exception &message)
 {
    HybridStringBuilder error("<icon error> <font color='red'>Command error: </font>", message);
    mp_wnd_text->AddHTML(error);

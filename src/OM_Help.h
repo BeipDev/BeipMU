@@ -208,40 +208,6 @@ struct DispatchNode : DLNode<DispatchNode>
    CntPtrTo<IDispatchEx> mp_dispex;
 };
 
-// Counting Receiver, where calling AttachTo/Detach increments and decrements a reference
-// count.  It only works if you're always attaching/detaching to the same single event sender
-// This way the OM code will keep the event hooked as long as there is at least 1 reference
-// As soon as the references drop to zero, the event is unhooked.
-template<typename TBase, typename TEvent>
-struct CntReceiverOf : private Events::Receiver
-{
-   void AttachTo(Events::SenderOf<TEvent> &sender)
-   {
-      if(m_iRefs++==0)
-         Events::Receiver::AttachTo(sender);
-   }
-
-   void Detach()
-   {
-      if(--m_iRefs==0)
-         Events::Receiver::Detach();
-   }
-
-private:
-   void Receive(void *event) noexcept { static_cast<TBase *>(this)->On(*reinterpret_cast<TEvent *>(event)); }
-   // NOTE: Cannot convert errors are because the class hooking this event didn't impliment an On(Event_Foo) handler
-
-   unsigned m_iRefs{};
-};
-
-template<typename TBase, typename... TEvents>
-struct CntReceiversOf : CntReceiverOf<TBase, TEvents>...
-{
-   template<typename TEvent> CntReceiverOf<TBase, TEvent> &Get() { return *this; }
-   template<typename TEvent> void AttachTo(Events::SenderOf<TEvent> &sender) { Get<TEvent>().AttachTo(sender); }
-   template<typename TEvent> void Detach() { Get<TEvent>().Detach(); }
-};
-
 void InitHooks();
 void ClearHooks();
 
@@ -293,7 +259,7 @@ struct HookVariant : Hook
 template<typename TEvent, typename TBase, typename TSender>
 HRESULT ManageHook(TBase *pBase, Hook &hook, TSender &sender, IDispatch *pDisp)
 {
-   auto &receiver=static_cast<CntReceiverOf<TBase, TEvent> &>(*pBase);
+   auto &receiver=static_cast<Events::ReceiverOf<TEvent> &>(*pBase);
 
    if(hook)
       receiver.Detach();
@@ -309,14 +275,12 @@ HRESULT ManageHook(TBase *pBase, Hook &hook, TSender &sender, IDispatch *pDisp)
 template<typename TEvent, typename TBase, typename TSender>
 HRESULT ManageHook(TBase *pBase, HookVariant &hook, TSender &sender, IDispatch *pDisp, VARIANT &var)
 {
-   auto &receiver=static_cast<CntReceiverOf<TBase, TEvent> &>(*pBase);
-
    if(hook)
-      receiver.Detach();
+      pBase->Detach<TEvent>();
    hook.Set(pDisp, var);
 
    if(pDisp)
-      receiver.AttachTo(sender);
+      pBase->AttachTo<TEvent>(sender);
    return S_OK;
 }
 

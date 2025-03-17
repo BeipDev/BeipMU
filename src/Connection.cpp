@@ -323,7 +323,10 @@ struct JSON_WebView_Open : JSON::Element
 void Connection::OnGMCP(ConstString string)
 {
    if(m_GMCP_dump)
-      ConsoleText(string);
+   {
+      HybridStringBuilder<> text("<font color='red'>GMCP Received:</font> ", Text::NoHTML{string});
+      ConsoleHTML(text);
+   }
 
    if(OnGMCP_Parse(string))
    {
@@ -468,9 +471,9 @@ bool Connection::OnGMCP_Parse(ConstString string)
          }
       }
    }
-   catch(const Exceptions::Message &message)
+   catch(const std::exception &message)
    {
-      ConsoleText(message);
+      ConsoleText(SzToString(message.what()));
    }
 
    return false;
@@ -550,6 +553,21 @@ void Connection::Send(ConstString string, bool send_event, bool raw)
 
       if(!m_ppropPuppet)
          mp_client->Input(ConstString(CRLF));
+   }
+}
+
+void Connection::SendGMCP(ConstString package, ConstString json)
+{
+   RawSend(ConstString{GMCP_BEGIN});
+   RawSend(package);
+   RawSend(ConstString(" "));
+   RawSend(json);
+   RawSend(ConstString{GMCP_END});
+
+   if(m_GMCP_dump)
+   {
+      HybridStringBuilder<> string("<font color='blue'>GMCP Sent:</font> ", Text::NoHTML{package}, " ", Text::NoHTML{json});
+      ConsoleHTML(string);
    }
 }
 
@@ -789,7 +807,10 @@ void Connection::Disconnect()
 
    if(!m_ppropPuppet && !m_connect_retry)
    {
-      m_wnd_main.BroadcastHTML(STR_Disconnected);
+      if(g_ppropGlobal->fNetworkMessagesInSpawns())
+         m_wnd_main.BroadcastHTML(STR_Disconnected);
+      else
+         Text(STR_Disconnected);
       m_events.Send(Event_Activity());
    }
 
@@ -969,7 +990,10 @@ void Connection::Connected()
 
    if(!m_ppropPuppet)
    {
-      m_wnd_main.BroadcastHTML(STR_Connected);
+      if(g_ppropGlobal->fNetworkMessagesInSpawns())
+         m_wnd_main.BroadcastHTML(STR_Connected);
+      else
+         Text(STR_Connected);
       m_events.Send(Event_Activity());
    }
 
@@ -1129,7 +1153,7 @@ void Connection::Display(UniquePtr<Text::Line> &&p_line)
    {
       if(p_capture_until->propSpawn().fOnlyChildrenDuringCapture())
       {
-         TriggersExecute(*p_line, p_capture_until->propTriggers(), state);
+         RunTriggers(*p_line, p_capture_until->propTriggers(), state);
          state.m_stop=true; // Don't process any other triggers
       }
    }
@@ -1140,7 +1164,7 @@ void Connection::Display(UniquePtr<Text::Line> &&p_line)
       for(unsigned i=0;i<m_multiline_triggers.Count();i++)
       {
          auto &multiline=*m_multiline_triggers[i];
-         TriggersExecute(*p_line, *multiline.mp_triggers, state);
+         RunTriggers(*p_line, *multiline.mp_triggers, state);
          if(multiline.m_line_limit!=0 && ++multiline.m_line_count>=multiline.m_line_limit)
          {
             m_multiline_triggers.Delete(i--);
@@ -1149,19 +1173,19 @@ void Connection::Display(UniquePtr<Text::Line> &&p_line)
          }
       }
 
-      TriggersExecute(*p_line, m_propConnections.propTriggers().WithoutLast(m_propConnections.propTriggers().AfterCount()), state);
+      RunTriggers(*p_line, m_propConnections.propTriggers().WithoutLast(m_propConnections.propTriggers().AfterCount()), state);
 
       if(m_ppropServer && m_ppropServer->propTriggers().fActive())
       {
-         TriggersExecute(*p_line, m_ppropServer->propTriggers().WithoutLast(m_ppropServer->propTriggers().AfterCount()), state);
+         RunTriggers(*p_line, m_ppropServer->propTriggers().WithoutLast(m_ppropServer->propTriggers().AfterCount()), state);
 
          if(m_ppropCharacter && m_ppropCharacter->propTriggers().fActive())
-            TriggersExecute(*p_line, m_ppropCharacter->propTriggers(), state);
+            RunTriggers(*p_line, m_ppropCharacter->propTriggers(), state);
 
-         TriggersExecute(*p_line, m_ppropServer->propTriggers().Last(m_ppropServer->propTriggers().AfterCount()), state);
+         RunTriggers(*p_line, m_ppropServer->propTriggers().Last(m_ppropServer->propTriggers().AfterCount()), state);
       }
 
-      TriggersExecute(*p_line, m_propConnections.propTriggers().Last(m_propConnections.propTriggers().AfterCount()), state);
+      RunTriggers(*p_line, m_propConnections.propTriggers().Last(m_propConnections.propTriggers().AfterCount()), state);
 
       // Add new multiline triggers to beginning of list, such that the last one added to the list will be first
       while(m_new_multiline_triggers)
@@ -1437,7 +1461,7 @@ void Connection::OnMultilineTriggerTimeout(MultilineTrigger &v)
    Assert(false); // Why didn't we find the trigger?
 }
 
-void Connection::TriggersExecute(Text::Line &line, Array<CopyCntPtrTo<Prop::Trigger>> triggers, TriggerState &state)
+void Connection::RunTriggers(Text::Line &line, Array<CopyCntPtrTo<Prop::Trigger>> triggers, TriggerState &state)
 {
    if(state.m_stop)
       return;
@@ -1620,22 +1644,25 @@ void Connection::TriggersExecute(Text::Line &line, Array<CopyCntPtrTo<Prop::Trig
                if(prop.fActive() && !mp_captured_spawn_window && !state.mp_spawn_window)
                {
                   FindStringReplacement replacement(search, prop.pclTitle());
-                  state.mp_spawn_window=&GetMainWindow().GetSpawnWindow(prop, replacement, !state.m_no_activity);
-                  state.mp_spawn_window->m_gag_log=prop.fGagLog();
-                  state.mp_spawn_trigger=ppropTrigger;
-
-                  // If there is no capture until set, and we have one, set this trigger as the capture until
-                  if(prop.pclCaptureUntil())
-                     state.mp_spawn_window->mp_capture_until=ppropTrigger;
-
-                  if(mp_trigger_debug)
+                  state.mp_spawn_window=GetMainWindow().GetSpawnWindow(prop, replacement, !state.m_no_activity, m_raw_log_replay);
+                  if(state.mp_spawn_window)
                   {
-                     FixedStringBuilder<256> string("Redirecting to spawn window: <b>", Text::NoHTML{replacement}, "</b>");
-                     if(prop.pclTabGroup())
-                        string(" on tab: <b>", Text::NoHTML{prop.pclTabGroup()});
-                     TriggerDebugText("#000040", "blue", "10", string);
+                     state.mp_spawn_window->m_gag_log=prop.fGagLog();
+                     state.mp_spawn_trigger=ppropTrigger;
+
+                     // If there is no capture until set, and we have one, set this trigger as the capture until
                      if(prop.pclCaptureUntil())
-                        TriggerDebugText("#000040", "blue", "10", FixedStringBuilder<256>("Capture until set: <b>", Text::NoHTML{prop.pclCaptureUntil()}));
+                        state.mp_spawn_window->mp_capture_until=ppropTrigger;
+
+                     if(mp_trigger_debug)
+                     {
+                        FixedStringBuilder<256> string("Redirecting to spawn window: <b>", Text::NoHTML{replacement}, "</b>");
+                        if(prop.pclTabGroup())
+                           string(" on tab: <b>", Text::NoHTML{prop.pclTabGroup()});
+                        TriggerDebugText("#000040", "blue", "10", string);
+                        if(prop.pclCaptureUntil())
+                           TriggerDebugText("#000040", "blue", "10", FixedStringBuilder<256>("Capture until set: <b>", Text::NoHTML{prop.pclCaptureUntil()}));
+                     }
                   }
                }
             }
@@ -1878,7 +1905,7 @@ void Connection::TriggersExecute(Text::Line &line, Array<CopyCntPtrTo<Prop::Trig
          {
             // Do the nested triggers
             if(ppropTrigger->fPropTriggers() && ppropTrigger->propTriggers().fActive())
-               TriggersExecute(line, ppropTrigger->propTriggers(), state);
+               RunTriggers(line, ppropTrigger->propTriggers(), state);
          }
       }
 
@@ -1991,7 +2018,7 @@ void Connection::AutoLogStart() try
       m_events.Send(Event_Log());
       m_auto_log=true;
    }
-} catch(const std::runtime_error &)
+} catch(const std::exception &)
 {
 }
 
@@ -2021,7 +2048,7 @@ void Connection::LogStart(ConstString filename, unsigned type) try
 
    if(p_start)
       mp_log->LogTextList(GetOutput().GetTextList(), p_start);
-} catch(const std::runtime_error &)
+} catch(const std::exception &)
 {
 }
 

@@ -420,7 +420,7 @@ Prop Ansi
 }
 
 Prop Aliases;
-Prop Alias
+Prop Alias(RefCounted)
 {
    String     Description, MaxLen=65536
    FindString FindString
@@ -432,7 +432,7 @@ Prop Alias
    Flag       ExpandVariables = false
 }
 
-Prop Aliases(StackOf Alias)
+Prop Aliases(RefCounted StackOf Alias)
 {
    Flag Active = false // Aliases are off by default because they're dangerous
    Flag Echo = true // Echo the processed alias (to see what you actually sent)
@@ -1009,6 +1009,8 @@ Prop Global
    Flag ShowWelcome = true
    Flag SendUnrecognizedCommands = false
    Flag PreventSmartQuotes = true
+   Flag LayoutWithCtrl = false
+   Flag NetworkMessagesInSpawns = true
 
    Flag AutoShowHistory = true // When true, history window will appear automatically when navigating history
    Flag NewContentMarker = true

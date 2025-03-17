@@ -42,7 +42,7 @@ struct WebView2EnvironmentCreator : General::Unknown<ICoreWebView2CreateCoreWebV
 
 struct WebView_OM
  : OM::Dispatch<OM::IWebView>,
-	OM::CntReceiversOf<WebView_OM, ::Connection::Event_Connect, ::Connection::Event_Disconnect, ::Connection::Event_Receive, ::Connection::Event_Display,
+	Events::ReceiversOf<WebView_OM, ::Connection::Event_Connect, ::Connection::Event_Disconnect, ::Connection::Event_Receive, ::Connection::Event_Display,
 	::Connection::Event_Send, ::Connection::Event_GMCP>
 {
 	WebView_OM(Wnd_WebView &wnd_webview) : mp_wnd_webview{&wnd_webview} { }
@@ -87,7 +87,8 @@ struct WebView_OM
 		{
 			p_displayer=m_displays.Push(MakeUnique<Displayer>());
 			p_displayer->m_id=id;
-			CntReceiverOf<WebView_OM, ::Connection::Event_Display>::AttachTo(m_connection);
+			if(m_displays.Count()+m_captures.Count()==1)
+				AttachTo<::Connection::Event_Display>(m_connection);
 		}
 
 		p_displayer->m_hook.Set(p_disp);
@@ -104,7 +105,8 @@ struct WebView_OM
 			if(p_hook->m_id==id)
 			{
 				m_displays.UnsortedDelete(index);
-				CntReceiverOf<WebView_OM, ::Connection::Event_Display>::Detach();
+				if(m_displays.Count()+m_captures.Count()==0)
+					Detach<::Connection::Event_Display>();
 				break;
 			}
 		}
@@ -128,7 +130,8 @@ struct WebView_OM
 		{
 			p_capture=m_captures.Push(MakeUnique<Capture>());
 			p_capture->m_id=id;
-			CntReceiverOf<WebView_OM, ::Connection::Event_Display>::AttachTo(m_connection);
+			if(m_displays.Count()+m_captures.Count()==1)
+				AttachTo<::Connection::Event_Display>(m_connection);
 		}
 
 		p_capture->m_hook_capture_line.Set(p_capture_line);
@@ -152,7 +155,8 @@ struct WebView_OM
 					break;
 
 				m_captures.UnsortedDelete(index);
-				CntReceiverOf<WebView_OM, ::Connection::Event_Display>::Detach();
+				if(m_displays.Count()+m_captures.Count()==0)
+					Detach<::Connection::Event_Display>();
 				*retval=OM::ToVariantBool(true);
 				break;
 			}
@@ -161,14 +165,11 @@ struct WebView_OM
 		return S_OK;
 	}
 
-	STDMETHODIMP SendGMCP(BSTR gmcp) override
+	STDMETHODIMP SendGMCP(BSTR package, BSTR json) override
 	{
 		if(!m_connection.IsConnected())
 			return E_FAIL;
-
-		m_connection.RawSend(ConstString{GMCP_BEGIN});
-		m_connection.RawSend(UTF8(gmcp));
-		m_connection.RawSend(ConstString{GMCP_END});
+		m_connection.SendGMCP(UTF8(package), UTF8(json));
 		return S_OK;
 	}
 
@@ -186,7 +187,8 @@ struct WebView_OM
 		p_handler->m_prefix=std::move(package_prefix);
 		p_handler->m_hook.Set(p_callback);
 
-		CntReceiverOf<WebView_OM, ::Connection::Event_GMCP>::AttachTo(m_connection);
+		if(m_gmcp_handlers.Count()==1)
+			AttachTo<::Connection::Event_GMCP>(m_connection);
 		return S_OK;
 	}
 
@@ -199,7 +201,8 @@ struct WebView_OM
 			if(p_handler->m_prefix==package_prefix)
 			{
 				m_gmcp_handlers.UnsortedDelete(index);
-				CntReceiverOf<WebView_OM, ::Connection::Event_GMCP>::Detach();
+				if(m_gmcp_handlers.Count()==0)
+					Detach<::Connection::Event_GMCP>();
 				return S_OK;
 			}
 		}
@@ -219,6 +222,30 @@ struct WebView_OM
 	{
 		mp_wnd_webview->GetWndMain().History_AddToHistory(UTF8(bstr), {});
 		return S_OK;
+	}
+
+	STDMETHODIMP GetPropertyString(BSTR bstr, BSTR *out) override
+	{
+		auto property=BSTRToLStr(bstr);
+		if(property=="WorldName")
+		{
+			*out=LStrToBSTR(mp_wnd_webview->GetWndMain().GetConnection().GetServer()->pclName());
+			return S_OK;
+		}
+		else if(property=="CharacterName")
+		{
+			*out=LStrToBSTR(mp_wnd_webview->GetWndMain().GetConnection().GetCharacter()->pclName());
+			return S_OK;
+		}
+		else if(property=="PuppetName")
+		{
+			if(auto *p_puppet=mp_wnd_webview->GetWndMain().GetConnection().GetPuppet())
+				*out=LStrToBSTR(p_puppet->pclName());
+			else
+				*out=nullptr;
+			return S_OK;
+		}
+		return S_FALSE;
 	}
 
 	void On(Connection::Event_Receive &event)
@@ -317,7 +344,7 @@ struct WebView_OM
 
 		for(auto &p_handler : m_gmcp_handlers)
 		{
-			if(p_handler->m_prefix==prefix)
+			if(auto remainder=package.RightOf(p_handler->m_prefix);remainder && remainder.StartsWith('.'))
 			{
 				p_handler->m_hook(string, package);
 				return;
@@ -438,9 +465,9 @@ void Wnd_WebView::On(const Event_WebViewEnvironmentCreated &)
 #if 0
 			OM::Variant v1{Automation::GetApp()};
 			mp_webview->AddHostObjectToScript(L"app", &v1);
-#endif
 			OM::Variant v2{m_wnd_main.GetDispatch()};
 			mp_webview->AddHostObjectToScript(L"window", &v2);
+#endif
 
 			EventRegistrationToken token;
 			mp_webview->add_DocumentTitleChanged(Microsoft::WRL::Callback<ICoreWebView2DocumentTitleChangedEventHandler>(

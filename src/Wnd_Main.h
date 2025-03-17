@@ -7,7 +7,7 @@
 
 namespace OM
 {
-class MainWindow;
+struct MainWindow;
 };
 
 struct Scripter;
@@ -123,6 +123,7 @@ struct SpawnWindow
 struct SpawnTabsWindow
  : DLNode<SpawnTabsWindow>,
    Wnd_Dialog,
+   Events::Sends_Deleted,
    Windows::AutoLayout::Tab::INotify
 {
    SpawnTabsWindow(SpawnTabsWindow *p_insert_after, Wnd_Main &wnd_main, ConstString title);
@@ -132,7 +133,7 @@ struct SpawnTabsWindow
    unsigned GetUnreadCount() const;
    void AfterRestore();
 
-   SpawnWindow &GetTab(ConstString title, Prop::TextWindow *pprops=nullptr, bool hilight=true);
+   SpawnWindow *GetTab(ConstString title, Prop::TextWindow *pprops, bool hilight, bool use_existing);
    void SetVisible(SpawnWindow &window);
    bool SetVisible(ConstString title);
    OwnedString m_title;
@@ -243,7 +244,7 @@ struct Wnd_Main
    void TabColor(Color color);
 
    SpawnTabsWindow *FindSpawnTabsWindow(ConstString title);
-   SpawnWindow &GetSpawnWindow(const Prop::Trigger_Spawn &trigger, ConstString title, bool fHilight);
+   SpawnWindow *GetSpawnWindow(const Prop::Trigger_Spawn &trigger, ConstString title, bool hilight, bool use_existing);
    Wnd_Image *GetImageWindow() { return mp_wnd_image; }
    Wnd_Image &EnsureImageWindow();
    Stats::Wnd &GetStatsWindow(ConstString title, bool fDock=true);
@@ -538,7 +539,7 @@ private:
    Collection<Variable> m_variables;
 
    CntPtrTo<OM::MainWindow> mp_dispatch;
-   friend class OM::MainWindow;
+   friend struct OM::MainWindow;
 };
 
 struct Wnd_MDI : TWindowImpl<Wnd_MDI>, DLNode<Wnd_MDI>
@@ -552,7 +553,7 @@ struct Wnd_MDI : TWindowImpl<Wnd_MDI>, DLNode<Wnd_MDI>
 
    void AddWindow(Wnd_Main &window);
    void DeleteWindow(Wnd_Main &window);
-   void Connect(Prop::Server *ppropServer, Prop::Character *ppropCharacter, Prop::Puppet *ppropPuppet, bool fSetActiveWindow);
+   void Connect(Prop::Server *ppropServer, Prop::Character *ppropCharacter, Prop::Puppet *ppropPuppet, bool set_active_window);
 
    Wnd_Main &GetActiveWindow() { AssumeAssert(mp_active_wnd_main); return *mp_active_wnd_main; }
    int GetActiveWindowIndex() const;

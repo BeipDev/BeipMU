@@ -72,7 +72,8 @@ struct Connection
 
    // When event is true, an OnSend event will be generated.
    void Send(ConstString string, bool send_event=true, bool raw=false);
-   void RawSend(Array<const BYTE> data) { mp_client->Input(data); }
+   void SendGMCP(ConstString package, ConstString json);
+   void RawSend(Array<const uint8> data) { mp_client->Input(data); }
 
    // Send the input line to the output window, styles and everything get parsed
    void Text(ConstString string);
@@ -194,8 +195,8 @@ struct Connection
 
       ConstString GetString() const { return m_lstr; }
 
-      private:
-         ConstString m_lstr;
+   private:
+      ConstString m_lstr;
    };
 
    struct Event_Activity { };
@@ -204,7 +205,7 @@ struct Connection
    struct Event_Log { };
 
    Events::SendersOf<Event_Log, Event_Send, Event_Receive, Event_Display, Event_Activity, Event_Connect, Event_Disconnect, Event_GMCP> m_events;
-   template<class TEvent> operator Events::SenderOf<TEvent> &() { return m_events.Get<TEvent>(); }
+   template<typename TEvent> operator Events::SenderOf<TEvent> &() { return m_events.Get<TEvent>(); }
 
    OwnedString m_grab_prefix; // If non empty, we're watching for a grab prefix to put into the input window
 
@@ -259,7 +260,7 @@ private:
       SpawnWindow *mp_spawn_window{};
       CntPtrTo<Prop::Trigger> mp_spawn_trigger;
    };
-   void TriggersExecute(Text::Line &line, Array<CopyCntPtrTo<Prop::Trigger>> triggers, TriggerState &state);
+   void RunTriggers(Text::Line &line, Array<CopyCntPtrTo<Prop::Trigger>> triggers, TriggerState &state);
    void TriggerDebugText(ConstString background_color, ConstString stroke_color, ConstString indent, ConstString message);
 
    Text::Wnd &GetOutput();

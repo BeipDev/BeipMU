@@ -20,8 +20,7 @@ private:
 struct SpawnTabs
  : DLNode<SpawnTabs>,
    Dispatch<IWindow_SpawnTabs>,
-   CntReceiverOf<SpawnTabs, SpawnTabsWindow::Event_Activate>,
-   Events::TReceiverOf<SpawnTabs, Events::Event_Deleted>
+   Events::ReceiversOf<SpawnTabs, SpawnTabsWindow::Event_Activate, Events::Event_Deleted>
 {
    SpawnTabs(MainWindow &main_window, SpawnTabsWindow &window);
 
@@ -38,10 +37,7 @@ private:
 
 struct MainWindow
  : Dispatch<IWindow_Main>,
-   CntReceiverOf<MainWindow, Wnd_Main::Event_Command>,
-   CntReceiverOf<MainWindow, Wnd_Main::Event_Activate>,
-   CntReceiverOf<MainWindow, Wnd_Main::Event_Close>,
-   CntReceiverOf<MainWindow, Wnd_Main::Event_Key>
+   Events::ReceiversOf<MainWindow, Wnd_Main::Event_Command, Wnd_Main::Event_Activate, Wnd_Main::Event_Close, Wnd_Main::Event_Key>
 {
    MainWindow(Wnd_Main *pWnd_Main);
    ~MainWindow() noexcept;

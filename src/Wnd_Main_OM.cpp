@@ -38,7 +38,7 @@ HRESULT Docking::Dock(Side side)
 SpawnTabs::SpawnTabs(MainWindow &main_window, SpawnTabsWindow &window)
    : m_main_window{main_window}, mp_window{&window}
 {
-   ReceiverOf<Events::Event_Deleted>::AttachTo(*mp_window);
+   AttachTo<Events::Event_Deleted>(*mp_window);
 }
 
 HRESULT SpawnTabs::SetOnTabActivate(IDispatch *pDisp, VARIANT var)
@@ -167,7 +167,10 @@ HRESULT MainWindow::GetInput(BSTR title, IWindow_Input **retval)
    ZOMBIECHECK
    auto p_input=m_pWnd_Main->FindInputWindow(BSTRToLStr(title));
    if(!p_input)
-      return E_INVALIDARG;
+   {
+      *retval=nullptr;
+      return S_OK;
+   }
    *retval=new Window_Input(*p_input); (*retval)->AddRef();
    return S_OK;
 }
@@ -187,7 +190,10 @@ HRESULT MainWindow::GetSpawnTabs(BSTR title16, IWindow_SpawnTabs **retval)
 
    auto *p_window=m_pWnd_Main->FindSpawnTabsWindow(title);
    if(!p_window)
-      return E_FAIL;
+   {
+      *retval=nullptr;
+      return S_OK;
+   }
 
    auto p_spawn_tabs=MakeCounting<SpawnTabs>(*this, *p_window);
    m_spawn_tabs.Push(p_spawn_tabs);

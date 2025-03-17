@@ -82,7 +82,7 @@ Log::Log(Connection &connection, Prop::Logging &propLogging, IError &error, Cons
    if(!m_file_log)
    {
       m_error.Text(FixedStringBuilder<512>(STR_CantCreateLogfile, "\"<font color='aqua'>", m_filename, "</font>\" <font color='white'>", LastError{}));
-      throw std::runtime_error{""};
+      throw std::exception{};
    }
 
    if(m_file_log.Size()>0)
@@ -454,7 +454,7 @@ RestoreLogs::RestoreLogs(ConstString path, unsigned buffer_size, unsigned buffer
 
    // Try to grow the file
    if(!m_file.Seek(buffer_count*buffer_size) || !m_file.SetEnd())
-      throw std::runtime_error{""};
+      throw std::exception{};
 
    m_buffer_count=buffer_count;
 }
@@ -488,7 +488,7 @@ bool RestoreLogs::Resize(unsigned oldSize, unsigned newSize)
             auto *p_view_dest=new_logs.Load(i);
 
             if(!p_view_source || !p_view_dest)
-               throw std::runtime_error{""};
+               throw std::exception{};
 
             MemoryZero(Array<BYTE>(reinterpret_cast<BYTE*>(static_cast<Buffer*>(p_view_dest->m_buffer)), newSize));
 
@@ -504,11 +504,11 @@ bool RestoreLogs::Resize(unsigned oldSize, unsigned newSize)
       // Delete the original file and rename the new one to take it's place
       if(!DeleteFile(path) || 
          !MoveFile(path_new, path))
-         throw std::runtime_error{""};
+         throw std::exception{};
 
       return true;
    }
-   catch(const std::runtime_error &)
+   catch(const std::exception &)
    {
       AssertReturned<TRUE>()==DeleteFile(path_new);
       return false;

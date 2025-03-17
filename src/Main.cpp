@@ -97,7 +97,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, wchar_t *pCmdL
    CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED); CallAtShutdown([](){ CoUninitialize(); });
 //   DebugOnly(MallocSpy_Register()); // In case of failure: http://support.microsoft.com/kb/894194/
    Sockets::Startup();
-#if YARN
+#if YARN || DWRITE_TEST
    DirectX::D3D _;
 #endif
 

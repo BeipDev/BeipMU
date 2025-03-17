@@ -36,8 +36,6 @@ void CreateDialog_Connect(Window wnd, Wnd_MDI &wndMDI);
 void CreateDialog_SmartPaste(Window wndParent, Connection &connection, Prop::Connections &propConnections);
 void CreateDialog_InputWindow(Window wndParent, InputControl &input_window, Prop::InputWindow &propInputWindow);
 
-void D2DTest();
-
 void ShowStatistics(Text::Wnd &wnd)
 {
    uint64 total_seconds_connected=0;
@@ -137,6 +135,7 @@ void ErrorCollection::Text(ConstString string)
 
 void Global_PropChange()
 {
+   Windows::Controls::s_layout_uses_control=g_ppropGlobal->fLayoutWithCtrl();
    Text::Wnd::ShowTip_SelectionCopy(g_ppropGlobal->fShowTip_SelectionCopy());
    Text::Wnd::SetShowNewContent(g_ppropGlobal->fNewContentMarker());
 
@@ -305,13 +304,13 @@ SpawnTabsWindow *Wnd_Main::FindSpawnTabsWindow(ConstString title)
    return nullptr;
 }
 
-SpawnWindow &Wnd_Main::GetSpawnWindow(const Prop::Trigger_Spawn &trigger, ConstString title, bool fHilight)
+SpawnWindow *Wnd_Main::GetSpawnWindow(const Prop::Trigger_Spawn &trigger, ConstString title, bool hilight, bool use_existing)
 {
    if(!title)
    {
       if(!mp_null_spawn)
          mp_null_spawn=MakeUnique<SpawnWindow>(*this);
-      return *mp_null_spawn;
+      return mp_null_spawn;
    }
 
    if(trigger.pclTabGroup())
@@ -329,23 +328,29 @@ SpawnWindow &Wnd_Main::GetSpawnWindow(const Prop::Trigger_Spawn &trigger, ConstS
 
       if(!p_tab_window)
       {
+         if(use_existing)
+            return nullptr;
+
          p_tab_window=new SpawnTabsWindow(m_spawn_tabs_windows.Prev(), *this, trigger.pclTabGroup());
          p_tab_window->GetDocking().Dock(Docking::Side::Right);
       }
 
-      return p_tab_window->GetTab(title, nullptr, fHilight);
+      return p_tab_window->GetTab(title, nullptr, hilight, use_existing);
    }
 
    for(auto &window : m_spawn_windows)
    {
       if(window.m_title==title)
-         return window;
+         return &window;
    }
+
+   if(use_existing)
+      return nullptr;
 
    auto &spawn=*new SpawnWindow(m_spawn_windows.Prev(), *this, title, *CopyIfNotGlobal(*mp_prop_output));
    if(spawn)
       spawn.GetDocking().Dock(Docking::Side::Right);
-   return spawn;
+   return &spawn;
 }
 
 Wnd_Image &Wnd_Main::EnsureImageWindow()
@@ -458,7 +463,7 @@ SpawnTabsWindow::~SpawnTabsWindow()
 {
 }
 
-SpawnWindow &SpawnTabsWindow::GetTab(ConstString title, Prop::TextWindow *pprops, bool hilight)
+SpawnWindow *SpawnTabsWindow::GetTab(ConstString title, Prop::TextWindow *pprops, bool hilight, bool use_existing)
 {
    // Look for an existing tab
    for(unsigned i=0;i<m_spawn_windows.Count();i++)
@@ -467,9 +472,12 @@ SpawnWindow &SpawnTabsWindow::GetTab(ConstString title, Prop::TextWindow *pprops
       {
          if(hilight)
             mp_tabs->SetHilight(i);
-         return m_spawn_windows[i];
+         return &m_spawn_windows[i];
       }
    }
+
+   if(use_existing)
+      return nullptr;
 
    // Create a new tab, make a copy of the text window settings using a previous tab or the output settings
    CntPtrTo<Prop::TextWindow> p_prop_text_window{pprops};
@@ -490,7 +498,7 @@ SpawnWindow &SpawnTabsWindow::GetTab(ConstString title, Prop::TextWindow *pprops
       spawn_window.mp_text->SetAway(true);
    }
    mp_tabs->Invalidate(true);
-   return spawn_window;
+   return &spawn_window;
 }
 
 void SpawnTabsWindow::SetAway(bool fAway)
@@ -1102,7 +1110,7 @@ void Wnd_Main::InitScripter()
    {
       new Scripter(g_ppropGlobal->pclScriptLanguage());
    }
-   catch(const std::runtime_error &)
+   catch(const std::exception &)
    {
       MessageBox(*this, STR_ErrorInitingScript, STR_Note, MB_OK|MB_ICONEXCLAMATION);
    }
@@ -1266,7 +1274,7 @@ Wnd_Docking *Wnd_Main::RestoreDockedWindowSettings(Prop::DockedWindow &propWindo
          auto &wnd=*new SpawnTabsWindow(m_spawn_tabs_windows.Prev(), *this, props.pclTitle());
 
          for(auto &pTab : props.propTabs())
-            wnd.GetTab(pTab->pclTitle(), pTab->fPropTextWindow() ? &pTab->propTextWindow() : nullptr, false);
+            wnd.GetTab(pTab->pclTitle(), pTab->fPropTextWindow() ? &pTab->propTextWindow() : &GlobalTextSettings(), false, false);
 
          return &wnd.GetDocking();
       }
@@ -1318,7 +1326,7 @@ Wnd_Docking *Wnd_Main::RestoreDockedWindowSettings(Prop::DockedWindow &propWindo
             return nullptr;
 
          try { mp_wnd_map=MakeUnique<Maps::Wnd>(*this); }
-         catch(const std::runtime_error &)
+         catch(const std::exception &)
          {
             return nullptr; // Probably on Wine where we failed to create Direct2D
          }
@@ -1349,7 +1357,7 @@ Wnd_Docking *Wnd_Main::RestoreDockedWindowSettings(Prop::DockedWindow &propWindo
             return nullptr;
 
          try { mp_yarn_tilemap=IYarn_TileMap::Create(*this); }
-         catch(const std::runtime_error &)
+         catch(const std::exception &)
          {
             return nullptr; // Probably failed to create Direct2D
          }
@@ -1443,48 +1451,48 @@ void Wnd_Main::RestoreDockingConfiguration(Prop::Docking &propDocking)
    {
       RestorerOf _(m_suspend_layout); m_suspend_layout=true;
 
-      Prop::DockedPanes &propPanes=propDocking.propDockedPanes();
+      Prop::DockedPanes &prop_panes=propDocking.propDockedPanes();
 
-      int2 clientSize=ClientRect().size();
+      int2 client_size=ClientRect().size();
       // The client size can't be zero, otherwise we'll crash on layout (not sure how this can happen, but it has)
-      PinAbove(clientSize.x, 128);
-      PinAbove(clientSize.y, 128);
+      PinAbove(client_size.x, 128);
+      PinAbove(client_size.y, 128);
 
-      int2 originalClient=propDocking.ClientSize();
-      if(originalClient.x<1 || originalClient.y<1)
+      int2 original_client=propDocking.ClientSize();
+      if(original_client.x<1 || original_client.y<1)
          return; // Bogus size or default initialized, either way exit
 
-      for(auto &propFrame : propPanes)
+      for(auto &prop_frame : prop_panes)
       {
-         auto side=Docking::Side(propFrame->Side());
-         int2 frameSize=clientSize;
-         int2 originalFrameSize=originalClient;
-         bool isHorizontal=Docking::ToDirection(side)==Direction::Horizontal;
+         auto side=Docking::Side(prop_frame->Side());
+         int2 frame_size=client_size;
+         int2 original_frame_size=original_client;
+         bool is_horizontal=Docking::ToDirection(side)==Direction::Horizontal;
 
          // Setup size so that size.x corresponds to the frame's size, and size.y to the space for docked windows in it
          // So for a vertical (left/right) frame, nothing changes, but for a horizontal one x and y swap
-         if(isHorizontal)
+         if(is_horizontal)
          {
-            std::swap(frameSize.x, frameSize.y);
-            std::swap(originalFrameSize.x, originalFrameSize.y);
+            std::swap(frame_size.x, frame_size.y);
+            std::swap(original_frame_size.x, original_frame_size.y);
          }
 
-         frameSize.x=max(propFrame->Size()*frameSize.x/originalFrameSize.x, 10*g_dpiScale);
-         Docking::Frame &frame=CreateFrame(side, frameSize.x);
+         frame_size.x=max(prop_frame->Size()*frame_size.x/original_frame_size.x, 10*g_dpiScale);
+         Docking::Frame &frame=CreateFrame(side, frame_size.x);
 
-         for(auto &ppropWindow : propFrame->propWindows())
+         for(auto &p_prop_window : prop_frame->propWindows())
          {
-            Wnd_Docking *pWnd=RestoreDockedWindowSettings(*ppropWindow);
-            if(!pWnd)
+            Wnd_Docking *p_wnd=RestoreDockedWindowSettings(*p_prop_window);
+            if(!p_wnd)
                continue;
 
-            pWnd->SetVerticalCaption(ppropWindow->fVerticalCaption());
-            pWnd->SetHideCaption(ppropWindow->fHideCaption());
-            int2 size(frameSize.x, ppropWindow->Size()*frameSize.y/originalFrameSize.y);
-            if(isHorizontal)
+            p_wnd->SetVerticalCaption(p_prop_window->fVerticalCaption());
+            p_wnd->SetHideCaption(p_prop_window->fHideCaption());
+            int2 size(frame_size.x, p_prop_window->Size()*frame_size.y/original_frame_size.y);
+            if(is_horizontal)
                std::swap(size.x, size.y);
 
-            frame.Add(*pWnd, nullptr, &size);
+            frame.Add(*p_wnd, nullptr, &size);
          }
 
          if(frame.m_window_count==0)
@@ -1494,15 +1502,15 @@ void Wnd_Main::RestoreDockingConfiguration(Prop::Docking &propDocking)
          }
       }
 
-      for(auto &ppropWindow : propDocking.propFloatingWindows())
+      for(auto &p_prop_window : propDocking.propFloatingWindows())
       {
-         Wnd_Docking *pWnd=RestoreDockedWindowSettings(*ppropWindow);
-         if(!pWnd)
+         Wnd_Docking *p_wnd=RestoreDockedWindowSettings(*p_prop_window);
+         if(!p_wnd)
             continue;
 
-         pWnd->SetPosition(ppropWindow->rcRect());
-         pWnd->EnsureOnScreen();
-         pWnd->Show(SW_SHOWNOACTIVATE);
+         p_wnd->SetPosition(p_prop_window->rcRect());
+         p_wnd->EnsureOnScreen();
+         p_wnd->Show(SW_SHOWNOACTIVATE);
       }
    }
    DockingChange();
@@ -1972,7 +1980,7 @@ LRESULT Wnd_Main::On(const Msg::Command &msg)
             {
                EnsureMapWindow();
             }
-            catch(const std::runtime_error &)
+            catch(const std::exception &)
             {
                // Nothing to do, the user would have already seen the Direct2D error on startup
             }
@@ -3162,7 +3170,7 @@ ATOM Wnd_MDI::Register()
    return wc.Register();
 }
 
-void Wnd_MDI::Connect(Prop::Server *ppropServer, Prop::Character *ppropCharacter, Prop::Puppet *ppropPuppet, bool fSetActiveWindow)
+void Wnd_MDI::Connect(Prop::Server *ppropServer, Prop::Character *ppropCharacter, Prop::Puppet *ppropPuppet, bool set_active_window)
 {
    if(ppropServer && !ppropCharacter)
    {
@@ -3191,32 +3199,41 @@ void Wnd_MDI::Connect(Prop::Server *ppropServer, Prop::Character *ppropCharacter
    }
 
    // Look for an existing window
-   if(auto *pWndMain=FindExistingWindow(ppropServer, ppropCharacter, ppropPuppet))
+   if(auto *p_window=FindExistingWindow(ppropServer, ppropCharacter, ppropPuppet))
    {
-      Connection &connection=pWndMain->GetConnection();
+      Connection &connection=p_window->GetConnection();
       connection.Reconnect();
-      if(fSetActiveWindow)
-         pWndMain->GetMDI().SetActiveWindow(*pWndMain);
+      if(set_active_window)
+         p_window->GetMDI().SetActiveWindow(*p_window);
       return;
    }
 
-   // Look for an empty window
-   for(auto &window : m_root_wnd_main)
+   auto UseWindow = [&](Wnd_Main &window)
    {
       Connection &connection=window.GetConnection();
-      if(!connection.IsConnected() && !connection.GetServer())
-      {
-         connection.Associate(ppropServer, ppropCharacter, ppropPuppet);
-         window.ResetWindowSettings();
-         connection.Connect(false);
-         if(fSetActiveWindow)
-            SetActiveWindow(window);
+      if(connection.IsConnected() || connection.GetServer())
+         return false;
+
+      connection.Associate(ppropServer, ppropCharacter, ppropPuppet);
+      window.ResetWindowSettings();
+      connection.Connect(false);
+      if(set_active_window)
+         SetActiveWindow(window);
+      return true;
+   };
+
+   // Look for an empty window
+   // Check active window
+   if(UseWindow(GetActiveWindow()))
+      return;
+
+   // Check all windows
+   for(auto &window : m_root_wnd_main)
+      if(UseWindow(window))
          return;
-      }
-   }
 
    Wnd_Main &window=*new Wnd_Main(*this, ppropServer, ppropCharacter, ppropPuppet);
-   if(fSetActiveWindow)
+   if(set_active_window)
       SetActiveWindow(window);
 }
 
@@ -3350,9 +3367,9 @@ Test() int
    {
       ConsoleText(FixedStringBuilder<256>("Compile error: ", e, "  On Line:", e.m_line_number));
    }
-   catch(const Exceptions::Message &e)
+   catch(const std::exception &e)
    {
-      ConsoleText(e);
+      ConsoleText(SzToString(e.what()));
    }
 #endif
 }
@@ -3404,7 +3421,7 @@ void CreateWindow_Root(ConstString command_line, int nCmdShow)
          script_path=script_path_fixed;
       }
 
-      if(auto *pScripter=Wnd_MDI::GetInstance().GetActiveWindow().GetScripter();pScripter && pScripter->RunFile(script_path)==false)
+      if(auto *p_scripter=Wnd_MDI::GetInstance().GetActiveWindow().GetScripter();p_scripter && p_scripter->RunFile(script_path)==false)
          ConsoleHTML(STR_CantLoadStartupScript);
    }
 
@@ -3422,7 +3439,6 @@ void CreateWindow_Root(ConstString command_line, int nCmdShow)
    MessageBox(*Wnd_MDI::s_root_node.Next(), "This is a beta build, expect things to not be perfect.\nAnd as always, please try to break it!", "BETA reminder", MB_ICONEXCLAMATION|MB_OK);
 #endif
 #if DWRITE_TEST
-   D2DTest();
    CreateWndGTest();
 #endif
 }
