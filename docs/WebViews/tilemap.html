@@ -11,7 +11,17 @@
 
     <script>
         const client=window.chrome.webview.hostObjects.client;
+        client.SetOnConnect(OnConnect);
         client.SetOnGMCP("tilemap", OnGMCP);
+
+        // Window was opened while we were already connected, so setup as though we just connected
+        if(await client.IsConnected())
+            OnConnect();
+
+        function OnConnect() {
+          let gmcp=["tilemap 1"];
+          client.SendGMCP("Core.Supports.Add", JSON.stringify(gmcp));
+        }
 
         let map_info = null;
         let map_data;
