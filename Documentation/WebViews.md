@@ -21,6 +21,12 @@ https://beipdev.github.io/BeipMU/WebViews/samples.html
 Navigation UI (buttons that send stuff)
 https://beipdev.github.io/BeipMU/WebViews/macros.html
 
+A GMCP handler example
+https://beipdev.github.io/BeipMU/WebViews/gmcp.html
+
+A GMCP graphical tilemap package
+https://beipdev.github.io/BeipMU/WebViews/tilemap.html
+
 ## API
 
 Inside the webview HTML, JavaScript can access the host through this object:
@@ -44,7 +50,6 @@ Methods:
 Close the WebView window. Useful if your webview is a popup to choose an item and you want it to close after doing your selection.
 </details>
 
-
 <details><summary>Send</summary>
   
 ### `Send(string text, bool process_aliases=false)`
@@ -57,6 +62,22 @@ window.chrome.webview.hostObjects.client.send("page friend=\"Booo!");
 #### Parameters
 * `text` The text to send
 * `process_aliases` Set to true to have the user's aliases processed when sending the text
+</details>
+
+<details><summary>SendGMCP</summary>
+
+### `SendGMCP(string package, string json)`
+Send the given package & json as a GMCP telnet message. This is a convenience function that joins the parameters together plus the telnet codes to make a valid GMCP message. It also gets captured by the GMCP debugger.
+
+```js
+let gmcp=["BeipTest1 1", "BeipTest2 1"];
+window.chrome.webview.hostObjects.client.SendGMCP("Core.Supports.Add "+JSON.stringify(gmcp));
+```
+
+#### Parameters
+* `package` The GMCP package name
+* `json` A string of the JSON
+
 </details>
 
 <details><summary>Receive</summary>
@@ -95,8 +116,8 @@ window.chrome.webview.hostObjects.client.SetOnSend(MyCallback);
 
 <details><summary>SetOnDisplay</summary>
 
-### `SetOnDisplay(int id, function callback, string regex)`
-Watch text lines about to be displayed and call `callback` when `regex` results in a match. Basically a script defined trigger.
+### `SetOnDisplay(int id, function callback, string regex, bool gag=false)`
+Watch text lines about to be displayed and call `callback` when `regex` results in a match. Basically a script defined trigger. If gag is true, the line will be gagged in the client display.
 
 ```js
 function OnDisplay(id, line)
