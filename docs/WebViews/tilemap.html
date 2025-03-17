@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<head>
+    <title>Tile Map Viewer</title>
+    <style>
+        #mapCanvas { width: 100%; height: 100%; object-fit: contain; }
+        body { display: flex; height: 100vh; background-color:black; margin: 0;}
+    </style>
+</head>
+<body>
+    <canvas id="mapCanvas"></canvas>
+
+    <script>
+        const client=window.chrome.webview.hostObjects.client;
+
+        window.onload = async function() {
+            client.SetOnConnect(OnConnect);
+            client.SetOnGMCP("tilemap", OnGMCP);
+
+            // Window was opened while we were already connected, so setup as though we just connected
+            if(await client.IsConnected())
+            OnConnect();
+        }
+
+        function OnConnect() {
+          let gmcp=["tilemap 1"];
+          client.SendGMCP("Core.Supports.Add", JSON.stringify(gmcp));
+        }
+
+        let map_info = null;
+        let map_data;
+        let tile_image;
+        let tile_size;
+        let map_size;
+
+        function OnGMCP(package, json) {
+            const data = JSON.parse(json);
+            
+            if (package === "tilemap.info") {
+                map_info = data;
+                document.title = map_info.title;
+                tile_size = map_info.tile_size.split(',').map(Number);
+                map_size = map_info.map_size.split(',').map(Number);
+                tile_image = new Image();
+                tile_image.src = map_info.tile_url;
+
+                const canvas = document.getElementById("mapCanvas");
+                canvas.width = tile_size[0] * map_size[0];
+                canvas.height = tile_size[1] * map_size[1];
+                return;
+            }
+
+            if (package === "tilemap.data" && map_info !== null) {
+                switch (map_info.encoding) {
+                    case "hex_4": map_data = data.match(/.{1}/g).map(hex => parseInt(hex, 16)); break;
+                    case "hex_8": map_data = data.match(/.{2}/g).map(hex => parseInt(hex, 16)); break;
+                    case "hex_12": map_data = data.match(/.{3}/g).map(hex => parseInt(hex, 16)); break;
+                    case "base64_8": map_data = atob(data).split("").map(c => c.charCodeAt(0)); break;
+                    default: console.error("Unknown encoding"); return;
+                }
+
+                if(tile_image.complete)
+                    UpdateCanvas();
+                else
+                    tile_image.onload = UpdateCanvas;
+            }
+        }
+
+        function UpdateCanvas() {
+            const canvas = document.getElementById("mapCanvas");
+            const context = canvas.getContext("2d");
+
+            const bitmap_tile_width = tile_image.width / tile_size[0];
+            for (let y = 0; y < map_size[1]; y++) {
+                for (let x = 0; x < map_size[0]; x++) {
+                    const tile_index = map_data[y * map_size[0] + x];
+                    const sx = (tile_index % bitmap_tile_width) * tile_size[0];
+                    const sy = Math.floor(tile_index / bitmap_tile_width) * tile_size[1];
+                    context.drawImage(tile_image, sx, sy, tile_size[0], tile_size[1], x * tile_size[0], y * tile_size[1], tile_size[0], tile_size[1]);
+                }
+            }
+        }
+
+        // Example usage
+        const test1_info = JSON.stringify({
+            "tile_url": "https://github.com/BeipDev/BeipMU/raw/master/images/Ultima5.png",
+            "title": "Overworld Map",
+            "tile_size": "16,16",
+            "map_size": "10,4",
+            "encoding": "hex_4"
+        });
+        const test1_data = JSON.stringify("0123456789ABCDEF0123456789ABCDEF01234567");
+
+        const test2_info = JSON.stringify({
+            "tile_url": "https://github.com/BeipDev/BeipMU/raw/master/images/Ultima5.png",
+            "title": "Overworld Map",
+            "tile_size": "16,16",
+            "map_size": "10,4",
+            "encoding": "hex_8"
+        });
+        const test2_data = JSON.stringify("000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F2021222324252627");
+
+        const test3_info = JSON.stringify({
+            "tile_url":"https://github.com/BeipDev/BeipMU/raw/master/images/Ultima5.png",
+            "title":"Castle",
+            "tile_size":"16,16",
+            "map_size":"32,32",
+            "encoding":"base64_8"
+        });
+        const test3_data = JSON.stringify(
+"T09PT08FBQUFBQUFBQUFBQUFBQUFBQUFBQVPT09PTwVPpqamTwUFBQUFBQUFBQUFBQUFBQUFBQUFBU+mRERPBU+myKZPT09PT09PT09PT09PT09PT09PT09PT0TIRE8FT0REpk/HRERERERERERERERERERERERERMVPr0SvTwVPT09PT09PT09PTwUFMURERDMFBU9PT09PT09PT09PBQUFT8RPq6ydq6xPBQUxREREMwUFT6usrausT8RPBQUFBQVPRE9ERERERE8FBTFEREQzBQVPRERERK9PRE8FBQUFBU9ET1xdRFxdTwUFMURERDMFBU+rrERERLhETwUFBQUFT0S4RERERERPBQUxREREMwUFT0RERESvT0RPBQUFBQVPRE9ERJEpk08FBTFEREQzBQVPq6ypq6xPRE8FBQUFBU9ET09PT09PTwUFMU9ETzMFBU9PT09PT09ETwUFBQUFT0QFBQUFBQUFBQUFT8ZPBQUFBQUFBQUFBURPBQUFBQVPRAUFBQUFBQUFT09PT09PTwUFBQUFBQUFRE8FBQUFBU9EMjIyMjIyMgVPXF2lXF1PBTIyMjIyMgVETwUFBQUFT0RERERERERPT09ERJBERE9PT0RERERERERPBQUFBQVPRERERERERETFT0REyERET8dERERERERERE8FBQUFBU9ERERERERET09PRERERERPT09ERERERERETwUFBQUFT0QwMDAwMDAwBU+rrEREqU8FMDAwMDAFBURPBQUFBQVPRAVPT09PT08FT09PT09PTwVPT09PT08FRE8FBQUFBU9EBU/IRERETwUFBU/ETwUFBU/IRES/TwVETwUFBQUFT0QFT0SUlZZPT08x+ET4M09PT0SUm5ZPBURPBQUFBQVPRAVPRERERFxdTzFEREQzT0SSRESQRE8FRE8FBQUFBU9EBU9PRERERERPMURERDNPlJyWRERPTwVETwUFBQUFT0RERERERERcXU8xREREM09EkERERERERERPBQUFBQVPRE9E2ERPRERETzFEREQzT1tEW09E2ERPRE8FBQUFBU/GT0RERE9PT09PMURERDNPT09PT0RERE/GTwUFBU9PT09PT09EBQUFBQUxREREMwUFBQUFRE9PT09PT08FT0Svr0/HRERERERERERERERERERERERERMVPr0RETwVPr8hET09PT09PT09PT0RERE9PT09PT09PT0+vyERPBU+vr0RPBQUFBQUFBQUFREREBQUFBQUFBQUFT6+vRE8FT09PT08FBQUFBQUFogVEREQFogUFBQUFBQVPT09PTwUFBQUFBQUFBQUFBQUFBURERAUFBQUFBQUFBQUFBQUFBQ"
+        );
+
+        // Uncomment below to simulate receiving the data
+        // OnGMCP("tilemap.info", test3_info);
+        // OnGMCP("tilemap.data", test3_data);
+
+    </script>
+</body>
+</html>
