@@ -1129,6 +1129,12 @@ void Connection::TriggerDebugText(ConstString background_color, ConstString stro
    mp_trigger_debug->AddHTML(HybridStringBuilder("<p background-color='", background_color, "' stroke-color='", stroke_color, "' stroke-width='2' indent='", indent, "' border-style='round' align='center' padding='2'>", message));
 }
 
+void Connection::AliasDebugText(ConstString background_color, ConstString stroke_color, ConstString indent, ConstString message)
+{
+   Assert(mp_alias_debug);
+   mp_alias_debug->AddHTML(HybridStringBuilder("<p background-color='", background_color, "' stroke-color='", stroke_color, "' stroke-width='2' indent='", indent, "' border-style='round' align='center' padding='2'>", message));
+}
+
 void Connection::Display(UniquePtr<Text::Line> &&p_line)
 {
    // Handle \grab prefixes
@@ -1140,15 +1146,13 @@ void Connection::Display(UniquePtr<Text::Line> &&p_line)
       return;
    }
 
-   TriggerState state;
-
    if(mp_trigger_debug)
    {
       TriggerDebugText("#004000", "green", "0", "Starting triggers, original line:");
       mp_trigger_debug->Add(MakeUnique<Text::Line>(*p_line));
    }
 
-   bool stop_capture=false;
+   TriggerState state;
    if(Prop::Trigger *p_capture_until=mp_captured_spawn_window ? mp_captured_spawn_window->mp_capture_until : nullptr)
    {
       if(p_capture_until->propSpawn().fOnlyChildrenDuringCapture())
@@ -1202,43 +1206,41 @@ void Connection::Display(UniquePtr<Text::Line> &&p_line)
 
    p_line->ParseURLs();
 
-   if(Prop::Trigger *p_capture_until=mp_captured_spawn_window ? mp_captured_spawn_window->mp_capture_until : nullptr)
-   {
-      if(RegEx::Expression *pRegEx=p_capture_until->propSpawn().GetCaptureUntilRegEx())
-      {
-         uint2 range;
-         stop_capture=pRegEx->Find(p_line->GetText(), 0, range);
-      }
-   }
-
-   // Spawn started by a trigger?
-   if(state.mp_spawn_window)
+   // Handle spawn windows
+   SpawnWindow *p_spawn_window{};
+   if(state.mp_spawn_trigger)
    {
       Assert(!mp_captured_spawn_window); // Should be nullptr as we can only be here if we're starting a new spawn
 
-      if(state.mp_spawn_trigger->propSpawn().fClear())
-         state.mp_spawn_window->mp_text->Clear();
-      if(state.mp_spawn_trigger->propSpawn().fShowTab())
-         state.mp_spawn_window->ShowTab();
-
-      // Starting a spawn capture? Then set the abort timer
-      if(state.mp_spawn_window->mp_capture_until)
+      auto &prop=state.mp_spawn_trigger->propSpawn();
+      if(p_spawn_window=GetMainWindow().GetSpawnWindow(prop, state.m_spawn_title, !state.m_no_activity && !state.m_gag, m_raw_log_replay))
       {
-         mp_captured_spawn_window=state.mp_spawn_window;
-         m_timer_spawn_capture.Set(5.0f);
+         if(prop.fClear())
+            p_spawn_window->mp_text->Clear();
+         if(prop.fShowTab())
+            p_spawn_window->ShowTab();
+
+         // If there is no capture until set, and we have one, set this trigger as the capture until
+         if(prop.pclCaptureUntil())
+         {
+            p_spawn_window->mp_capture_until=state.mp_spawn_trigger;
+            mp_captured_spawn_window=p_spawn_window;
+            m_timer_spawn_capture.Set(5.0f);
+         }
       }
    }
    else if(mp_captured_spawn_window) // If existing capture, set the state spawn window to it
    {
-      state.mp_spawn_window=mp_captured_spawn_window;
+      p_spawn_window=mp_captured_spawn_window;
       state.mp_spawn_trigger=mp_captured_spawn_window->mp_capture_until;
 
-      if(stop_capture)
+      if(RegEx::Expression *p_regex=state.mp_spawn_trigger->propSpawn().GetCaptureUntilRegEx();p_regex && p_regex->Find(p_line->GetText(), 0).has_value())
          KillSpawnCapture();
    }
 
-   bool spawn_gag_log=state.mp_spawn_window && state.mp_spawn_window->m_gag_log;
-   if(!state.m_gag_log && !spawn_gag_log)
+   // Spawns have a separate gag from log
+   state.m_gag_log|=state.mp_spawn_trigger && state.mp_spawn_trigger->propSpawn().fGagLog();
+   if(!state.m_gag_log)
    {
       if(mp_log)
          mp_log->LogTextLine(*p_line);
@@ -1319,12 +1321,12 @@ void Connection::Display(UniquePtr<Text::Line> &&p_line)
    Text::Wnd *p_wnd=&GetOutput();
 
    // Redirect into spawn window?
-   if(state.mp_spawn_window)
+   if(p_spawn_window)
    {
       if(state.mp_spawn_trigger && state.mp_spawn_trigger->propSpawn().fCopy())
          GetOutput().Add(MakeUnique<Text::Line>(*p_line));
 
-      p_wnd=state.mp_spawn_window->mp_text;
+      p_wnd=p_spawn_window->mp_text;
    }
 
    p_wnd->Add(std::move(p_line));
@@ -1640,29 +1642,20 @@ void Connection::RunTriggers(Text::Line &line, Array<CopyCntPtrTo<Prop::Trigger>
             if(ppropTrigger->fPropSpawn())
             {
                auto &prop=ppropTrigger->propSpawn();
-
-               if(prop.fActive() && !mp_captured_spawn_window && !state.mp_spawn_window)
+               if(prop.fActive() && !mp_captured_spawn_window && !state.mp_spawn_trigger)
                {
                   FindStringReplacement replacement(search, prop.pclTitle());
-                  state.mp_spawn_window=GetMainWindow().GetSpawnWindow(prop, replacement, !state.m_no_activity, m_raw_log_replay);
-                  if(state.mp_spawn_window)
+                  state.m_spawn_title=replacement;
+                  state.mp_spawn_trigger=ppropTrigger;
+
+                  if(mp_trigger_debug)
                   {
-                     state.mp_spawn_window->m_gag_log=prop.fGagLog();
-                     state.mp_spawn_trigger=ppropTrigger;
-
-                     // If there is no capture until set, and we have one, set this trigger as the capture until
+                     FixedStringBuilder<256> string("Redirecting to spawn window: <b>", Text::NoHTML{replacement}, "</b>");
+                     if(prop.pclTabGroup())
+                        string(" on tab: <b>", Text::NoHTML{prop.pclTabGroup()});
+                     TriggerDebugText("#000040", "blue", "10", string);
                      if(prop.pclCaptureUntil())
-                        state.mp_spawn_window->mp_capture_until=ppropTrigger;
-
-                     if(mp_trigger_debug)
-                     {
-                        FixedStringBuilder<256> string("Redirecting to spawn window: <b>", Text::NoHTML{replacement}, "</b>");
-                        if(prop.pclTabGroup())
-                           string(" on tab: <b>", Text::NoHTML{prop.pclTabGroup()});
-                        TriggerDebugText("#000040", "blue", "10", string);
-                        if(prop.pclCaptureUntil())
-                           TriggerDebugText("#000040", "blue", "10", FixedStringBuilder<256>("Capture until set: <b>", Text::NoHTML{prop.pclCaptureUntil()}));
-                     }
+                        TriggerDebugText("#000040", "blue", "10", FixedStringBuilder<256>("Capture until set: <b>", Text::NoHTML{prop.pclCaptureUntil()}));
                   }
                }
             }
@@ -1915,9 +1908,7 @@ void Connection::RunTriggers(Text::Line &line, Array<CopyCntPtrTo<Prop::Trigger>
    }
 }
 
-void ProcessAliases(StringBuilder &string, Prop::Aliases &propAliases, Connection::AliasState &state);
-
-void ProcessAlias(StringBuilder &string, Prop::Alias &propAlias, Connection::AliasState &state)
+void Connection::ProcessAlias(StringBuilder &string, Prop::Alias &propAlias, Connection::AliasState &state)
 {
    bool aliased=false;
    if(!propAlias.fFolder() && propAlias.propFindString().pclMatchText())
@@ -1932,6 +1923,12 @@ void ProcessAlias(StringBuilder &string, Prop::Alias &propAlias, Connection::Ali
          search.HandleReplacement(replacement.Length(), string);
          state.m_aliased=true;
          aliased=true;
+
+         if(mp_alias_debug)
+         {
+            AliasDebugText("#400040", "magenta", "5", HybridStringBuilder("<b>", Text::NoHTML{propAlias.pclDescription()}, "</b> Matcharoo: <b>", Text::NoHTML{propAlias.propFindString().pclMatchText()}));
+            mp_alias_debug->Add(Text::Line::CreateFromText(string));
+         }
       }
    }
 
@@ -1943,7 +1940,7 @@ void ProcessAlias(StringBuilder &string, Prop::Alias &propAlias, Connection::Ali
       state.m_stop=true;
 }
 
-void ProcessAliases(StringBuilder &string, Prop::Aliases &propAliases, Connection::AliasState &state)
+void Connection::ProcessAliases(StringBuilder &string, Prop::Aliases &propAliases, Connection::AliasState &state)
 {
    for(auto &ppropAlias : propAliases)
    {
@@ -1961,14 +1958,23 @@ bool Connection::ProcessAliases(StringBuilder &string)
 
    AliasState state{m_wnd_main.GetVariables()};
 
+   if(mp_alias_debug)
+   {
+      AliasDebugText("#004000", "green", "0", "Starting aliases, original line:");
+      mp_alias_debug->Add(Text::Line::CreateFromText(string));
+   }
+
    if(m_ppropCharacter && m_ppropCharacter->fPropAliases())
-      ::ProcessAliases(string, m_ppropCharacter->propAliases(), state);
+      ProcessAliases(string, m_ppropCharacter->propAliases(), state);
 
    if(m_ppropServer && m_ppropServer->fPropAliases() && !state.m_stop)
-      ::ProcessAliases(string, m_ppropServer->propAliases(), state);
+      ProcessAliases(string, m_ppropServer->propAliases(), state);
 
    if(m_propConnections.fPropAliases() && !state.m_stop)
-      ::ProcessAliases(string, m_propConnections.propAliases(), state);
+      ProcessAliases(string, m_propConnections.propAliases(), state);
+
+   if(mp_alias_debug)
+      AliasDebugText("#400000", "red", "0", "Complete");
 
    return state.m_aliased;
 }
@@ -2187,6 +2193,24 @@ void Connection::OpenTriggerDebugWindow()
    mp_trigger_debug->SetSize(uint2(640,480));
    mp_trigger_debug->SetText("Trigger Debugger");
    mp_trigger_debug->Show(SW_SHOWNOACTIVATE);
+}
+
+void Connection::OpenAliasDebugWindow()
+{
+   if(mp_alias_debug)
+   {
+      mp_alias_debug->InsertAfter(HWND_TOP);
+      return;
+   }
+
+   static Text::IHost s_dummyHost;
+   mp_alias_debug=MakeUnique<Text::Wnd>(nullptr, s_dummyHost);
+
+   Prop::TextWindow &prop=g_ppropGlobal->propWindows().propMainWindowSettings().propOutput();
+   mp_alias_debug->SetFont(prop.propFont().pclName(), prop.propFont().Size(), prop.propFont().CharSet());
+   mp_alias_debug->SetSize(uint2(640, 480));
+   mp_alias_debug->SetText("Alias Debugger");
+   mp_alias_debug->Show(SW_SHOWNOACTIVATE);
 }
 
 void Connection::ShowConnectionInfo()

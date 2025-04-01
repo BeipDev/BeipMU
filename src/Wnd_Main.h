@@ -42,6 +42,7 @@ enum CommandIDs : int
    ID_HELP_CHANGES,
    ID_HELP_DEBUG_NETWORK,
    ID_HELP_DEBUG_TRIGGERS,
+   ID_HELP_DEBUG_ALIASES,
    ID_OPTIONS_PREFERENCES,
    ID_OPTIONS_MACROS,
    ID_OPTIONS_ALIASES,
@@ -115,7 +116,6 @@ struct SpawnWindow
    SpawnTabsWindow *mp_spawn_tabs_window{}; // If we're in a spawn tab, this is set
 
    CntPtrTo<Prop::Trigger> mp_capture_until;
-   bool m_gag_log{}; // Updated each time a spawn trigger hits
 
    using DLNode<SpawnWindow>::Link, DLNode<SpawnWindow>::Unlink, DLNode<SpawnWindow>::Prev;
 };

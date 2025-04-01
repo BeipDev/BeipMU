@@ -106,6 +106,8 @@ struct Connection
    };
 
    bool ProcessAliases(StringBuilder &string);
+   void ProcessAlias(StringBuilder &string, Prop::Alias &propAlias, Connection::AliasState &state);
+   void ProcessAliases(StringBuilder &string, Prop::Aliases &propAliases, Connection::AliasState &state);
 
    uint32 TimeConnectedInSeconds();
    uint32 TimeIdleInSeconds();
@@ -139,6 +141,7 @@ struct Connection
 
    void OpenNetworkDebugWindow();
    void OpenTriggerDebugWindow();
+   void OpenAliasDebugWindow();
 
    void ShowConnectionInfo();
 
@@ -257,11 +260,13 @@ private:
    {
       bool m_gag{}, m_gag_log{}, m_stop{};
       bool m_no_activity{}; // Don't show as activity
-      SpawnWindow *mp_spawn_window{};
+
       CntPtrTo<Prop::Trigger> mp_spawn_trigger;
+      OwnedString m_spawn_title;
    };
    void RunTriggers(Text::Line &line, Array<CopyCntPtrTo<Prop::Trigger>> triggers, TriggerState &state);
    void TriggerDebugText(ConstString background_color, ConstString stroke_color, ConstString indent, ConstString message);
+   void AliasDebugText(ConstString background_color, ConstString stroke_color, ConstString indent, ConstString message);
 
    Text::Wnd &GetOutput();
 
@@ -319,6 +324,7 @@ private:
    UniquePtr<Log> mp_log;
    OwnerPtr<Text::Wnd> mp_network_debug;
    OwnerPtr<Text::Wnd> mp_trigger_debug;
+   OwnerPtr<Text::Wnd> mp_alias_debug;
    NetworkDebugHost m_network_debug_host;
 
    friend struct Puppet;

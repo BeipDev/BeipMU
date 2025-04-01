@@ -103,10 +103,7 @@ void FindStringReplacement::ExpandVariables(Collection<Variable> &variables)
 
       unsigned index=variables.Find(name);
       if(index==~0U)
-      {
-         ConsoleText(FixedStringBuilder<256>("Warning: Send trigger action, variable '", name, "' not found"));
          break;
-      }
 
       auto &variable=variables[index];
       m_replacement.Replace(uint2(first, second+1), variable.m_value);
