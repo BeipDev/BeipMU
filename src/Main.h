@@ -21,10 +21,10 @@
 #define YARN 1
 #define DWRITE_TEST 1
 #else
-#define BETA_BUILD 0
+#define BETA_BUILD 1
 #define SCRIPTING 0
 #define YARN 0
-#define DWRITE_TEST 1
+#define DWRITE_TEST 0
 #endif
 
 namespace OM

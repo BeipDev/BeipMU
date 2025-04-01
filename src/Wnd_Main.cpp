@@ -2020,6 +2020,7 @@ LRESULT Wnd_Main::On(const Msg::Command &msg)
 
       case ID_HELP_DEBUG_NETWORK: mp_connection->OpenNetworkDebugWindow(); return msg.Success();
       case ID_HELP_DEBUG_TRIGGERS: mp_connection->OpenTriggerDebugWindow(); return msg.Success();
+      case ID_HELP_DEBUG_ALIASES: mp_connection->OpenAliasDebugWindow(); return msg.Success();
 
       case ID_HELP_CONTENTS:
       {
@@ -2987,6 +2988,7 @@ void Wnd_MDI::PopupMainMenu(int2 position)
       m.Append(MF_STRING, ID_OPTIONS_ALIASES, "&Aliases...");
       m.AppendSeparator();
       m.Append(MF_STRING, ID_HELP_DEBUG_TRIGGERS, "Trigger Debugger");
+      m.Append(MF_STRING, ID_HELP_DEBUG_ALIASES, "Alias Debugger");
       m.Append(MF_STRING, ID_HELP_DEBUG_NETWORK, "Network Debugger");
       m.Append(MF_STRING, ID_EDIT_SMARTPASTE, "&Smart Paste...");
 

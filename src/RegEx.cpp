@@ -57,19 +57,17 @@ void Expression::GetError(StringBuilder &string) const
    string.AddLength(count-chars.Count()); // Add back unused space
 }
 
-bool Expression::Find(ConstString string, unsigned start, uint2 &found) const
+std::optional<uint2> Expression::Find(ConstString string, unsigned start) const
 {
    int result_count=pcre2_match(m_code, (PCRE2_UCHAR8*)string.begin(), string.Length(), start, 0, m_data, nullptr);
    if(result_count<=0)
-      return false;
+      return {};
 
    auto ovector=pcre2_get_ovector_pointer(m_data);
-
    if(ovector[1]==start)
-      return false; // Ignore empty matches
+      return {}; // Ignore empty matches
 
-   found={unsigned(ovector[0]), unsigned(ovector[1])};
-   return true;
+   return uint2{unsigned(ovector[0]), unsigned(ovector[1])};
 }
 
 Array<uint2> Expression::Find(ConstString string, unsigned start, Array<uint2> ranges) const

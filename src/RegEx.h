@@ -13,7 +13,7 @@ struct Expression
    void GetError(StringBuilder &string) const;
    unsigned GetErrorOffset() const { return unsigned(m_error_offset); }
 
-   bool Find(ConstString string, unsigned start, uint2 &found) const;
+   std::optional<uint2> Find(ConstString string, unsigned start) const;
    Array<uint2> Find(ConstString string, unsigned start, Array<uint2> ranges) const;
 
 private:
