@@ -39,7 +39,7 @@ struct FindStringReplacement : ConstString
 {
    FindStringReplacement(const FindStringSearch &search, ConstString replace, bool escape_html=false);
 
-   void ExpandVariables(Collection<Variable> &variables);
+   void ExpandVariables(Prop::Variables &variables);
 
 private:
    HybridStringBuilder<> m_replacement;

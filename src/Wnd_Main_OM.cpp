@@ -59,13 +59,13 @@ void SpawnTabs::On(Events::Event_Deleted &event)
 }
 
 #undef ZOMBIECHECK
-#define ZOMBIECHECK if(!m_pWnd_Main) return E_ZOMBIE;
+#define ZOMBIECHECK if(!mp_wnd_main) return E_ZOMBIE;
 
 MainWindow::MainWindow(Wnd_Main *pWnd_Main)
-:  m_pWnd_Main(pWnd_Main)
+:  mp_wnd_main(pWnd_Main)
 {
-   m_pTextWindowOutput=new Window_Text(pWnd_Main->mp_wnd_text);
-   m_pTextWindowHistory=new Window_Text(pWnd_Main->mp_wnd_text_history);
+   mp_text_window_output=new Window_Text(pWnd_Main->mp_wnd_text);
+   mp_text_window_history=new Window_Text(pWnd_Main->mp_wnd_text_history);
    mp_connection=new Connection(&pWnd_Main->GetConnection());
    mp_input=new Window_Input(pWnd_Main->m_input);
 }
@@ -86,86 +86,89 @@ HRESULT MainWindow::Run(BSTR bstr)
    OwnedString string; string.Allocate(stringRun.Count()+2); // For CR/LF
    StringBuilder{string}(stringRun, CRLF);
 
-   m_pWnd_Main->SendLines(string);
+   mp_wnd_main->SendLines(string);
    return S_OK;
 }
 
 HRESULT MainWindow::RunFile(BSTR bstr)
 {
    ZOMBIECHECK
-   if(!m_pWnd_Main->GetScripter()->RunFile(BSTRToLStr(bstr)))
-      m_pWnd_Main->mp_wnd_text->AddHTML("<font color='red'>Couldn't run script file");
+   if(!mp_wnd_main->GetScripter()->RunFile(BSTRToLStr(bstr)))
+      mp_wnd_main->mp_wnd_text->AddHTML("<font color='red'>Couldn't run script file");
    return S_OK;
 }
 
 HRESULT MainWindow::CreateDialogConnect()
 {
    ZOMBIECHECK
-   if(m_pWnd_Main->GetConnection().IsConnected())
+   if(mp_wnd_main->GetConnection().IsConnected())
       return E_FAIL;
-   m_pWnd_Main->On(Msg::Command(ID_CONNECTION_CONNECT, 0, 0));
+   mp_wnd_main->On(Msg::Command(ID_CONNECTION_CONNECT, 0, 0));
    return S_OK;
 }
 
 HRESULT MainWindow::put_TitlePrefix(BSTR bstr)
 {
    ZOMBIECHECK
-   m_pWnd_Main->m_title_prefix=BSTRToLStr(bstr);
-   m_pWnd_Main->UpdateTitle();
+   mp_wnd_main->m_title_prefix=BSTRToLStr(bstr);
+   mp_wnd_main->UpdateTitle();
    return S_OK;
 }
 
 HRESULT MainWindow::get_TitlePrefix(BSTR *retval)
 {
    ZOMBIECHECK
-   *retval=LStrToBSTR(m_pWnd_Main->m_title_prefix);
+   *retval=LStrToBSTR(mp_wnd_main->m_title_prefix);
    return S_OK;
 }
 
 HRESULT MainWindow::get_Title(BSTR *retval)
 {
    ZOMBIECHECK
-   *retval=LStrToBSTR(m_pWnd_Main->m_title);
+   *retval=LStrToBSTR(mp_wnd_main->m_title);
    return S_OK;
 }
 
 HRESULT MainWindow::GetVariable(BSTR name, BSTR *retval)
 {
    ZOMBIECHECK
-   auto index=m_pWnd_Main->m_variables.Find(BSTRToLStr(name));
+   auto &variables=mp_wnd_main->mp_connection->GetVariables();
+   auto index=variables.Find(BSTRToLStr(name));
    if(index==~0U)
       *retval=nullptr;
    else
-      *retval=LStrToBSTR(m_pWnd_Main->m_variables[index].m_value);
+      *retval=LStrToBSTR(variables[index]->pclValue());
    return S_OK;
 }
 
 HRESULT MainWindow::SetVariable(BSTR name, BSTR value)
 {
    ZOMBIECHECK
-   auto index=m_pWnd_Main->m_variables.Find(BSTRToLStr(name));
+   auto &variables=mp_wnd_main->mp_connection->GetVariables();
+   auto index=variables.Find(BSTRToLStr(name));
    if(index==~0U)
-      m_pWnd_Main->AddVariable(BSTRToLStr(name), BSTRToLStr(value));
+      variables.Add(BSTRToLStr(name), BSTRToLStr(value));
    else
-      m_pWnd_Main->m_variables[index].m_value=BSTRToLStr(value);
+      variables[index]->pclValue(BSTRToLStr(value));
    return S_OK;
 }
 
 HRESULT MainWindow::DeleteVariable(BSTR name)
 {
    ZOMBIECHECK
-   auto index=m_pWnd_Main->m_variables.Find(BSTRToLStr(name));
+   auto &variables=mp_wnd_main->mp_connection->GetVariables();
+   auto index=variables.Find(BSTRToLStr(name));
    if(index==~0U)
       return E_INVALIDARG;
 
-   m_pWnd_Main->m_variables.UnsortedDelete(index);
+   variables.UnsortedDelete(index);
    return S_OK;
 }
 
 HRESULT MainWindow::GetInput(BSTR title, IWindow_Input **retval)
 {
    ZOMBIECHECK
-   auto p_input=m_pWnd_Main->FindInputWindow(BSTRToLStr(title));
+   auto p_input=mp_wnd_main->FindInputWindow(BSTRToLStr(title));
    if(!p_input)
    {
       *retval=nullptr;
@@ -188,7 +191,7 @@ HRESULT MainWindow::GetSpawnTabs(BSTR title16, IWindow_SpawnTabs **retval)
       }
    }
 
-   auto *p_window=m_pWnd_Main->FindSpawnTabsWindow(title);
+   auto *p_window=mp_wnd_main->FindSpawnTabsWindow(title);
    if(!p_window)
    {
       *retval=nullptr;
@@ -209,26 +212,26 @@ void MainWindow::On(Events::Event_Deleted &event, SpawnTabs &tabs)
 HRESULT STDMETHODCALLTYPE MainWindow::Close()
 {
    ZOMBIECHECK
-   m_pWnd_Main->Close();
+   mp_wnd_main->Close();
    return S_OK;
 }
 
 HRESULT MainWindow::SetOnCommand(IDispatch *pDisp, VARIANT var)
 {
    ZOMBIECHECK
-   return ManageHook<Wnd_Main::Event_Command>(this, m_hookCommand, *m_pWnd_Main, pDisp, var);
+   return ManageHook<Wnd_Main::Event_Command>(this, m_hookCommand, *mp_wnd_main, pDisp, var);
 }
 
 HRESULT MainWindow::SetOnActivate(IDispatch *pDisp, VARIANT var)
 {
    ZOMBIECHECK
-   return ManageHook<Wnd_Main::Event_Activate>(this, m_hookActivate, *m_pWnd_Main, pDisp, var);
+   return ManageHook<Wnd_Main::Event_Activate>(this, m_hookActivate, *mp_wnd_main, pDisp, var);
 }
 
 HRESULT MainWindow::SetOnClose(IDispatch *pDisp, VARIANT var)
 {
    ZOMBIECHECK
-   return ManageHook<Wnd_Main::Event_Close>(this, m_hookClose, *m_pWnd_Main, pDisp, var);
+   return ManageHook<Wnd_Main::Event_Close>(this, m_hookClose, *mp_wnd_main, pDisp, var);
 }
 
 void MainWindow::On(Wnd_Main::Event_Command &event)

@@ -697,6 +697,18 @@ Prop Triggers(RefCounted StackOf Trigger)
 //   Func "private: using Collection<CopyCntPtrTo<Trigger>>::Push; public:"
 }
 
+Prop Variable
+{
+   String Name
+   String Value
+}
+
+Prop Variables(StackOf Variable)
+{
+   Func "void Add(ConstString name, ConstString value);"
+   Func "unsigned Find(ConstString name) const;"
+}
+
 //*****************************************************************************
 //
 // Characters and Servers
@@ -773,6 +785,7 @@ Prop Character(RefCounted)
    KeyboardMacros2 KeyboardMacros2(DemandCreate)
    Triggers       Triggers(DemandCreate)
    Aliases        Aliases(DemandCreate)
+   Variables      Variables
 
    Puppets        Puppets(DemandCreate)
 

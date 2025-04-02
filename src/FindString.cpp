@@ -81,7 +81,7 @@ FindStringReplacement::FindStringReplacement(const FindStringSearch &search, Con
    ConstString::operator=(m_replacement);
 }
 
-void FindStringReplacement::ExpandVariables(Collection<Variable> &variables)
+void FindStringReplacement::ExpandVariables(Prop::Variables &variables)
 {
    unsigned first=Find('%');
    if(first==~0U)
@@ -106,8 +106,8 @@ void FindStringReplacement::ExpandVariables(Collection<Variable> &variables)
          break;
 
       auto &variable=variables[index];
-      m_replacement.Replace(uint2(first, second+1), variable.m_value);
-      first=m_replacement.FindFirstAt('%', first+variable.m_value.Count());
+      m_replacement.Replace(uint2(first, second+1), variable->pclValue());
+      first=m_replacement.FindFirstAt('%', first+variable->pclValue().Count());
       if(first==~0U)
          break;
    }

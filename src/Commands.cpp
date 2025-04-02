@@ -318,13 +318,14 @@ try
 
    if(IEquals(command, "printenv"))
    {
-      mp_wnd_text->AddHTML(FixedStringBuilder<256>("Environment Variables: (", m_variables.Count(), ")"));
+      auto &variables=mp_connection->GetVariables();
+      mp_wnd_text->AddHTML(FixedStringBuilder<256>("Environment Variables: (", variables.Count(), ")"));
 
       HybridStringBuilder string;
-      for(auto &variable : m_variables)
+      for(auto &variable : variables)
       {
          string.Clear();
-         string(variable.m_name, "=", variable.m_value);
+         string(variable->pclName(), "=", variable->pclValue());
          mp_wnd_text->Add(Text::Line::CreateFromText(string));
       }
 
@@ -343,15 +344,16 @@ try
          return;
       }
 
-      unsigned index=m_variables.Find(name);
+      auto &variables=mp_connection->GetVariables();
+      unsigned index=variables.Find(name);
       if(index==~0U)
       {
-         AddVariable(name, value);
+         variables.Add(name, value);
          mp_wnd_text->AddHTML("<font color='aqua'>New variable added");
       }
       else
       {
-         m_variables[index].m_value=value;
+         variables[index]->pclValue(value);
          mp_wnd_text->AddHTML("<font color='aqua'>Existing variable set to new value");
       }
       return;
@@ -366,14 +368,15 @@ try
          return;
       }
 
-      unsigned index=m_variables.Find(name);
+      auto &variables=mp_connection->GetVariables();
+      unsigned index=variables.Find(name);
       if(index==~0U)
       {
          mp_wnd_text->AddHTML("<font color='red'>Variable not found");
          return;
       }
 
-      m_variables.UnsortedDelete(index);
+      variables.UnsortedDelete(index);
       mp_wnd_text->AddHTML("<font color='aqua'>Variable deleted");
       return;
    }

@@ -1345,7 +1345,6 @@ bool Connection::KillSpawnCapture()
    mp_captured_spawn_window->mp_capture_until=nullptr;
    mp_captured_spawn_window=nullptr;
    mp_captureabort_window=nullptr;
-
    return true;
 }
 
@@ -1751,7 +1750,7 @@ void Connection::RunTriggers(Text::Line &line, Array<CopyCntPtrTo<Prop::Trigger>
             {
                FindStringReplacement sendString(search, ppropTrigger->propSend().pclSend());
                if(ppropTrigger->propSend().fExpandVariables())
-                  sendString.ExpandVariables(m_wnd_main.GetVariables());
+                  sendString.ExpandVariables(GetVariables());
 
                if(ppropTrigger->propSend().fSendOnClick())
                {
@@ -1956,7 +1955,7 @@ bool Connection::ProcessAliases(StringBuilder &string)
    if(!m_propConnections.propAliases().fActive())
       return false;
 
-   AliasState state{m_wnd_main.GetVariables()};
+   AliasState state{GetVariables()};
 
    if(mp_alias_debug)
    {

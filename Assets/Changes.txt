@@ -8,6 +8,10 @@ Add IAlias and IAliases and Aliases properties where Triggers also are in script
 Changed restore logs so that spawn triggers will only add to existing windows/tabs vs creating new ones
 Add 'Changing layout requires holding down Control' to the General settings
 Add 'Show connect/disconnect in spawn windows' option in Networking settings
+Fixed a minor issue where some windows (like settings) will be positioned on the wrong monitor in certain multimon scenarios
+Add 'Alias Debugger' to make debugging aliases easy, similar to the 'Trigger Debugger'
+Fix spawn windows so that gagging won't cause activity in the spawn windows
+Character variables now persist after close
 
 4.00.328 - 2024-11-18
 
