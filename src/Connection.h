@@ -99,7 +99,7 @@ struct Connection
 
    struct AliasState
    {
-      Collection<Variable> &m_variables;
+      Prop::Variables &m_variables;
 
       bool m_stop{}; // Stop processing further alises
       bool m_aliased{}; // Set to true if any alias hits
@@ -130,6 +130,7 @@ struct Connection
    Prop::Server    *GetServer()    { return m_ppropServer; }
    Prop::Character *GetCharacter() { return m_ppropCharacter; }
    Prop::Puppet    *GetPuppet()    { return m_ppropPuppet; }
+   Prop::Variables &GetVariables() { return m_ppropCharacter ? m_ppropCharacter->propVariables() : g_empty_variables; }
 
    MCP::Parser *GetMCP_Parser() { return mp_MCP; }
    Wnd_Main &GetMainWindow() const { return m_wnd_main; }

@@ -41,7 +41,7 @@ struct MainWindow
 {
    MainWindow(Wnd_Main *pWnd_Main);
    ~MainWindow() noexcept;
-   void Destroyed() { m_pWnd_Main=nullptr; }
+   void Destroyed() { mp_wnd_main=nullptr; }
 
    USE_INHERITED_UNKNOWN(IWindow_Main)
 
@@ -51,13 +51,13 @@ struct MainWindow
    // IWindow methods
    STDMETHODIMP get_Output(IWindow_Text **retval) override
    {
-      m_pTextWindowOutput->AddRef(); *retval=m_pTextWindowOutput;
+      mp_text_window_output->AddRef(); *retval=mp_text_window_output;
       return S_OK;
    }
 
    STDMETHODIMP get_History(IWindow_Text **retval) override
    {
-      m_pTextWindowHistory->AddRef(); *retval=m_pTextWindowHistory;
+      mp_text_window_history->AddRef(); *retval=mp_text_window_history;
       return S_OK;
    }
 
@@ -106,11 +106,11 @@ struct MainWindow
    void On(Events::Event_Deleted &event, SpawnTabs &tab);
 
 private:
-   CntPtrTo<IWindow_Text> m_pTextWindowOutput;
-   CntPtrTo<IWindow_Text> m_pTextWindowHistory;
+   CntPtrTo<IWindow_Text> mp_text_window_output;
+   CntPtrTo<IWindow_Text> mp_text_window_history;
    CntPtrTo<IConnection> mp_connection;
    CntPtrTo<IWindow_Input> mp_input;
-   Wnd_Main *m_pWnd_Main;
+   Wnd_Main *mp_wnd_main;
 
    VariantNode m_varUserData;
 

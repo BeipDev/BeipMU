@@ -11,6 +11,7 @@ void ApplyTheme();
 
 std::array<ConstString, 3> g_encoding_names{ "UTF8 - Unicode", "CP-1252 - Windows", "CP-437 - DOS" };
 RandomKISS g_random;
+Prop::Variables g_empty_variables;
 
 //
 // Global Variables

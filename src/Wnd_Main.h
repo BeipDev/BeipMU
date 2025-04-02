@@ -286,7 +286,6 @@ struct Wnd_Main
    void SendNAWS();
 
    void ParseCommand(ConstString string);
-   Collection<Variable> &GetVariables() { return m_variables; }
 
    void On_TileMap(ConstString command, ConstString json);
    void ShowStatistics();
@@ -534,9 +533,6 @@ private:
 
    OwnedString m_title_prefix; // Prefix before window title
    OwnedString m_title; // Window title (we save it so we can change prefixes)
-
-   void AddVariable(ConstString name, ConstString value);
-   Collection<Variable> m_variables;
 
    CntPtrTo<OM::MainWindow> mp_dispatch;
    friend struct OM::MainWindow;

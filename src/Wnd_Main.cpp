@@ -2645,11 +2645,6 @@ void Wnd_Main::DockingChange()
    mp_layout->Update();
 }
 
-void Wnd_Main::AddVariable(ConstString name, ConstString value)
-{
-   m_variables.Insert(m_variables.LowerBound(name), name, value);
-}
-
 static Wnd_Main *FindExistingWindow(Prop::Server *ppropServer, Prop::Character *ppropCharacter, Prop::Puppet *ppropPuppet)
 {
    for(auto &mainWindow : Wnd_MDI::s_root_node)

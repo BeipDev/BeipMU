@@ -106,6 +106,7 @@ struct Variable
 
 extern RandomKISS g_random;
 extern std::array<ConstString, 3> g_encoding_names;
+extern Prop::Variables g_empty_variables;
 
 UINT StateToShowCmd(Prop::Position::State state) noexcept;
 
