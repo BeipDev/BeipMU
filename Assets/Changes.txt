@@ -13,6 +13,7 @@ Add 'Alias Debugger' to make debugging aliases easy, similar to the 'Trigger Deb
 Fix spawn windows so that gagging won't cause activity in the spawn windows
 Character variables now persist after close
 Aliases now allow pre/post their nested objects like triggers do
+Add optional /silent prefix for all commands to suppress informational messages from it
 
 4.00.328 - 2024-11-18
 

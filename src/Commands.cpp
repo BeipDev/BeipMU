@@ -171,6 +171,8 @@ try
          "",
          "<p align='center'><font color='silver'><b><u>  " gd_pcTitle " - Command Line Help  </u></b>",
          "/@ $ - Run an immediate script, $ can span multiple lines of text",
+         "/silent/(command) - Prefix for any command that will suppress informational messages from it",
+         "",
          "/ansireset - Reset ansi state to default (useful if the server misbehaves and leaves a style set)",
          "/autolog - If one is setup and was stopped, this restarts the autolog",
          "/capturecancel - Cancel any spawn capture in the current window",
@@ -251,6 +253,9 @@ try
          "🦎 🦎");
       return;
    }
+
+   
+
 
    // Clear
    if(IEquals(command, "clear"))
