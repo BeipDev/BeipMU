@@ -126,33 +126,26 @@ bool ParseTimeInSeconds(ConstString word, float &seconds)
    return true;
 }
 
-void Wnd_Main::ParseCommand(ConstString full_line)
+void Wnd_Main::ParseCommand(ConstString fullLine)
 try
 {
-   ConstString command_line=full_line.WithoutFirst(1);
-   if(command_line.First()=='/') // Non command pass through?
-      return SendLine(command_line);
+   ConstString commandLine=fullLine.WithoutFirst(1);
+   if(commandLine.First()=='/') // Non command pass through?
+      return SendLine(commandLine);
 
    // See if the script wants to handle it
    if(m_events.Get<Event_Command>())
    {
       SetScripterWindow();
 
-      ConstString command=command_line, parameters;
-      command_line.Split(' ', command, parameters);
+      ConstString command=commandLine, parameters;
+      commandLine.Split(' ', command, parameters);
       Event_Command event(command, parameters);
       if(m_events.Send(event, event))
          return;
    }
 
-   bool verbose=true;
-   if(auto result=command_line.RightOf("silent/"))
-   {
-      command_line=result;
-      verbose=false;
-   }
-
-   WordList wl(command_line);
+   WordList wl(commandLine);
 
    ConstString command;
    if(wl)
@@ -247,7 +240,7 @@ try
       mp_wnd_text->AddHTML("<u>And now some messages from our Lizard supporters:</u>" CRLF
          "<font color='lime'>Cam-a-cam-mal, Pria-toi, Gan delah</font><font color='white'> - Snowglass</font>" CRLF
          "<font color='lime'>kweh</font><font color='white'> - Thistle</font>" CRLF
-         "<font color='lime'>🦌 ☀️ ☀️ 🚙</font>" CRLF /* DeerInHeadlights */
+//         "<font color='lime'>🦌 ☀️ ☀️ 🚙</font>" CRLF /* DeerInHeadlights */
          "🦎 🦎");
       return;
    }
@@ -301,9 +294,9 @@ try
          
       } options;
 
-      if(command_line.Length()>command.Length()+1)
+      if(commandLine.Length()>command.Length()+1)
       {
-         auto attributes=command_line.WithoutFirst(command.Length()+1);
+         auto attributes=commandLine.WithoutFirst(command.Length()+1);
          ParseXMLAttributes(attributes, options);
       }
 
@@ -345,10 +338,9 @@ try
       ConstString ignore, params;
       ConstString name, value;
 
-      if(!command_line.Split(' ', ignore, params) || !params.Split('=', name, value))
+      if(!commandLine.Split(' ', ignore, params) || !params.Split('=', name, value))
       {
-         if(verbose)
-            mp_wnd_text->AddHTML("<font color='red'>Syntax error, missing '='");
+         mp_wnd_text->AddHTML("<font color='red'>Syntax error, missing '='");
          return;
       }
 
@@ -357,14 +349,12 @@ try
       if(index==~0U)
       {
          variables.Add(name, value);
-         if(verbose)
-            mp_wnd_text->AddHTML("<font color='aqua'>New variable added");
+         mp_wnd_text->AddHTML("<font color='aqua'>New variable added");
       }
       else
       {
          variables[index]->pclValue(value);
-         if(verbose)
-            mp_wnd_text->AddHTML("<font color='aqua'>Existing variable set to new value");
+         mp_wnd_text->AddHTML("<font color='aqua'>Existing variable set to new value");
       }
       return;
    }
@@ -372,7 +362,7 @@ try
    if(IEquals(command, "unset"))
    {
       ConstString ignore, name;
-      if(!command_line.Split(' ', ignore, name))
+      if(!commandLine.Split(' ', ignore, name))
       {
          mp_wnd_text->AddHTML("<font color='red'>Error, missing variable name");
          return;
@@ -387,8 +377,7 @@ try
       }
 
       variables.UnsortedDelete(index);
-      if(verbose)
-         mp_wnd_text->AddHTML("<font color='aqua'>Variable deleted");
+      mp_wnd_text->AddHTML("<font color='aqua'>Variable deleted");
       return;
    }
 
@@ -404,8 +393,7 @@ try
             if(!fLocalEcho)
             {
                m_input.GetProps().fLocalEcho(true);
-               if(verbose)
-                  mp_wnd_text->AddHTML("<font color='green'>Echo turned ON");
+               mp_wnd_text->AddHTML("<font color='green'>Echo turned ON");
             }
             return;
          }
@@ -417,8 +405,7 @@ try
             if(!fLocalEcho)
             {
                m_input.GetProps().fLocalEcho(true);
-               if(verbose)
-                  mp_wnd_text->AddHTML("<font color='green'>Echo turned ON");
+               mp_wnd_text->AddHTML("<font color='green'>Echo turned ON");
             }
             return;
          }
@@ -428,8 +415,7 @@ try
             if(fLocalEcho)
             {
                m_input.GetProps().fLocalEcho(false);
-               if(verbose)
-                  mp_wnd_text->AddHTML("<font color='red'>Echo turned OFF");
+               mp_wnd_text->AddHTML("<font color='red'>Echo turned OFF");
             }
             return;
          }
@@ -483,8 +469,7 @@ try
          }
          if(IEquals(wl[1], "killall"))
          {
-            if(verbose)
-               mp_wnd_text->AddHTML("<icon information> <font color='aqua'>All pending timers erased</font>");
+            mp_wnd_text->AddHTML("<icon information> <font color='aqua'>All pending timers erased</font>");
             m_delay_timers.Empty();
             return;
          }
@@ -501,8 +486,7 @@ try
             {
                if(v.m_id==id)
                {
-                  if(verbose)
-                     mp_wnd_text->AddHTML("<icon information> Timer killed");
+                  mp_wnd_text->AddHTML("<icon information> Timer killed");
                   delete &v;
                   return;
                }
@@ -525,16 +509,13 @@ try
          if(ParseTimeInSeconds(wl[wl_index++], seconds) && wl.Count()==wl_index+1)
          {
             auto &timer=*new DelayTimer(*this, wl[wl_index], seconds, repeating);
-            if(verbose)
-            {
-               FixedStringBuilder<256> string("<icon information> <font color='green'>Starting timer with ID:", timer.m_id, " in ");
-               if(unsigned frac;seconds<60.0f && (frac=unsigned(seconds*100)%100))
-                  string(int(seconds), '.', Strings::Int(frac, 2, '0'), "s");
-               else
-                  Time::SecondsToStringAbbreviated(string, seconds);
-               string("</font>");
-               mp_wnd_text->AddHTML(string);
-            }
+            FixedStringBuilder<256> string("<icon information> <font color='green'>Starting timer with ID:", timer.m_id, " in ");
+            if(unsigned frac;seconds<60.0f && (frac=unsigned(seconds*100)%100))
+               string(int(seconds), '.', Strings::Int(frac, 2, '0'), "s");
+            else
+               Time::SecondsToStringAbbreviated(string, seconds);
+            string("</font>");
+            mp_wnd_text->AddHTML(string);
             return;
          }
       }
@@ -558,13 +539,12 @@ try
          {
             m_idle_timer.Reset();
             m_idle_string.Clear();
-            if(verbose)
-               mp_wnd_text->AddHTML("<icon information> <font color='aqua'>Idle timer removed");
+            mp_wnd_text->AddHTML("<icon information> <font color='aqua'>Idle timer removed");
 
             if(auto *p_character=mp_connection->GetCharacter())
                p_character->fIdleEnabled(false);
          }
-         else if(verbose)
+         else
             mp_wnd_text->AddHTML("<icon information> No idle timer set");
          return;
       }
@@ -581,8 +561,7 @@ try
          PinAbove(m_idle_delay, 1U); // Must be at least 1 minute!
          m_idle_string=wl[2];
          m_idle_timer.Set(m_idle_delay*60.0f, true);
-         if(verbose)
-            mp_wnd_text->AddHTML(FixedStringBuilder<256>("<icon information> <font color='aqua'>Idle timer activated, sending <font color='white'>", m_idle_string, "</font> every ", m_idle_delay, " minutes"));
+         mp_wnd_text->AddHTML(FixedStringBuilder<256>("<icon information> <font color='aqua'>Idle timer activated, sending <font color='white'>", m_idle_string, "</font> every ", m_idle_delay, " minutes"));
 
          if(auto *p_character=mp_connection->GetCharacter())
          {
@@ -656,8 +635,8 @@ try
 
    if(IEquals(command, "ping"))
    {
-      if(command_line.Length()>command.Length()+1)
-         mp_connection->Send(command_line.WithoutFirst(command.Length()+1));
+      if(commandLine.Length()>command.Length()+1)
+         mp_connection->Send(commandLine.WithoutFirst(command.Length()+1));
       else
          mp_connection->Send({}); // Send a blank line
       mp_connection->StartPing();
@@ -696,13 +675,13 @@ try
          return;
       }
 
-      if(command_line.Length()<=command.Length()+1)
+      if(commandLine.Length()<=command.Length()+1)
       {
          mp_wnd_text->AddHTML("<font color='red'>Can't run, no script code given");
          return;
       }
 
-      p_scripter->Run(OwnedBSTR(command_line.WithoutFirst(command.Length()+1)));
+      p_scripter->Run(OwnedBSTR(commandLine.WithoutFirst(command.Length()+1)));
       return;
    }
 
@@ -815,12 +794,11 @@ try
          trigger=0;
          ppropTriggers->Insert(0, std::move(ppropTrigger));
       }
-      else if(verbose)
+      else
          mp_wnd_text->AddHTML("<font color='aqua'><b>Gag:</b> Trigger already exists, enabling gag on existing trigger");
 
       (*ppropTriggers)[trigger]->propGag().fActive(true);
-      if(verbose)
-         mp_wnd_text->AddHTML("<font color='lime'><b>Gag:</b> Trigger Activated");
+      mp_wnd_text->AddHTML("<font color='lime'><b>Gag:</b> Trigger Activated");
       return;
    }
 
@@ -1124,9 +1102,9 @@ try
          OwnedString prepend, append;
       } options;
 
-      if(command_line.Length()>command.Length()+1)
+      if(commandLine.Length()>command.Length()+1)
       {
-         auto attributes=command_line.WithoutFirst(command.Length()+1);
+         auto attributes=commandLine.WithoutFirst(command.Length()+1);
          ParseXMLAttributes(attributes, options);
       }
 
@@ -1167,9 +1145,9 @@ try
 
    if(IEquals(command, "setinput"))
    {
-      if(command_line.Length()>command.Length()+1 && mp_input_active->GetTextLength()==0)
+      if(commandLine.Length()>command.Length()+1 && mp_input_active->GetTextLength()==0)
       {
-         mp_input_active->SetText(command_line.WithoutFirst(command.Length()+1));
+         mp_input_active->SetText(commandLine.WithoutFirst(command.Length()+1));
          mp_input_active->SetSelAll();
       }
       return;
@@ -1283,8 +1261,7 @@ try
          auto &telnet=mp_connection->GetTelnet();
          telnet.m_do_naws=false;
          telnet.SendNAWS(size);
-         if(verbose)
-            mp_wnd_text->AddHTML(FixedStringBuilder<256>("<icon information>TELOPT_NAWS <b>Width:</b>", size.x, " <b>Height:</b>", size.y, " sent"));
+         mp_wnd_text->AddHTML(FixedStringBuilder<256>("<icon information>TELOPT_NAWS <b>Width:</b>", size.x, " <b>Height:</b>", size.y, " sent"));
          return;
       }
 
@@ -1362,9 +1339,9 @@ try
          return;
       }
 
-      if(command_line.Length()>command.Length()+1)
+      if(commandLine.Length()>command.Length()+1)
       {
-         auto data=command_line.WithoutFirst(command.Length()+1);
+         auto data=commandLine.WithoutFirst(command.Length()+1);
          if(mp_connection->IsInReceive())
          {
             mp_connection->Display(data);
@@ -1390,16 +1367,16 @@ try
 
    if(IEquals(command, "receivegmcp"))
    {
-      auto data=command_line.WithoutFirst(command.Length()+1);
+      auto data=commandLine.WithoutFirst(command.Length()+1);
       mp_connection->OnGMCP(data);
       return;
    }
 
    if(IEquals(command, "wall"))
    {
-      if(command_line.Length()<command.Length()+1)
+      if(commandLine.Length()<command.Length()+1)
          return;
-      Strings::HeapStringBuilder param; param(command_line.WithoutFirst(command.Length()+1), CRLF);
+      Strings::HeapStringBuilder param; param(commandLine.WithoutFirst(command.Length()+1), CRLF);
 
       for(auto &connection : Connection::s_root_node)
       {
@@ -2253,7 +2230,7 @@ GMCP_BEGIN R"+(beip.tilemap.data { "Laboratory":"k+ZFAXzaLKxIgE1/5ixHhtsMYBBzLFl
    }
 
    if(g_ppropGlobal->fSendUnrecognizedCommands())
-      SendLine(full_line);
+      SendLine(fullLine);
    else
       mp_wnd_text->AddHTML("<icon error> <font color='red'>Unrecognized Command, use // to send text directly to the mu*, /help for a list of commands, or set 'Send unrecognized commands' in settings/input window");
 }
