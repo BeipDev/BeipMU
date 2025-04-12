@@ -375,9 +375,7 @@ void LoadConfig(Prop::Global &global, ConstString filename, IError &error)
    {
       auto Validate=[&](this auto &&self, Prop::Triggers &triggers) -> void
       {
-         if(triggers.AfterCount()>triggers.Count())
-            triggers.AfterCount(triggers.Count());
-
+         PinBelow(triggers.AfterCount(), triggers.Count());
          for(auto &p_trigger : triggers)
          {
             if(p_trigger->fPropTriggers())
@@ -391,6 +389,27 @@ void LoadConfig(Prop::Global &global, ConstString filename, IError &error)
          Validate(p_server->propTriggers());
          for(auto &p_character : p_server->propCharacters())
             Validate(p_character->propTriggers());
+      }
+   }
+
+   // Validate iAfterCount for all aliases
+   {
+      auto Validate=[&](this auto &&self, Prop::Aliases &aliases) -> void
+         {
+            PinBelow(aliases.AfterCount(), aliases.Count());
+            for(auto &p_alias : aliases)
+            {
+               if(p_alias->fPropAliases())
+                  self(p_alias->propAliases());
+            }
+         };
+
+      Validate(global.propConnections().propAliases());
+      for(auto &p_server : global.propConnections().propServers())
+      {
+         Validate(p_server->propAliases());
+         for(auto &p_character : p_server->propCharacters())
+            Validate(p_character->propAliases());
       }
    }
 

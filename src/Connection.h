@@ -107,7 +107,7 @@ struct Connection
 
    bool ProcessAliases(StringBuilder &string);
    void ProcessAlias(StringBuilder &string, Prop::Alias &propAlias, Connection::AliasState &state);
-   void ProcessAliases(StringBuilder &string, Prop::Aliases &propAliases, Connection::AliasState &state);
+   void ProcessAliases(StringBuilder &string, Array<CopyCntPtrTo<Prop::Alias>> aliases, Connection::AliasState &state);
 
    uint32 TimeConnectedInSeconds();
    uint32 TimeIdleInSeconds();

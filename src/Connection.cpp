@@ -1177,19 +1177,19 @@ void Connection::Display(UniquePtr<Text::Line> &&p_line)
          }
       }
 
-      RunTriggers(*p_line, m_propConnections.propTriggers().WithoutLast(m_propConnections.propTriggers().AfterCount()), state);
+      RunTriggers(*p_line, m_propConnections.propTriggers().Pre(), state);
 
       if(m_ppropServer && m_ppropServer->propTriggers().fActive())
       {
-         RunTriggers(*p_line, m_ppropServer->propTriggers().WithoutLast(m_ppropServer->propTriggers().AfterCount()), state);
+         RunTriggers(*p_line, m_ppropServer->propTriggers().Pre(), state);
 
          if(m_ppropCharacter && m_ppropCharacter->propTriggers().fActive())
             RunTriggers(*p_line, m_ppropCharacter->propTriggers(), state);
 
-         RunTriggers(*p_line, m_ppropServer->propTriggers().Last(m_ppropServer->propTriggers().AfterCount()), state);
+         RunTriggers(*p_line, m_ppropServer->propTriggers().Post(), state);
       }
 
-      RunTriggers(*p_line, m_propConnections.propTriggers().Last(m_propConnections.propTriggers().AfterCount()), state);
+      RunTriggers(*p_line, m_propConnections.propTriggers().Post(), state);
 
       // Add new multiline triggers to beginning of list, such that the last one added to the list will be first
       while(m_new_multiline_triggers)
@@ -1939,9 +1939,12 @@ void Connection::ProcessAlias(StringBuilder &string, Prop::Alias &propAlias, Con
       state.m_stop=true;
 }
 
-void Connection::ProcessAliases(StringBuilder &string, Prop::Aliases &propAliases, Connection::AliasState &state)
+void Connection::ProcessAliases(StringBuilder &string, Array<CopyCntPtrTo<Prop::Alias>> aliases, Connection::AliasState &state)
 {
-   for(auto &ppropAlias : propAliases)
+   if(state.m_stop)
+      return;
+
+   for(auto &ppropAlias : aliases)
    {
       ProcessAlias(string, *ppropAlias, state);
       if(state.m_stop)
@@ -1963,14 +1966,19 @@ bool Connection::ProcessAliases(StringBuilder &string)
       mp_alias_debug->Add(Text::Line::CreateFromText(string));
    }
 
-   if(m_ppropCharacter && m_ppropCharacter->fPropAliases())
-      ProcessAliases(string, m_ppropCharacter->propAliases(), state);
+   ProcessAliases(string, m_propConnections.propAliases().Pre(), state);
 
-   if(m_ppropServer && m_ppropServer->fPropAliases() && !state.m_stop)
-      ProcessAliases(string, m_ppropServer->propAliases(), state);
+   if(m_ppropServer)
+   {
+      ProcessAliases(string, m_ppropServer->propAliases().Pre(), state);
 
-   if(m_propConnections.fPropAliases() && !state.m_stop)
-      ProcessAliases(string, m_propConnections.propAliases(), state);
+      if(m_ppropCharacter)
+         ProcessAliases(string, m_ppropCharacter->propAliases(), state);
+
+      ProcessAliases(string, m_ppropServer->propAliases().Post(), state);
+   }
+
+   ProcessAliases(string, m_propConnections.propAliases().Post(), state);
 
    if(mp_alias_debug)
       AliasDebugText("#400000", "red", "0", "Complete");

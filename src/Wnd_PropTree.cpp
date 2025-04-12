@@ -346,7 +346,7 @@ LRESULT Wnd_PropTree::On(const Msg::Command &msg)
 
          // Add the item before any servers or characters in this group
          Tree::ItemAndParam insert_after;
-         if(!ptiNew->ppropTrigger())
+         if(!ptiNew->ppropTrigger() && !ptiNew->ppropAlias())
          {
             for(insert_after=m_tree.GetChild(selection);insert_after;insert_after=m_tree.GetNextSibling(insert_after))
             {
@@ -556,7 +556,7 @@ LRESULT Wnd_PropTree::On(const Msg::Notify &msg)
             return 0;
 
          m_tree.SelectItem(target);
-         if(!target->ppropTrigger())
+         if(!target->ppropTrigger() && !target->ppropAlias())
             return 0;
 
          enum struct Commands : UINT_PTR
@@ -752,7 +752,7 @@ LRESULT Wnd_PropTree::On(const Msg::MouseMove &msg)
 
             bool can_move_after=can_move;
             // If we can't move, are we trying to drag past the end of the world/character/puppet list?
-            if(!can_move && target_parent && m_drag_from->ppropTrigger())
+            if(!can_move && target_parent && (m_drag_from->ppropTrigger() || m_drag_from->ppropAlias()))
             {
                if(!m_tree.GetNextSibling(target))
                   can_move_after=true;

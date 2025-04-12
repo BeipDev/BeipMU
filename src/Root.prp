@@ -437,6 +437,10 @@ Prop Aliases(RefCounted StackOf Alias)
    Flag Active = false // Aliases are off by default because they're dangerous
    Flag Echo = true // Echo the processed alias (to see what you actually sent)
    Flag ProcessCommands = false
+   UInt32 AfterCount = 0
+
+   Func "auto Pre() { return WithoutLast(AfterCount()); }"
+   Func "auto Post() { return Last(AfterCount()); }"
 }
 
 Prop KeyboardMacros2;
@@ -693,6 +697,9 @@ Prop Triggers(RefCounted StackOf Trigger)
 {
    Flag Active = true
    UInt32 AfterCount = 0
+
+   Func "auto Pre() { return WithoutLast(AfterCount()); }"
+   Func "auto Post() { return Last(AfterCount()); }"
 
 //   Func "private: using Collection<CopyCntPtrTo<Trigger>>::Push; public:"
 }
