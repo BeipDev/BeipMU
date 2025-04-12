@@ -12,6 +12,7 @@ Fixed a minor issue where some windows (like settings) will be positioned on the
 Add 'Alias Debugger' to make debugging aliases easy, similar to the 'Trigger Debugger'
 Fix spawn windows so that gagging won't cause activity in the spawn windows
 Character variables now persist after close
+Aliases now allow pre/post their nested objects like triggers do
 
 4.00.328 - 2024-11-18
 

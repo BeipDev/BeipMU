@@ -2440,13 +2440,13 @@ struct PropTree : IPropTree
 
    void GetChildren(TCallback<void(UniquePtr<IPropTreeItem>&&)> callback, IPropTreeItem &item) override
    {
-      for(auto &trigger : make_reverse_container(item.ppropTriggers()->WithoutLast(item.ppropTriggers()->AfterCount())))
+      for(auto &trigger : make_reverse_container(item.ppropTriggers()->Pre()))
          callback(MakeUnique<PropTreeItem_Trigger>(trigger));
    }
 
    void GetPostChildren(TCallback<void(UniquePtr<IPropTreeItem>&&)> callback, IPropTreeItem &item) override
    {
-      for(auto &trigger : item.ppropTriggers()->Last(item.ppropTriggers()->AfterCount()))
+      for(auto &trigger : item.ppropTriggers()->Post())
          callback(MakeUnique<PropTreeItem_Trigger>(trigger));
    }
 

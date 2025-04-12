@@ -362,11 +362,14 @@ struct PropTree : IPropTree
 
    void GetChildren(TCallback<void(UniquePtr<IPropTreeItem>&&)> callback, IPropTreeItem &item) override
    {
-      if(!item.ppropAliases())
-         return;
+      for(auto &alias : make_reverse_container(item.ppropAliases()->Pre()))
+         callback(MakeUnique<PropTreeItem_Alias>(alias));
+   }
 
-      for(auto &p_alias : make_reverse_container(*item.ppropAliases()))
-         callback(MakeUnique<PropTreeItem_Alias>(p_alias));
+   void GetPostChildren(TCallback<void(UniquePtr<IPropTreeItem> &&)> callback, IPropTreeItem &item) override
+   {
+      for(auto &alias : item.ppropAliases()->Post())
+         callback(MakeUnique<PropTreeItem_Alias>(alias));
    }
 
    UniquePtr<IPropTreeItem> NewChild(IPropTreeItem &item) override
@@ -396,24 +399,43 @@ struct PropTree : IPropTree
 
    void ExtractChild(IPropTreeItem &item, IPropTreeItem *pti) override
    {
-      item.ppropAliases()->FindAndDelete(pti->ppropAlias());
+      auto &aliases=*item.ppropAliases();
+      auto position=aliases.Find(pti->ppropAlias());
+      if(position>=aliases.Count()-aliases.AfterCount())
+         aliases.AfterCount(aliases.AfterCount()-1);
+      aliases.Delete(position);
    }
 
-   void InsertChild(IPropTreeItem &item, IPropTreeItem *pti, IPropTreeItem *ptiNextTo, bool fAfter) override
+   void InsertChild(IPropTreeItem &item, IPropTreeItem *ptiChild, IPropTreeItem *ptiNextTo, bool after) override
    {
-      Prop::Alias *ppropAlias=pti->ppropAlias();
+      CntPtrTo<Prop::Alias> ppropAlias=ptiChild->ppropAlias();
+      Prop::Aliases &aliases=*item.ppropAliases();
 
-      unsigned iPosition=0;
-      if(ptiNextTo)
+      unsigned position=0;
+
+      if(ptiNextTo) // This is nullptr when we're dragged into a container
       {
-         Prop::Alias *ppropAliasNextTo=ptiNextTo->ppropAlias();
-         Assert(ppropAliasNextTo);
-         iPosition=item.ppropAliases()->Find(ppropAliasNextTo);
-         Assert(iPosition!=~0U);
-         if(fAfter) iPosition++;
+         if(Prop::Alias *ppropAliasNextTo=ptiNextTo->ppropAlias())
+         {
+            position=item.ppropAliases()->Find(ppropAliasNextTo);
+            if(after) position++;
+         }
+         else // After the bottom of the list, means we're adding to the top of the after count
+         {
+            if(after)
+            {
+               position=aliases.Count()-aliases.AfterCount();
+               aliases.Insert(position, ppropAlias);
+               aliases.AfterCount(aliases.AfterCount()+1);
+               return;
+            }
+         }
+
+         if(position-after>=aliases.Count()-aliases.AfterCount())
+            aliases.AfterCount(aliases.AfterCount()+1);
       }
 
-      item.ppropAliases()->Insert(iPosition, ppropAlias);
+      aliases.Insert(position, ppropAlias);
    }
 
    bool fCanHold(IPropTreeItem &target, IPropTreeItem *source) override
@@ -435,6 +457,7 @@ UniquePtr<IPropTreeItem> PropTree::Import(IPropTreeItem &item, Prop::Global &pro
    auto p_prop_alias=props.propConnections().propAliases().Delete(0);
    auto new_item=MakeUnique<PropTreeItem_Alias>(p_prop_alias);
    item.ppropAliases()->Push(std::move(p_prop_alias));
+   item.ppropAliases()->AfterCount(item.ppropAliases()->AfterCount()+1);
    return new_item;
 }
 

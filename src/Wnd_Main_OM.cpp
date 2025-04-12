@@ -61,13 +61,13 @@ void SpawnTabs::On(Events::Event_Deleted &event)
 #undef ZOMBIECHECK
 #define ZOMBIECHECK if(!mp_wnd_main) return E_ZOMBIE;
 
-MainWindow::MainWindow(Wnd_Main *pWnd_Main)
-:  mp_wnd_main(pWnd_Main)
+MainWindow::MainWindow(Wnd_Main *p_wnd_main)
+:  mp_wnd_main(p_wnd_main)
 {
-   mp_text_window_output=new Window_Text(pWnd_Main->mp_wnd_text);
-   mp_text_window_history=new Window_Text(pWnd_Main->mp_wnd_text_history);
-   mp_connection=new Connection(&pWnd_Main->GetConnection());
-   mp_input=new Window_Input(pWnd_Main->m_input);
+   mp_text_window_output=new Window_Text(p_wnd_main->mp_wnd_text);
+   mp_text_window_history=new Window_Text(p_wnd_main->mp_wnd_text_history);
+   mp_connection=new Connection(&p_wnd_main->GetConnection());
+   mp_input=new Window_Input(p_wnd_main->m_input);
 }
 
 MainWindow::~MainWindow()
