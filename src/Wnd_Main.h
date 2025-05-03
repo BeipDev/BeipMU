@@ -55,9 +55,12 @@ enum CommandIDs : int
    ID_CONNECTION_CONNECT,
    ID_CONNECTION_DISCONNECT,
    ID_CONNECTION_RECONNECT,
+   ID_LOGGING,
+#if 0
    ID_LOGGING_START,
    ID_LOGGING_STOP,
-   ID_LOGGING,
+#endif
+   ID_LOGGING_FROMNOW,
    ID_LOGGING_FROMBEGINNING,
    ID_LOGGING_FROMWINDOW,
    ID_STATIC_ABOUTINFO,
@@ -347,7 +350,10 @@ struct Wnd_Main
       Key_Disconnect,
       Key_Reconnect,
 
-      Key_Logging_Toggle,
+      Key_Logging,
+      Key_Triggers,
+      Key_Aliases,
+      Key_Macros,
       Key_SendTelnet_IP,
       Key_Max
    };

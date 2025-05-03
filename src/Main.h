@@ -21,7 +21,7 @@
 #define YARN 1
 #define DWRITE_TEST 1
 #else
-#define BETA_BUILD 1
+#define BETA_BUILD 4
 #define SCRIPTING 0
 #define YARN 0
 #define DWRITE_TEST 0
@@ -136,7 +136,7 @@ void CreateDialog_Aliases(Window wnd, Prop::Server *ppropServer, Prop::Character
 void CloseDialog_Aliases();
 void CreateWindow_Root(ConstString cmdLine={}, int nCmdShow=SW_SHOWDEFAULT); // Create the First Window
 
-void CreateDialog_Settings(Window wndParent);
+void CreateDialog_Settings(Window wndParent, ConstString section={});
 void CreateDialog_Find(Window wnd, Text::Wnd &wndText);
 void CreateWindow_About(Window wndParent);
 

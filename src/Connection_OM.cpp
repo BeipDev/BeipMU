@@ -189,9 +189,12 @@ STDMETHODIMP Connection::get_Window_Main(IWindow_Main **retval)
 STDMETHODIMP Connection::get_Log(ILog **retval)
 {
    ZOMBIECHECK
-   if(!mp_connection->IsLogging()) { *retval=nullptr; return S_OK; }
-
-   *retval=new Log(&mp_connection->GetLog()); (*retval)->AddRef(); return S_OK;
+   auto *p_log=mp_connection->GetAutoLog();
+   if(p_log)
+      *retval=new Log(p_log);
+   else
+      *retval=nullptr;
+   return S_OK;
 }
 
 };

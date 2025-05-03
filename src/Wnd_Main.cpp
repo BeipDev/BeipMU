@@ -35,6 +35,7 @@ void CreateDialog_TextWindow(Window wndParent, Prop::TextWindow &propTextWindow)
 void CreateDialog_Connect(Window wnd, Wnd_MDI &wndMDI);
 void CreateDialog_SmartPaste(Window wndParent, Connection &connection, Prop::Connections &propConnections);
 void CreateDialog_InputWindow(Window wndParent, InputControl &input_window, Prop::InputWindow &propInputWindow);
+void CreateDialog_Logs(Connection &connection);
 
 void ShowStatistics(Text::Wnd &wnd)
 {
@@ -316,10 +317,12 @@ SpawnWindow *Wnd_Main::GetSpawnWindow(const Prop::Trigger_Spawn &trigger, ConstS
    if(trigger.pclTabGroup())
    {
       SpawnTabsWindow *p_tab_window{};
+      FindStringReplacement replacement{trigger.pclTabGroup()};
+      replacement.ExpandVariables(mp_connection->GetVariables());
 
       for(auto &tab_window : m_spawn_tabs_windows)
       {
-         if(tab_window && tab_window.m_title==trigger.pclTabGroup())
+         if(tab_window && tab_window.m_title==replacement)
          {
             p_tab_window=&tab_window;
             break;
@@ -331,7 +334,7 @@ SpawnWindow *Wnd_Main::GetSpawnWindow(const Prop::Trigger_Spawn &trigger, ConstS
          if(use_existing)
             return nullptr;
 
-         p_tab_window=new SpawnTabsWindow(m_spawn_tabs_windows.Prev(), *this, trigger.pclTabGroup());
+         p_tab_window=new SpawnTabsWindow(m_spawn_tabs_windows.Prev(), *this, replacement);
          p_tab_window->GetDocking().Dock(Docking::Side::Right);
       }
 
@@ -1930,18 +1933,14 @@ LRESULT Wnd_Main::On(const Msg::Command &msg)
          return msg.Success();
 
       case ID_LOGGING:
-         if(mp_connection->IsLogging())
-         {
-            mp_connection->LogStop();
-            return msg.Success();
-         }
-         // Otherwise fall through to start logging!
+         CreateDialog_Logs(*mp_connection);
+         return msg.Success();
+
+#if 0
       case ID_LOGGING_START:
       case ID_LOGGING_FROMBEGINNING:
       case ID_LOGGING_FROMWINDOW:
          {
-            Assert(!mp_connection->IsLogging());
-
             auto &propLogging=g_ppropGlobal->propConnections().propLogging();
 
             File::Chooser cf;
@@ -1955,16 +1954,18 @@ LRESULT Wnd_Main::On(const Msg::Command &msg)
             if(cf.Choose(*this, fileName, true))
             {
                g_ppropGlobal->LogFileFilter(cf.GetFilterIndex());
-               mp_connection->LogStart(fileName, msg.iID());
+               mp_connection->StartLog(fileName, msg.iID());
                propLogging.pclPath(ConstString(fileName.begin(), cf.GetFileOffset()));
             }
          }
          return msg.Success();
 
       case ID_LOGGING_STOP:
-         Assert(mp_connection->IsLogging());
-         mp_connection->LogStop();
+         CreateDialog_Logs(*mp_connection);
+//         Assert(mp_connection->IsLogging());
+//         mp_connection->StopLogs();
          return msg.Success();
+#endif
 
       case ID_OPTIONS_IMAGEWINDOW:
          if(!mp_wnd_image)
@@ -2430,7 +2431,10 @@ void Wnd_Main::HandleKey(InputControl &edInput, Keys key)
       case Key_Disconnect: Msg::Command(ID_CONNECTION_DISCONNECT, nullptr, 0).Post(*this); return;
       case Key_Reconnect: Msg::Command(ID_CONNECTION_RECONNECT, nullptr, 0).Post(*this); return;
 
-      case Key_Logging_Toggle: Msg::Command(ID_LOGGING, nullptr, 0).Post(*this); return;
+      case Key_Logging: Msg::Command(ID_LOGGING, nullptr, 0).Post(*this); return;
+      case Key_Triggers: Msg::Command(ID_OPTIONS_TRIGGERS, nullptr, 0).Post(*this); return;
+      case Key_Aliases: Msg::Command(ID_OPTIONS_ALIASES, nullptr, 0).Post(*this); return;
+      case Key_Macros: Msg::Command(ID_OPTIONS_MACROS, nullptr, 0).Post(*this); return;
 
       case Key_SendTelnet_IP: mp_connection->Send("\xFF\xF4", true, true); return;
    }
@@ -2451,7 +2455,7 @@ void Wnd_Main::SendLine(ConstString _string, ConstString prefix)
    HybridStringBuilder string(_string);
 
    if(mp_connection->IsLogging())
-      mp_connection->GetLog().LogTyped(string);
+      mp_connection->LogTyped(string);
 
    if(mp_connection->ProcessAliases(string))
    {
@@ -2596,16 +2600,17 @@ void Wnd_Main::InitMenu(Menu &menu)
    bool fConnected=mp_connection->IsConnected();
 //   bool fLocalEcho=mp_input_active->GetProps().fLocalEcho(); TODO: Delete
 //   bool fPaused=mp_wnd_text->IsPaused();
-   bool fLogging=mp_connection->IsLogging();
+//   bool fLogging=mp_connection->IsLogging();
 
 //   CheckItem(hmenu, ID_EDIT_PAUSE, fPaused);
    menu.Enable(ID_EDIT_SMARTPASTE, fConnected);
 //   menu.Enable(ID_CONNECTION_DISCONNECT, fConnected);
 //   menu.Enable(ID_CONNECTION_RECONNECT, !fConnected);
-   menu.Enable(ID_LOGGING_START, !fLogging);
-   menu.Enable(ID_LOGGING_FROMBEGINNING, !fLogging);
-   menu.Enable(ID_LOGGING_FROMWINDOW, !fLogging);
-   menu.Enable(ID_LOGGING_STOP,   fLogging);
+// With multiple logs, these are no longer disabled
+//   menu.Enable(ID_LOGGING_START, !fLogging);
+//   menu.Enable(ID_LOGGING_FROMBEGINNING, !fLogging);
+//   menu.Enable(ID_LOGGING_FROMWINDOW, !fLogging);
+//   menu.Enable(ID_LOGGING_STOP,   fLogging);
 //   CheckItem(hmenu, ID_OPTIONS_LOCALECHO, fLocalEcho); TODO: Delete
    menu.Check(ID_OPTIONS_INPUT_HISTORY, settings.fHistory());
    menu.Check(ID_OPTIONS_IMAGEWINDOW, mp_wnd_image);
@@ -2978,9 +2983,9 @@ void Wnd_MDI::PopupMainMenu(int2 position)
    {
       PopupMenu m;
 
-      m.Append(MF_STRING, ID_OPTIONS_TRIGGERS, "&Triggers...");
-      m.Append(MF_STRING, ID_OPTIONS_MACROS, "&Macros...");
-      m.Append(MF_STRING, ID_OPTIONS_ALIASES, "&Aliases...");
+      Append(m, ID_OPTIONS_TRIGGERS, "&Triggers...", Wnd_Main::Key_Triggers);
+      Append(m, ID_OPTIONS_MACROS, "&Macros...", Wnd_Main::Key_Macros);
+      Append(m, ID_OPTIONS_ALIASES, "&Aliases...", Wnd_Main::Key_Aliases);
       m.AppendSeparator();
       m.Append(MF_STRING, ID_HELP_DEBUG_TRIGGERS, "Trigger Debugger");
       m.Append(MF_STRING, ID_HELP_DEBUG_ALIASES, "Alias Debugger");
@@ -2989,14 +2994,17 @@ void Wnd_MDI::PopupMainMenu(int2 position)
 
       menu.Append(std::move(m), "&Tools");
    }
+#if 0
    {
       PopupMenu m;
-      Append(m, ID_LOGGING_START, "&Start...", Wnd_Main::Key_Logging_Toggle);
-      Append(m, ID_LOGGING_STOP, "S&top", Wnd_Main::Key_Logging_Toggle);
+      Append(m, ID_LOGGING_START, "&Start...", Wnd_Main::Key_Logging_Start);
+      Append(m, ID_LOGGING_STOP, "S&top", Wnd_Main::Key_Logging_Stop);
       m.Append(MF_STRING, ID_LOGGING_FROMBEGINNING, "Starting From Beginning...");
       m.Append(MF_STRING, ID_LOGGING_FROMWINDOW, "Starting From Top of Window...");
       menu.Append(std::move(m), "&Logging");
    }
+#endif
+   Append(menu, ID_LOGGING, "&Logging...", Wnd_Main::Key_Logging);
    menu.Append(MF_STRING, ID_OPTIONS_PREFERENCES, "&Settings...");
 
    {

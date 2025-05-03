@@ -196,7 +196,7 @@ Log::~Log()
       }
    }
 
-   m_error.Text(STR_LoggingStopped);
+   m_error.Text(HybridStringBuilder<>(STR_LoggingStopped, "</font> ", m_filename));
 }
 
 void Log::LogTextList(const Text::List &list, const Text::Line *pStart)
@@ -877,3 +877,173 @@ RestoreLogReplay::Entry RestoreLogReplay::Read()
 
    return entry;
 }
+
+struct Dlg_Logs : Wnd_Dialog, Events::ReceiversOf<Dlg_Logs, Connection::Event_Log>
+{
+   Dlg_Logs(Connection &connection);
+
+   void On(const Connection::Event_Log &event);
+
+private:
+   ~Dlg_Logs();
+
+   LRESULT WndProc(const Message &msg) override;
+   friend TWindowImpl;
+
+   LRESULT On(const Msg::Create &msg);
+   LRESULT On(const Msg::Command &msg);
+
+   enum
+   {
+      IDC_START = 100,
+      IDC_STOP,
+      IDC_STOP_ALL
+   };
+
+   Connection &m_connection;
+   AL::ListBox *mp_list;
+   AL::Button *mp_button_stop, *mp_button_stop_all;
+
+   AL::Button *mp_button_start;
+   AL::Radio *mp_radio_now, *mp_radio_beginning, *mp_radio_window;
+
+   AL::Button *mp_button_close;
+};
+
+LRESULT Dlg_Logs::WndProc(const Message &msg)
+{
+   return Dispatch<Wnd_Dialog, Msg::Create, Msg::Command>(msg);
+}
+
+Dlg_Logs::Dlg_Logs(Connection &connection) : m_connection{connection}
+{
+   AttachTo<Connection::Event_Log>(m_connection);
+   Create("Logging", WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME | WS_VISIBLE | Wnd_Dialog::Style_Modal, 0 /*dwExStyle*/, connection.GetMainWindow());
+}
+
+Dlg_Logs::~Dlg_Logs()
+{
+}
+
+LRESULT Dlg_Logs::On(const Msg::Create &msg)
+{
+   auto *p_gv=m_layout.CreateGroup_Vertical(); m_layout.SetRoot(p_gv);
+   {
+      auto &g=m_layout.CreateSection(*p_gv, "Current");
+      mp_list=m_layout.CreateListBox(-1, int2(64, 8), WS_VSCROLL); g << mp_list;
+      {
+         auto *p_gh=m_layout.CreateGroup_Horizontal(); g << p_gh;
+         *p_gh >> AL::Style::Attach_Left;
+         p_gh->MatchWidth(true);
+         p_gh->weight(0);
+         mp_button_stop=m_layout.CreateButton(IDC_STOP, "Stop");
+         mp_button_stop_all=m_layout.CreateButton(IDC_STOP_ALL, "Stop All");
+
+         *p_gh << mp_button_stop << mp_button_stop_all;
+      }
+   }
+   {
+      auto &g=m_layout.CreateSection(*p_gv, "New");
+      auto *p_gh=m_layout.CreateGroup_Horizontal(); g << p_gh;
+      *p_gh >> AL::Style::Attach_Right;
+      p_gh->weight(0);
+
+      mp_button_start=m_layout.CreateButton(IDC_START, "   Start...   ");
+
+      mp_radio_now=m_layout.CreateRadio(-1, "Now", true);
+      mp_radio_beginning=m_layout.CreateRadio(-1, "Beginning");
+      mp_radio_window=m_layout.CreateRadio(-1, "Top of window");
+
+      mp_radio_now->Check(true);
+      *p_gh << mp_button_start << m_layout.CreateStatic(" Starting from:") << mp_radio_now << mp_radio_beginning << mp_radio_window;
+   }
+   {
+      auto *p_gh=m_layout.CreateGroup_Horizontal(); *p_gv << p_gh;
+      *p_gh >> AL::Style::Attach_Left;
+      p_gh->weight(0);
+      mp_button_close=m_layout.CreateButton(IDCANCEL, "  Close  ");
+      *p_gh << mp_button_close;
+   }
+
+   On(Connection::Event_Log{});
+
+   m_defID=IDCANCEL;
+   return msg.Success();
+}
+
+void Dlg_Logs::On(const Connection::Event_Log &event)
+{
+   mp_list->Reset();
+   if(auto *p_log=m_connection.GetAutoLog())
+   {
+      auto index=mp_list->AddString(HybridStringBuilder<>("AutoLog: ", p_log->GetFileName()));
+      mp_list->SetItemData(index, reinterpret_cast<LPARAM>(p_log));
+   }
+   for(auto &p_log : m_connection.GetLogs())
+   {
+      auto index=mp_list->AddString(p_log->GetFileName());
+      mp_list->SetItemData(index, reinterpret_cast<LPARAM>(&*p_log));
+   }
+}
+
+LRESULT Dlg_Logs::On(const Msg::Command &msg)
+{
+   switch(msg.iID())
+   {
+      case IDC_START:
+      {
+         auto &propLogging=g_ppropGlobal->propConnections().propLogging();
+
+         File::Chooser cf;
+         cf.SetTitle(STR_LogToFile);
+         cf.SetFilter(STR_LogFileFilter, g_ppropGlobal->LogFileFilter());
+         cf.SetDirectory(propLogging.pclPath());
+
+         FixedStringBuilder<256> fileName;
+         Time::Local().FormatDate(fileName, propLogging.pclFileDateFormat());
+
+         unsigned id=ID_LOGGING_FROMNOW;
+         if(mp_radio_beginning->IsChecked())
+            id=ID_LOGGING_FROMBEGINNING;
+         else if(mp_radio_window->IsChecked())
+            id=ID_LOGGING_FROMWINDOW;
+
+         if(cf.Choose(*this, fileName, true))
+         {
+            g_ppropGlobal->LogFileFilter(cf.GetFilterIndex());
+            m_connection.StartLog(fileName, id);
+            propLogging.pclPath(ConstString(fileName.begin(), cf.GetFileOffset()));
+         }
+      }
+      break;
+
+      case IDC_STOP:
+      {
+         int selection=mp_list->GetCurSel();
+         if(selection==LB_ERR)
+            break; // Nothing selected
+         auto &log=*reinterpret_cast<Log *>(mp_list->GetItemData(selection));
+         m_connection.StopLog(log);
+         break;
+      }
+      case IDC_STOP_ALL:
+      {
+         m_connection.StopAutoLog();
+         m_connection.StopLogs();
+         break;
+      }
+      case IDCANCEL:
+         Close();
+         break;
+   }
+
+   return msg.Success();
+}
+
+
+// Dialog to choose which active log to stop
+void CreateDialog_Logs(Connection &connection)
+{
+   new Dlg_Logs(connection);
+}
+

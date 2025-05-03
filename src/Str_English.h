@@ -436,5 +436,8 @@
     "Connection - Connect", \
     "Connection - Disconnect", \
     "Connection - Reconnect", \
-    "Logging - Start/Stop", \
+    "Logging", \
+    "Triggers", \
+    "Aliases", \
+    "Macros", \
     "Send Telnet Interrupt Process (IAC IP)"
