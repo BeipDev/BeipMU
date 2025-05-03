@@ -532,8 +532,8 @@ void Connection::Send(ConstString string, bool send_event, bool raw)
          return;
    }
 
-   if(mp_log && !raw)
-      mp_log->LogSent(string);
+   if(IsLogging() && !raw)
+      LogSent(string);
    if(m_ppropCharacter && !m_ppropPuppet)
       m_ppropCharacter->BytesSent(m_ppropCharacter->BytesSent()+string.Count()+2); // 2 for the CRLF
 
@@ -777,8 +777,8 @@ void Connection::Disconnect()
    mp_client=nullptr;
 
    // Stop auto logging as soon as we disconnect
-   if(IsLogging() && m_auto_log)
-      LogStop();
+   if(mp_auto_log)
+      StopAutoLog();
 
    // Update the last time used on the character
    if(m_ppropCharacter && !m_ppropPuppet)
@@ -849,7 +849,7 @@ const Prop::KeyboardMacro *Connection::MacroKey(const KEY_ID *pKeyID)
    return p_macro;
 }
 
-void Connection::GetWorldTitle(StringBuilder &string, unsigned unreadCount)
+void Connection::GetWorldTitle(StringBuilder &string, unsigned unread_count)
 {
    FixedCollection<ConstString, 3> strings;
 
@@ -864,8 +864,8 @@ void Connection::GetWorldTitle(StringBuilder &string, unsigned unreadCount)
 
    if(strings.Count())
       string(strings[0]);
-   if(unreadCount)
-      string(" (+", unreadCount, ')');
+   if(unread_count)
+      string(" (+", unread_count, ')');
    for(unsigned i=1;i<strings.Count();i++)
       string(" - ", strings[i]);
 
@@ -963,7 +963,7 @@ void Connection::ConnectCharacter()
    m_ppropCharacter->ConnectionCount(m_ppropCharacter->ConnectionCount()+1);
    m_ppropCharacter->timeLastUsed(Time::Running());
    m_wnd_main.UpdateCharacterIdleTimer();
-   AutoLogStart();
+   StartAutoLog();
 
    if(m_ppropCharacter->fPropPuppets())
    {
@@ -977,7 +977,7 @@ void Connection::ConnectCharacter()
 
 void Connection::ConnectPuppet()
 {
-   AutoLogStart();
+   StartAutoLog();
    UpdateMainWindowTitle();
 }
 
@@ -1242,14 +1242,14 @@ void Connection::Display(UniquePtr<Text::Line> &&p_line)
    state.m_gag_log|=state.mp_spawn_trigger && state.mp_spawn_trigger->propSpawn().fGagLog();
    if(!state.m_gag_log)
    {
-      if(mp_log)
-         mp_log->LogTextLine(*p_line);
+      if(IsLogging())
+         LogTextLine(*p_line);
 
-      if(mp_puppet && mp_puppet->GetConnectionMaster().mp_log && mp_puppet->GetPuppet()->fCharacterLog())
+      if(mp_puppet && mp_puppet->GetConnectionMaster().IsLogging() && mp_puppet->GetPuppet()->fCharacterLog())
       {
          auto line=Text::Line::CreateFromText(mp_puppet->GetPuppet()->pclCharacterLogPrefix());
          line->InsertLine(line->GetText().Length(), *p_line);
-         mp_puppet->GetConnectionMaster().mp_log->LogTextLine(*line);
+         mp_puppet->GetConnectionMaster().LogTextLine(*line);
       }
    }
 
@@ -1644,6 +1644,7 @@ void Connection::RunTriggers(Text::Line &line, Array<CopyCntPtrTo<Prop::Trigger>
                if(prop.fActive() && !mp_captured_spawn_window && !state.mp_spawn_trigger)
                {
                   FindStringReplacement replacement(search, prop.pclTitle());
+                  replacement.ExpandVariables(GetVariables());
                   state.m_spawn_title=replacement;
                   state.mp_spawn_trigger=ppropTrigger;
 
@@ -1785,6 +1786,7 @@ void Connection::RunTriggers(Text::Line &line, Array<CopyCntPtrTo<Prop::Trigger>
                int searchLength=search.End()-search.Start();
 
                FindStringReplacement replacement(search, ppropTrigger->propFilter().pclReplace(), ppropTrigger->propFilter().fHTML());
+               replacement.ExpandVariables(GetVariables());
 
                auto p_line=Text::Line::Create(replacement, ppropTrigger->propFilter().fHTML());
                line.InsertLine(search.Start(), *p_line);
@@ -1799,6 +1801,7 @@ void Connection::RunTriggers(Text::Line &line, Array<CopyCntPtrTo<Prop::Trigger>
             if(ppropTrigger->fPropAvatar() && ppropTrigger->propAvatar().pclURL())
             {
                FindStringReplacement replacement(search, ppropTrigger->propAvatar().pclURL());
+               replacement.ExpandVariables(GetVariables());
 
                auto p_image=MakeCounting<ImageAvatar>(Text::ImageURL{replacement});
                line.SetParagraphRecord(Text::Records::ImageLeft(&*p_image));
@@ -1988,18 +1991,16 @@ bool Connection::ProcessAliases(StringBuilder &string)
 
 void Connection::On(const Event_NewDay &event)
 {
-   if(!IsLogging()) return;
-
-   if(!m_auto_log || !mp_log->fDateLog())
+   if(!mp_auto_log || !mp_auto_log->fDateLog())
       return;
 
-   LogStop();
-   AutoLogStart();
+   StopAutoLog();
+   StartAutoLog();
 }
 
-void Connection::AutoLogStart() try
+void Connection::StartAutoLog() try
 {
-   if(IsLogging())
+   if(mp_auto_log)
       return; // Don't start the autolog if we're already manually logging
 
    ConstString filename;
@@ -2026,26 +2027,48 @@ void Connection::AutoLogStart() try
 
    if(filename)
    {
-      LogStop();
-      mp_log=MakeUnique<Log>(*this, m_propConnections.propLogging(), *this, filename, timeFormat);
+      StopAutoLog();
+      mp_auto_log=MakeUnique<Log>(*this, m_propConnections.propLogging(), *this, filename, timeFormat);
       m_events.Send(Event_Log());
-      m_auto_log=true;
    }
 } catch(const std::exception &)
 {
 }
 
-void Connection::LogStart(ConstString filename, unsigned type) try
+void Connection::LogTyped(ConstString string)
+{
+   if(mp_auto_log)
+      mp_auto_log->LogTyped(string);
+   for(auto &p_log : m_logs)
+      p_log->LogTyped(string);
+}
+
+void Connection::LogSent(ConstString string)
+{
+   if(mp_auto_log)
+      mp_auto_log->LogSent(string);
+   for(auto &p_log : m_logs)
+      p_log->LogSent(string);
+}
+
+void Connection::LogTextLine(Text::Line &line)
+{
+   if(mp_auto_log)
+      mp_auto_log->LogTextLine(line);
+   for(auto &p_log : m_logs)
+      p_log->LogTextLine(line);
+}
+
+void Connection::StartLog(ConstString filename, unsigned type) try
 {
    Text::Pauser _(GetOutput()); // Without this, log from window doesn't work due to scrolling down due to the log creation message
-   m_auto_log=false;
-   LogStop();
-   mp_log=MakeUnique<Log>(*this, m_propConnections.propLogging(), *this, filename, 0);
-   m_events.Send(Event_Log());
-
+   auto &log=*m_logs.Push(MakeUnique<Log>(*this, m_propConnections.propLogging(), *this, filename, 0));
    const Text::Line *p_start{};
    switch(type)
    {
+      case ID_LOGGING_FROMNOW:
+         break;
+
       case ID_LOGGING_FROMBEGINNING:
       {
          auto &lines=GetOutput().GetTextList().GetLines();
@@ -2060,17 +2083,45 @@ void Connection::LogStart(ConstString filename, unsigned type) try
    }
 
    if(p_start)
-      mp_log->LogTextList(GetOutput().GetTextList(), p_start);
+      log.LogTextList(GetOutput().GetTextList(), p_start);
+   m_events.Send(Event_Log());
 } catch(const std::exception &)
 {
 }
 
-void Connection::LogStop()
+void Connection::StopAutoLog()
 {
-   if(!mp_log)
+   if(!mp_auto_log)
       return;
 
-   mp_log=nullptr;
+   mp_auto_log=nullptr;
+   m_events.Send(Event_Log());
+}
+
+void Connection::StopLog(Log &log)
+{
+   if(&log==mp_auto_log)
+   {
+      StopAutoLog();
+      return;
+   }
+
+   for(unsigned i=0;i<m_logs.Count();i++)
+      if(&log==m_logs[i])
+      {
+         m_logs.Delete(i);
+         m_events.Send(Event_Log());
+         return;
+      }
+   Assert(false); // Log not found? Why?
+}
+
+void Connection::StopLogs()
+{
+   if(!m_logs)
+      return;
+
+   m_logs.Empty();
    m_events.Send(Event_Log());
 }
 
@@ -2198,7 +2249,9 @@ void Connection::OpenTriggerDebugWindow()
    Prop::TextWindow &prop=g_ppropGlobal->propWindows().propMainWindowSettings().propOutput();
    mp_trigger_debug->SetFont(prop.propFont().pclName(), prop.propFont().Size(), prop.propFont().CharSet());
    mp_trigger_debug->SetSize(uint2(640,480));
-   mp_trigger_debug->SetText("Trigger Debugger");
+
+   FixedStringBuilder<256> string("Trigger Debugger - "); GetWorldTitle(string, 0);
+   mp_trigger_debug->SetText(string);
    mp_trigger_debug->Show(SW_SHOWNOACTIVATE);
 }
 
@@ -2216,7 +2269,9 @@ void Connection::OpenAliasDebugWindow()
    Prop::TextWindow &prop=g_ppropGlobal->propWindows().propMainWindowSettings().propOutput();
    mp_alias_debug->SetFont(prop.propFont().pclName(), prop.propFont().Size(), prop.propFont().CharSet());
    mp_alias_debug->SetSize(uint2(640, 480));
-   mp_alias_debug->SetText("Alias Debugger");
+
+   FixedStringBuilder<256> string("Alias Debugger - "); GetWorldTitle(string, 0);
+   mp_alias_debug->SetText(string);
    mp_alias_debug->Show(SW_SHOWNOACTIVATE);
 }
 

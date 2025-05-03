@@ -1,5 +1,6 @@
 4.00.329
 
+Add ability to log to more than one file at once
 Fix issue with multiline triggers with a 0 timeout duration not being infinite time
 Remove connection point OLE code, hasn't been used in decades
 Add window title setting to input windows (mainly useful for scripts)
@@ -14,6 +15,9 @@ Fix spawn windows so that gagging won't cause activity in the spawn windows
 Character variables now persist after close
 Aliases now allow pre/post their nested objects like triggers do
 Add optional /silent prefix for all commands to suppress informational messages from it
+Add /opendialog command to open aliases/triggers/macros/worlds/settings dialog boxes as a command
+Add /opendialog settings (section name) command, to open a specific section in the settings
+Add %variable% expansion to spawns, sound, and filter triggers
 
 4.00.328 - 2024-11-18
 

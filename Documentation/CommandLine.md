@@ -29,6 +29,7 @@
   - [/new](#new)
   - [/newedit](#newedit)
   - [/newinput](#newinput)
+  - [/opendialog](#opendialog)
   - [/ping](#ping)
   - [/printenv](#printenv)
   - [/puppet](#puppet)
@@ -324,6 +325,13 @@ Usage:
 Opens a new input pane. If a prefix is specified, this will be sent on every line sent by the input box. Note that input panes can be docked anywhere.
 
 /unique - This will not create the input window if one with the given prefix already exists for this window.
+
+## /opendialog
+Usage:
+
+    /opendialog (aliases/triggers/macros/worlds) (parameters...)
+
+Open a built in dialog box
 
 ## /ping
 Usage:

@@ -196,13 +196,16 @@ try
          "/log $ - Log incoming text into a file",
          "/logall $ - Same as log, but includes all previously received text",
          "/logtop $ - Same as log, but from the top of the current window",
+         "/stoplogs - Stop all logs",
          "/map_addroom - Add a room to the map (see online help)",
          "/map_addexit - Add an exit to the map (see online help)",
          "/map_guesslocation - Try to figure out where the player is on the map based on recent scrollback",
          "/naws - Send telnet NAWS",
          "/new - Open a new window",
+         "/newtab - Open a new tab in the current window",
          "/newedit - Open a new edit window (see help for parameters)",
          "/newinput (/unique) ($)- Open a new input window with an optional prefix",
+         "/opendialog (aliases/triggers/macros/worlds/settings) (parameters...) - Open a built in dialog",
          "/ping $ - Sends the given text to the server and times how long before a response is received",
          "/printenv - Print environment variables",
          "/puppet $ - Open a new window and connect through the given puppet",
@@ -606,18 +609,19 @@ try
    // Log
    if(IEquals(command, "log"))
    {
-      if(wl.Count()==2)
-         mp_connection->LogStart(wl[1], ID_LOGGING_START);
-      else if(wl.Count()==1)
+      if(wl.Count()!=2)
       {
-         if(mp_connection->IsLogging())
-            mp_connection->LogStop();
-         else
-            mp_wnd_text->AddHTML("<icon information> Not logging (🐱‍👤, please press Ctrl+L to start a log)");
+         mp_wnd_text->AddHTML("<icon information> <font color='aqua'>Usage: '/log &lt;filename&gt;'</font>");
+         return;
       }
-      else
-         mp_wnd_text->AddHTML("<icon information> <font color='aqua'>Usage: '/log &lt;filename&gt;', no filename stops the log</font>");
 
+      mp_connection->StartLog(wl[1], ID_LOGGING_FROMNOW);
+      return;
+   }
+
+   if(IEquals(command, "stoplogs"))
+   {
+      mp_connection->StopLogs();
       return;
    }
 
@@ -629,7 +633,7 @@ try
          return;
       }
 
-      mp_connection->LogStart(wl[1], ID_LOGGING_FROMBEGINNING);
+      mp_connection->StartLog(wl[1], ID_LOGGING_FROMBEGINNING);
       return;
    }
 
@@ -641,20 +645,20 @@ try
          return;
       }
 
-      mp_connection->LogStart(wl[1], ID_LOGGING_FROMWINDOW);
+      mp_connection->StartLog(wl[1], ID_LOGGING_FROMWINDOW);
       return;
    }
 
    if(IEquals(command, "autolog"))
    {
-      if(mp_connection->IsLogging())
+      if(mp_connection->GetAutoLog())
       {
          mp_wnd_text->AddHTML("<icon error> <font color='teal'>Log already running");
          return;
       }
 
-      mp_connection->AutoLogStart();
-      if(!mp_connection->IsLogging())
+      mp_connection->StartAutoLog();
+      if(!mp_connection->GetAutoLog())
          mp_wnd_text->AddHTML("<icon information> No autolog setup");
       return;
    }
@@ -666,6 +670,28 @@ try
       else
          mp_connection->Send({}); // Send a blank line
       mp_connection->StartPing();
+      return;
+   }
+
+   if(IEquals(command, "opendialog"))
+   {
+      if(wl.Count()>=2)
+      {
+         if(IEquals(wl[1], "aliases"))
+            Msg::Command(ID_OPTIONS_ALIASES, nullptr, 0).Post(GetMDI());
+         else if(IEquals(wl[1], "triggers"))
+            Msg::Command(ID_OPTIONS_TRIGGERS, nullptr, 0).Post(GetMDI());
+         else if(IEquals(wl[1], "macros"))
+            Msg::Command(ID_OPTIONS_MACROS, nullptr, 0).Post(GetMDI());
+         else if(IEquals(wl[1], "worlds"))
+            Msg::Command(ID_CONNECTION_CONNECT, nullptr, 0).Post(GetMDI());
+         else if(IEquals(wl[1], "settings"))
+            CreateDialog_Settings(*this, wl.Count()==3 ? wl[2] : ConstString());
+         else
+            mp_wnd_text->AddHTML("<icon error> <font color='red'>Unknown dialog");
+      }
+      else
+         mp_wnd_text->AddHTML("<icon error> <font color='red'>Usage: '/opendialog (aliases/triggers/macros/worlds)'");
       return;
    }
 

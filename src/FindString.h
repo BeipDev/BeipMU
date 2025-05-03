@@ -37,6 +37,7 @@ private:
 struct FindStringReplacement : ConstString
 // Given an ConstString, can generate regex \1 \2 \3 type replacement strings when you call 'Get' during a RegEx search
 {
+   FindStringReplacement(ConstString replace); // For when we only need ExpandVariables
    FindStringReplacement(const FindStringSearch &search, ConstString replace, bool escape_html=false);
 
    void ExpandVariables(Prop::Variables &variables);

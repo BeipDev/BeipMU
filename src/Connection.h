@@ -115,11 +115,18 @@ struct Connection
    void ShowSpawnCancel();
 
    bool m_mute_audio{};
-   bool IsLogging() const { return mp_log!=nullptr; }
-   Log &GetLog() { Assert(mp_log); return *mp_log; }
-   void LogStart(ConstString filename, unsigned type);
-   void LogStop();
-   void AutoLogStart(); // If someone stops a log and wants to restart the autolog, call this
+   bool IsLogging() const { return mp_auto_log || m_logs; }
+   Log *GetAutoLog() { return mp_auto_log; }
+   Collection<UniquePtr<Log>>& GetLogs() { return m_logs; }
+   void StartLog(ConstString filename, unsigned type);
+   void StopLog(Log &log);
+   void StopLogs();
+   void StartAutoLog(); // If someone stops a log and wants to restart the autolog, call this
+   void StopAutoLog();
+
+   void LogTyped(ConstString string);
+   void LogSent(ConstString string);
+   void LogTextLine(Text::Line &line);
 
    bool InReplay() const { return m_raw_log_replay; }
 
@@ -274,8 +281,6 @@ private:
    UniquePtr<IClient> mp_client; // Current Client Module
    AsyncOwner<Sockets::GetHost> mp_get_host; // Asynchronous DNS lookup host
 
-   bool m_auto_log{}; // True when the log was started automatically (not by the user)
-
    bool m_away{true}; // False if the user has this connection on the screen right now (window is active)
    bool m_away_notified{true}; // True if we've already notified the user of activity while the window is not active
 
@@ -322,7 +327,9 @@ private:
 
    IEvent_Prepare &m_ievent_prepare;
 
-   UniquePtr<Log> mp_log;
+   UniquePtr<Log> mp_auto_log;
+   Collection<UniquePtr<Log>> m_logs;
+
    OwnerPtr<Text::Wnd> mp_network_debug;
    OwnerPtr<Text::Wnd> mp_trigger_debug;
    OwnerPtr<Text::Wnd> mp_alias_debug;

@@ -53,27 +53,7 @@ struct SettingsDialog : Wnd_ChildDialog
 
    AL::Group &CreateSection(ConstString label, int weight=1)
    {
-      // Only add an extra space if we're not the first item
-      if(!m_first)
-         *mp_root << m_layout.CreateSpacer({0, Controls::Control::m_tmButtons.tmHeight/2});
-      else
-         m_first=false;
-
-      AL::Group_Horizontal *p_group=m_layout.CreateGroup_Horizontal(); *mp_root << p_group; p_group->weight(0);
-      p_group->MatchBaseline(false);
-      *p_group >> AL::Style::Attach_Vert; // Center vertically
-
-      *p_group << m_layout.CreateStatic(label, 0, true);
-      auto line=m_layout.CreateStatic(" ", SS_ETCHEDHORZ); line->weight(1); line->szMinimum()=int2(2,2);
-      *p_group << line;
-
-      // Add an indent on the left
-      auto *pGH=m_layout.CreateGroup_Horizontal(); *mp_root << pGH; pGH->weight(weight);
-      *pGH << m_layout.CreateSpacer(int2(5*g_dpiScale, 0));
-      auto *p_section=m_layout.CreateGroup_Vertical();
-      *pGH << p_section;
-
-      return *p_section;
+      return m_layout.CreateSection(*mp_root, label, weight);
    }
 
    AL::Group &GetRoot() { return *mp_root; }
@@ -106,7 +86,6 @@ struct SettingsDialog : Wnd_ChildDialog
 
 private:
    AL::Group *mp_root{};
-   bool m_first{true};
 };
 
 struct Dlg_General : SettingsDialog
@@ -2198,13 +2177,12 @@ struct Dlg_Settings : Wnd_Dialog, Singleton<Dlg_Settings>
 {
    Dlg_Settings(Window wndParent);
 
+   void SetActiveCategory(ConstString category);
+
 private:
 
    LRESULT WndProc(const Message &msg) override;
    friend TWindowImpl;
-
-   void Save();
-   void UpdateEnabled();
 
    // Window Messages
    LRESULT On(const Msg::Create &msg);
@@ -2225,6 +2203,16 @@ Dlg_Settings::Dlg_Settings(Window wndParent)
 LRESULT Dlg_Settings::WndProc(const Message &msg)
 {
    return Dispatch<Wnd_Dialog, Msg::Create, Msg::Command>(msg);
+}
+
+void Dlg_Settings::SetActiveCategory(ConstString category)
+{
+   int index=mp_list_categories->FindString(category);
+   if(index==-1)
+      return;
+
+   mp_list_categories->SetCurSel(index);
+   mp_stack->SetVisible(index);
 }
 
 void Dlg_Settings::AddCategory(SettingsDialog *p, ConstString label)
@@ -2309,10 +2297,13 @@ LRESULT Dlg_Settings::On(const Msg::Command &msg)
    return msg.Success();
 }
 
-void CreateDialog_Settings(Window wndParent)
+void CreateDialog_Settings(Window wndParent, ConstString section)
 {
    if(Dlg_Settings::HasInstance())
       Dlg_Settings::GetInstance().SetFocus();
    else
       new Dlg_Settings(wndParent);
+
+   if(section)
+      Dlg_Settings::GetInstance().SetActiveCategory(section);
 }

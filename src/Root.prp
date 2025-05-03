@@ -948,7 +948,10 @@ Prop Keys
       Connection_Disconnect = "0xDD,false,true,false"
       Connection_Reconnect = "'R',false,true,false"
 
-      Logging_Toggle = "'L',false,true,false"
+      Logging = "'L',false,true,false"
+      Triggers = "'T',true, true, false"
+      Aliases = "'A',true, true, false"
+      Macros = "'M',true, true, false"
 
       SendTelnet_IP
    }

@@ -37,6 +37,11 @@ void EscapeHTML(StringBuilder &string, ConstString append)
    }
 }
 
+FindStringReplacement::FindStringReplacement(ConstString replace)
+{
+   ConstString::operator=(replace);
+}
+
 FindStringReplacement::FindStringReplacement(const FindStringSearch &search, ConstString replace, bool escape_html)
 {
    unsigned slash_index=replace.FindFirstOf('\\', replace.Count());
