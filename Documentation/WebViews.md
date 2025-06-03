@@ -7,6 +7,8 @@ WebViews are web browser windows that are integrated into the client. They can d
 The `/webview` command line command is the simplest:
 https://github.com/BeipDev/BeipMU/blob/master/Documentation/CommandLine.md#webview
 
+`/webview url="https://beipdev.github.io/BeipMU/WebViews/samples.html"`
+
 You can also right click hyperlinks on a page to open them as a webview vs the default browser. Useful if you want to dock it inside your client.
 
 The mu* server can also send a GMCP `webview.open` message. [See here](#gmcp)
