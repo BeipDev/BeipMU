@@ -18,6 +18,7 @@ Add optional /silent prefix for all commands to suppress informational messages 
 Add /opendialog command to open aliases/triggers/macros/worlds/settings dialog boxes as a command
 Add /opendialog settings (section name) command, to open a specific section in the settings
 Add %variable% expansion to spawns, sound, and filter triggers
+Add more keyboard shortcuts for menu items
 
 4.00.328 - 2024-11-18
 

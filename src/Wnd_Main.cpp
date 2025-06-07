@@ -61,9 +61,9 @@ void ShowStatistics(Text::Wnd &wnd)
    wnd.AddHTML(string);
 }
 
-void Append(PopupMenu &menu, UINT_PTR id, ConstString label, Wnd_Main::Keys key_id)
+void Append(PopupMenu &menu, UINT_PTR id, ConstString label, Wnd_Main::Key key_id)
 {
-   if(auto &key=g_ppropGlobal->propKeys().Get(key_id))
+   if(auto &key=g_ppropGlobal->propKeys().Get(int(key_id)))
    {
       FixedStringBuilder<256> string{label, '\t'};
       key.KeyNameWithModifiers(string);
@@ -2005,23 +2005,23 @@ LRESULT Wnd_Main::On(const Msg::Command &msg)
          return msg.Success();
       }
 
-      case ID_OPTIONS_MACROS:
+      case ID_MACROS:
          CreateDialog_KeyboardMacros(*this, mp_connection->GetServer(), mp_connection->GetCharacter());
          return msg.Success();
 
-      case ID_OPTIONS_TRIGGERS:
+      case ID_TRIGGERS:
          CreateDialog_Triggers(*this, mp_connection->GetServer(), mp_connection->GetCharacter(), nullptr);
          return msg.Success();
 
-      case ID_OPTIONS_ALIASES:
+      case ID_ALIASES:
          CreateDialog_Aliases(*this, mp_connection->GetServer(), mp_connection->GetCharacter());
          return msg.Success();
 
-      case ID_OPTIONS_PREFERENCES: CreateDialog_Settings(*this); return msg.Success();
+      case ID_SETTINGS: CreateDialog_Settings(*this); return msg.Success();
 
-      case ID_HELP_DEBUG_NETWORK: mp_connection->OpenNetworkDebugWindow(); return msg.Success();
-      case ID_HELP_DEBUG_TRIGGERS: mp_connection->OpenTriggerDebugWindow(); return msg.Success();
-      case ID_HELP_DEBUG_ALIASES: mp_connection->OpenAliasDebugWindow(); return msg.Success();
+      case ID_NETWORK_DEBUGGER: mp_connection->OpenNetworkDebugWindow(); return msg.Success();
+      case ID_TRIGGER_DEBUGGER: mp_connection->OpenTriggerDebugWindow(); return msg.Success();
+      case ID_ALIAS_DEBUGGER: mp_connection->OpenAliasDebugWindow(); return msg.Success();
 
       case ID_HELP_CONTENTS:
       {
@@ -2297,18 +2297,17 @@ bool Wnd_Main::ProcessEditKey(InputControl &edInput, const Msg::Key &msg)
    }
 
    const Prop::Keys &propKeys=g_ppropGlobal->propKeys();
-   Assert(Key_Max==propKeys.Count());
 
-   Keys eKey;
+   Key eKey;
    {
       unsigned int iKey=0;
-      for(iKey=0;iKey<Key_Max;iKey++)
+      for(iKey=0;iKey<int(Key::Max);iKey++)
          if(propKeys.Get(iKey).Matches(key))
             break;
-      eKey=(Keys)iKey;
+      eKey=(Key)iKey;
    }
 
-   if(eKey==Key_Max)
+   if(eKey==Key::Max)
    {
       // Ignore superscript/subscript
       if(key.iVKey==VK_OEM_PLUS && key.fControl && !key.fAlt)
@@ -2323,17 +2322,17 @@ bool Wnd_Main::ProcessEditKey(InputControl &edInput, const Msg::Key &msg)
    return false;
 }
 
-void Wnd_Main::HandleKey(InputControl &edInput, Keys key)
+void Wnd_Main::HandleKey(InputControl &edInput, Key key)
 {
    switch(key)
    {
-      case Key_Minimize:
+      case Key::Minimize:
       {
          GetMDI().Show(SW_MINIMIZE);
          return;
       }
 
-      case Key_Hide:
+      case Key::Hide:
       {
          MessageBeep(MB_ICONASTERISK);
 #if 0 // Disabled since the notification icon menu is gone now
@@ -2348,14 +2347,14 @@ void Wnd_Main::HandleKey(InputControl &edInput, Keys key)
          return;
       }
 
-      case Key_ClearActivity:
+      case Key::ClearActivity:
          // Clear activity markers by pretending we click away then back in the window
          SetActive(false);
          SetActive(true);
          return;
 
-      case Key_Input_Send: SendInput(edInput); return;
-      case Key_Input_RepeatLastLine:
+      case Key::Input_Send: SendInput(edInput); return;
+      case Key::Input_RepeatLastLine:
       {
          const Text::Lines &lines=mp_wnd_text_history->GetTextList().GetLines();
          if(lines.Count())
@@ -2363,11 +2362,11 @@ void Wnd_Main::HandleKey(InputControl &edInput, Keys key)
          return;
       }
 
-      case Key_Input_LineUp: Msg::_Edit_LineMove(Direction::Up).Post(edInput); return;
-      case Key_Input_LineDown: Msg::_Edit_LineMove(Direction::Down).Post(edInput); return;
-      case Key_Input_Clear: edInput.SetText(""); return;
-      case Key_Input_NextInput: ActivateNextInputWindow(); return;
-      case Key_Input_PushToHistory:
+      case Key::Input_LineUp: Msg::_Edit_LineMove(Direction::Up).Post(edInput); return;
+      case Key::Input_LineDown: Msg::_Edit_LineMove(Direction::Down).Post(edInput); return;
+      case Key::Input_Clear: edInput.SetText(""); return;
+      case Key::Input_NextInput: ActivateNextInputWindow(); return;
+      case Key::Input_PushToHistory:
          History_CheckIfInputModified(*mp_input_active);
          if(m_history_pos!=~0U)
          {
@@ -2376,8 +2375,8 @@ void Wnd_Main::HandleKey(InputControl &edInput, Keys key)
          }
          return;
 
-      case Key_Input_Autocomplete:
-      case Key_Input_AutocompleteWholeLine:
+      case Key::Input_Autocomplete:
+      case Key::Input_AutocompleteWholeLine:
       {
          // Build up a list of all of the text to scan through, like output, history, and spawns
          Collection<const Text::Lines*> linesCollection;
@@ -2390,53 +2389,53 @@ void Wnd_Main::HandleKey(InputControl &edInput, Keys key)
          for(auto &window : m_spawn_windows)
             linesCollection.Push(&window.mp_text->GetTextList().GetLines());
 
-         mp_input_active->Autocomplete(linesCollection, key==Key_Input_AutocompleteWholeLine);
+         mp_input_active->Autocomplete(linesCollection, key==Key::Input_AutocompleteWholeLine);
          return;
       }
 
-      case Key_Output_PageUp: Msg::VScroll(SB_PAGEUP).Post(*mp_wnd_text); return;
-      case Key_Output_PageDown: Msg::VScroll(SB_PAGEDOWN).Post(*mp_wnd_text); return;
-      case Key_Output_LineUp: Msg::VScroll(SB_LINEUP).Post(*mp_wnd_text); return;
-      case Key_Output_LineDown: Msg::VScroll(SB_LINEDOWN).Post(*mp_wnd_text); return;
-      case Key_Output_Top: Msg::VScroll(SB_TOP).Post(*mp_wnd_text); return;
-      case Key_Output_Bottom: Msg::VScroll(SB_BOTTOM).Post(*mp_wnd_text); return;
+      case Key::Output_PageUp: Msg::VScroll(SB_PAGEUP).Post(*mp_wnd_text); return;
+      case Key::Output_PageDown: Msg::VScroll(SB_PAGEDOWN).Post(*mp_wnd_text); return;
+      case Key::Output_LineUp: Msg::VScroll(SB_LINEUP).Post(*mp_wnd_text); return;
+      case Key::Output_LineDown: Msg::VScroll(SB_LINEDOWN).Post(*mp_wnd_text); return;
+      case Key::Output_Top: Msg::VScroll(SB_TOP).Post(*mp_wnd_text); return;
+      case Key::Output_Bottom: Msg::VScroll(SB_BOTTOM).Post(*mp_wnd_text); return;
 
-      case Key_History_PageUp: Msg::VScroll(SB_PAGEUP).Post(*mp_wnd_text_history); return;
-      case Key_History_PageDown: Msg::VScroll(SB_PAGEDOWN).Post(*mp_wnd_text_history); return;
-      case Key_History_SelectUp: History_SelectUp(edInput); return;
-      case Key_History_SelectDown: History_SelectDown(edInput); return;
-      case Key_History_Toggle: Msg::Command(ID_OPTIONS_INPUT_HISTORY, nullptr, 0).Post(GetMDI()); return;
+      case Key::History_PageUp: Msg::VScroll(SB_PAGEUP).Post(*mp_wnd_text_history); return;
+      case Key::History_PageDown: Msg::VScroll(SB_PAGEDOWN).Post(*mp_wnd_text_history); return;
+      case Key::History_SelectUp: History_SelectUp(edInput); return;
+      case Key::History_SelectDown: History_SelectDown(edInput); return;
+      case Key::History_Toggle: Msg::Command(ID_OPTIONS_INPUT_HISTORY, nullptr, 0).Post(GetMDI()); return;
 
-      case Key_Imaging_Toggle: Msg::Command(ID_OPTIONS_IMAGEWINDOW, nullptr, 0).Post(GetMDI()); return;
+      case Key::Imaging_Toggle: Msg::Command(ID_OPTIONS_IMAGEWINDOW, nullptr, 0).Post(GetMDI()); return;
 
-      case Key_Window_Next: ActivateWindow(Direction::Next); return;
-      case Key_Window_Prev: ActivateWindow(Direction::Previous); return;
-      case Key_Window_Close: Close(); return;
-      case Key_Window_CloseAll: Msg::Command(ID_FILE_QUIT, nullptr, 0).Post(GetMDI()); return;
+      case Key::Window_Next: ActivateWindow(Direction::Next); return;
+      case Key::Window_Prev: ActivateWindow(Direction::Previous); return;
+      case Key::Window_Close: Close(); return;
+      case Key::Window_CloseAll: Msg::Command(ID_FILE_QUIT, nullptr, 0).Post(GetMDI()); return;
 
-      case Key_NewTab: Msg::Command(ID_FILE_NEWTAB, nullptr, 0).Post(GetMDI()); return;
-      case Key_NewWindow: Msg::Command(ID_FILE_NEWWINDOW, nullptr, 0).Post(GetMDI()); return;
+      case Key::NewTab: Msg::Command(ID_FILE_NEWTAB, nullptr, 0).Post(GetMDI()); return;
+      case Key::NewWindow: Msg::Command(ID_FILE_NEWWINDOW, nullptr, 0).Post(GetMDI()); return;
 
-      case Key_Edit_Find: Msg::Command(ID_EDIT_FIND, nullptr, 0).Post(*this); return;
-      case Key_Edit_FindHistory: Msg::Command(ID_EDIT_FINDINPUTHISTORY, nullptr, 0).Post(*this); return;
-      case Key_Edit_SelectAll: edInput.SetSel(0, -1); return;
-      case Key_Edit_Paste: Msg::Command(ID_EDIT_PASTE, nullptr, 0).Post(*this); return;
-      case Key_Edit_Pause: mp_wnd_text->SetUserPaused(!mp_wnd_text->IsUserPaused()); return;
-      case Key_Edit_SmartPaste: Msg::Command(ID_EDIT_SMARTPASTE, nullptr, 0).Post(*this); return;
-      case Key_Edit_ConvertReturns: mp_input_active->ConvertReturns(); return;
-      case Key_Edit_ConvertTabs: mp_input_active->ConvertTabs(); return;
-      case Key_Edit_ConvertSpaces: mp_input_active->ConvertSpaces(); return;
+      case Key::Edit_Find: Msg::Command(ID_EDIT_FIND, nullptr, 0).Post(*this); return;
+      case Key::Edit_FindHistory: Msg::Command(ID_EDIT_FINDINPUTHISTORY, nullptr, 0).Post(*this); return;
+      case Key::Edit_SelectAll: edInput.SetSel(0, -1); return;
+      case Key::Edit_Paste: Msg::Command(ID_EDIT_PASTE, nullptr, 0).Post(*this); return;
+      case Key::Edit_Pause: mp_wnd_text->SetUserPaused(!mp_wnd_text->IsUserPaused()); return;
+      case Key::Edit_SmartPaste: Msg::Command(ID_EDIT_SMARTPASTE, nullptr, 0).Post(*this); return;
+      case Key::Edit_ConvertReturns: mp_input_active->ConvertReturns(); return;
+      case Key::Edit_ConvertTabs: mp_input_active->ConvertTabs(); return;
+      case Key::Edit_ConvertSpaces: mp_input_active->ConvertSpaces(); return;
 
-      case Key_Connect: Msg::Command(ID_CONNECTION_CONNECT, nullptr, 0).Post(*this); return;
-      case Key_Disconnect: Msg::Command(ID_CONNECTION_DISCONNECT, nullptr, 0).Post(*this); return;
-      case Key_Reconnect: Msg::Command(ID_CONNECTION_RECONNECT, nullptr, 0).Post(*this); return;
+      case Key::Connect: Msg::Command(ID_CONNECTION_CONNECT, nullptr, 0).Post(*this); return;
+      case Key::Disconnect: Msg::Command(ID_CONNECTION_DISCONNECT, nullptr, 0).Post(*this); return;
+      case Key::Reconnect: Msg::Command(ID_CONNECTION_RECONNECT, nullptr, 0).Post(*this); return;
 
-      case Key_Logging: Msg::Command(ID_LOGGING, nullptr, 0).Post(*this); return;
-      case Key_Triggers: Msg::Command(ID_OPTIONS_TRIGGERS, nullptr, 0).Post(*this); return;
-      case Key_Aliases: Msg::Command(ID_OPTIONS_ALIASES, nullptr, 0).Post(*this); return;
-      case Key_Macros: Msg::Command(ID_OPTIONS_MACROS, nullptr, 0).Post(*this); return;
+      case Key::Logging: Msg::Command(ID_LOGGING, nullptr, 0).Post(*this); return;
+      case Key::Triggers: Msg::Command(ID_TRIGGERS, nullptr, 0).Post(*this); return;
+      case Key::Aliases: Msg::Command(ID_ALIASES, nullptr, 0).Post(*this); return;
+      case Key::Macros: Msg::Command(ID_MACROS, nullptr, 0).Post(*this); return;
 
-      case Key_SendTelnet_IP: mp_connection->Send("\xFF\xF4", true, true); return;
+      case Key::SendTelnet_IP: mp_connection->Send("\xFF\xF4", true, true); return;
    }
 
    Assert(0);
@@ -2573,8 +2572,8 @@ LRESULT Wnd_Main::On(const Msg::Paint &msg)
 void Wnd_Main::PopupTabMenu(int2 position)
 {
    PopupMenu menu;
-   Append(menu, ID_CONNECTION_DISCONNECT, "Disconnect", Keys::Key_Disconnect);
-   Append(menu, ID_CONNECTION_RECONNECT, "Reconnect", Keys::Key_Reconnect);
+   Append(menu, ID_CONNECTION_DISCONNECT, "Disconnect", Key::Disconnect);
+   Append(menu, ID_CONNECTION_RECONNECT, "Reconnect", Key::Reconnect);
    menu.AppendSeparator();
    menu.Append(MF_STRING, ID_MUTE_ACTIVITY, "Show activity on Taskbar");
    menu.Append(MF_STRING, ID_MUTE_AUDIO, "Mute audio");
@@ -2963,18 +2962,18 @@ void Wnd_MDI::PopupMainMenu(int2 position)
 
    {
       PopupMenu m;
-      Append(m, ID_FILE_NEWTAB, "New &Tab", Wnd_Main::Key_NewTab);
-      Append(m, ID_FILE_NEWWINDOW, "New &Window", Wnd_Main::Key_NewWindow);
-      m.Append(MF_STRING, ID_FILE_NEWINPUT, "New Input Window");
-      m.Append(MF_STRING, ID_FILE_NEWEDIT, "New Edit Window");
+      Append(m, ID_FILE_NEWTAB, "New &Tab", Wnd_Main::Key::NewTab);
+      Append(m, ID_FILE_NEWWINDOW, "New &Window", Wnd_Main::Key::NewWindow);
+      Append(m, ID_FILE_NEWINPUT, "New Input Window", Wnd_Main::Key::NewInput);
+      Append(m, ID_FILE_NEWEDIT, "New Edit Window", Wnd_Main::Key::NewEdit);
       m.AppendSeparator();
       m.Append(MF_STRING, ID_OPTIONS_INPUT_HISTORY, "Toggle Input &History Window");
       m.Append(MF_STRING, ID_OPTIONS_IMAGEWINDOW, "Toggle Image Window");
       m.Append(MF_STRING, ID_OPTIONS_MAPWINDOW, "Toggle Map Window");
       m.Append(MF_STRING, ID_OPTIONS_CHARNOTESWINDOW, "Toggle Character Notes Window");
       m.AppendSeparator();
-	   m.Append(MF_STRING, ID_EDIT_COPYDOCKING, "Copy all window settings");
-	   m.Append(MF_STRING, ID_EDIT_PASTEDOCKING, "Paste all window settings");
+	   Append(m, ID_EDIT_COPYDOCKING, "Copy all window settings", Wnd_Main::Key::CopyDocking);
+	   Append(m, ID_EDIT_PASTEDOCKING, "Paste all window settings", Wnd_Main::Key::PasteDocking);
       m.AppendSeparator();
       m.Append(MF_STRING, ID_OPTIONS_SHOWHIDDENCAPTIONS, "Show Hidden Captions");
 
@@ -2983,29 +2982,19 @@ void Wnd_MDI::PopupMainMenu(int2 position)
    {
       PopupMenu m;
 
-      Append(m, ID_OPTIONS_TRIGGERS, "&Triggers...", Wnd_Main::Key_Triggers);
-      Append(m, ID_OPTIONS_MACROS, "&Macros...", Wnd_Main::Key_Macros);
-      Append(m, ID_OPTIONS_ALIASES, "&Aliases...", Wnd_Main::Key_Aliases);
+      Append(m, ID_TRIGGERS, "&Triggers...", Wnd_Main::Key::Triggers);
+      Append(m, ID_MACROS, "&Macros...", Wnd_Main::Key::Macros);
+      Append(m, ID_ALIASES, "&Aliases...", Wnd_Main::Key::Aliases);
       m.AppendSeparator();
-      m.Append(MF_STRING, ID_HELP_DEBUG_TRIGGERS, "Trigger Debugger");
-      m.Append(MF_STRING, ID_HELP_DEBUG_ALIASES, "Alias Debugger");
-      m.Append(MF_STRING, ID_HELP_DEBUG_NETWORK, "Network Debugger");
-      m.Append(MF_STRING, ID_EDIT_SMARTPASTE, "&Smart Paste...");
+      Append(m, ID_TRIGGER_DEBUGGER, "Trigger Debugger", Wnd_Main::Key::Trigger_Debugger);
+      Append(m, ID_ALIAS_DEBUGGER, "Alias Debugger", Wnd_Main::Key::Alias_Debugger);
+      Append(m, ID_NETWORK_DEBUGGER, "Network Debugger", Wnd_Main::Key::Network_Debugger);
+      Append(m, ID_EDIT_SMARTPASTE, "&Smart Paste...", Wnd_Main::Key::Edit_SmartPaste);
 
       menu.Append(std::move(m), "&Tools");
    }
-#if 0
-   {
-      PopupMenu m;
-      Append(m, ID_LOGGING_START, "&Start...", Wnd_Main::Key_Logging_Start);
-      Append(m, ID_LOGGING_STOP, "S&top", Wnd_Main::Key_Logging_Stop);
-      m.Append(MF_STRING, ID_LOGGING_FROMBEGINNING, "Starting From Beginning...");
-      m.Append(MF_STRING, ID_LOGGING_FROMWINDOW, "Starting From Top of Window...");
-      menu.Append(std::move(m), "&Logging");
-   }
-#endif
-   Append(menu, ID_LOGGING, "&Logging...", Wnd_Main::Key_Logging);
-   menu.Append(MF_STRING, ID_OPTIONS_PREFERENCES, "&Settings...");
+   Append(menu, ID_LOGGING, "&Logging...", Wnd_Main::Key::Logging);
+   Append(menu, ID_SETTINGS, "&Settings...", Wnd_Main::Key::Settings);
 
    {
       PopupMenu m;
@@ -3017,7 +3006,7 @@ void Wnd_MDI::PopupMainMenu(int2 position)
    }
 
    menu.AppendSeparator();
-   Append(menu, ID_FILE_QUIT, "Close all Windows and E&xit", Wnd_Main::Key_Window_CloseAll);
+   Append(menu, ID_FILE_QUIT, "Close all Windows and E&xit", Wnd_Main::Key::Window_CloseAll);
 
    if(mp_active_wnd_main)
       mp_active_wnd_main->InitMenu(menu);
@@ -3384,6 +3373,8 @@ void CreateWindow_Root(ConstString command_line, int nCmdShow)
 #if SCRIPTING
    Code_Test();
 #endif
+
+   Assert(Wnd_Main::Key::Max==Wnd_Main::Key(g_ppropGlobal->propKeys().Count()));
 
    if(!GlobalEvents::HasInstance())
       new GlobalEvents();

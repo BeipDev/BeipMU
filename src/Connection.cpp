@@ -200,7 +200,7 @@ void Connection::OnPrompt(ConstString string)
       RemovePrompt();
 
       m_timer_prompt.Reset();
-      auto p_line=m_text_to_line.Parse(string, m_ppropServer->fHTMLTags(), m_ppropServer->eEncoding());
+      auto p_line=m_text_to_line.Parse(string, m_pueblo, m_ppropServer->eEncoding());
       mp_prompt=*p_line;
       GetOutput().Add(std::move(p_line));
    }
@@ -1168,7 +1168,7 @@ void Connection::Display(UniquePtr<Text::Line> &&p_line)
       for(unsigned i=0;i<m_multiline_triggers.Count();i++)
       {
          auto &multiline=*m_multiline_triggers[i];
-         RunTriggers(*p_line, *multiline.mp_triggers, state);
+         RunTriggers(*p_line, multiline.mp_trigger->propTriggers(), state);
          if(multiline.m_line_limit!=0 && ++multiline.m_line_count>=multiline.m_line_limit)
          {
             m_multiline_triggers.Delete(i--);
@@ -1462,6 +1462,16 @@ void Connection::OnMultilineTriggerTimeout(MultilineTrigger &v)
    Assert(false); // Why didn't we find the trigger?
 }
 
+void PrintTriggerInfo(StringBuilder &string, const Prop::Trigger &trigger)
+{
+   string("<b>", Text::NoHTML{trigger.pclDescription()}, "</b> Matcharoo: <b>", Text::NoHTML{trigger.propFindString().pclMatchText()});
+}
+
+void PrintAliasInfo(StringBuilder &string, const Prop::Alias &alias)
+{
+   string("<b>", Text::NoHTML{alias.pclDescription()}, "</b> Matcharoo: <b>", Text::NoHTML{alias.propFindString().pclMatchText()});
+}
+
 void Connection::RunTriggers(Text::Line &line, Array<CopyCntPtrTo<Prop::Trigger>> triggers, TriggerState &state)
 {
    if(state.m_stop)
@@ -1474,7 +1484,15 @@ void Connection::RunTriggers(Text::Line &line, Array<CopyCntPtrTo<Prop::Trigger>
       if(!ppropTrigger->fDisabled())
       {
          if(ppropTrigger->fCooldown() && ppropTrigger->m_lastHit.SecondsSinceStart()<ppropTrigger->CooldownTime())
+         {
+            if(mp_trigger_debug && FindStringSearch(ppropTrigger->propFindString(), line).Next())
+            {
+               HybridStringBuilder string("Bypassing due to cooldown: ");
+               PrintTriggerInfo(string, *ppropTrigger);
+               TriggerDebugText("#000040", "blue", "5", string);
+            }
             continue;
+         }
 
          if(ppropTrigger->fAwayPresent() && ( // Is this an away/present trigger?
             // Skip if trigger is for away and we're not away or if the trigger is for away, only once, and we've already notified
@@ -1489,7 +1507,11 @@ void Connection::RunTriggers(Text::Line &line, Array<CopyCntPtrTo<Prop::Trigger>
             hit=true;
 
             if(mp_trigger_debug)
-               TriggerDebugText("#400040", "magenta", "5", HybridStringBuilder("<b>", Text::NoHTML{ppropTrigger->pclDescription()}, "</b> Matcharoo: <b>", Text::NoHTML{ppropTrigger->propFindString().pclMatchText()}));
+            {
+               HybridStringBuilder string;
+               PrintTriggerInfo(string, *ppropTrigger);
+               TriggerDebugText("#400040", "magenta", "5", string);
+            }
 
             if(ppropTrigger->fCooldown())
             {
@@ -1864,23 +1886,23 @@ void Connection::RunTriggers(Text::Line &line, Array<CopyCntPtrTo<Prop::Trigger>
             }
             else
             {
-               auto FindMultiline=[](Collection<UniquePtr<MultilineTrigger>> &list, Prop::Triggers &triggers)
+               auto FindMultiline=[](Collection<UniquePtr<MultilineTrigger>> &list, Prop::Trigger &trigger)
                   {
                      for(unsigned i=0; i<list.Count(); i++)
-                        if(list[i]->mp_triggers==&triggers)
+                        if(list[i]->mp_trigger==&trigger)
                            return i;
                      return ~0U;
                   };
 
                // Look for existing trigger
-               if(auto existing=FindMultiline(m_multiline_triggers, ppropTrigger->propTriggers()); existing!=~0U)
+               if(auto existing=FindMultiline(m_multiline_triggers, *ppropTrigger); existing!=~0U)
                   m_new_multiline_triggers.Push(m_multiline_triggers.Delete(existing));
-               else if(auto existing=FindMultiline(m_new_multiline_triggers, ppropTrigger->propTriggers()); existing!=~0U)
+               else if(auto existing=FindMultiline(m_new_multiline_triggers, *ppropTrigger); existing!=~0U)
                   m_new_multiline_triggers.Push(m_new_multiline_triggers.Delete(existing));
                else
                {
                   auto multi=MakeUnique<MultilineTrigger>();
-                  multi->mp_triggers=&ppropTrigger->propTriggers();
+                  multi->mp_trigger=ppropTrigger;
                   m_new_multiline_triggers.Push(std::move(multi));
                }
 
@@ -1928,7 +1950,9 @@ void Connection::ProcessAlias(StringBuilder &string, Prop::Alias &propAlias, Con
 
          if(mp_alias_debug)
          {
-            AliasDebugText("#400040", "magenta", "5", HybridStringBuilder("<b>", Text::NoHTML{propAlias.pclDescription()}, "</b> Matcharoo: <b>", Text::NoHTML{propAlias.propFindString().pclMatchText()}));
+            HybridStringBuilder debug_string;
+            PrintAliasInfo(debug_string, propAlias);
+            AliasDebugText("#400040", "magenta", "5", debug_string);
             mp_alias_debug->Add(Text::Line::CreateFromText(string));
          }
       }

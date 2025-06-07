@@ -105,7 +105,7 @@ void Dlg_SmartPaste::Paste(ConstString text, ConstString prefix, ConstString suf
 // Actually Paste the Text
 {
    float time{};
-   unsigned linesPasted=0;
+   unsigned lines_pasted=0;
    while(text)
    {
       ConstString line;
@@ -124,10 +124,10 @@ void Dlg_SmartPaste::Paste(ConstString text, ConstString prefix, ConstString suf
          m_connection.GetMainWindow().DelaySend(string, time+=delay);
       else
          m_connection.Send(string, false);
-      linesPasted++;
+      lines_pasted++;
    }
 
-   m_connection.Text(FixedStringBuilder<256>("<font color='cyan'>", linesPasted, STR_LinesPasted));
+   m_connection.Text(FixedStringBuilder<256>("<font color='cyan'>", lines_pasted, STR_LinesPasted));
 }
 
 LRESULT Dlg_SmartPaste::On(const Msg::Create &msg)

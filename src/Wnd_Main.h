@@ -40,13 +40,13 @@ enum CommandIDs : int
    ID_HELP_ABOUT,
    ID_HELP_CONTENTS,
    ID_HELP_CHANGES,
-   ID_HELP_DEBUG_NETWORK,
-   ID_HELP_DEBUG_TRIGGERS,
-   ID_HELP_DEBUG_ALIASES,
-   ID_OPTIONS_PREFERENCES,
-   ID_OPTIONS_MACROS,
-   ID_OPTIONS_ALIASES,
-   ID_OPTIONS_TRIGGERS,
+   ID_NETWORK_DEBUGGER,
+   ID_TRIGGER_DEBUGGER,
+   ID_ALIAS_DEBUGGER,
+   ID_SETTINGS,
+   ID_MACROS,
+   ID_ALIASES,
+   ID_TRIGGERS,
    ID_OPTIONS_INPUT_HISTORY,
    ID_OPTIONS_CHARNOTESWINDOW,
    ID_OPTIONS_IMAGEWINDOW,
@@ -297,65 +297,74 @@ struct Wnd_Main
    bool EditChar(InputControl &edit, char c);
    bool EditKey(InputControl &edit, const Msg::Key &msg);
 
-   enum Keys
+   enum struct Key
    {
-      Key_Minimize,
-      Key_Hide,
-      Key_ClearActivity,
+      Minimize,
+      Hide,
+      ClearActivity,
 
-      Key_Input_Send,
-      Key_Input_RepeatLastLine,
-      Key_Input_LineUp,
-      Key_Input_LineDown,
-      Key_Input_Clear,
-      Key_Input_NextInput,
-      Key_Input_PushToHistory,
-      Key_Input_Autocomplete,
-      Key_Input_AutocompleteWholeLine,
+      Input_Send,
+      Input_RepeatLastLine,
+      Input_LineUp,
+      Input_LineDown,
+      Input_Clear,
+      Input_NextInput,
+      Input_PushToHistory,
+      Input_Autocomplete,
+      Input_AutocompleteWholeLine,
 
-      Key_Output_PageUp,
-      Key_Output_PageDown,
-      Key_Output_LineUp,
-      Key_Output_LineDown,
-      Key_Output_Top,
-      Key_Output_Bottom,
+      Output_PageUp,
+      Output_PageDown,
+      Output_LineUp,
+      Output_LineDown,
+      Output_Top,
+      Output_Bottom,
 
-      Key_History_PageUp,
-      Key_History_PageDown,
-      Key_History_SelectUp,
-      Key_History_SelectDown,
-      Key_History_Toggle,
+      History_PageUp,
+      History_PageDown,
+      History_SelectUp,
+      History_SelectDown,
+      History_Toggle,
 
-      Key_Imaging_Toggle,
+      Imaging_Toggle,
 
-      Key_Window_Next,
-      Key_Window_Prev,
-      Key_Window_Close,
-      Key_Window_CloseAll,
+      Window_Next,
+      Window_Prev,
+      Window_Close,
+      Window_CloseAll,
 
-      Key_NewTab,
-      Key_NewWindow,
+      NewTab,
+      NewWindow,
+      NewInput,
+      NewEdit,
 
-      Key_Edit_Find,
-      Key_Edit_FindHistory,
-      Key_Edit_SelectAll,
-      Key_Edit_Paste,
-      Key_Edit_Pause,
-      Key_Edit_SmartPaste,
-      Key_Edit_ConvertReturns,
-      Key_Edit_ConvertTabs,
-      Key_Edit_ConvertSpaces,
+      Edit_Find,
+      Edit_FindHistory,
+      Edit_SelectAll,
+      Edit_Paste,
+      Edit_Pause,
+      Edit_SmartPaste,
+      Edit_ConvertReturns,
+      Edit_ConvertTabs,
+      Edit_ConvertSpaces,
+      CopyDocking,
+      PasteDocking,
 
-      Key_Connect,
-      Key_Disconnect,
-      Key_Reconnect,
+      Connect,
+      Disconnect,
+      Reconnect,
 
-      Key_Logging,
-      Key_Triggers,
-      Key_Aliases,
-      Key_Macros,
-      Key_SendTelnet_IP,
-      Key_Max
+      Settings,
+      Logging,
+      Triggers,
+      Aliases,
+      Macros,
+      Trigger_Debugger,
+      Alias_Debugger,
+      Network_Debugger,
+
+      SendTelnet_IP,
+      Max
    };
 
    //
@@ -423,7 +432,7 @@ private:
    void History_SelectLine(InputControl &edInput); // Put the current m_history_pos into the input window and select it in the historyw window
    void Input_Autocomplete();
    void ActivateWindow(Direction::PN dir);
-   void HandleKey(InputControl &edInput, Keys key);
+   void HandleKey(InputControl &edInput, Key key);
    void FlashTab();
 
    LRESULT WndProc(const Message &msg) override;
