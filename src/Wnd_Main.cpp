@@ -30,7 +30,7 @@ namespace Yarn { struct Wnd_Windows; }
 Prop::Docking g_propDockingClipboard;
 static CntPtrTo<Prop::MainWindowSettings> g_ppropMainWindowSettingsClipboard=MakeCounting<Prop::MainWindowSettings>();
 
-void SetBadgeNumber(int num);
+void SetBadgeInfo(int num, ConstString glyph_name);
 void CreateDialog_TextWindow(Window wndParent, Prop::TextWindow &propTextWindow);
 void CreateDialog_Connect(Window wnd, Wnd_MDI &wndMDI);
 void CreateDialog_SmartPaste(Window wndParent, Connection &connection, Prop::Connections &propConnections);
@@ -2076,6 +2076,7 @@ void Wnd_Main::AddImportantActivity()
       return;
 
    m_important_activity_count++;
+   GetMDI().RefreshBadgeCount();
    GetMDI().RefreshTaskbar(*this);
 }
 
@@ -2119,8 +2120,9 @@ void Wnd_Main::SetActive(bool active)
    {
       mp_connection->Away(true);
 
-      GetMDI().RefreshTaskbar(*this); // Either way, redraw the window's unread count
       m_important_activity_count=0;
+      mp_wnd_MDI->RefreshBadgeCount();
+      GetMDI().RefreshTaskbar(*this); // Either way, redraw the window's unread count
 
       if(m_events.Get<Event_Activate>())
       {
@@ -2754,7 +2756,7 @@ Wnd_MDI::~Wnd_MDI()
       ConsoleDelete();
 
       if(IsStoreApp())
-         SetBadgeNumber(0);
+         SetBadgeInfo(0, {});
 
       PostQuitMessage(0);
    }
@@ -2834,27 +2836,32 @@ void Wnd_MDI::RefreshTaskbar(Wnd_Main &window)
 }
 
 unsigned Wnd_MDI::s_badge_number{};
+bool Wnd_MDI::s_badge_has_important{};
 
 void Wnd_MDI::RefreshBadgeCount()
 {
    if(!IsStoreApp())
       return;
 
+   bool has_important=false;
    unsigned count=0;
    if(g_ppropGlobal->fTaskbarBadge()) // If no badge, leave count at 0 (so turning off badges hides the badge)
    {
       for(auto &connection : Connection::s_root_node)
       {
          auto &wnd=connection.GetMainWindow();
-         if(wnd.ShowActivityOnTaskbar())
+         if(wnd.ShowActivityOnTaskbar()) {
             count+=wnd.HasActivity();
+            has_important|=wnd.GetImportantActivityCount()!=0;
+         }
       }
    }
 
-   if(count!=s_badge_number)
+   if(count!=s_badge_number || has_important!=s_badge_has_important)
    {
       s_badge_number=count;
-      SetBadgeNumber(count);
+      s_badge_has_important=has_important;
+      SetBadgeInfo(count, s_badge_has_important ? "alert" : ConstString());
    }
 }
 
@@ -2972,8 +2979,8 @@ void Wnd_MDI::PopupMainMenu(int2 position)
       m.Append(MF_STRING, ID_OPTIONS_MAPWINDOW, "Toggle Map Window");
       m.Append(MF_STRING, ID_OPTIONS_CHARNOTESWINDOW, "Toggle Character Notes Window");
       m.AppendSeparator();
-	   Append(m, ID_EDIT_COPYDOCKING, "Copy all window settings", Wnd_Main::Key::CopyDocking);
-	   Append(m, ID_EDIT_PASTEDOCKING, "Paste all window settings", Wnd_Main::Key::PasteDocking);
+	   Append(m, ID_EDIT_COPYDOCKING, "Copy all window settings", Wnd_Main::Key::Window_CopyDocking);
+	   Append(m, ID_EDIT_PASTEDOCKING, "Paste all window settings", Wnd_Main::Key::Window_PasteDocking);
       m.AppendSeparator();
       m.Append(MF_STRING, ID_OPTIONS_SHOWHIDDENCAPTIONS, "Show Hidden Captions");
 
@@ -3367,6 +3374,9 @@ Test() int
    }
 #endif
 }
+
+using namespace std;
+// Write any include statements here
 
 void CreateWindow_Root(ConstString command_line, int nCmdShow)
 {

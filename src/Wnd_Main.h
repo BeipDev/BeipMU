@@ -332,6 +332,8 @@ struct Wnd_Main
       Window_Prev,
       Window_Close,
       Window_CloseAll,
+      Window_CopyDocking,
+      Window_PasteDocking,
 
       NewTab,
       NewWindow,
@@ -347,8 +349,6 @@ struct Wnd_Main
       Edit_ConvertReturns,
       Edit_ConvertTabs,
       Edit_ConvertSpaces,
-      CopyDocking,
-      PasteDocking,
 
       Connect,
       Disconnect,
@@ -610,6 +610,7 @@ private:
    unsigned m_window_count{};
 
    static unsigned s_badge_number;
+   static bool s_badge_has_important;
 
    OwnerPtr<Wnd_HistoryGraph> m_pHistoryGraph;
    Wnd_Taskbar *mp_wnd_taskbar{};
