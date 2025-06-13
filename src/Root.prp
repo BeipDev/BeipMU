@@ -820,7 +820,6 @@ Prop Server(RefCounted)
 
    UInt32 LastIP(NoWrite) = 0
 
-   Flag   HTMLTags(NoWrite) = false
    Flag   Pueblo = false
    Flag   Prompts = false // MUD like prompt handling
    Flag   MCP = false // Enable MCP
@@ -930,9 +929,13 @@ Prop Keys
       Window_Prev         = "VK_TAB,true,true,false"
       Window_Close        = "VK_F4,false,true,false"
       Window_CloseAll
+      Window_CopyDocking
+      Window_PasteDocking
 
       File_NewTab      = "'T',false,true,false"
       File_NewWindow   = "'N',false,true,false"
+      File_NewInput
+      File_NewEdit
 
       Edit_Find        = "'F',false,true,false"
       Edit_FindHistory = "'H',false,true,false"
@@ -948,10 +951,14 @@ Prop Keys
       Connection_Disconnect = "0xDD,false,true,false"
       Connection_Reconnect = "'R',false,true,false"
 
+      Settings
       Logging = "'L',false,true,false"
       Triggers = "'T',true, true, false"
       Aliases = "'A',true, true, false"
       Macros = "'M',true, true, false"
+      Trigger_Debugger,
+      Alias_Debugger,
+      Network_Debugger,
 
       SendTelnet_IP
    }

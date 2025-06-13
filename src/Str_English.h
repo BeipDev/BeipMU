@@ -422,8 +422,12 @@
     "Activate previous window", \
     "Close the current window", \
     "Close all windows and exit", \
+    "Window Settings - Copy all", \
+    "Window Settings - Paste all", \
     "Open a new tab", \
     "Open a new window", \
+    "Open a new input window", \
+    "Open a new edit window", \
     "Output Window - Find", \
     "Input History Window - Find", \
     "Output Window - Select all", \
@@ -436,8 +440,12 @@
     "Connection - Connect", \
     "Connection - Disconnect", \
     "Connection - Reconnect", \
+    "Settings", \
     "Logging", \
     "Triggers", \
     "Aliases", \
     "Macros", \
+    "Trigger Debugger", \
+    "Alias Debugger", \
+    "Network Debugger", \
     "Send Telnet Interrupt Process (IAC IP)"

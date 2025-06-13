@@ -181,6 +181,7 @@ try
          "/close - Close the current tab",
          "/connect ($)/$ - Connect to a server",
          "/connectioninfo - Shows connection information (like socket security information)",
+         "/debugaliases - Opens up an alias debug window",
          "/debugnetwork - Opens up a network debug window",
          "/debugtriggers - Opens up a trigger debug window",
          "/delay - Runs given commands after given given number of seconds",
@@ -678,11 +679,11 @@ try
       if(wl.Count()>=2)
       {
          if(IEquals(wl[1], "aliases"))
-            Msg::Command(ID_OPTIONS_ALIASES, nullptr, 0).Post(GetMDI());
+            Msg::Command(ID_ALIASES, nullptr, 0).Post(GetMDI());
          else if(IEquals(wl[1], "triggers"))
-            Msg::Command(ID_OPTIONS_TRIGGERS, nullptr, 0).Post(GetMDI());
+            Msg::Command(ID_TRIGGERS, nullptr, 0).Post(GetMDI());
          else if(IEquals(wl[1], "macros"))
-            Msg::Command(ID_OPTIONS_MACROS, nullptr, 0).Post(GetMDI());
+            Msg::Command(ID_MACROS, nullptr, 0).Post(GetMDI());
          else if(IEquals(wl[1], "worlds"))
             Msg::Command(ID_CONNECTION_CONNECT, nullptr, 0).Post(GetMDI());
          else if(IEquals(wl[1], "settings"))
@@ -1448,7 +1449,13 @@ try
       return;
    }
 
-   if(IEquals(command, "debugnetwork") || IEquals(command, "rawnetwork"))
+   if(IEquals(command, "debugaliases"))
+   {
+      mp_connection->OpenAliasDebugWindow();
+      return;
+   }
+
+   if(IEquals(command, "debugnetwork"))
    {
       mp_connection->OpenNetworkDebugWindow();
       return;

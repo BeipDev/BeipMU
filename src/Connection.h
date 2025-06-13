@@ -256,7 +256,7 @@ private:
 
    struct MultilineTrigger
    {
-      CntPtrTo<Prop::Triggers> mp_triggers;
+      CntPtrTo<Prop::Trigger> mp_trigger;
       unsigned m_line_count{}, m_line_limit{};
       Time::Timer m_timeout;
    };
