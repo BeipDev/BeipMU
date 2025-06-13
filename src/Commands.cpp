@@ -688,11 +688,13 @@ try
             Msg::Command(ID_CONNECTION_CONNECT, nullptr, 0).Post(GetMDI());
          else if(IEquals(wl[1], "settings"))
             CreateDialog_Settings(*this, wl.Count()==3 ? wl[2] : ConstString());
+         else if(IEquals(wl[1], "about"))
+            CreateWindow_About(*this);
          else
             mp_wnd_text->AddHTML("<icon error> <font color='red'>Unknown dialog");
       }
       else
-         mp_wnd_text->AddHTML("<icon error> <font color='red'>Usage: '/opendialog (aliases/triggers/macros/worlds)'");
+         mp_wnd_text->AddHTML("<icon error> <font color='red'>Usage: '/opendialog (aliases/triggers/macros/worlds/about)'");
       return;
    }
 

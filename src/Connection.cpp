@@ -1982,8 +1982,11 @@ void Connection::ProcessAliases(StringBuilder &string, Array<CopyCntPtrTo<Prop::
 bool Connection::ProcessAliases(StringBuilder &string)
 {
    // Don't process Aliases?
-   if(!m_propConnections.propAliases().fActive())
+   if(!m_propConnections.propAliases().fActive()) {
+      if(mp_alias_debug)
+         AliasDebugText("#000040", "blue", "5", "Aliases are not enabled ('Process Aliases' is unchecked)");
       return false;
+   }
 
    AliasState state{GetVariables()};
 
