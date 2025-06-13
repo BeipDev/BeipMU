@@ -3375,9 +3375,6 @@ Test() int
 #endif
 }
 
-using namespace std;
-// Write any include statements here
-
 void CreateWindow_Root(ConstString command_line, int nCmdShow)
 {
 #if SCRIPTING
