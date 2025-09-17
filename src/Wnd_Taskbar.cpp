@@ -502,7 +502,6 @@ void Wnd_Taskbar::Paint()
          float width=mp_font_emoji->Measure(c_toolbar_items[i].m_icon, m_font_size);
          float x=(CalculateToolbarX(i)+CalculateToolbarX(i+1))/2;
          mp_font_emoji->Draw(c_toolbar_items[i].m_icon, m_font_size, float2(x-width/2.0f, top), *mp_render_target, *mp_brush_dynamic);
-         top; width; x;
       }
    }
 

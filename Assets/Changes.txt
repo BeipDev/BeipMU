@@ -1,4 +1,13 @@
-4.00.329
+4.00.330
+
+Fixed regression where a maximized window would not restore to the correct size
+Added input window option 'Enable WM_GETOBJECT' to allow utilities like grammarly to work (disabled by default to prevent misbehaving 3rd party apps)
+Fix map editor so that selecting 0 sized images/labels will work, previously only select-all could select them
+Fix map crash when moving exits and using undo (selection got out of sync with reality)
+Fix map editor removing exits when rooms overlap and exits is contained within overlap region
+Map smart location now watches exit names the user types to reduce ambiguity
+
+4.00.329 - 2025-6-13
 
 Add ability to log to more than one file at once
 Fix issue with multiline triggers with a 0 timeout duration not being infinite time
@@ -19,6 +28,7 @@ Add /opendialog command to open aliases/triggers/macros/worlds/settings dialog b
 Add /opendialog settings (section name) command, to open a specific section in the settings
 Add %variable% expansion to spawns, sound, and filter triggers
 Add more keyboard shortcuts for menu items
+Show '*' taskbar badge symbol when there's important activity (Badges work for Windows 11 store app only)
 
 4.00.328 - 2024-11-18
 

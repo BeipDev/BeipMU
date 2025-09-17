@@ -167,7 +167,7 @@ try
          return;
       }
 
-      static constexpr ConstString c_helpPage[]={
+      static constexpr ConstString c_help_page[]={
          "",
          "<p align='center'><font color='silver'><b><u>  " gd_pcTitle " - Command Line Help  </u></b>",
          "/@ $ - Run an immediate script, $ can span multiple lines of text",
@@ -233,7 +233,7 @@ try
          "<p align='center'><A href='" HELP_URL "CommandLine.md'>Click here for the online version with more details</a>",
       };
 
-      for(auto &line : c_helpPage)
+      for(auto &line : c_help_page)
          mp_wnd_text->AddHTML(line);
 
       return;

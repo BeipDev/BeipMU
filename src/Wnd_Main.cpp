@@ -2461,7 +2461,7 @@ void Wnd_Main::SendLine(ConstString _string, ConstString prefix)
    if(mp_connection->ProcessAliases(string))
    {
       if(g_ppropGlobal->propConnections().propAliases().fEcho())
-         mp_connection->Text(string, Colors::Green);
+         mp_connection->Text(HybridStringBuilder<>("ℹ <font color='green'>Echoing alias result: </font>", string));
 
       bool process_commands=g_ppropGlobal->propConnections().propAliases().fProcessCommands();
       ConstString lines=string;
