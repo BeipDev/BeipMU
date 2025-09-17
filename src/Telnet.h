@@ -23,6 +23,7 @@ struct TelnetParser
 
    void SendNAWS(uint16_2 dims);
    bool m_do_naws{};
+   int m_ttype_sequence{};
 
 private:
    INotify &m_notify;
