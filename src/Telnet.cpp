@@ -105,6 +105,7 @@ void TelnetParser::Reset()
 {
    m_buffer.Empty();
    m_state=State::Normal;
+   m_ttype_sequence=0;
 }
 
 void TelnetParser::Parse(Array<const char> buffer)
@@ -227,6 +228,16 @@ void TelnetParser::Parse(Array<const char> buffer)
             }
 
             case State::Dont:
+            {
+               switch(c)
+               {
+                  case TELOPT_TTYPE:
+                     m_ttype_sequence=0;
+                     break;
+               }
+               break;
+            }
+
             case State::Wont:
                break;
 
@@ -334,7 +345,41 @@ void TelnetParser::Parse(Array<const char> buffer)
             case State::SB_TTYPE:
                if(c==TELQUAL_SEND)
                {
-                  m_notify.OnTelnet(FixedStringBuilder<256>(MakeString<TELNET_IAC, TELNET_SB, TELOPT_TTYPE, TELQUAL_IS>, g_ppropGlobal->pclTelnet_TType(), MakeString<TELNET_IAC, TELNET_SE>));
+                  FixedStringBuilder<256> reply(MakeString<TELNET_IAC, TELNET_SB, TELOPT_TTYPE, TELQUAL_IS>);
+
+                  // TTYPE sequence from here: https://github.com/nickgammon/mushclient/blob/201131914f643b24e65e2c846b8e12327225c598/telnet_phases.cpp#L761
+                  switch(m_ttype_sequence++)
+                  {
+                     case 0:
+                        reply(g_ppropGlobal->pclTelnet_TType());
+                        break;
+                     case 1:
+                        reply("ANSI");
+                        break;
+                     case 2:
+                     case 3:
+                        // 1 "ANSI"               supports all ANSI color codes.Supporting blink and underline is optional.
+                        // 2 "VT100"              supports most VT100 codes.
+                        // 4 "UTF-8"              is using UTF-8 character encoding.
+                        // 8 "256 COLORS"         supports all xterm 256 color codes.
+                        // 16 "MOUSE TRACKING"    supports xterm mouse tracking.
+                        // 32 "OSC COLOR PALETTE" supports the OSC color palette.
+                        // 64 "SCREEN READER"     is using a screen reader.
+                        // 128 "PROXY"            is a proxy allowing different users to connect from the same IP address.
+                        // 256 "TRUECOLOR"        supports truecolor codes using semicolon notation.
+                        // 512 "MNES"             supports the Mud New Environment Standard for information exchange.
+                        // 1024 "MSLP"            supports the Mud Server Link Protocol for clickable link handling.
+                        // 2048 "SSL"             supports SSL for data encryption, preferably TLS 1.3 or higher.
+
+                        // 1 "ANSI" + 4 "UTF-8" + 8 "256 Colors" + 256 "Truecolor" = 269
+                        reply("MTTS 269");
+                        if(m_ttype_sequence==4)
+                           m_ttype_sequence=0;
+                        break;
+                  }
+
+                  reply(MakeString<TELNET_IAC, TELNET_SE>);
+                  m_notify.OnTelnet(reply);
                   m_state=State::SB_WaitForIAC; continue;
                }
                break;
