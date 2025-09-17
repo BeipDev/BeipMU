@@ -1,23 +1,53 @@
-Version=322
+Version=329
 Windows
 {
-  MDIPosition=(228,228,2880,1537)
+  MDIPosition=(653,37,1480,882)
 }
 Connections
 {
   Logging.RestoreBufferSizeCurrent=256
-  KeyboardMacros
+  "KeyboardMacros2"
   {
-    ""=Control+Alt+A,"OOC Quick Message: Something's come up in RL. I'll be back momentarily"
-    ""=NumPad1,"SW"
-    ""=NumPad2,"S"
-    ""=NumPad3,"SE"
-    ""=NumPad4,"W"
-    ""=NumPad6,"E"
-    ""=NumPad7,"NW"
-    ""=NumPad8,"N"
-    ""=NumPad9,"NE"
-    ""=Control+T,"/@window.input.Set(\"@emit \"+window.input.get().replace(/\\n/g, \"\\n@emit \"));"
+    {
+      Macro="OOC Quick Message: Something's come up in RL. I'll be back momentarily"
+      key=Control+Alt+A
+    }
+    {
+      Macro="SW"
+      key=NumPad1
+    }
+    {
+      Macro="S"
+      key=NumPad2
+    }
+    {
+      Macro="SE"
+      key=NumPad3
+    }
+    {
+      Macro="W"
+      key=NumPad4
+    }
+    {
+      Macro="E"
+      key=NumPad6
+    }
+    {
+      Macro="NW"
+      key=NumPad7
+    }
+    {
+      Macro="N"
+      key=NumPad8
+    }
+    {
+      Macro="NE"
+      key=NumPad9
+    }
+    {
+      Macro="/@window.input.Set(\"@emit \"+window.input.get().replace(/\\n/g, \"\\n@emit \"));"
+      key=Control+T
+    }
   }
   Shortcuts
   {
@@ -56,7 +86,10 @@ Connections
       {
         Unnamed
         {
-          Docking.ClientSize={2858,1415}
+          Docking
+          {
+            ClientSize={1458,791}
+          }
           MainWindowSettings.InputSize=25
         }
       }
@@ -72,6 +105,8 @@ Connections
         {
           Connect="/delay 3s \"connect %NAME% %PASSWORD%\""
           Password="guest"
+          LastUsed=2023-4-21-17-53-28-429
+          Created=2023-4-21-17-53-38-815
           Docking
           {
             ClientSize={2858,1415}
@@ -139,7 +174,6 @@ Connections
           {
             InputSize=25
             HistorySize=0
-            History=false
             History
             {
               ForeColor=RGB(0,128,64)
@@ -713,7 +747,7 @@ Connections
         {
           Description="OOC poses"
           Example="(OOC) Frank says \"Whose pose is it?\""
-          CooldownTime=5
+          CooldownTime=5.0
           FindString
           {
             MatchText="^[(\\[<]OOC[)\\]>](.+)"
@@ -845,6 +879,27 @@ Connections
   }
   Aliases
   {
+    Active=true
+    {
+      Description="Repeat 'buy torch' command n times"
+      Example="bt 5"
+      Replace="/script for(i=0;i<\\1;i++) { window.run(\"buy torch\"); }"
+      FindString
+      {
+        MatchText="bt (\\d+)"
+        RegularExpression=true
+      }
+    }
+    {
+      Description="Repeat 'eat food' command n times"
+      Example="eat 5"
+      Replace="/script for(i=0;i<\\1;i++) { window.run(\"eat food\"); }"
+      FindString
+      {
+        MatchText="eat (\\d+)"
+        RegularExpression=true
+      }
+    }
     {
       Description="Nicknames for Friends"
       Folder=true

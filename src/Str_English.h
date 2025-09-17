@@ -430,7 +430,7 @@
     "Open a new edit window", \
     "Output Window - Find", \
     "Input History Window - Find", \
-    "Output Window - Select all", \
+    "Input Window - Select all", \
     "Input Window - Paste", \
     "Output Window - Pause", \
     "Smart Paste", \

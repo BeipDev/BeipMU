@@ -268,6 +268,7 @@ void Dlg_Input::OnCreate()
       AddBool(g, "Send unrecognized commands to server", g_ppropGlobal->fSendUnrecognizedCommands());
       AddBool(g, "Prevent smart quote mode (no “” quotes, only \")", g_ppropGlobal->fPreventSmartQuotes());
       AddBool(g, "Automatically show history window while navigating input history", g_ppropGlobal->fAutoShowHistory());
+      AddBool(g, "Allow WM_GETOBJECT for accessibility", g_ppropGlobal->fEnableGetObject());
    }
 
    {

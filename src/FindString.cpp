@@ -100,7 +100,8 @@ void FindStringReplacement::ExpandVariables(Prop::Variables &variables)
       unsigned second=m_replacement.FindFirstAt('%', first+1);
       if(second==~0U)
       {
-         ConsoleText("Warning: Send trigger action missing second '%'");
+         HybridStringBuilder<> message("Warning: Missing second '%' when processing: ", *this);
+         ConsoleText(message);
          break;
       }
 

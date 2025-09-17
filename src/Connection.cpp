@@ -1316,7 +1316,11 @@ void Connection::Display(UniquePtr<Text::Line> &&p_line)
 
    RemovePrompt();
    if(!state.m_no_activity)
+   {
+      if(mp_trigger_debug && !m_wnd_main.ShowActivityOnTaskbar())
+         TriggerDebugText("#000040", "blue", "5", "OS Taskbar activity muted as tab option 'Show Activity On Taskbar' is unchecked");
       m_events.Send(Event_Activity());
+   }
 
    Text::Wnd *p_wnd=&GetOutput();
 
@@ -1748,7 +1752,11 @@ void Connection::RunTriggers(Text::Line &line, Array<CopyCntPtrTo<Prop::Trigger>
             if(!m_raw_log_replay && ppropTrigger->fPropSound() && ppropTrigger->propSound().fActive())
             {
                if(!m_mute_audio)
-                  PlaySound(ppropTrigger->propSound().pclSound());
+               {
+                  FindStringReplacement replacement(ppropTrigger->propSound().pclSound());
+                  replacement.ExpandVariables(GetVariables());
+                  PlaySound(ExpandEnvironmentStrings(replacement));
+               }
                if(mp_trigger_debug)
                   TriggerDebugText("#000040", "blue", "10", "Playing sound");
             }

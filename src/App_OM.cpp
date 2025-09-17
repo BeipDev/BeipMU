@@ -220,7 +220,7 @@ STDMETHODIMP Triggers::get_Item(VARIANT var, ITrigger** retval)
    {
       BSTRToLStr string(var.bstrVal);
       for(auto &v : *m_propTriggers)
-         if(v->pclDescription()==string)
+         if(v->pclDescription() && v->pclDescription()==string || v->propFindString().pclMatchText()==string)
             return RefReturner(retval)(MakeCounting<Trigger>(*v, m_propTriggers));
    }
 
