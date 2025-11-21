@@ -1825,6 +1825,7 @@ private:
 
    AL::CheckBox *m_pcbActive;
    AL::CheckBox *m_pcbHTML;
+   AL::CheckBox *m_pcbExpandVariables;
    AL::Edit     *m_pedText;
 
    AL::Edit     *m_pedAvatarURL;
@@ -1863,6 +1864,7 @@ void Dlg_Trigger_Filter::Save()
    {
       m_ptFilter->fActive(m_pcbActive->IsChecked());
       m_ptFilter->fHTML(m_pcbHTML->IsChecked());
+      m_ptFilter->fExpandVariables(m_pcbExpandVariables->IsChecked());
       m_ptFilter->pclReplace(m_pedText->GetText());
    }
 
@@ -1881,7 +1883,7 @@ void Dlg_Trigger_Filter::UpdateEnabled()
    bool fEnabled=m_ptFilter && m_fEnabled;
    EnableWindows(fEnabled, *m_pcbActive);
    fEnabled&=m_pcbActive->IsChecked();
-   EnableWindows(fEnabled, *m_pedText, *m_pcbHTML);
+   EnableWindows(fEnabled, *m_pedText, *m_pcbHTML, *m_pcbExpandVariables);
 }
 
 void Dlg_Trigger_Filter::Update()
@@ -1891,6 +1893,7 @@ void Dlg_Trigger_Filter::Update()
       m_pedText->SetText(m_ptFilter->pclReplace());
       m_pcbActive->Check(m_ptFilter->fActive());
       m_pcbHTML->Check(m_ptFilter->fHTML());
+      m_pcbExpandVariables->Check(m_ptFilter->fExpandVariables());
    }
    else
       m_pedText->SetText("");
@@ -1913,9 +1916,10 @@ LRESULT Dlg_Trigger_Filter::On(const Msg::Create &msg)
 
    m_pcbActive=CreateHorizontalCheckbox(m_layout, *pGV, -1, STR_FilterText);
    m_pcbHTML=m_layout.CreateCheckBox(-1, STR_FilterHTML);
+   m_pcbExpandVariables=m_layout.CreateCheckBox(-1, "Expand %variables%");
 
    AL::Static *pText=m_layout.CreateStatic(STR_TextFilteredWith);
-   *pGV << m_pcbHTML << pText;
+   *pGV << m_pcbHTML << m_pcbExpandVariables << pText;
 
    m_pedText=m_layout.CreateEdit(-1, int2(30, 1), ES_MULTILINE | ES_WANTRETURN | WS_VSCROLL | ES_AUTOVSCROLL); *pGV << m_pedText;
    m_pedText->LimitText(Prop::Trigger_Filter::pclReplace_MaxLength());
