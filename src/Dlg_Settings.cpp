@@ -1210,6 +1210,9 @@ LRESULT Dlg_UITheme::On(const Msg::Command &msg)
 
       case IDC_DEFAULT:
       {
+         auto index=m_plbColors->GetCurSel();
+         if(index==-1 || index>=std::size(g_theme_entries))
+            break;
          auto &entry=g_theme_entries[m_plbColors->GetCurSel()];
          if(!entry.IsEditable())
             break;
