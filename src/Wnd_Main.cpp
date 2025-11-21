@@ -26,6 +26,7 @@
 namespace Yarn { struct Wnd_Windows; }
 #endif
 #include "WebView.h"
+#include "AI.h"
 
 Prop::Docking g_propDockingClipboard;
 static CntPtrTo<Prop::MainWindowSettings> g_ppropMainWindowSettingsClipboard=MakeCounting<Prop::MainWindowSettings>();
@@ -222,6 +223,8 @@ void ClientLayoutHelper::Layout(DeferredWindowPos &wp, const Rect &rc)
    mp_object->Layout(wp, rect);
 }
 
+
+
 SpawnWindow::SpawnWindow(Wnd_Main &wndMain)
  : m_wnd_main{wndMain},
   mp_text{&wndMain.GetOutputWindow()}
@@ -383,6 +386,17 @@ TileMaps &Wnd_Main::EnsureTileMaps()
       mp_tile_maps=MakeUnique<TileMaps>(*this);
    return *mp_tile_maps;
 }
+
+AIWindow &Wnd_Main::EnsureAIWindow()
+{
+   if(!mp_ai_window)
+   {
+      mp_ai_window=MakeUnique<AIWindow>(*this);
+      mp_ai_window->GetDocking().Dock(Docking::Side::Bottom);
+   }
+   return *mp_ai_window;
+}
+
 
 IYarn_TileMap &Wnd_Main::EnsureYarn_TileMap()
 {
@@ -1248,6 +1262,13 @@ bool SaveDockedWindowSettings(Prop::DockedWindow &propWindow, Wnd_Docking &windo
          prop.pclID(pWnd->GetID());
          return true;
       }
+      else if(typeID==GetTypeID<AIWindow>())
+      {
+         propWindow.Type(10);
+         auto *pWnd=reinterpret_cast<AIWindow *>(p_this);
+         propWindow.propAIWindow()=*pWnd->m_pprop;
+         return true;
+      }
    }
 
    Assert(false); // A window that we don't understand is docked, this shouldn't happen
@@ -1375,6 +1396,14 @@ Wnd_Docking *Wnd_Main::RestoreDockedWindowSettings(Prop::DockedWindow &propWindo
          auto &wnd=*new Wnd_WebView(*this, props.pclID());
          wnd.SetURL(props.pclURL());
          return &wnd.GetDocking();
+      }
+
+      case 10: // AIWindow
+      {
+         auto &props=propWindow.propAIWindow();
+         Assert(!mp_ai_window);
+         mp_ai_window=MakeUnique<AIWindow>(*this, &props);
+         return &mp_ai_window->GetDocking();
       }
    }
 

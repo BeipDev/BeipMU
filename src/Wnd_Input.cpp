@@ -494,6 +494,11 @@ void InputControl::SetText(ConstString text)
    Controls::RichEdit::SetText(text);
 }
 
+void InputControl::ReplaceSelection(ConstString text)
+{
+   Controls::RichEdit::ReplaceSel(text);
+}
+
 bool InputControl::IsPrimary() const
 {
    return &m_wnd_main.GetInputWindow()==this;

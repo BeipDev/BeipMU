@@ -15,6 +15,7 @@ struct InputControl : IEditHost, Controls::RichEdit, Events::Sends_Deleted
    void ApplyProps(); // Used if props change but pointer is the same
 
    void SetText(ConstString text);
+   void ReplaceSelection(ConstString text);
    bool IsPrimary() const;
 
    void ConvertReturns();
