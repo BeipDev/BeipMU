@@ -20,6 +20,7 @@ struct TileMaps;
 struct IYarn_TileMap;
 struct SpawnTabsWindow;
 struct Wnd_WebView;
+struct AIWindow;
 
 enum CommandIDs : int
 {
@@ -243,6 +244,8 @@ struct Wnd_Main
 
    void ShowCharacterNotesPane();
    void UpdateCharacterIdleTimer();
+
+   AIWindow &EnsureAIWindow();
 
    void TabColor(Color color);
 
@@ -535,6 +538,7 @@ private:
    Collection<Wnd_EditPane*> m_edit_panes;
    OwnerPtr<Wnd_EditPropertyPane> mp_character_notes_pane;
    UniquePtr<TileMaps> mp_tile_maps;
+   OwnerPtr<AIWindow> mp_ai_window;
    bool m_tile_maps_enabled{true};
    OwnerPtr<Wnd_Image> mp_wnd_image;
    OwnerPtr<Maps::Wnd> mp_wnd_map;

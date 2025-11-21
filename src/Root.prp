@@ -174,6 +174,11 @@ Prop InputWindow(RefCounted)
    Func "bool ShouldCopy() const;"
 }
 
+Prop AIWindow(RefCounted)
+{
+   String Server
+}
+
 Prop SpawnWindow
 {
    String Title
@@ -225,7 +230,7 @@ Prop DockedWindow
 {
    Rect Rect // If undocked, this is the rectangle used
    Int Size // Size Pane's size on it's Side axis (ex, for a right pane, it's vertical size)
-   Int Type // 0=Input, 1=Spawn, 2=SpawnTabs, 3=Image, 4=TileMap, 5=Stats, 6=Character Notes, 7=Map, 8=YarnMap, 9=WebView
+   Int Type // 0=Input, 1=Spawn, 2=SpawnTabs, 3=Image, 4=TileMap, 5=Stats, 6=Character Notes, 7=Map, 8=YarnMap, 9=WebView, 10=AIWindow
    Flag VerticalCaption=false
    Flag HideCaption=false
 
@@ -236,6 +241,7 @@ Prop DockedWindow
    TileMapWindow TileMapWindow(DemandCreate)
    MapWindow MapWindow(DemandCreate)
    WebViewWindow WebViewWindow(DemandCreate)
+   AIWindow AIWindow(DemandCreate)
 }
 
 Prop DockedWindows(StackOf DockedWindow)
