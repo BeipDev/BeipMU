@@ -1816,7 +1816,8 @@ void Connection::RunTriggers(Text::Line &line, Array<CopyCntPtrTo<Prop::Trigger>
                int searchLength=search.End()-search.Start();
 
                FindStringReplacement replacement(search, ppropTrigger->propFilter().pclReplace(), ppropTrigger->propFilter().fHTML());
-               replacement.ExpandVariables(GetVariables());
+               if(ppropTrigger->propFilter().fExpandVariables())
+                  replacement.ExpandVariables(GetVariables());
 
                auto p_line=Text::Line::Create(replacement, ppropTrigger->propFilter().fHTML());
                line.InsertLine(search.Start(), *p_line);

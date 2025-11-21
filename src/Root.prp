@@ -552,6 +552,7 @@ Prop Trigger_Filter
 {
    Flag   Active = false
    Flag   HTML = false
+   Flag   ExpandVariables = false
 
    String Replace, MaxLen=65536 // Text to replace trigger text
 }
