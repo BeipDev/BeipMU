@@ -246,4 +246,14 @@ webview.open { "id":"Character editor", "dock":"right", "url":"value", "http-req
 The attributes:
 * id - A way to refer to a webview. If a later `webview.open` comes in, it will replace the original one with the same id
 * dock - (optional) For a new webview, will dock it on creation.
+* url - (optional) The URL to open
+* source - (optional) If URL isn't specified, this can directly provide the HTML source of the webview page
 * http-request-headers - (optional) A list of name/value pairs to be added to the http request.
+
+```
+webview.close { "id":"Character editor" }
+```
+
+The attributes:
+* id - An id of an existing webview to close. If there is no open webview with this id, it does nothing
+  
