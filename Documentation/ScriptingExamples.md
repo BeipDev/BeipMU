@@ -300,7 +300,7 @@ After:
     <1824/1824hp 350m 406mv -25542xp>
 
 
-## Script to detect the presence of data for processing. (Did we receive a prmopt?)
+## Script to detect the presence of data for processing. (Did we receive a prompt?)
 
 Once the ANSI sequences are removed, you can use the matcharoo from Beip's trigger to detect the presence of the MUD's health prompt.  Cleaning up the string and detecting the right text format should be done before processing any of the text, so you don't have problems activating the script on a false positive.
 
