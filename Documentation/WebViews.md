@@ -241,12 +241,16 @@ Or having it auto dock, plus providing http-request-header to auto-login to your
 
 ```
 webview.open { "id":"Character editor", "dock":"right", "url":"value", "http-request-headers":{ "name1":"value1", "name2":"value2" } }
+webview.open ( "id","Character editor", "width":500, "height":400, "caption":false }
 ```
 
 The attributes:
 * id - A way to refer to a webview. If a later `webview.open` comes in, it will replace the original one with the same id
 * dock - (optional) For a new webview, will dock it on creation.
-* url - (optional) The URL to open
+* width - (optional) Value for Horizontal size of the window
+* height - (optional) Value for Vertical size of the window
+* caption - (optional) Bool for if the window has a caption when docked
+* * url - (optional) The URL to open
 * source - (optional) If URL isn't specified, this can directly provide the HTML source of the webview page
 * http-request-headers - (optional) A list of name/value pairs to be added to the http request.
 
