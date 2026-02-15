@@ -347,7 +347,7 @@ void TelnetParser::Parse(Array<const char> buffer)
                {
                   FixedStringBuilder<256> reply(MakeString<TELNET_IAC, TELNET_SB, TELOPT_TTYPE, TELQUAL_IS>);
 
-                  // TTYPE sequence from here: https://github.com/nickgammon/mushclient/blob/201131914f643b24e65e2c846b8e12327225c598/telnet_phases.cpp#L761
+                  // TTYPE sequence from here: https://tintin.mudhalla.net/protocols/mtts/
                   switch(m_ttype_sequence++)
                   {
                      case 0:

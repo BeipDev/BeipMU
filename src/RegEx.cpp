@@ -57,6 +57,7 @@ void Expression::GetError(StringBuilder &string) const
    string.AddLength(count-chars.Count()); // Add back unused space
 }
 
+#if 0
 std::optional<uint2> Expression::Find(ConstString string, unsigned start) const
 {
    int result_count=pcre2_match(m_code, (PCRE2_UCHAR8*)string.begin(), string.Length(), start, 0, m_data, nullptr);
@@ -69,20 +70,19 @@ std::optional<uint2> Expression::Find(ConstString string, unsigned start) const
 
    return uint2{unsigned(ovector[0]), unsigned(ovector[1])};
 }
+#endif
 
-Array<uint2> Expression::Find(ConstString string, unsigned start, Array<uint2> ranges) const
+Array<size_t_2> Expression::Find(ConstString string, unsigned start) const
 {
    int result_count=pcre2_match(m_code, (PCRE2_SPTR8)string.begin(), string.Length(), start, PCRE2_NO_UTF_CHECK, m_data, nullptr);
    if(result_count<=0)
       return {};
 
-   PinBelow(result_count, (int)ranges.Count());
+   auto *ovector=pcre2_get_ovector_pointer(m_data);
+   // static_assert that ovector is of type size_t
+   static_assert(std::is_same_v<decltype(ovector), size_t *>);
 
-   auto *ovector = pcre2_get_ovector_pointer(m_data);
-   for(int i=0;i<result_count;i++)
-      ranges[i]={unsigned(ovector[i*2]), unsigned(ovector[i*2+1])};
-
-   return ranges.First(result_count);
+   return {reinterpret_cast<size_t_2*>(pcre2_get_ovector_pointer(m_data)), static_cast<unsigned>(result_count)};
 }
 
 };

@@ -1,10 +1,11 @@
 ﻿#include "Main.h"
 #include "TextToLine.h"
 #include "CodePages.h"
+#include "ImageBanner.h"
 
 TextToLine::TextToLine(Wnd_Main &wndMain)
  : m_wnd_main(wndMain),
-   m_parserAnsi(g_ppropGlobal->propAnsi())
+   m_ansi_parser(g_ppropGlobal->propAnsi())
 {
 }
 
@@ -18,7 +19,7 @@ UniquePtr<Text::Line> TextToLine::Parse(ConstString string, bool use_pueblo, Pro
    Text::HTMLParser html(stream, m_line_builder);
 
    if(g_ppropGlobal->propAnsi().fResetOnNewLine())
-      m_parserAnsi.Reset();
+      m_ansi_parser.Reset();
    else
       m_line_builder.SetStyleState(m_prev_line_state);
 
@@ -28,7 +29,7 @@ UniquePtr<Text::Line> TextToLine::Parse(ConstString string, bool use_pueblo, Pro
       {
          case CHAR_ESC: // ESC
             if(stream.CharSpy()=='[')
-               m_parserAnsi.Parse(stream, m_line_builder);
+               m_ansi_parser.Parse(stream, m_line_builder);
             break;
 
          case CHAR_BEEP: // Beep
@@ -103,6 +104,60 @@ UniquePtr<Text::Line> TextToLine::Parse(ConstString string, bool use_pueblo, Pro
 
    m_prev_line_state=m_line_builder.GetStyleState();
    return m_line_builder.Create();
+}
+
+UniquePtr<Text::Line> CreateLineInternal(ConstString string)
+{
+   struct TagHandler : Text::ITagHandler
+   {
+      bool OnTag(Text::HTMLParser &html_parser, Text::LineBuilder &line_builder) override
+      {
+         auto &stream=html_parser.GetStream();
+         Streams::Input::PosRestorer restorer(stream);
+
+         bool start=!stream.CharSkip('/');
+
+         ConstString tag;
+         if(!html_parser.ParseName(tag))
+            return false;
+
+         // Parse tags in the form of <run text='cmd'> and turn them into Command_Send blocks
+         if(tag=="run")
+         {
+            if(start)
+            {
+               auto p_url=MakeCounting<Command_Send>();
+
+               Text::HTMLParser::Attribute attribute;
+               while(html_parser.ParseAttribute(attribute))
+               {
+                  if(attribute.m_name=="text")
+                  {
+                     p_url->m_command=attribute.m_value;
+                  }
+               }
+
+               line_builder.SetURL(MakeUnique<Text::Records::URLData>(*p_url));
+               line_builder.Set(Text::Records::Underline{true});
+            }
+            else
+            {
+               line_builder.Set(Text::Records::Underline{false});
+               line_builder.SetURL(nullptr);
+            }
+         }
+         else
+            return false;
+
+         if(stream.CharGet()!='>')
+            return false;
+
+         restorer.NoRestore();
+         return true;
+      }
+   } handler;
+
+   return Text::Line::Create(string, true, &handler);
 }
 
 void *Pueblo_Send::QueryInterface(TypeID id)
@@ -185,13 +240,18 @@ ConstString Pueblo_Send::OnRButton(Window wnd, int2 position) const
    return {};
 }
 
+void *Command_Send::QueryInterface(TypeID id)
+{
+   if(id==GetTypeID<Command_Send>())
+      return this;
+   return nullptr;
+}
+
 bool TextToLine::HandlePuebloTag(Streams::Input &stream, Text::HTMLParser &html)
 {
    Streams::Input::PosRestorer restorer(stream);
 
-   bool start=true;
-   if(stream.CharSkip('/'))
-      start=false;
+   bool start=!stream.CharSkip('/');
 
    ConstString tag;
    if(!html.ParseName(tag))
@@ -250,14 +310,14 @@ bool TextToLine::HandlePuebloTag(Streams::Input &stream, Text::HTMLParser &html)
          Text::HTMLParser::Attribute attribute;
          while(html.ParseAttribute(attribute))
          {
-            if(IEquals(attribute.m_name, "xch_mode"))
+            if(IEquals(attribute.m_name, "src"))
+            {
+               m_line_builder.AppendEmoji("🖼️");
+               m_line_builder.AppendURL(MakeUnique<Text::Records::URLData>(Text::Records::URLType::HTTP, attribute.m_value));
+            }
+            else if(IEquals(attribute.m_name, "height"))
             {
             }
-            else if(IEquals(attribute.m_name, "xch_graph"))
-            {
-            }
-            else
-               return false;
          }
       }
    }

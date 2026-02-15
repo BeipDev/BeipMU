@@ -22,10 +22,10 @@ Docking::Docking(Wnd_Docking *pWnd)
 {
 }
 
-HRESULT Docking::Dock(Side side)
+HRESULT Docking::Dock(I::Side side)
 {
    ZOMBIECHECK
-   if(side<0 || side>Side_Bottom)
+   if(side<0 || side>I::Side_Bottom)
       return E_INVALIDARG;
 
    m_pWnd->Dock((::Docking::Side)side);
@@ -129,6 +129,20 @@ HRESULT MainWindow::get_Title(BSTR *retval)
    return S_OK;
 }
 
+HRESULT MainWindow::Activity()
+{
+   ZOMBIECHECK
+   mp_wnd_main->On(::Connection::Event_Activity{});
+   return S_OK;
+}
+
+HRESULT MainWindow::AddImportantActivity()
+{
+   ZOMBIECHECK
+   mp_wnd_main->AddImportantActivity();
+   return S_OK;
+}
+
 HRESULT MainWindow::GetVariable(BSTR name, BSTR *retval)
 {
    ZOMBIECHECK
@@ -165,7 +179,7 @@ HRESULT MainWindow::DeleteVariable(BSTR name)
    return S_OK;
 }
 
-HRESULT MainWindow::GetInput(BSTR title, IWindow_Input **retval)
+HRESULT MainWindow::GetInput(BSTR title, I::Window_Input **retval)
 {
    ZOMBIECHECK
    auto p_input=mp_wnd_main->FindInputWindow(BSTRToLStr(title));
@@ -178,7 +192,7 @@ HRESULT MainWindow::GetInput(BSTR title, IWindow_Input **retval)
    return S_OK;
 }
 
-HRESULT MainWindow::GetSpawnTabs(BSTR title16, IWindow_SpawnTabs **retval)
+HRESULT MainWindow::GetSpawnTabs(BSTR title16, I::Window_SpawnTabs **retval)
 {
    ZOMBIECHECK
    auto title=BSTRToLStr(title16);
@@ -256,7 +270,7 @@ void MainWindow::On(Wnd_Main::Event_Key &event)
 {
 }
 
-STDMETHODIMP Windows::get_Item(VARIANT var, IWindow_Main **retval)
+STDMETHODIMP Windows::get_Item(VARIANT var, I::Window_Main **retval)
 {
    Variant v2;
    if(v2.Convert<int32>(var))

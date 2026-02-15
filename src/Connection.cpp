@@ -305,6 +305,24 @@ struct JSON_WebView_Open : JSON::Element
          Assert(false);
    }
 
+   void OnNumber(ConstString name, double value) override
+   {
+      if(name=="width")
+         m_size.x=int(value);
+      else if(name=="height")
+         m_size.y=int(value);
+      else
+         Assert(false);
+   }
+
+   void OnBool(ConstString name, bool value) override
+   {
+      if(name=="caption")
+         m_caption=value;
+      else
+         Assert(false);
+   }
+
    JSON::Element &OnObject(ConstString name) override
    {
       if(name=="http-request-headers")
@@ -313,11 +331,26 @@ struct JSON_WebView_Open : JSON::Element
    }
 
    OwnedString m_url, m_id, m_source;
+   int2 m_size{-1, -1};
 
    bool m_docked{};
+   std::optional<bool> m_caption;
    Docking::Side m_docking_side;
 
    JSON_WebView_Headers m_headers;
+};
+
+struct JSON_WebView_Close : JSON::Element
+{
+   void OnString(ConstString name, ConstString value) override
+   {
+      if(name=="id")
+         m_id=value;
+      else
+         Assert(false);
+   }
+
+   OwnedString m_id;
 };
 
 void Connection::OnGMCP(ConstString string)
@@ -395,17 +428,50 @@ bool Connection::OnGMCP_Parse(ConstString string)
             Wnd_WebView *p_webview{};
             if(element.m_id)
                p_webview=m_wnd_main.FindWebView(element.m_id);
+
+            {
+               int2 size=p_webview ? p_webview->WindowSize() : int2(800, 600);
+               if(element.m_size.x==-1)
+                  element.m_size.x=size.x;
+               if(element.m_size.y==-1)
+                  element.m_size.y=size.y;
+            }
+
             if(!p_webview)
             {
-               p_webview=new Wnd_WebView(m_wnd_main, element.m_id);
+               p_webview=new Wnd_WebView(m_wnd_main, element.m_size, element.m_id);
                if(element.m_docked)
                   p_webview->GetDocking().Dock(element.m_docking_side);
             }
+            else
+            {
+               if(p_webview->GetDocking().Docked())
+                  p_webview->GetDocking().SetSize(element.m_size);
+               else
+                  p_webview->SetSize(element.m_size);
+            }
+
+            if(element.m_caption.has_value())
+               p_webview->GetDocking().SetHideCaption(*element.m_caption);
 
             if(element.m_source)
                p_webview->SetSource(element.m_source);
             else
                p_webview->SetURL(element.m_url, element.m_headers.m_headers);
+            return false;
+         }
+         else if(package=="close")
+         {
+            JSON_WebView_Close element;
+            JSON::ParseObject(element, string);
+
+            Wnd_WebView *p_webview{};
+            if(element.m_id)
+            {
+               p_webview=m_wnd_main.FindWebView(element.m_id);
+               if(p_webview)
+                  p_webview->Destroy();
+            }
             return false;
          }
          return false;
@@ -516,6 +582,10 @@ void Connection::Send(ConstString string, bool send_event, bool raw)
 
    if(!IsConnected())
    {
+      if(m_in_send)
+         return;
+
+      RestorerOf _(m_in_send); m_in_send=true; // To prevent infinite recursion since Receive calls triggers on the prompt text.
       Text(STR_HTML_NotConnected);
       if(m_ppropServer && MessageBox(m_wnd_main, STR_AskReconnect, STR_NotConnected, MB_ICONEXCLAMATION|MB_YESNO)==IDYES)
          Reconnect();
@@ -1064,7 +1134,7 @@ void Connection::Disconnected(DWORD error)
    Text(FixedStringBuilder<256>("<icon information> <font color='aqua'>Will try to reconnect in ", int(seconds), " seconds"));
 }
 
-OM::IWindow_Main *Connection::GetWindow_Main()
+OM::I::Window_Main *Connection::GetWindow_Main()
 {
    return m_wnd_main.GetDispatch();
 }
@@ -1166,16 +1236,7 @@ void Connection::Display(UniquePtr<Text::Line> &&p_line)
    if(m_propConnections.propTriggers().fActive())
    {
       for(unsigned i=0;i<m_multiline_triggers.Count();i++)
-      {
-         auto &multiline=*m_multiline_triggers[i];
-         RunTriggers(*p_line, multiline.mp_trigger->propTriggers(), state);
-         if(multiline.m_line_limit!=0 && ++multiline.m_line_count>=multiline.m_line_limit)
-         {
-            m_multiline_triggers.Delete(i--);
-            if(mp_trigger_debug)
-               TriggerDebugText("#000040", "blue", "10", "Multiline child triggers hit line limit");
-         }
-      }
+         RunTriggers(*p_line, m_multiline_triggers[i]->mp_trigger->propTriggers(), state);
 
       RunTriggers(*p_line, m_propConnections.propTriggers().Pre(), state);
 
@@ -1190,6 +1251,21 @@ void Connection::Display(UniquePtr<Text::Line> &&p_line)
       }
 
       RunTriggers(*p_line, m_propConnections.propTriggers().Post(), state);
+
+      // Delete empty and expired multiline triggers
+      for(unsigned i=0; i<m_multiline_triggers.Count(); i++)
+      {
+         auto &p_multiline=m_multiline_triggers[i];
+         if(p_multiline && p_multiline->m_line_limit!=0 && ++p_multiline->m_line_count>=p_multiline->m_line_limit)
+         {
+            p_multiline=nullptr;
+            if(mp_trigger_debug)
+               TriggerDebugText("#000040", "blue", "10", "Multiline child triggers hit line limit");
+         }
+
+         if(!p_multiline)
+            m_multiline_triggers.Delete(i--);
+      }
 
       // Add new multiline triggers to beginning of list, such that the last one added to the list will be first
       while(m_new_multiline_triggers)
@@ -1234,7 +1310,7 @@ void Connection::Display(UniquePtr<Text::Line> &&p_line)
       p_spawn_window=mp_captured_spawn_window;
       state.mp_spawn_trigger=mp_captured_spawn_window->mp_capture_until;
 
-      if(RegEx::Expression *p_regex=state.mp_spawn_trigger->propSpawn().GetCaptureUntilRegEx();p_regex && p_regex->Find(p_line->GetText(), 0).has_value())
+      if(RegEx::Expression *p_regex=state.mp_spawn_trigger->propSpawn().GetCaptureUntilRegEx();p_regex && p_regex->Find(p_line->GetText(), 0))
          KillSpawnCapture();
    }
 
@@ -1410,7 +1486,7 @@ void Connection::ShowSpawnCancel()
    mp_captureabort_window=MakeUnique<Wnd_CaptureAbort>(*this);
 }
 
-Color ColorHash(ConstString text, uint2 range, Array<const uint2> ranges, float brightness)
+Color ColorHash(ConstString text, uint2 range, Array<const size_t_2> ranges, float brightness)
 {
    if(range.end==0) // If whole line, use the first () range if it exists, otherwise the regular range
       range=ranges.Count()>1 ? ranges[1] : ranges[0];
@@ -1419,7 +1495,7 @@ Color ColorHash(ConstString text, uint2 range, Array<const uint2> ranges, float 
    return HSVtoRGB(float3((hash&0xFFF)/4095.0f, ((hash>>12)&0xFFF)/8190.0f+0.5f, brightness));
 };
 
-void ApplyParagraphToLine(const Prop::Trigger_Paragraph &p, Text::Line &line, Array<const uint2> ranges)
+void ApplyParagraphToLine(const Prop::Trigger_Paragraph &p, Text::Line &line, Array<const size_t_2> ranges)
 {
    if(p.fUseIndent_Left())
       line.SetIndentLeft(p.Indent_Left()/100.0f);
@@ -1524,7 +1600,7 @@ void Connection::RunTriggers(Text::Line &line, Array<CopyCntPtrTo<Prop::Trigger>
                   TriggerDebugText("#000040", "blue", "10", "Starting cooldown");
             }
 
-            static constexpr uint2 c_wholeLine[]={ uint2() };
+            static constexpr size_t_2 c_wholeLine[1];
 
             // Color
             if(ppropTrigger->fPropColor())
@@ -1905,7 +1981,7 @@ void Connection::RunTriggers(Text::Line &line, Array<CopyCntPtrTo<Prop::Trigger>
 
                // Look for existing trigger
                if(auto existing=FindMultiline(m_multiline_triggers, *ppropTrigger); existing!=~0U)
-                  m_new_multiline_triggers.Push(m_multiline_triggers.Delete(existing));
+                  m_new_multiline_triggers.Push(std::move(m_multiline_triggers[existing]));
                else if(auto existing=FindMultiline(m_new_multiline_triggers, *ppropTrigger); existing!=~0U)
                   m_new_multiline_triggers.Push(m_new_multiline_triggers.Delete(existing));
                else
@@ -2401,8 +2477,7 @@ uint2 Puppet::FindRegEx(const Prop::Puppet &propPuppet, ConstString string)
    if(!propPuppet.mp_regex_cache)
       propPuppet.mp_regex_cache=MakeUnique<RegEx::Expression>(propPuppet.pclReceivePrefix(), PCRE2_UTF);
 
-   FixedArray<uint2, 15> ranges_buffer;
-   auto ranges=propPuppet.mp_regex_cache->Find(string, 0, ranges_buffer);
+   auto ranges=propPuppet.mp_regex_cache->Find(string, 0);
    if(ranges.Count()==0)
       return {};
 

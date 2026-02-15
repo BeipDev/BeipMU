@@ -28,7 +28,7 @@ HRESULT TextWindowLine::get_HTMLString(BSTR *retval)
    return S_OK;
 }
 
-HRESULT TextWindowLine::Insert(unsigned iPosition, ITextWindowLine *pILine)
+HRESULT TextWindowLine::Insert(unsigned iPosition, I::TextWindowLine *pILine)
 {
    const TextWindowLine *pLine=static_cast<TextWindowLine *>(pILine);
    if(pLine==this)
@@ -105,7 +105,7 @@ Window_Text::~Window_Text()
       delete m_pWnd;
 }
 
-STDMETHODIMP Window_Text::get_Properties(IWindow_Properties **retval)
+STDMETHODIMP Window_Text::get_Properties(I::Window_Properties **retval)
 {
    ZOMBIECHECK
    return RefReturner(retval)(MakeCounting<Window_Properties>(*m_pWnd, *m_pWnd));
@@ -136,7 +136,7 @@ STDMETHODIMP Window_Text::WriteHTML(BSTR bstr)
    return S_OK;
 }
 
-STDMETHODIMP Window_Text::Create(BSTR bstr, ITextWindowLine **ppLine)
+STDMETHODIMP Window_Text::Create(BSTR bstr, I::TextWindowLine **ppLine)
 {
    ZOMBIECHECK
    *ppLine=new TextWindowLine(BSTRToLStr(bstr), false);
@@ -144,7 +144,7 @@ STDMETHODIMP Window_Text::Create(BSTR bstr, ITextWindowLine **ppLine)
    return S_OK;
 }
 
-STDMETHODIMP Window_Text::CreateHTML(BSTR bstr, ITextWindowLine **ppLine)
+STDMETHODIMP Window_Text::CreateHTML(BSTR bstr, I::TextWindowLine **ppLine)
 {
    ZOMBIECHECK
    *ppLine=new TextWindowLine(BSTRToLStr(bstr), true);
@@ -152,7 +152,7 @@ STDMETHODIMP Window_Text::CreateHTML(BSTR bstr, ITextWindowLine **ppLine)
    return S_OK;
 }
 
-STDMETHODIMP Window_Text::Add(ITextWindowLine *pILine)
+STDMETHODIMP Window_Text::Add(I::TextWindowLine *pILine)
 {
    ZOMBIECHECK
    m_pWnd->Add(MakeUnique<Text::Line>(static_cast<TextWindowLine *>(pILine)->GetInternal()));

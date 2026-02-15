@@ -203,16 +203,6 @@ bool Dlg::EditKey(const Msg::Key &msg)
    if(msg.direction()==Direction::Up) return true;
    auto iVKey=msg.iVirtKey();
 
-   // Only allow certain keys
-   // F-Keys, A-Z, 0-9
-   if((iVKey<VK_F1 || iVKey>VK_F24) && (iVKey<'A' || iVKey>'Z') && (iVKey<'0' || iVKey>'9') &&
-      (iVKey<VK_NUMPAD0 || iVKey>VK_NUMPAD9) &&
-      (iVKey!=VK_TAB && iVKey!=VK_PAUSE && iVKey!=VK_SPACE && iVKey!=VK_HOME &&
-       iVKey!=VK_UP && iVKey!=VK_DOWN && iVKey!=VK_LEFT && iVKey!=VK_RIGHT &&
-       iVKey!=VK_ADD && iVKey!=VK_SUBTRACT && iVKey!=VK_MULTIPLY && iVKey!=VK_DIVIDE &&
-       iVKey!=VK_DECIMAL && iVKey!=VK_OEM_1 /* ; */ && iVKey!=VK_OEM_PLUS))
-      return false;
-
    m_iVKey=iVKey;
 
    KEY_ID key; // Temporary Key so we can update the display

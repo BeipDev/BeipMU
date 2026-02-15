@@ -1,5 +1,6 @@
 #include "Main.h"
 #include "Automation.h"
+#include <Shobjidl_core.h>
 #pragma comment(lib, "gdi32")
 #pragma comment(lib, "comdlg32")
 #pragma comment(lib, "shell32")
@@ -90,6 +91,9 @@ void GlobalEvents::InitNewDayTimer()
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, wchar_t *pCmdLine, int nCmdShow)
 {
+   if(!IsStoreApp())
+      SetCurrentProcessExplicitAppUserModelID(L"R-Axis.BeipMU");
+
    g_random.SeedRandomDevice();
    SetGenerateMinidumpOnCrash();
 

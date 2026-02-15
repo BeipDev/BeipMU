@@ -5,14 +5,15 @@
 #include "FindString.h"
 
 FindStringSearch::FindStringSearch(const Prop::FindString &fs, ConstString string)
-: m_fs(fs), m_string(string)
+   : m_fs{fs}, m_string{string}, m_ranges{&fs.m_search_range, 1}
 {
+   fs.m_search_range={};
 }
 
 bool FindStringSearch::Next()
 {
-   m_rangeCount=m_fs.Find(m_string, m_ranges[0].end, m_ranges).Count();
-   if(m_rangeCount==0)
+   m_ranges=m_fs.Find(m_string, m_ranges[0].end);
+   if(!m_ranges)
       return false;
    
    if(m_ranges[0].end==m_ranges[0].begin)
@@ -63,8 +64,23 @@ FindStringReplacement::FindStringReplacement(const FindStringSearch &search, Con
       if(replace.Count()<2)
          break;
 
-      char c=replace[1];
-      if(unsigned value=c-'0'; value<ranges.Count())
+      unsigned value=0;
+      unsigned value_length=2;
+      if(replace[1]=='a') // \a## (4 character code)
+      {
+         // Grab the next two chars as two digit number
+         if(replace.Count()<4)
+            break;
+
+         value=(replace[2]-'0')*10+(replace[3]-'0');
+         value_length=4;
+      }
+      else // \# (2 character code)
+      {
+         value=replace[1]-'0';
+      }
+
+      if(value<ranges.Count())
       {
          auto sub=search.SearchString().Sub(ranges[value]);
          if(escape_html)
@@ -74,15 +90,16 @@ FindStringReplacement::FindStringReplacement(const FindStringSearch &search, Con
       }
       else
       {
-         m_replacement('\\');
-         if(c!='\\') // Not an escaped slash?  Then echo the char
-            m_replacement(c);
+         if(replace[1]=='\\') // An escaped slash?
+            m_replacement('\\');
+         else // Invalid sequence, so just display whatever it was
+            m_replacement(replace.First(value_length));
       }
 
-      replace=replace.WithoutFirst(2);
+      replace=replace.WithoutFirst(value_length);
       slash_index=replace.FindFirstOf('\\', replace.Count());
    }
-
+   m_replacement(replace);
    ConstString::operator=(m_replacement);
 }
 

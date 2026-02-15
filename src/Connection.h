@@ -141,7 +141,7 @@ struct Connection
 
    MCP::Parser *GetMCP_Parser() { return mp_MCP; }
    Wnd_Main &GetMainWindow() const { return m_wnd_main; }
-   OM::IWindow_Main *STDMETHODCALLTYPE GetWindow_Main();
+   OM::I::Window_Main *STDMETHODCALLTYPE GetWindow_Main();
 
    Time::Stopwatch m_ping_timer;
 

@@ -153,7 +153,7 @@ STDMETHODIMP Connection::IsLogging(VARIANT_BOOL *retval)
    *retval=VariantBool(mp_connection->IsLogging()); return S_OK;
 }
 
-STDMETHODIMP Connection::get_World(IWorld **retval)
+STDMETHODIMP Connection::get_World(I::World **retval)
 {
    ZOMBIECHECK
    Prop::Server *pServer=mp_connection->GetServer();
@@ -162,7 +162,7 @@ STDMETHODIMP Connection::get_World(IWorld **retval)
    *retval=new World(*pServer); (*retval)->AddRef(); return S_OK;
 }
 
-STDMETHODIMP Connection::get_Character(ICharacter **retval)
+STDMETHODIMP Connection::get_Character(I::Character **retval)
 {
    ZOMBIECHECK
    Prop::Character *pCharacter=mp_connection->GetCharacter();
@@ -171,7 +171,7 @@ STDMETHODIMP Connection::get_Character(ICharacter **retval)
    *retval=new Character(*pCharacter); (*retval)->AddRef(); return S_OK;
 }
 
-STDMETHODIMP Connection::get_Puppet(IPuppet **retval)
+STDMETHODIMP Connection::get_Puppet(I::Puppet **retval)
 {
    ZOMBIECHECK
    Prop::Puppet *pPuppet=mp_connection->GetPuppet();
@@ -180,13 +180,13 @@ STDMETHODIMP Connection::get_Puppet(IPuppet **retval)
    *retval=new Puppet(*pPuppet); (*retval)->AddRef(); return S_OK;
 }
 
-STDMETHODIMP Connection::get_Window_Main(IWindow_Main **retval)
+STDMETHODIMP Connection::get_Window_Main(I::Window_Main **retval)
 {
    ZOMBIECHECK
    return RefReturner(retval)(mp_connection->GetWindow_Main());
 }
 
-STDMETHODIMP Connection::get_Log(ILog **retval)
+STDMETHODIMP Connection::get_Log(I::Log **retval)
 {
    ZOMBIECHECK
    auto *p_log=mp_connection->GetAutoLog();

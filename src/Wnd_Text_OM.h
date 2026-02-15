@@ -3,7 +3,7 @@
 namespace OM
 {
 
-struct TextWindowLine : Dispatch<ITextWindowLine>
+struct TextWindowLine : Dispatch<I::TextWindowLine>
 {
    TextWindowLine(ConstString string, bool fHTML) : mp_line(Text::Line::CreateFromHTML(string))
    {
@@ -22,7 +22,7 @@ struct TextWindowLine : Dispatch<ITextWindowLine>
    STDMETHODIMP get_String(BSTR *retval) override;
    STDMETHODIMP get_HTMLString(BSTR *retval) override;
 
-   STDMETHODIMP Insert(unsigned position, ITextWindowLine *pLine) override;
+   STDMETHODIMP Insert(unsigned position, I::TextWindowLine *pLine) override;
    STDMETHODIMP Delete(unsigned start, unsigned end) override;
 
    STDMETHODIMP Color(unsigned start, unsigned end, long lColor) override;
@@ -43,7 +43,7 @@ private:
 };
 
 struct Window_Text
-:  Dispatch<IWindow_Text>,
+:  Dispatch<I::Window_Text>,
    Text::IHost,
    Events::ReceiversOf<Window_Text, Text::Wnd::Event_Pause>
 {
@@ -63,21 +63,21 @@ struct Window_Text
 
    ~Window_Text() noexcept;
 
-   USE_INHERITED_UNKNOWN(IWindow_Text)
+   USE_INHERITED_UNKNOWN(I::Window_Text)
 
    // IUnknown
    STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj) override;
 
    // ITextWindow methods
-   STDMETHODIMP get_Properties(IWindow_Properties **retval) override;
+   STDMETHODIMP get_Properties(I::Window_Properties **retval) override;
    STDMETHODIMP get_Paused(VARIANT_BOOL *retval) override;
 
    STDMETHODIMP SetOnPause(IDispatch *pDisp) override;
    STDMETHODIMP Write(BSTR bstr) override;
    STDMETHODIMP WriteHTML(BSTR bstr) override;
-   STDMETHODIMP Create(BSTR bstr, ITextWindowLine **ppLine) override;
-   STDMETHODIMP CreateHTML(BSTR bstr, ITextWindowLine **ppLine) override;
-   STDMETHODIMP Add(ITextWindowLine *pLine) override;
+   STDMETHODIMP Create(BSTR bstr, I::TextWindowLine **ppLine) override;
+   STDMETHODIMP CreateHTML(BSTR bstr, I::TextWindowLine **ppLine) override;
+   STDMETHODIMP Add(I::TextWindowLine *pLine) override;
 
    // Events
    void On(const Text::Wnd::Event_Pause &event);

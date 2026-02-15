@@ -32,12 +32,12 @@ void Window_FixedText::On(const Events::Event_Deleted &event)
    m_pEvents=nullptr; m_pProperties=nullptr; m_pWnd.Extract();
 }
 
-HRESULT Window_FixedText::get_Events(IWindow_Events **retval)
+HRESULT Window_FixedText::get_Events(I::Window_Events **retval)
 {
    return RefReturner(retval)(m_pEvents);
 }
 
-HRESULT Window_FixedText::get_Properties(IWindow_Properties **retval)
+HRESULT Window_FixedText::get_Properties(I::Window_Properties **retval)
 {
    return RefReturner(retval)(m_pProperties);
 }
@@ -84,7 +84,7 @@ HRESULT Window_FixedText::Write(BSTR bstr)
    return S_OK;
 }
 
-IWindow_FixedText *Create_Window_FixedText(int2 sz)
+I::Window_FixedText *Create_Window_FixedText(int2 sz)
 {
    return new Window_FixedText(sz);
 }

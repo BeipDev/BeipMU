@@ -8,7 +8,7 @@ struct FindStringSearch
 
    bool Next();
 
-   Array<const uint2> ranges() const { return m_ranges.First(m_rangeCount); }
+   Array<const size_t_2> ranges() const { return m_ranges; }
 
    const uint2 RangeFound() const { return m_ranges[0]; }
    unsigned Start() const { return m_ranges[0].begin; }
@@ -30,8 +30,7 @@ private:
    ConstString m_string;
    bool m_empty_seen{}; // If we ever match on nothing, we need to find nothing the second time through, or we'll loop forever
 
-   FixedArray<uint2, 15> m_ranges;
-   unsigned m_rangeCount{}; // Number of ranges filled in by the RegExFind() function
+   Array<size_t_2> m_ranges;
 };
 
 struct FindStringReplacement : ConstString

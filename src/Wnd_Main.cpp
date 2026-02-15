@@ -339,6 +339,7 @@ SpawnWindow *Wnd_Main::GetSpawnWindow(const Prop::Trigger_Spawn &trigger, ConstS
 
          p_tab_window=new SpawnTabsWindow(m_spawn_tabs_windows.Prev(), *this, replacement);
          p_tab_window->GetDocking().Dock(Docking::Side::Right);
+         SetDockedTitlePrefix(p_tab_window->GetDocking());
       }
 
       return p_tab_window->GetTab(title, nullptr, hilight, use_existing);
@@ -355,7 +356,10 @@ SpawnWindow *Wnd_Main::GetSpawnWindow(const Prop::Trigger_Spawn &trigger, ConstS
 
    auto &spawn=*new SpawnWindow(m_spawn_windows.Prev(), *this, title, *CopyIfNotGlobal(*mp_prop_output));
    if(spawn)
+   {
       spawn.GetDocking().Dock(Docking::Side::Right);
+      SetDockedTitlePrefix(spawn.GetDocking());
+   }
    return &spawn;
 }
 
@@ -365,6 +369,7 @@ Wnd_Image &Wnd_Main::EnsureImageWindow()
    {
       mp_wnd_image=CreateImageWindow(*this);
       mp_wnd_image->GetDocking().Dock(Docking::Side::Top);
+      SetDockedTitlePrefix(mp_wnd_image->GetDocking());
    }
 
    return *mp_wnd_image;
@@ -376,6 +381,7 @@ Maps::Wnd &Wnd_Main::EnsureMapWindow()
    {
       mp_wnd_map=MakeUnique<Maps::Wnd>(*this);
       mp_wnd_map->GetDocking().Dock(Docking::Side::Right);
+      SetDockedTitlePrefix(mp_wnd_map->GetDocking());
    }
    return *mp_wnd_map;
 }
@@ -393,6 +399,7 @@ AIWindow &Wnd_Main::EnsureAIWindow()
    {
       mp_ai_window=MakeUnique<AIWindow>(*this);
       mp_ai_window->GetDocking().Dock(Docking::Side::Bottom);
+      SetDockedTitlePrefix(mp_ai_window->GetDocking());
    }
    return *mp_ai_window;
 }
@@ -405,6 +412,7 @@ IYarn_TileMap &Wnd_Main::EnsureYarn_TileMap()
    {
       mp_yarn_tilemap=IYarn_TileMap::Create(*this);
       mp_yarn_tilemap->GetDocking().Dock(Docking::Side::Left);
+      SetDockedTitlePrefix(mp_yarn_tilemap->GetDocking());
    }
 #endif
 
@@ -431,6 +439,7 @@ Stats::Wnd &Wnd_Main::GetStatsWindow(ConstString title, bool fDock)
 
    auto *pStat=new Stats::Wnd(*this, title);
    pStat->DLNode<Stats::Wnd>::Link(m_stat_windows.Prev());
+   SetDockedTitlePrefix(pStat->GetDocking());
    if(fDock)
       pStat->GetDocking().Dock(Docking::Side::Right);
 
@@ -638,6 +647,7 @@ Wnd_InputPane* Wnd_Main::AddInputWindow(ConstString prefix, bool unique)
    p_props->pclPrefix(prefix);
    auto *p_input=CreateInputWindow(*p_props);
    p_input->GetDocking().Dock(Docking::Side::Bottom);
+   SetDockedTitlePrefix(p_input->GetDocking());
    return p_input;
 }
 
@@ -710,6 +720,7 @@ void Wnd_Main::ShowCharacterNotesPane()
 
       mp_character_notes_pane=MakeUnique<Wnd_EditPropertyPane>(*this, *pCharacter);
       mp_character_notes_pane->GetDocking().Dock(Docking::Side::Right);
+      SetDockedTitlePrefix(mp_character_notes_pane->GetDocking());
    }
    else
       MessageBox(*this, "You must connect with a character first", "Note", MB_OK|MB_ICONINFORMATION);
@@ -887,15 +898,19 @@ bool Wnd_Main::On(Text::Wnd &wnd_text, Text::Wnd_View &wnd_view, const Text::Rec
             return true;
 
          case Text::Records::URLType::Custom:
-            if(url.m_pCustom)
+            if(url.mp_custom)
             {
-               if(auto *pPueblo=url.m_pCustom->QueryInterface<Pueblo_Send>())
+               if(auto *p_pueblo=url.mp_custom->QueryInterface<Pueblo_Send>())
                {
-                  if(auto send=pPueblo->OnLButton())
+                  if(auto send=p_pueblo->OnLButton())
                   {
                      History_AddToHistory(send, ConstString());
                      mp_connection->Send(send);
                   }
+               }
+               else if(auto *p_command=url.mp_custom->QueryInterface<Command_Send>())
+               {
+                  SendLines(p_command->m_command);
                }
             }
             else
@@ -908,9 +923,9 @@ bool Wnd_Main::On(Text::Wnd &wnd_text, Text::Wnd_View &wnd_view, const Text::Rec
    }
    else if(_msg.uMessage()==Msg::RButtonDown::ID)
    {
-      if(url.m_pCustom)
+      if(url.mp_custom)
       {
-         if(auto *pPueblo=url.m_pCustom->QueryInterface<Pueblo_Send>())
+         if(auto *pPueblo=url.mp_custom->QueryInterface<Pueblo_Send>())
          {
             auto &msg=_msg.Cast<Msg::RButtonDown>();
             if(auto send=pPueblo->OnRButton(wnd_view, msg.position()))
@@ -966,6 +981,7 @@ bool Wnd_Main::On(Text::Wnd &wnd_text, Text::Wnd_View &wnd_view, const Text::Rec
             auto &wnd=*new Wnd_WebView(*this);
             wnd.SetURL(url.m_url);
             wnd.GetDocking().Dock(Docking::Side::Right);
+            SetDockedTitlePrefix(wnd.GetDocking());
             break;
          }
          case Commands::Copy: ::Clipboard::SetText(url.m_url); break;
@@ -1393,7 +1409,7 @@ Wnd_Docking *Wnd_Main::RestoreDockedWindowSettings(Prop::DockedWindow &propWindo
       case 9: // WebView
       {
          auto &props=propWindow.propWebViewWindow();
-         auto &wnd=*new Wnd_WebView(*this, props.pclID());
+         auto &wnd=*new Wnd_WebView(*this, {800, 800} /* Arbitrary starting size, will be overridden later by common code */, props.pclID());
          wnd.SetURL(props.pclURL());
          return &wnd.GetDocking();
       }
@@ -1409,6 +1425,15 @@ Wnd_Docking *Wnd_Main::RestoreDockedWindowSettings(Prop::DockedWindow &propWindo
 
    Assert(false);
    return nullptr;
+}
+
+void Wnd_Main::SetDockedTitlePrefix(Wnd_Docking &wnd)
+{
+   FixedStringBuilder<256> string;
+   mp_connection->GetWorldTitle(string, 0);
+   string(" - ");
+
+   wnd.SetUndockedTitlePrefix(string);
 }
 
 void Wnd_Main::Save()
@@ -1544,6 +1569,23 @@ void Wnd_Main::RestoreDockingConfiguration(Prop::Docking &propDocking)
          p_wnd->EnsureOnScreen();
          p_wnd->Show(SW_SHOWNOACTIVATE);
       }
+   }
+
+   // Update the titles of all windows
+   {
+      FixedStringBuilder<256> string;
+      mp_connection->GetWorldTitle(string, 0);
+      string(" - ");
+
+      // Iterate through all docked windows to notify them of the change
+      for(auto &frame : GetFrames())
+      {
+         for(auto &window : frame.GetWindows())
+            window.SetUndockedTitlePrefix(string);
+      }
+
+      for(auto &window : GetFloating())
+         window.SetUndockedTitlePrefix(string);
    }
    DockingChange();
 }
@@ -2059,6 +2101,10 @@ LRESULT Wnd_Main::On(const Msg::Command &msg)
          return msg.Success();
       }
 
+      case ID_HELP_SCRIPT:
+         ParseCommand("/shelp");
+         return msg.Success();
+
       case ID_HELP_CHANGES:
       {
          File::Path path{GetResourcePath(), "Changes.txt"};
@@ -2262,7 +2308,7 @@ bool Wnd_Main::ProcessEditKey(InputControl &edInput, const Msg::Key &msg)
 //
 // Returns true if Key should be processed by the Edit Control
 {
-   bool fDown=msg.direction()==Direction::Down;
+   bool is_down=msg.direction()==Direction::Down;
 
    KEY_ID key;
    key.iVKey=msg.iVirtKey();
@@ -2271,8 +2317,8 @@ bool Wnd_Main::ProcessEditKey(InputControl &edInput, const Msg::Key &msg)
    key.fAlt=IsKeyPressed(VK_MENU);
 
    // Refresh the taskbar when Alt is pressed/released to show the tab numbers
-   if(key.iVKey==VK_MENU && !(fDown && msg.fRepeating()))
-      mp_wnd_MDI->GetTaskbar().DrawTabNumbers(fDown);
+   if(key.iVKey==VK_MENU && !(is_down && msg.fRepeating()))
+      mp_wnd_MDI->GetTaskbar().DrawTabNumbers(is_down);
 
    // Ignore these keys as we don't do anything on them
    if(key.iVKey==VK_CONTROL || key.iVKey==VK_SHIFT || key.iVKey==VK_MENU)
@@ -2283,7 +2329,7 @@ bool Wnd_Main::ProcessEditKey(InputControl &edInput, const Msg::Key &msg)
       return false;
 
    // Don't process macros when the key is A-Z and no control or alt keys are pressed
-   if(fDown && (key.fControl || key.fAlt || !IsBetween<int>(key.iVKey, 'A', 'Z')) &&
+   if(is_down && (key.fControl || key.fAlt || !IsBetween<int>(key.iVKey, 'A', 'Z')) &&
        g_ppropGlobal->propConnections().propKeyboardMacros2().fActive())
    {
       const Prop::KeyboardMacro *p_macro=mp_connection->MacroKey(&key);
@@ -2306,7 +2352,7 @@ bool Wnd_Main::ProcessEditKey(InputControl &edInput, const Msg::Key &msg)
    }
 
    // Handle Alt+# tab switching
-   if(fDown && key.fAlt && !key.fControl && IsBetween<int>(key.iVKey, '0', '9'))
+   if(is_down && key.fAlt && !key.fControl && IsBetween<int>(key.iVKey, '0', '9'))
    {
       unsigned index=key.iVKey=='0' ? 10 : key.iVKey-'0';
       if(key.fShift)
@@ -2320,7 +2366,7 @@ bool Wnd_Main::ProcessEditKey(InputControl &edInput, const Msg::Key &msg)
    }
 
    // Send off a key event in case someone is listening
-   if(fDown)
+   if(is_down)
    {
       Event_Key event(key.iVKey);
       if(m_events.Send(event, event)) // If handler process key it'll return true, so we return false (meaning processed)
@@ -2347,7 +2393,7 @@ bool Wnd_Main::ProcessEditKey(InputControl &edInput, const Msg::Key &msg)
       return true;
    }
 
-   if(fDown) // Only handle the key on the down press
+   if(is_down) // Only handle the key on the down press
       HandleKey(edInput, eKey);
 
    return false;
@@ -2660,7 +2706,6 @@ void Wnd_Main::UpdateTitle()
 {
    FixedStringBuilder<256> sBuffer(m_title_prefix, m_title);
    __super::WndProc(Msg::SetText(UTF16(sBuffer).stringz()));
-
    GetMDI().OnWindowChanged(*this);
 }
 
@@ -3035,6 +3080,7 @@ void Wnd_MDI::PopupMainMenu(int2 position)
    {
       PopupMenu m;
       m.Append(MF_STRING, ID_HELP_CONTENTS, "&Contents...");
+      m.Append(MF_STRING, ID_HELP_SCRIPT, "&Scripting...");
    	m.Append(MF_STRING, ID_HELP_CHANGES, "Changes...");
       m.AppendSeparator();
       m.Append(MF_STRING, ID_HELP_ABOUT, "&About...");

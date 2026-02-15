@@ -2,7 +2,7 @@ namespace OM
 {
 
 struct Window_Events
-:  Dispatch<OM::IWindow_Events>,
+:  Dispatch<OM::I::Window_Events>,
    Events::ReceiversOf<Window_Events, Windows::Event_MouseMove, Windows::Event_Close, Windows::Event_Key>
 {
    Window_Events(WindowEvents *pEvents);

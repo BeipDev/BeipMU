@@ -8,7 +8,7 @@
 #include "FindString.h"
 #include "Matcharoo.h"
 
-void ApplyParagraphToLine(const Prop::Trigger_Paragraph &p, Text::Line &line, Array<const uint2> ranges);
+void ApplyParagraphToLine(const Prop::Trigger_Paragraph &p, Text::Line &line, Array<const size_t_2> ranges);
 
 namespace
 {

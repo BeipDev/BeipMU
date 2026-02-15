@@ -4,7 +4,7 @@ struct InputControl;
 namespace OM
 {
 
-struct Window_Input : Dispatch<IWindow_Input>
+struct Window_Input : Dispatch<I::Window_Input>
 {
    Window_Input(InputControl &input);
 

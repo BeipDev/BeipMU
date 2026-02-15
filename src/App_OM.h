@@ -11,7 +11,7 @@ namespace OM
 struct ForwardDNS;
 struct ReverseDNS;
 
-struct ArrayUInt : Dispatch<IArrayUInt>
+struct ArrayUInt : Dispatch<I::ArrayUInt>
 {
    OwnedArray<uint32> m_array;
 
@@ -19,7 +19,7 @@ struct ArrayUInt : Dispatch<IArrayUInt>
    STDMETHODIMP get_Count(long *retval);
 };
 
-struct FindString : Dispatch<IFindString>
+struct FindString : Dispatch<I::FindString>
 {
    FindString(Prop::Trigger &propTrigger);
 
@@ -42,13 +42,13 @@ private:
    CntRefTo<Prop::Trigger> m_propTrigger;
 };
 
-struct Trigger : Dispatch<ITrigger>
+struct Trigger : Dispatch<I::Trigger>
 {
    Trigger(Prop::Trigger &propTrigger, Prop::Triggers *ppropTriggers);
 
    STDMETHODIMP Delete(VARIANT_BOOL *) override;
 
-   STDMETHODIMP get_FindString(IFindString **) override;
+   STDMETHODIMP get_FindString(I::FindString **) override;
 
    STDMETHODIMP get_Disabled(VARIANT_BOOL *) override;
    STDMETHODIMP put_Disabled(VARIANT_BOOL ) override;
@@ -64,7 +64,7 @@ struct Trigger : Dispatch<ITrigger>
    STDMETHODIMP get_Away(VARIANT_BOOL *) override;
    STDMETHODIMP put_Away(VARIANT_BOOL ) override;
 
-   STDMETHODIMP get_Triggers(ITriggers **) override;
+   STDMETHODIMP get_Triggers(I::Triggers **) override;
 
 private:
    CntRefTo<Prop::Trigger> m_propTrigger;
@@ -72,22 +72,25 @@ private:
    friend struct Triggers;
 };
 
-struct Triggers : Dispatch<ITriggers>
+struct Triggers : Dispatch<I::Triggers>
 {
    Triggers(Prop::Triggers &propTriggers);
 
-   STDMETHODIMP get_Item(VARIANT var, ITrigger **retval) override;
+   STDMETHODIMP Item(VARIANT var, I::Trigger **retval) override;
    STDMETHODIMP get_Count(long *retval) override;
 
+   STDMETHODIMP get_Active(VARIANT_BOOL *) override;
+   STDMETHODIMP put_Active(VARIANT_BOOL) override;
+
    STDMETHODIMP Delete(long index);
-   STDMETHODIMP AddCopy(ITrigger *, ITrigger **);
+   STDMETHODIMP AddCopy(I::Trigger *, I::Trigger **);
    STDMETHODIMP Move(long from, long to);
 
 private:
    CntRefTo<Prop::Triggers> m_propTriggers;
 };
 
-struct Alias : Dispatch<IAlias>
+struct Alias : Dispatch<I::Alias>
 {
    Alias(Prop::Alias &prop_alias, Prop::Aliases *prop_aliases);
 
@@ -101,18 +104,18 @@ private:
    CntPtrTo<Prop::Aliases> mp_prop_aliases;
 };
 
-struct Aliases : Dispatch<IAliases>
+struct Aliases : Dispatch<I::Aliases>
 {
    Aliases(Prop::Aliases &prop_aliases);
 
-   STDMETHODIMP get_Item(VARIANT var, IAlias **retval) override;
+   STDMETHODIMP Item(VARIANT var, I::Alias **retval) override;
    STDMETHODIMP get_Count(long *retval) override;
 
 private:
    CntRefTo<Prop::Aliases> m_prop_aliases;
 };
 
-struct Puppet : Dispatch<IPuppet>
+struct Puppet : Dispatch<I::Puppet>
 {
    Puppet(Prop::Puppet &propPuppet);
 
@@ -131,26 +134,26 @@ struct Puppet : Dispatch<IPuppet>
    STDMETHODIMP get_ConnectWithPlayer(VARIANT_BOOL *);
    STDMETHODIMP put_ConnectWithPlayer(VARIANT_BOOL);
 
-   STDMETHODIMP get_Triggers(ITriggers **);
-   STDMETHODIMP get_Aliases(IAliases **);
+   STDMETHODIMP get_Triggers(I::Triggers **);
+   STDMETHODIMP get_Aliases(I::Aliases **);
 
 private:
    CntRefTo<Prop::Puppet> m_propPuppet;
 };
 
-struct Puppets : Dispatch<IPuppets>
+struct Puppets : Dispatch<I::Puppets>
 {
    Puppets(Prop::Puppets &propPuppets);
 
-   STDMETHODIMP get_Item(VARIANT var, IPuppet **retval);
-   STDMETHODIMP get_Count(long *retval);
+   STDMETHODIMP Item(VARIANT var, I::Puppet **retval) override;
+   STDMETHODIMP get_Count(long *retval) override;
 
 private:
 
    CntRefTo<Prop::Puppets> m_propPuppets;
 };
 
-struct Character : Dispatch<ICharacter>
+struct Character : Dispatch<I::Character>
 {
    Character(Prop::Character &propCharacter);
 
@@ -168,27 +171,27 @@ struct Character : Dispatch<ICharacter>
    STDMETHODIMP get_LastUsed(VARIANT *date);
    STDMETHODIMP get_TimeCreated(VARIANT *date);
 
-   STDMETHODIMP get_Triggers(ITriggers **retval);
-   STDMETHODIMP get_Aliases(IAliases **retval);
-   STDMETHODIMP get_Puppets(IPuppets **retval);
+   STDMETHODIMP get_Triggers(I::Triggers **retval);
+   STDMETHODIMP get_Aliases(I::Aliases **retval);
+   STDMETHODIMP get_Puppets(I::Puppets **retval);
 
 private:
    CntRefTo<Prop::Character> m_propCharacter;
 };
 
-struct Characters : Dispatch<ICharacters>
+struct Characters : Dispatch<I::Characters>
 {
    Characters(Prop::Server &propServer);
 
-   STDMETHODIMP get_Item(VARIANT var, ICharacter **retval);
-   STDMETHODIMP get_Count(long *retval);
+   STDMETHODIMP Item(VARIANT var, I::Character **retval) override;
+   STDMETHODIMP get_Count(long *retval) override;
 
 private:
 
    CntRefTo<Prop::Server> m_propServer;
 };
 
-struct World : Dispatch<IWorld>
+struct World : Dispatch<I::World>
 {
    World(Prop::Server &propServer);
 
@@ -201,20 +204,20 @@ struct World : Dispatch<IWorld>
    STDMETHODIMP get_Host(BSTR *retval);
    STDMETHODIMP put_Host(BSTR bstr);
 
-   STDMETHODIMP get_Characters(ICharacters **retval);
-   STDMETHODIMP get_Triggers(ITriggers **retval);
-   STDMETHODIMP get_Aliases(IAliases **retval);
+   STDMETHODIMP get_Characters(I::Characters **retval);
+   STDMETHODIMP get_Triggers(I::Triggers **retval);
+   STDMETHODIMP get_Aliases(I::Aliases **retval);
 
 private:
    CntRefTo<Prop::Server> m_propServer;
 };
 
-struct Worlds : Dispatch<IWorlds>
+struct Worlds : Dispatch<I::Worlds>
 {
    Worlds();
 
-   STDMETHODIMP get_Item(VARIANT var, IWorld **retval);
-   STDMETHODIMP get_Count(long *retval);
+   STDMETHODIMP Item(VARIANT var, I::World **retval) override;
+   STDMETHODIMP get_Count(long *retval) override;
 
 private:
 
@@ -222,13 +225,13 @@ private:
 };
 
 struct App
-:  Dispatch<IApp>,
+:  Dispatch<I::App>,
    Events::ReceiversOf<App, Event_NewWindow>
 {
    App();
    ~App() noexcept;
 
-   USE_INHERITED_UNKNOWN(IApp)
+   USE_INHERITED_UNKNOWN(I::App)
 
    // IUnknown
    STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj) override;
@@ -240,24 +243,24 @@ struct App
 
    STDMETHODIMP get_ConfigPath(BSTR *retval) override { *retval=LStrToBSTR(GetConfigPath()); return S_OK;}
 
-   STDMETHODIMP get_Worlds(IWorlds **retval) override;
-   STDMETHODIMP get_Windows(IWindows **retval) override;
-   STDMETHODIMP get_Triggers(ITriggers **retval) override;
-   STDMETHODIMP get_Aliases(IAliases **retval) override;
+   STDMETHODIMP get_Worlds(I::Worlds **retval) override;
+   STDMETHODIMP get_Windows(I::Windows **retval) override;
+   STDMETHODIMP get_Triggers(I::Triggers **retval) override;
+   STDMETHODIMP get_Aliases(I::Aliases **retval) override;
 
    STDMETHODIMP ActiveXObject(BSTR name, IDispatch **retval) override;
 
-   STDMETHODIMP NewTrigger(ITrigger **retval) override;
-   STDMETHODIMP NewWindow_FixedText(int iWidth, int iHeight, IWindow_FixedText **retval) override;
-   STDMETHODIMP NewWindow_Text(int iWidth, int iHeight, IWindow_Text **retval) override;
+   STDMETHODIMP NewTrigger(I::Trigger **retval) override;
+   STDMETHODIMP NewWindow_FixedText(int iWidth, int iHeight, I::Window_FixedText **retval) override;
+   STDMETHODIMP NewWindow_Text(int iWidth, int iHeight, I::Window_Text **retval) override;
 
-   STDMETHODIMP NewWindow(IWindow_Main **retval) override;
+   STDMETHODIMP NewWindow(I::Window_Main **retval) override;
    STDMETHODIMP SetOnNewWindow(IDispatch *pDisp, VARIANT var) override;
 
-   STDMETHODIMP CreateInterval(int iTimeOut, IDispatch *pDisp, VARIANT var, ITimer **retval) override;
-   STDMETHODIMP CreateTimeout(int iTimeOut, IDispatch *pDisp, VARIANT var, ITimer **retval) override;
+   STDMETHODIMP CreateInterval(int iTimeOut, IDispatch *pDisp, VARIANT var, I::Timer **retval) override;
+   STDMETHODIMP CreateTimeout(int iTimeOut, IDispatch *pDisp, VARIANT var, I::Timer **retval) override;
 
-   STDMETHODIMP NewWindow_Graphics(int iWidth, int iHeight, IWindow_Graphics **retval) override;
+   STDMETHODIMP NewWindow_Graphics(int iWidth, int iHeight, I::Window_Graphics **retval) override;
 
    STDMETHODIMP PlaySound(BSTR filename, float volume) override;
    STDMETHODIMP StopSounds() override;
@@ -265,8 +268,8 @@ struct App
    STDMETHODIMP OutputDebugHTML(BSTR bstr) override;
    STDMETHODIMP OutputDebugText(BSTR bstr) override;
 
-   STDMETHODIMP New_Socket(ISocket **retval) override;
-   STDMETHODIMP New_SocketServer(unsigned int iPort, IDispatch *pDisp, VARIANT var, ISocketServer **retval) override;
+   STDMETHODIMP New_Socket(I::Socket **retval) override;
+   STDMETHODIMP New_SocketServer(unsigned int iPort, IDispatch *pDisp, VARIANT var, I::SocketServer **retval) override;
 
    STDMETHODIMP ForwardDNSLookup(BSTR bstrHost, IDispatch *pDisp, VARIANT var) override;
    STDMETHODIMP ReverseDNSLookup(BSTR bstrIP, IDispatch *pDisp, VARIANT var) override;
@@ -277,12 +280,12 @@ struct App
 
 private:
 
-   CntPtrTo<IWorlds> m_pIWorlds;
-   CntPtrTo<IWindows> m_pIWindows;
+   CntPtrTo<I::Worlds> m_pIWorlds;
+   CntPtrTo<I::Windows> m_pIWindows;
 
    HookVariant m_hookNewWindow;
 
-   struct OMTimer : Dispatch<ITimer>, DLNode<OMTimer>
+   struct OMTimer : Dispatch<I::Timer>, DLNode<OMTimer>
 
 
    {
