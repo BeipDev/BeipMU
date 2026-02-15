@@ -41,7 +41,7 @@ struct WebView2EnvironmentCreator : General::Unknown<ICoreWebView2CreateCoreWebV
 };
 
 struct WebView_OM
- : OM::Dispatch<OM::IWebView>,
+ : OM::Dispatch<OM::I::WebView>,
 	Events::ReceiversOf<WebView_OM, ::Connection::Event_Connect, ::Connection::Event_Disconnect, ::Connection::Event_Receive, ::Connection::Event_Display,
 	::Connection::Event_Send, ::Connection::Event_GMCP>
 {
@@ -245,6 +245,11 @@ struct WebView_OM
 				*out=nullptr;
 			return S_OK;
 		}
+		else if(property=="ID")
+		{
+			*out=LStrToBSTR(mp_wnd_webview->GetID());
+			return S_OK;
+		}
 		return S_FALSE;
 	}
 
@@ -261,10 +266,8 @@ struct WebView_OM
 
 		if(m_displays)
 		{
-			FixedArray<uint2, 15> ranges;
-
 			for(auto &p_display : m_displays)
-				if(p_display->mp_regex->Find(event.GetTextLine().GetText(), 0, ranges))
+				if(p_display->mp_regex->Find(event.GetTextLine().GetText(), 0))
 				{
 					CntPtrTo<IDispatch> p_line=new OM::TextWindowLine(event.GetTextLine());
 					p_display->m_hook(&*p_line, p_display->m_id);
@@ -279,12 +282,10 @@ struct WebView_OM
 		if(!m_captures)
 			return false;
 
-		FixedArray<uint2, 15> ranges;
-
 		if(!mp_capturing)
 		{
 			for(auto &p_capture : m_captures)
-				if(p_capture->mp_regex_begin->Find(event.GetTextLine().GetText(), 0, ranges))
+				if(p_capture->mp_regex_begin->Find(event.GetTextLine().GetText(), 0))
 				{
 					mp_capturing=p_capture;
 					break;
@@ -301,7 +302,7 @@ struct WebView_OM
 
 		CntPtrTo<IDispatch> p_line=new OM::TextWindowLine(event.GetTextLine());
 
-		if(mp_capturing->mp_regex_end->Find(event.GetTextLine().GetText(), 0, ranges))
+		if(mp_capturing->mp_regex_end->Find(event.GetTextLine().GetText(), 0))
 		{
 			mp_capturing->m_hook_capture_changed(false, &*p_line, mp_capturing->m_id);
 			event.Stop(mp_capturing->m_gag);
@@ -407,10 +408,10 @@ ATOM Wnd_WebView::Register()
 	return wc.Register();
 }
 
-Wnd_WebView::Wnd_WebView(Wnd_Main &wnd_main, ConstString id)
+Wnd_WebView::Wnd_WebView(Wnd_Main &wnd_main, int2 size, ConstString id)
 	: DLNode<Wnd_WebView>{wnd_main.GetWebViewRoot()}, m_wnd_main{wnd_main}, m_id{id}
 {
-	Create("WebView", WS_OVERLAPPEDWINDOW, Window::Position(int2(CW_USEDEFAULT, CW_USEDEFAULT), int2(800, 800)), wnd_main, WS_EX_APPWINDOW);
+	Create("WebView", WS_OVERLAPPEDWINDOW, Window::Position(int2(CW_USEDEFAULT, CW_USEDEFAULT), size), wnd_main, WS_EX_APPWINDOW);
 	mp_docking=&m_wnd_main.CreateDocking(*this);
 	Show(SW_SHOWNOACTIVATE);
 

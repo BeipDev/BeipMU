@@ -13,8 +13,7 @@ struct Expression
    void GetError(StringBuilder &string) const;
    unsigned GetErrorOffset() const { return unsigned(m_error_offset); }
 
-   std::optional<uint2> Find(ConstString string, unsigned start) const;
-   Array<uint2> Find(ConstString string, unsigned start, Array<uint2> ranges) const;
+   Array<size_t_2> Find(ConstString string, unsigned start) const;
 
 private:
    Expression(const Expression&)=delete; // No way to copy the cached values

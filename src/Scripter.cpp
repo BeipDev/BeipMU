@@ -354,20 +354,20 @@ void DisplayScriptingEngines(Controls::ComboBox &list)
 // Beip
 //
 
-struct Beip : public Dispatch<IBeip>
+struct Beip : public Dispatch<I::Beip>
 {
-   Beip(IApp *p_app) : mp_app(p_app)
+   Beip(I::App *p_app) : mp_app(p_app)
    {
    }
 
-	STDMETHODIMP get_Window(IWindow_Main** retval) override { return ReturnRef(retval, mp_window); }
-	STDMETHODIMP get_App(IApp** retval) override { return ReturnRef(retval, mp_app); }
+	STDMETHODIMP get_Window(I::Window_Main** retval) override { return ReturnRef(retval, mp_window); }
+	STDMETHODIMP get_App(I::App** retval) override { return ReturnRef(retval, mp_app); }
 
-   void SetWindow(IWindow_Main *pWindow) { mp_window=pWindow; }
+   void SetWindow(I::Window_Main *pWindow) { mp_window=pWindow; }
 
 //private:
-   CntPtrTo<IApp> mp_app;
-   CntPtrTo<IWindow_Main> mp_window;
+   CntPtrTo<I::App> mp_app;
+   CntPtrTo<I::Window_Main> mp_window;
 };
 
 //

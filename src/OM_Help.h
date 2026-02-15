@@ -7,12 +7,12 @@ namespace OM
 {
 
 // Object Creation (where the internal header isn't needed)
-interface IWindow_Graphics;
+interface I::Window_Graphics;
 
-IWindow_Graphics  *Create_Window_Graphics(int2 sz);
-IWindow_FixedText *Create_Window_FixedText(int2 sz);
+I::Window_Graphics  *Create_Window_Graphics(int2 sz);
+I::Window_FixedText *Create_Window_FixedText(int2 sz);
 
-HRESULT LoadTypeInfoFromThisModule(REFIID riid, ITypeInfo **ppti);
+void LoadTypeInfoFromThisModule(REFIID riid, ITypeInfo **ppti);
 
 #define E_ZOMBIE E_POINTER
 
@@ -108,6 +108,8 @@ struct Variant : VARIANT
 
    bool operator==(bool f) const noexcept { return Is<VARIANT_BOOL>() && boolVal==BoolVariant(f); }
 };
+
+void GetOMHelp(ConstString topic, Text::Wnd &wnd);
 
 template<typename T>
 struct __declspec(novtable) Dispatch : General::Unknown<T>
@@ -276,11 +278,11 @@ template<typename TEvent, typename TBase, typename TSender>
 HRESULT ManageHook(TBase *pBase, HookVariant &hook, TSender &sender, IDispatch *pDisp, VARIANT &var)
 {
    if(hook)
-      pBase->Detach<TEvent>();
+      pBase->template Detach<TEvent>();
    hook.Set(pDisp, var);
 
    if(pDisp)
-      pBase->AttachTo<TEvent>(sender);
+      pBase->template AttachTo<TEvent>(sender);
    return S_OK;
 }
 

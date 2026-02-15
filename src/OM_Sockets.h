@@ -7,13 +7,13 @@ namespace OM
 {
 
 struct Socket
- : Dispatch<ISocket>,
+ : Dispatch<I::Socket>,
    Sockets::Socket::INotify,
    Sockets::GetHost::INotify
 {
    Socket(SOCKET socket=INVALID_SOCKET);
 
-   USE_INHERITED_UNKNOWN(ISocket)
+   USE_INHERITED_UNKNOWN(I::Socket)
 
    // IUnknown
    STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
@@ -54,12 +54,12 @@ private:
 };
 
 struct SocketServer
- : Dispatch<ISocketServer>,
+ : Dispatch<I::SocketServer>,
    Sockets::Server::INotify
 {
    SocketServer(unsigned int iPort, IDispatch *pDisp, VARIANT &var);
 
-   USE_INHERITED_UNKNOWN(ISocketServer)
+   USE_INHERITED_UNKNOWN(I::SocketServer)
 
    // IUnknown
    STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj) override;
@@ -74,7 +74,7 @@ private:
    HookVariant m_hookConnection;
 };
 
-struct ReverseDNS : Dispatch<IReverseDNS>, Sockets::GetHost::INotify, Sockets::GetName::INotify, DLNode<ReverseDNS>
+struct ReverseDNS : Dispatch<I::ReverseDNS>, Sockets::GetHost::INotify, Sockets::GetName::INotify, DLNode<ReverseDNS>
 {
    ReverseDNS(ReverseDNS *pInsertAfter, BSTR bstrIP, IDispatch *pDisp, VARIANT &var);
 
@@ -92,7 +92,7 @@ private:
    AsyncOwner<Sockets::GetName> m_pGetName;
 };
 
-struct ForwardDNS : Dispatch<IForwardDNS>, Sockets::GetHost::INotify, DLNode<ForwardDNS>
+struct ForwardDNS : Dispatch<I::ForwardDNS>, Sockets::GetHost::INotify, DLNode<ForwardDNS>
 {
    ForwardDNS(ForwardDNS *pInsertAfter, BSTR bstrName, IDispatch *pDisp, VARIANT &var);
 

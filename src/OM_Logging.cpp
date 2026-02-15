@@ -24,7 +24,7 @@ HRESULT Log::Write(BSTR bstr)
    return S_OK;
 }
 
-HRESULT Log::WriteLine(ITextWindowLine *pLine)
+HRESULT Log::WriteLine(I::TextWindowLine *pLine)
 {
    ZOMBIECHECK
    mp_log->LogTextLine(static_cast<TextWindowLine *>(pLine)->GetInternal());

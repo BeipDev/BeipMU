@@ -17,7 +17,7 @@ struct Wnd_WebView
 	};
 
 	static ATOM Register();
-	Wnd_WebView(Wnd_Main &wnd_main, ConstString id={});
+	Wnd_WebView(Wnd_Main &wnd_main, int2 size={800, 800}, ConstString id={});
 
 	ConstString GetURL() const { return m_url; }
 	void SetURL(ConstString url, Array<Header> headers={});

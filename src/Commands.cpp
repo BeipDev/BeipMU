@@ -16,6 +16,8 @@
 #include "Wnd_Map.h"
 #include "ImageBanner.h"
 #include "WebView.h"
+#include "AI.h"
+#include "OM_Help.h"
 
 void StopSpeech();
 
@@ -169,7 +171,8 @@ try
 
       static constexpr ConstString c_help_page[]={
          "",
-         "<p align='center'><font color='silver'><b><u>  " gd_pcTitle " - Command Line Help  </u></b>",
+         "<p align='center' background-color='#004000' stroke-color='#008000' stroke-width='2' border='10' border-style='round' padding='2'><font color='silver'><b>" gd_pcTitle " - Command Line Help</b>",
+         "<font size='16'>Scripting</font>",
          "/@ $ - Run an immediate script, $ can span multiple lines of text",
          "/silent/(command) - Prefix for any command that will suppress informational messages from it",
          "",
@@ -218,6 +221,7 @@ try
          "/resetscript - Reset the scripting engine (possibly switching languages)",
          "/roll [count]d[sides](+bonus) - Dice roll. Example /roll 10d6",
          "/script $ - Run single line script",
+         "<run text='/shelp'>/shelp</run> ($) - Scripting help",
          "/set $=$ - Set environment variable",
          "/setinput $ - Sets any text after the \"/setinput \" into the active input window",
          "/silence - Stop all playing sounds",
@@ -234,10 +238,30 @@ try
       };
 
       for(auto &line : c_help_page)
-         mp_wnd_text->AddHTML(line);
+         mp_wnd_text->Add(CreateLineInternal(line));
 
       return;
    }
+
+   if(IEquals(command, "shelp"))
+   {
+      if(wl.Count()>1)
+      {
+         HybridStringBuilder string;
+         OM::GetOMHelp(wl[1], *mp_wnd_text);
+      }
+      else
+      {
+         mp_wnd_text->Add(CreateLineInternal(
+            "To get help on any scripting type, use `/shelp [type]`. Click Underlined text for additional help." CRLF
+            "The root types are:" CRLF
+            "  <run text='/shelp App'><font color='#00FFFF'>App</font></run> - ('app' global variable) - The application interface" CRLF
+            "  <run text='/shelp Window_Main'><font color='#00FFFF'>Window_Main</font></run> - ('window' global variable) - The current window the script was launched from" CRLF
+            "  <run text='/shelp WebView'><font color='#00FFFF'>WebView</font></run> - For webviews, this is the interface available to them"));
+      }
+      return;
+   }
+
 
    if(IEquals(command, "makali"))
    {
@@ -265,6 +289,18 @@ try
    if(IEquals(command, "clear"))
    {
       mp_wnd_text->Clear();
+      return;
+   }
+
+   if(IEquals(command, "ai"))
+   {
+      auto &ai=EnsureAIWindow();
+
+      if(command_line.Length()<=command.Length()+1)
+         return;
+
+      auto prompt=command_line.WithoutFirst(command.Length()+1);
+      ai.Request(prompt);
       return;
    }
 
@@ -499,16 +535,15 @@ try
          }
          if(IEquals(wl[1], "kill"))
          {
-            unsigned id;
-            if(wl.Count()<=2 || !wl[2].To(id))
+            if(wl.Count()<=2)
             {
-               mp_wnd_text->AddHTML("<icon error> Bad ID format, should be like: kill 43");
+               mp_wnd_text->AddHTML("<icon error> Missing ID, should be like: kill 43");
                return;
             }
 
             for(auto &v : m_delay_timers)
             {
-               if(v.m_id==id)
+               if(v.m_id==wl[2])
                {
                   if(verbose)
                      mp_wnd_text->AddHTML("<icon information> Timer killed");
@@ -517,12 +552,26 @@ try
                }
             }
 
-            mp_wnd_text->AddHTML("<icon error> Timer ID not found");
+            if(verbose)
+               mp_wnd_text->AddHTML("<icon information> Timer ID not found");
             return;
          }
 
          unsigned wl_index=1;
          bool repeating=false;
+         ConstString id;
+
+         if(IEquals(wl[wl_index], "id"))
+         {
+            if(wl_index+1>=wl.Count())
+            {
+               mp_wnd_text->AddHTML("<icon error> Missing ID after 'id' parameter");
+               return;
+            }
+
+            id=wl[wl_index+1];
+            wl_index+=2;
+         }
 
          if(IEquals(wl[wl_index], "every"))
          {
@@ -533,7 +582,7 @@ try
          float seconds{};
          if(ParseTimeInSeconds(wl[wl_index++], seconds) && wl.Count()==wl_index+1)
          {
-            auto &timer=*new DelayTimer(*this, wl[wl_index], seconds, repeating);
+            auto &timer=*new DelayTimer(*this, wl[wl_index], seconds, id, repeating);
             if(verbose)
             {
                FixedStringBuilder<256> string("<icon information> <font color='green'>Starting timer with ID:", timer.m_id, " in ");
@@ -2135,6 +2184,13 @@ try
          mp_connection->Receive(ConstString("[\x01B[38;5;40m▬▬▬▬▬▬\x01B[38;5;192m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\x01B[38;5;124m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\x01B[38;5;15m●\x01B[38;5;124m▬▬▬\x01B[0m]" CRLF));
          return;
       }
+
+      if(IEquals(wl[1], "gmcp_clientmedia"))
+      {
+         mp_connection->Receive(ConstString(GMCP_BEGIN R"+(client.media.play { "name":"audio/01_Ultima_Theme.mp3", "url" : "https://prelle.selfhost.eu:4079/", "type" : "music", "volume" : 60, "loops" : 1, "continue" : true })+" GMCP_END));
+         return;
+      }
+
 #endif
 
       if(IEquals(wl[1], "gmcp_beiptest1"))
@@ -2151,8 +2207,23 @@ try
 
       if(IEquals(wl[1], "gmcp_webview"))
       {
-         mp_connection->Receive(ConstString(GMCP_BEGIN R"+(webview.open { "id":"Character editor", "url":"https://beta.flexiblesurvival.com/embedded/c/aleric", "dock":"right", "http-request-headers":{ "Session Key":"Example key", "Username":"Example username" } })+" GMCP_END));
+         mp_connection->Receive(ConstString(GMCP_BEGIN R"+(webview.open { "id":"Character editor", "url":"https://beta.flexiblesurvival.com/embedded/c/aleric", "dock":"right", "height":400, "http-request-headers":{ "Session Key":"Example key", "Username":"Example username" } })+" GMCP_END));
 //         mp_connection->Receive(ConstString(GMCP_BEGIN R"+(webview.open { "id":"Example WebView", "url":"https://www.example.com", "dock":"right", "http-request-headers":{ "Session Key":"Example key", "Username":"Example username" } })+" GMCP_END));
+         return;
+      }
+      if(IEquals(wl[1], "gmcp_webviewwidth"))
+      {
+         mp_connection->Receive(ConstString(GMCP_BEGIN R"+(webview.open { "id":"Character editor", "width":500})+" GMCP_END));
+         return;
+      }
+      if(IEquals(wl[1], "gmcp_webviewheight"))
+      {
+         mp_connection->Receive(ConstString(GMCP_BEGIN R"+(webview.open { "id":"Character editor", "height":500})+" GMCP_END));
+         return;
+      }
+      if(IEquals(wl[1], "gmcp_webviewclose"))
+      {
+         mp_connection->Receive(ConstString(GMCP_BEGIN R"+(webview.close { "id":"Character editor" })+" GMCP_END));
          return;
       }
 

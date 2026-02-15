@@ -106,8 +106,9 @@ Prop FindString
 
    Func "mutable CachedUniquePtr<RegEx::Expression> mp_regex_cache;"
    Func "bool Find(ConstString search, unsigned iStartChar, uint2 &found) const;"
-   Func "Array<uint2> Find(ConstString search, unsigned iStartChar, Array<uint2> ranges) const;"
+   Func "Array<size_t_2> Find(ConstString search, unsigned iStartChar) const;"
    Func "bool operator==(const FindString &pfs) const;"
+   Func "mutable size_t_2 m_search_range;" // For non regex searches
 }
 
 // Text window settings (duh)

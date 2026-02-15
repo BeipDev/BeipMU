@@ -122,9 +122,13 @@ Color Wnd_Taskbar::DrawWindow(RectF rcWindow, Wnd_Main &wnd, unsigned tabNumber)
    // Draw logging indicator
    if(connection.IsLogging() && g_ppropGlobal->fTaskbarShowLogging())
    {
-      float width=mp_font_emoji->Measure("●", m_font_size);
+      FixedStringBuilder<16> string("●");
+      if((connection.GetAutoLog()!=nullptr) + connection.GetLogs().Count()>1)
+         string("⁺");
+
+      float width=mp_font_emoji->Measure(string, m_font_size);
       mp_brush_dynamic->SetColor(ToD2D(Color(225,0,0)));
-      mp_font_emoji->Draw("●", m_font_size, rcText.ptLT()+float2(0, emoji_top), *mp_render_target, *mp_brush_dynamic);
+      mp_font_emoji->Draw(string, m_font_size, rcText.ptLT()+float2(0, emoji_top), *mp_render_target, *mp_brush_dynamic);
       rcText.left+=width+1;
    }
 

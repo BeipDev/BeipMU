@@ -88,15 +88,14 @@ bool Font::ChooseFont(HWND hWnd)
 //
 bool FindString::Find(ConstString string, unsigned start_index, uint2 &range) const
 {
-   FixedArray<uint2, 15> ranges;
-   auto result=Find(string, start_index, ranges);
+   auto result=Find(string, start_index);
    if(result.Count()==0)
       return false;
-   range=ranges[0];
+   range=result[0];
    return true;
 }
 
-Array<uint2> FindString::Find(ConstString string, unsigned start_index, Array<uint2> ranges) const
+Array<size_t_2> FindString::Find(ConstString string, unsigned start_index) const
 {
    if(fRegularExpression())
    {
@@ -104,14 +103,14 @@ Array<uint2> FindString::Find(ConstString string, unsigned start_index, Array<ui
          mp_regex_cache=MakeUnique<RegEx::Expression>(pclMatchText(), (fMatchCase() ? 0 : PCRE2_CASELESS)|PCRE2_UTF);
 
       if(fForward())
-         return mp_regex_cache->Find(string, start_index, ranges);
+         return mp_regex_cache->Find(string, start_index);
 
       // For a backwards search, look for the earliest search that ends before the start character
       // We do that by iterating forward, then backing up to the last valid match
       uint2 found;
       while(true)
       {
-         auto result=mp_regex_cache->Find(string, found.end, ranges);
+         auto result=mp_regex_cache->Find(string, found.end);
          if(!result)
             break;
 
@@ -126,14 +125,14 @@ Array<uint2> FindString::Find(ConstString string, unsigned start_index, Array<ui
       if(found.end==0)
          return {};
 
-      return mp_regex_cache->Find(string, found.begin, ranges);
+      return mp_regex_cache->Find(string, found.begin);
    }
 
    // Special case for an empty match, this will find 'nothing' at the start of the line
    if(!pclMatchText())
    {
-      ranges[0]={};
-      return ranges.First(1);
+      m_search_range={};
+      return {&m_search_range, 1};
    }
 
    unsigned found_index=Strings::Result::Not_Found;
@@ -199,8 +198,8 @@ Array<uint2> FindString::Find(ConstString string, unsigned start_index, Array<ui
    if(fWholeWord() && !IsWholeWord())
       return {};
 
-   ranges[0]=uint2(found_index, found_index+match_text.Length());
-   return ranges.First(1);
+   m_search_range={found_index, found_index+match_text.Length()};
+   return {&m_search_range, 1};
 }
 
 bool FindString::operator==(const FindString &pfs) const

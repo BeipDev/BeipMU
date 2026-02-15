@@ -40,6 +40,7 @@ enum CommandIDs : int
    ID_EDIT_FINDINPUTHISTORY,
    ID_HELP_ABOUT,
    ID_HELP_CONTENTS,
+   ID_HELP_SCRIPT,
    ID_HELP_CHANGES,
    ID_NETWORK_DEBUGGER,
    ID_TRIGGER_DEBUGGER,
@@ -216,6 +217,7 @@ struct Wnd_Main
    void RestoreDockingConfiguration(Prop::Docking &propDocking);
 
    Wnd_Docking *RestoreDockedWindowSettings(Prop::DockedWindow &propWindow);
+   void SetDockedTitlePrefix(Wnd_Docking &wnd);
 
    void SaveMainWindowSettings(Prop::MainWindowSettings &settings);
    void ApplyMainWindowSettings();
@@ -489,11 +491,15 @@ private:
 
    struct DelayTimer : Time::Timer, DLNode<DelayTimer>
    {
-      DelayTimer(Wnd_Main &wnd_main, ConstString string, float seconds, bool repeating=false)
-       : Time::Timer([this]() { OnHit(); }),
-         DLNode<DelayTimer>(wnd_main.m_delay_timers.Prev()), m_wnd_main(wnd_main), m_string(string)
+      DelayTimer(Wnd_Main &wnd_main, ConstString string, float seconds, ConstString id={}, bool repeating=false)
+       : Time::Timer{[this]() { OnHit(); }},
+         DLNode<DelayTimer>{wnd_main.m_delay_timers.Prev()},
+         m_wnd_main{wnd_main}, m_string{string},
+         m_id{id}
       {
          Set(seconds, repeating);
+         if(!m_id)
+            m_id=Strings::to_string(wnd_main.m_next_delay_id++);
       }
 
       void OnHit()
@@ -505,7 +511,7 @@ private:
 
       Wnd_Main &m_wnd_main;
       OwnedString m_string;
-      unsigned m_id{m_wnd_main.m_next_delay_id++};
+      OwnedString m_id;
    };
 
    OwnedDLNodeList<DelayTimer> m_delay_timers;

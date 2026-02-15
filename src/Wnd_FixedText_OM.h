@@ -4,14 +4,14 @@ namespace OM
 {
 
 struct Window_FixedText
-:  public Dispatch<IWindow_FixedText>,
+:  public Dispatch<I::Window_FixedText>,
    public Events::ReceiversOf<Window_FixedText, Events::Event_Deleted>
 {
    Window_FixedText(int2 size);
    ~Window_FixedText() noexcept;
 
-   STDMETHODIMP get_Events(IWindow_Events **retval);
-   STDMETHODIMP get_Properties(IWindow_Properties **retval);
+   STDMETHODIMP get_Events(I::Window_Events **retval);
+   STDMETHODIMP get_Properties(I::Window_Properties **retval);
 
    STDMETHODIMP put_CursorX(int x);
    STDMETHODIMP get_CursorX(int *pX);

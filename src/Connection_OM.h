@@ -4,14 +4,14 @@ namespace OM
 {
 
 struct Connection
-:  Dispatch<IConnection>,
+:  Dispatch<I::Connection>,
    Events::ReceiversOf<Connection, ::Connection::Event_Receive, ::Connection::Event_Display,
       ::Connection::Event_Connect, ::Connection::Event_Disconnect, ::Connection::Event_Send,
       ::Connection::Event_GMCP, ::Connection::Event_Log>
 {
    Connection(::Connection *pConnection);
 
-   USE_INHERITED_UNKNOWN(IConnection)
+   USE_INHERITED_UNKNOWN(I::Connection)
 
    // IUnknown
    STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
@@ -35,11 +35,11 @@ struct Connection
    STDMETHODIMP Reconnect(VARIANT_BOOL *retval);
    STDMETHODIMP IsLogging(VARIANT_BOOL *retval);
 
-   STDMETHODIMP get_World(IWorld **);
-   STDMETHODIMP get_Character(ICharacter **);
-   STDMETHODIMP get_Puppet(IPuppet **);
-   STDMETHODIMP get_Window_Main(IWindow_Main **);
-   STDMETHODIMP get_Log(ILog **);
+   STDMETHODIMP get_World(I::World **);
+   STDMETHODIMP get_Character(I::Character **);
+   STDMETHODIMP get_Puppet(I::Puppet **);
+   STDMETHODIMP get_Window_Main(I::Window_Main **);
+   STDMETHODIMP get_Log(I::Log **);
 
    // Events
    void On(::Connection::Event_Receive &event);

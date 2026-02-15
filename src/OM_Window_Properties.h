@@ -5,7 +5,7 @@ namespace OM
 {
 
 struct Window_Properties
-:  Dispatch<OM::IWindow_Properties>,
+:  Dispatch<OM::I::Window_Properties>,
    Events::ReceiversOf<Window_Properties, Events::Event_Deleted>
 {
    Window_Properties(Window window, Events::SenderOf<Events::Event_Deleted> &deleted);

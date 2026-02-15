@@ -21,13 +21,13 @@
 #define YARN 1
 #define DWRITE_TEST 1
 #else
-#define BETA_BUILD 2
+#define BETA_BUILD 1
 #define SCRIPTING 0
 #define YARN 0
 #define DWRITE_TEST 0
 #endif
 
-namespace OM
+namespace OM::I
 {
 #include "OM.h"
 };
@@ -88,6 +88,8 @@ struct ErrorCollection : IError, Collection<OwnedString>
 void ConsoleHTML(ConstString string);
 void ConsoleText(ConstString string);
 void ConsoleDelete();
+
+UniquePtr<Text::Line> CreateLineInternal(ConstString string);
 
 #include "RegEx.h"
 #include "WinFunc.h"

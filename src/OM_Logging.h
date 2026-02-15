@@ -7,7 +7,7 @@
 namespace OM
 {
 
-struct Log : Dispatch<ILog>
+struct Log : Dispatch<I::Log>
 {
    Log(::Log *pLog);
 
@@ -15,7 +15,7 @@ struct Log : Dispatch<ILog>
 
    // ILog
    STDMETHODIMP Write(BSTR bstr) override;
-   STDMETHODIMP WriteLine(ITextWindowLine *pLine) override;
+   STDMETHODIMP WriteLine(I::TextWindowLine *pLine) override;
    STDMETHODIMP get_FileName(BSTR *bstr) override;
 
    NotifiedPtrTo<::Log> mp_log;

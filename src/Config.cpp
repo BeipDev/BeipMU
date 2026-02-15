@@ -7,7 +7,7 @@ static bool g_fUseStartupPathForConfig{};
 UniquePtr<RestoreLogs> gp_restore_logs;
 UniquePtr<Prop::Global> g_ppropSample;
 
-File::File g_config_lock;
+Kernel::Mutex g_config_lock;
 
 bool LoadConfig()
 {
@@ -16,7 +16,10 @@ bool LoadConfig()
    // First look for a config.txt in the startup folder, as that's how people used to use it
    File::Path path(name);
    if(!IsStoreApp() && path.Exists())
+   {
       g_fUseStartupPathForConfig=true;
+      path.MakeAbsolute(GetConfigPath());
+   }
    else
    {
       // Look in the %APPDATA%\BeipMU folder
@@ -35,14 +38,18 @@ bool LoadConfig()
       }
    }
 
-   if(!g_config_lock.Open(path) && GetLastError()==ERROR_SHARING_VIOLATION)
+   FixedStringBuilder<256> mutex_path{path};
+   for(unsigned index=0;(index=mutex_path.FindFirstAt('\\', index, ~0U))!=~0U;)
+      mutex_path[index]='/';
+   mutex_path.Insert(0, "Local\\BeipMU_Config_");
+   g_config_lock=Kernel::Mutex(true, mutex_path);
+   if(!g_config_lock || GetLastError()==ERROR_ALREADY_EXISTS)
    {
       MessageBox(nullptr, "The config file is already in use. The most likely cause is that BeipMU is already running.", "Error", MB_ICONERROR|MB_OK);
       return false;
    }
-   g_config_lock.Close();
+
    LoadConfig(path);
-   AssertReturned<true>()==g_config_lock.Open(path);
    return true;
 }
 
@@ -580,8 +587,6 @@ bool SaveConfig(Window wnd, bool allow_gui)
       ConfigExport(filenameNew, g_ppropGlobal, g_ppropGlobal->fShowDefaults(), !allow_gui);
    }
 
-   g_config_lock.Close(); // Release lock on file
-
    // Now replace config.txt with config.new
    if(!MoveFileEx(filenameNew, filename, MOVEFILE_REPLACE_EXISTING|MOVEFILE_WRITE_THROUGH|MOVEFILE_COPY_ALLOWED))
    {
@@ -592,7 +597,6 @@ bool SaveConfig(Window wnd, bool allow_gui)
       return false;
    }
 
-   AssertReturned<true>()==g_config_lock.Open(filename);
    return true;
 }
 

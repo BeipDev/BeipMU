@@ -1,11 +1,27 @@
-4.00.330
+4.00.331
+
+Separate out map live tracking into two separate options, "Track based on what is seen" and "Track based on what you type"
+Make % variable expansion optional in filter trigger actions
+Fixed a crash in global UI settings when trying to set a default with no color selected
+Fixed a crash when trying to send text in a connecting TLS connection (sending during the DNS lookup window can hit this) 
+Added ability to set id as a string value in /delay command (/delay id "blah" 5s "foo")
+Added width/height value fields to webview.open
+Add webview.close GMCP command to close existing webviews by id
+Add /shelp command to get scripting help of the available objects directly from the internal metadata
+Add world/character/puppet names to undocked window titles
+Add WebView::GetPropertyString("ID")
+Parse <img src=> tags in Pueblo mode for better inline image display
+Extend trigger \# replacement to add \a## to support up to 99 capture groups
+
+4.00.330 - 2025-10-18
 
 Fixed regression where a maximized window would not restore to the correct size
 Added input window option 'Enable WM_GETOBJECT' to allow utilities like grammarly to work (disabled by default to prevent misbehaving 3rd party apps)
 Fix map editor so that selecting 0 sized images/labels will work, previously only select-all could select them
 Fix map crash when moving exits and using undo (selection got out of sync with reality)
-Fix map editor removing exits when rooms overlap and exits is contained within overlap region
+Fix map editor removing exits when rooms overlap and exits are contained within overlap region
 Map smart location now watches exit names the user types to reduce ambiguity
+Update telnet TTYPE to follow spec here: https://tintin.mudhalla.net/protocols/mtts/
 
 4.00.329 - 2025-6-13
 

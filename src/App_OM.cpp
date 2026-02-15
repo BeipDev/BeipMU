@@ -130,7 +130,7 @@ STDMETHODIMP Trigger::Delete(VARIANT_BOOL *retval)
    return S_OK;
 }
 
-STDMETHODIMP Trigger::get_FindString(IFindString **retval)
+STDMETHODIMP Trigger::get_FindString(I::FindString **retval)
 {
    return RefReturner(retval)(MakeCounting<FindString>(*m_propTrigger));
 }
@@ -195,7 +195,7 @@ STDMETHODIMP Trigger::put_Away(VARIANT_BOOL flag)
    m_propTrigger->fAway(VariantBool(flag)); return S_OK;
 }
 
-STDMETHODIMP Trigger::get_Triggers(ITriggers **retval)
+STDMETHODIMP Trigger::get_Triggers(I::Triggers **retval)
 {
    return RefReturner(retval)(MakeCounting<Triggers>(m_propTrigger->propTriggers()));
 }
@@ -204,7 +204,7 @@ Triggers::Triggers(Prop::Triggers &propTriggers) : m_propTriggers(propTriggers)
 {
 }
 
-STDMETHODIMP Triggers::get_Item(VARIANT var, ITrigger** retval)
+STDMETHODIMP Triggers::Item(VARIANT var, I::Trigger** retval)
 {
    Variant v2;
    if(v2.Convert<uint32>(var))
@@ -232,6 +232,16 @@ STDMETHODIMP Triggers::get_Count(long *retval)
    *retval=m_propTriggers->Count(); return S_OK;
 }
 
+STDMETHODIMP Triggers::get_Active(VARIANT_BOOL *flag)
+{
+   *flag=BoolVariant(m_propTriggers->fActive()); return S_OK;
+}
+
+STDMETHODIMP Triggers::put_Active(VARIANT_BOOL flag)
+{
+   m_propTriggers->fActive(VariantBool(flag)); return S_OK;
+}
+
 STDMETHODIMP Triggers::Delete(long index)
 {
    if(static_cast<unsigned int>(index)>=m_propTriggers->Count())
@@ -240,7 +250,7 @@ STDMETHODIMP Triggers::Delete(long index)
    return S_OK;
 }
 
-STDMETHODIMP Triggers::AddCopy(ITrigger *pITrigger, ITrigger **retval)
+STDMETHODIMP Triggers::AddCopy(I::Trigger *pITrigger, I::Trigger **retval)
 {
    Trigger *pTrigger=static_cast<Trigger *>(pITrigger);
    auto pCopy=MakeCounting<Prop::Trigger>(*pTrigger->m_propTrigger);
@@ -258,7 +268,6 @@ STDMETHODIMP Triggers::Move(long from, long to)
 
    return E_FAIL; // NYI
 }
-
 
 Alias::Alias(Prop::Alias &prop_alias, Prop::Aliases *p_prop_aliases)
    : m_prop_alias{prop_alias}, mp_prop_aliases{p_prop_aliases}
@@ -289,7 +298,7 @@ Aliases::Aliases(Prop::Aliases &prop_aliases) : m_prop_aliases{prop_aliases}
 {
 }
 
-STDMETHODIMP Aliases::get_Item(VARIANT var, IAlias **retval)
+STDMETHODIMP Aliases::Item(VARIANT var, I::Alias **retval)
 {
    Variant v2;
    if(v2.Convert<uint32>(var))
@@ -393,12 +402,12 @@ STDMETHODIMP Puppet::put_ConnectWithPlayer(VARIANT_BOOL flag)
    m_propPuppet->fConnectWithPlayer(VariantBool(flag)); return S_OK;
 }
 
-STDMETHODIMP Puppet::get_Triggers(ITriggers **retval)
+STDMETHODIMP Puppet::get_Triggers(I::Triggers **retval)
 {
    return RefReturner(retval)(MakeCounting<Triggers>(m_propPuppet->propTriggers()));
 }
 
-STDMETHODIMP Puppet::get_Aliases(IAliases **retval)
+STDMETHODIMP Puppet::get_Aliases(I::Aliases **retval)
 {
    return RefReturner(retval)(MakeCounting<Aliases>(m_propPuppet->propAliases()));
 }
@@ -407,7 +416,7 @@ Puppets::Puppets(Prop::Puppets &propPuppets) : m_propPuppets(propPuppets)
 {
 }
 
-STDMETHODIMP Puppets::get_Item(VARIANT var, IPuppet **retval)
+STDMETHODIMP Puppets::Item(VARIANT var, I::Puppet **retval)
 {
    RefReturner returner(retval);
 
@@ -506,17 +515,17 @@ STDMETHODIMP Character::get_TimeCreated(VARIANT *retval)
    return SystemTimeToVariant(*retval, m_propCharacter->timeCreated());
 }
 
-STDMETHODIMP Character::get_Triggers(ITriggers **retval)
+STDMETHODIMP Character::get_Triggers(I::Triggers **retval)
 {
    return RefReturner(retval)(MakeCounting<Triggers>(m_propCharacter->propTriggers()));
 }
 
-STDMETHODIMP Character::get_Aliases(IAliases **retval)
+STDMETHODIMP Character::get_Aliases(I::Aliases **retval)
 {
    return RefReturner(retval)(MakeCounting<Aliases>(m_propCharacter->propAliases()));
 }
 
-STDMETHODIMP Character::get_Puppets(IPuppets **retval)
+STDMETHODIMP Character::get_Puppets(I::Puppets **retval)
 {
    return RefReturner(retval)(MakeCounting<Puppets>(m_propCharacter->propPuppets()));
 }
@@ -525,7 +534,7 @@ Characters::Characters(Prop::Server &propServer) : m_propServer(propServer)
 {
 }
 
-HRESULT Characters::get_Item(VARIANT var, ICharacter** retval)
+HRESULT Characters::Item(VARIANT var, I::Character** retval)
 {
    RefReturner returner(retval);
 
@@ -602,17 +611,17 @@ STDMETHODIMP World::put_Host(BSTR bstr)
    m_propServer->pclHost(BSTRToLStr(bstr)); return S_OK;
 }
 
-STDMETHODIMP World::get_Characters(ICharacters **retval)
+STDMETHODIMP World::get_Characters(I::Characters **retval)
 {
    return RefReturner(retval)(MakeCounting<Characters>(*m_propServer));
 }
 
-STDMETHODIMP World::get_Triggers(ITriggers **retval)
+STDMETHODIMP World::get_Triggers(I::Triggers **retval)
 {
    return RefReturner(retval)(MakeCounting<Triggers>(m_propServer->propTriggers()));
 }
 
-STDMETHODIMP World::get_Aliases(IAliases **retval)
+STDMETHODIMP World::get_Aliases(I::Aliases **retval)
 {
    return RefReturner(retval)(MakeCounting<Aliases>(m_propServer->propAliases()));
 }
@@ -621,7 +630,7 @@ Worlds::Worlds() : m_propServers(g_ppropGlobal->propConnections().propServers())
 {
 }
 
-STDMETHODIMP Worlds::get_Item(VARIANT var, IWorld **retval)
+STDMETHODIMP Worlds::Item(VARIANT var, I::World **retval)
 {
    RefReturner returner(retval);
 
@@ -656,7 +665,7 @@ STDMETHODIMP Worlds::get_Count(long *retval)
 
 STDMETHODIMP App::QueryInterface(const GUID &id, void **ppvObj)
 {
-   return TQueryInterfaces<IApp>(id, ppvObj);
+   return TQueryInterfaces<I::App>(id, ppvObj);
 }
 
 App::App()
@@ -681,7 +690,7 @@ STDMETHODIMP App::get_BuildDate(DATE *retval)
    return (SystemTimeToVariantTime(&buildTime, retval)!=0) ? S_OK : E_FAIL;
 }
 
-HRESULT App::get_Worlds(IWorlds **retval)
+HRESULT App::get_Worlds(I::Worlds **retval)
 {
    RefReturner returner(retval);
 
@@ -689,7 +698,7 @@ HRESULT App::get_Worlds(IWorlds **retval)
    return returner(m_pIWorlds);
 }
 
-HRESULT App::get_Windows(IWindows **retval)
+HRESULT App::get_Windows(I::Windows **retval)
 {
    RefReturner returner(retval);
 
@@ -697,12 +706,12 @@ HRESULT App::get_Windows(IWindows **retval)
    return returner(m_pIWindows);
 }
 
-HRESULT App::get_Triggers(ITriggers **retval)
+HRESULT App::get_Triggers(I::Triggers **retval)
 {
    return RefReturner(retval)(MakeCounting<Triggers>(g_ppropGlobal->propConnections().propTriggers()));
 }
 
-HRESULT App::get_Aliases(IAliases **retval)
+HRESULT App::get_Aliases(I::Aliases **retval)
 {
    return RefReturner(retval)(MakeCounting<Aliases>(g_ppropGlobal->propConnections().propAliases()));
 }
@@ -712,7 +721,7 @@ STDMETHODIMP App::SetOnNewWindow(IDispatch *pDisp, VARIANT var)
    return ManageHook<Event_NewWindow>(this, m_hookNewWindow, GlobalEvents::GetInstance(), pDisp, var);
 }
 
-STDMETHODIMP App::NewWindow(IWindow_Main **retval)
+STDMETHODIMP App::NewWindow(I::Window_Main **retval)
 {
    return RefReturner(retval)( (new Wnd_Main(Wnd_MDI::GetInstance()))->GetDispatch());
 }
@@ -737,24 +746,24 @@ STDMETHODIMP App::ActiveXObject(BSTR name, IDispatch **retval)
 }
 
 
-STDMETHODIMP App::NewTrigger(ITrigger **retval)
+STDMETHODIMP App::NewTrigger(I::Trigger **retval)
 {
    return RefReturner(retval)(new Trigger(*new Prop::Trigger(), nullptr));
 }
 
-STDMETHODIMP App::NewWindow_FixedText(int iWidth, int iHeight, IWindow_FixedText **retval)
+STDMETHODIMP App::NewWindow_FixedText(int iWidth, int iHeight, I::Window_FixedText **retval)
 {
    return RefReturner(retval)(Create_Window_FixedText(int2(iWidth, iHeight)));
 }
 
-STDMETHODIMP App::NewWindow_Graphics(int iWidth, int iHeight, IWindow_Graphics **retval)
+STDMETHODIMP App::NewWindow_Graphics(int iWidth, int iHeight, I::Window_Graphics **retval)
 {
    return RefReturner(retval)(Create_Window_Graphics(int2(iWidth, iHeight)));
 }
 
-STDMETHODIMP App::NewWindow_Text(int iWidth, int iHeight, IWindow_Text **retval)
+STDMETHODIMP App::NewWindow_Text(int iWidth, int iHeight, I::Window_Text **retval)
 {
-   CntPtrTo<IWindow_Text> pText=new Window_Text(int2(iWidth, iHeight));
+   CntPtrTo<I::Window_Text> pText=new Window_Text(int2(iWidth, iHeight));
    return RefReturner(retval)(pText);
 }
 
@@ -780,12 +789,12 @@ STDMETHODIMP App::OutputDebugText(BSTR bstr)
    ConsoleText(BSTRToLStr(bstr)); return S_OK;
 }
 
-STDMETHODIMP App::CreateInterval(int iTimeOut, IDispatch *pDisp, VARIANT var, ITimer **retval)
+STDMETHODIMP App::CreateInterval(int iTimeOut, IDispatch *pDisp, VARIANT var, I::Timer **retval)
 {
    return RefReturner(retval)(new OMTimer(m_firstTimer.Prev(), pDisp, var, iTimeOut, true));
 }
 
-STDMETHODIMP App::CreateTimeout(int iTimeOut, IDispatch *pDisp, VARIANT var, ITimer **retval)
+STDMETHODIMP App::CreateTimeout(int iTimeOut, IDispatch *pDisp, VARIANT var, I::Timer **retval)
 {
    return RefReturner(retval)(new OMTimer(m_firstTimer.Prev(), pDisp, var, iTimeOut, false));
 }
@@ -826,12 +835,12 @@ void App::OMTimer::OnTimer()
       Kill();
 }
 
-STDMETHODIMP App::New_Socket(ISocket **retval)
+STDMETHODIMP App::New_Socket(I::Socket **retval)
 {
    *retval=new Socket(); (*retval)->AddRef(); return S_OK;
 }
 
-STDMETHODIMP App::New_SocketServer(unsigned int iPort, IDispatch *pDisp, VARIANT var, ISocketServer **retval)
+STDMETHODIMP App::New_SocketServer(unsigned int iPort, IDispatch *pDisp, VARIANT var, I::SocketServer **retval)
 {
    return RefReturner(retval)(new SocketServer(iPort, pDisp, var));
 }
