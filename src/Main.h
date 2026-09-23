@@ -21,7 +21,7 @@
 #define YARN 1
 #define DWRITE_TEST 1
 #else
-#define BETA_BUILD 1
+#define BETA_BUILD 0
 #define SCRIPTING 0
 #define YARN 0
 #define DWRITE_TEST 0
@@ -55,6 +55,9 @@ const unsigned g_ciVersion=400;
 #undef gd_pcTitle
 #define gd_pcTitle "Cyberfall" TITLE_SUFFIX
 #endif
+
+// Http Agent string for the client (used in HTTP requests) (app name + build number)
+inline ConstString g_http_agent=gd_pcTitle " " g_szVersion;
 
 ConstString GetResourcePath();
 ConstString GetAppDataPath();
@@ -106,9 +109,23 @@ struct Variable
    OwnedString m_name, m_value;
 };
 
+//
+// Global Variables
+//
+struct Wnd_Main;
+struct Wnd_MDI;
+struct RestoreLogs;
+struct InputControl;
+struct Connection;
+
+extern Prop::Global *g_ppropGlobal;
+extern UniquePtr<RestoreLogs> gp_restore_logs;
 extern RandomKISS g_random;
 extern std::array<ConstString, 3> g_encoding_names;
 extern Prop::Variables g_empty_variables;
+
+struct HttpSession;
+HttpSession &GetHttpSession(); // Defined in AI.cpp
 
 UINT StateToShowCmd(Prop::Position::State state) noexcept;
 
@@ -138,24 +155,20 @@ void CreateDialog_Aliases(Window wnd, Prop::Server *ppropServer, Prop::Character
 void CloseDialog_Aliases();
 void CreateWindow_Root(ConstString cmdLine={}, int nCmdShow=SW_SHOWDEFAULT); // Create the First Window
 
+void CreateWindow_About(Window wndParent);
 void CreateDialog_Settings(Window wndParent, ConstString section={});
 void CreateDialog_Find(Window wnd, Text::Wnd &wndText);
-void CreateWindow_About(Window wndParent);
+void CreateDialog_Find(Window wndParent, Controls::RichEdit &wndText);
+void CreateDialog_InputWindow(Window wndParent, InputControl &input_window, Prop::InputWindow &propInputWindow);
+void CreateDialog_TextWindow(Window wndParent, Prop::TextWindow &propTextWindow);
+void CreateDialog_Connect(Window wnd, Wnd_MDI &wndMDI);
+void CreateDialog_SmartPaste(Window wndParent, Connection &connection, Prop::Connections &propConnections);
+void CreateDialog_Logs(Connection &connection);
 
 void CreateWindow_Subscribe(Window wndParent);
 
 bool ParseTimeInSeconds(ConstString word, float &seconds);
 
-
-//
-// Global Variables
-//
-struct Wnd_Main;
-struct Wnd_MDI;
-struct RestoreLogs;
-
-extern Prop::Global *g_ppropGlobal;
-extern UniquePtr<RestoreLogs> gp_restore_logs;
 
 struct Event_NewWindow
 {

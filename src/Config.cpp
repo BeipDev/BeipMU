@@ -82,6 +82,9 @@ void LoadConfig(ConstString filename, bool fImportingConfig)
    Global_PropChange();
 
    SetUIFont(g_ppropGlobal->pclUIFontName(), g_ppropGlobal->UIFontSize());
+
+   Docking::g_caption_font_name=g_ppropGlobal->pclDockedCaptionFontName();
+   Docking::g_docked_caption_height=g_ppropGlobal->DockedCaptionHeight(); // caption bar height derived from font size
 }
 
 void LoadConfig(Prop::Global &global, ConstString filename, IError &error)

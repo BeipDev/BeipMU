@@ -3,7 +3,7 @@
 //
 
 #include "Main.h"
-#include "AnsiParser.h"
+#include "TextToLine.h"
 
 //
 //
@@ -96,10 +96,10 @@ private:
    AnsiParser::State &m_state;
 };
 
-bool AnsiParser::Parse(Streams::Input &ts, Text::LineBuilder &line_builder)
+void AnsiParser::Parse(Streams::Input &ts, Text::LineBuilder &line_builder)
 {
    if(!m_prop_ansi.fParse())
-      return false;
+      return;
 
    StateChanger change(m_state);
 
@@ -163,7 +163,7 @@ bool AnsiParser::Parse(Streams::Input &ts, Text::LineBuilder &line_builder)
                      {
                         Color color;
                         if(!Translate8BitOr24BitColor(ts, color))
-                           return false;
+                           return;
                         change.Foreground(color);
                         break;
                      }
@@ -175,7 +175,7 @@ bool AnsiParser::Parse(Streams::Input &ts, Text::LineBuilder &line_builder)
                      case 48: // Look for a 48;[5 or 2];#m style code
                      {
                         if(!Translate8BitOr24BitColor(ts, color_bg))
-                           return false;
+                           return;
                         break;
                      }
                      case 49: // 49: Default background color (implementation defined)
@@ -214,8 +214,90 @@ bool AnsiParser::Parse(Streams::Input &ts, Text::LineBuilder &line_builder)
          }
 
          if(ts.CharGet()!='m')
-            return false;
+            return;
          break;
+      }
+      case ']':
+      {
+         // OSC sequences (Operating System Command). We handle OSC 8 which is the
+         // hyperlink sequence: ESC ] 8 ; params ; URI ST  (where ST (string terminator)
+         // is ESC '\' or BEL)
+         unsigned osc;
+         if(!ts.Parse(osc) || !ts.CharSkip(';'))
+            return;
+
+         if(osc!=8)
+            return; // Only handle OSC 8 currently
+
+         unsigned param_start=ts.PosGet();
+         if(!ts.SkipUntilChar(';'))
+            return;
+
+         auto params=ts.GetText().Sub(param_start, ts.PosGet()-1);
+
+         unsigned uri_start=ts.PosGet();
+         unsigned uri_end=0;
+         while(!uri_end)
+         {
+            switch(ts.CharGet())
+            {
+               case 0: // End of stream
+                  return;
+               case 7: // BEL
+                  uri_end=ts.PosGet()-1;
+                  break;
+               case 27: // ESC, maybe ST
+                  if(ts.CharSkip('\\'))
+                     uri_end=ts.PosGet()-2;
+                  break;
+            }
+         }
+
+         ConstString uri=ts.GetText().Sub(uri_start, uri_end);
+
+         // Terminate any previous hyperlink
+         if(m_in_osc8)
+         {
+            m_in_osc8=false;
+            line_builder.Set(Text::Records::Underline{false});
+            line_builder.SetURL(nullptr);
+         }
+
+         // Ignore empty URIs
+         if(!params && !uri)
+            return;
+
+         auto p_url_data=MakeUnique<Text::Records::URLData>();
+
+         // Determine URL type by scheme
+         if(uri.IStartsWith("http://") || uri.IStartsWith("https://"))
+            p_url_data->m_type=Text::Records::URLType::HTTP;
+         else if(uri.IStartsWith("ftp://"))
+            p_url_data->m_type=Text::Records::URLType::FTP;
+         else if(uri.IStartsWith("tel:"))
+            p_url_data->m_type=Text::Records::URLType::TELNET;
+         else if(uri.IStartsWith("send:"))
+         {
+            p_url_data->m_type=Text::Records::URLType::Custom;
+            auto p_command=MakeCounting<Command_Send>();
+            p_command->m_command=HybridStringBuilder<>{Strings::URLUnescapedString{uri.WithoutFirst(5)}};
+            p_url_data->mp_custom=std::move(p_command);
+         }
+         else if(uri.IStartsWith("prompt:"))
+         {
+            p_url_data->m_type=Text::Records::URLType::Custom;
+            auto p_command=MakeCounting<Command_Prompt>();
+            p_command->m_command=HybridStringBuilder<>{Strings::URLUnescapedString{uri.WithoutFirst(7)}};
+            p_url_data->mp_custom=std::move(p_command);
+         }
+
+         if(!p_url_data->mp_custom)
+            p_url_data->m_url=uri;
+
+         line_builder.SetURL(std::move(p_url_data));
+         line_builder.Set(Text::Records::Underline{true});
+         m_in_osc8=true;
+         return;
       }
    }
 
@@ -258,8 +340,6 @@ bool AnsiParser::Parse(Streams::Input &ts, Text::LineBuilder &line_builder)
       }
       line_builder.Set(tr);
    }
-
-   return true;
 }
 
 Color AnsiParser::GetForegroundColor() const

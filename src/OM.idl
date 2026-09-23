@@ -406,7 +406,7 @@ library BeipMU
 
       HRESULT ActiveXObject([in] BSTR name, [out, retval] IDispatch **retval);
 
-      HRESULT NewTrigger([out, retval] Trigger **retval);
+      [helpstring("Create a new trigger object")] HRESULT NewTrigger([out, retval] Trigger **retval);
 
       HRESULT NewWindow_FixedText([in, defaultvalue(80)] int width, [in, defaultvalue(25)] int height, [out, retval] Window_FixedText** retval);
       HRESULT NewWindow_Graphics([in] int width, [in] int height, [out, retval] Window_Graphics** retval);

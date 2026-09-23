@@ -5,6 +5,8 @@
 #include "Emoji.h"
 #include "Wnd_Taskbar.h"
 #include "Speech.h"
+#include "JSON.h"
+#include "LibWin32\Http.h"
 
 namespace OM
 {
@@ -221,6 +223,11 @@ private:
    using SettingsDialog::On;
    LRESULT On(const Msg::Command &msg);
 
+   enum
+   {
+      IDC_GLOBAL_INPUT_SETTINGS = 100,
+   };
+
    AL::CheckBox *m_pcbSpellCheck;
    Controls::TComboBox<OwnedString> m_coSpellLanguage;
 };
@@ -265,6 +272,8 @@ void Dlg_Input::OnCreate()
       auto &g=CreateSection("Options");
       g >> AL::Style::Attach_Right;
 
+      g << m_layout.CreateButton(IDC_GLOBAL_INPUT_SETTINGS, "Global Input Settings...");
+
       AddBool(g, "Send unrecognized commands to server", g_ppropGlobal->fSendUnrecognizedCommands());
       AddBool(g, "Prevent smart quote mode (no “” quotes, only \")", g_ppropGlobal->fPreventSmartQuotes());
       AddBool(g, "Automatically show history window while navigating input history", g_ppropGlobal->fAutoShowHistory());
@@ -298,6 +307,13 @@ void Dlg_Input::OnCreate()
 
 LRESULT Dlg_Input::On(const Msg::Command &msg)
 {
+   if(msg.iID()==IDC_GLOBAL_INPUT_SETTINGS && msg.uCodeNotify()==BN_CLICKED)
+   {
+      auto &wnd_main=Wnd_MDI::GetInstance().GetActiveWindow();
+      CreateDialog_InputWindow(*this, wnd_main.GetInputWindow(), GlobalInputSettings());
+      return msg.Success();
+   }
+
    if(msg.uCodeNotify()==CBN_DROPDOWN && msg.wndCtl()==m_coSpellLanguage &&
       m_coSpellLanguage.GetCount()<2)
    {
@@ -818,7 +834,7 @@ LRESULT Dlg_AnsiColors::On(const Msg::MeasureItem &msg)
 
 LRESULT Dlg_AnsiColors::On(const Msg::DrawItem &msg)
 {
-   // Draw the standard listbox text
+   // DrawTop the standard listbox text
    DC dc(msg->hDC);
    Rect &rcItem=(Rect&)(msg->rcItem); rcItem.left+=rcItem.size().y;
    bool fSelected=msg->itemState&ODS_SELECTED;
@@ -834,7 +850,7 @@ LRESULT Dlg_AnsiColors::On(const Msg::DrawItem &msg)
       dc.DrawFocusRect(rcItem);
    }
 
-   // Draw the color sample
+   // DrawTop the color sample
    Rect rcSample(rcItem.left-rcItem.size().y, rcItem.top, rcItem.left, rcItem.bottom);
    dc.SetDCBrushColor(m_propColors.Get(msg->itemID));
    dc.FillRect(rcSample, (HBRUSH)GetStockObject(DC_BRUSH));
@@ -1052,6 +1068,9 @@ private:
       IDC_CUSTOM,
       IDC_UIFONT,
       IDC_UIFONT_DEFAULT,
+      IDC_CAPTIONFONT,
+      IDC_CAPTIONFONT_DEFAULT,
+      IDC_CAPTIONHEIGHT_DEFAULT,
    };
 
    // Color List
@@ -1059,6 +1078,7 @@ private:
    AL::CheckBox *m_pcbColors;
    AL::ListBox *m_plbColors;
    AL::Button *m_pbtChange, *m_pbtDefault;
+   AL::Edit *m_caption_height;
 };
 
 LRESULT Dlg_UITheme::WndProc(const Message &msg)
@@ -1078,6 +1098,9 @@ void Dlg_UITheme::Save()
 {
    if(g_ppropGlobal->fPropCustomTheme())
       SaveCustomTheme();
+
+   if(unsigned value; m_caption_height->Get(value))
+      g_ppropGlobal->DockedCaptionHeight(value);
 }
 
 void Dlg_UITheme::OnCreate()
@@ -1092,6 +1115,20 @@ void Dlg_UITheme::OnCreate()
       {
          auto *pGH=m_layout.CreateGroup_Horizontal(); g << pGH;
          *pGH << m_layout.CreateButton(IDC_UIFONT, "Font...") << m_layout.CreateButton(IDC_UIFONT_DEFAULT, "Use Default font");
+      }
+   }
+   {
+      auto &g=CreateSection("Docked Windows", 0);
+      {
+         auto *pGH=m_layout.CreateGroup_Horizontal(); g << pGH;
+         *pGH >> AL::Style::Attach_Right;
+         *pGH << m_layout.CreateStatic("Caption Font Face:") << m_layout.CreateButton(IDC_CAPTIONFONT, "Font...") << m_layout.CreateButton(IDC_CAPTIONFONT_DEFAULT, "Use Default");
+      }
+      {
+         auto *pGH=m_layout.CreateGroup_Horizontal(); g << pGH;
+         *pGH >> AL::Style::Attach_Right;
+         m_caption_height=m_layout.CreateEdit(-1, int2(5, 1), ES_NUMBER);
+         *pGH << m_layout.CreateStatic("Height ") << m_caption_height << m_layout.CreateStatic(" dips") << m_layout.CreateButton(IDC_CAPTIONHEIGHT_DEFAULT, "Default");
       }
    }
    {
@@ -1132,6 +1169,7 @@ void Dlg_UITheme::OnCreate()
    // UI
    m_pcbColors->Check(g_ppropGlobal->fPropCustomTheme());
    m_lbPresets.SetCurSel(g_ppropGlobal->Theme());
+   m_caption_height->Set(g_ppropGlobal->DockedCaptionHeight());
 
    for(unsigned i=0;i<std::size(g_theme_entries);i++)
       m_plbColors->AddData(nullptr);
@@ -1160,6 +1198,30 @@ LRESULT Dlg_UITheme::On(const Msg::Command &msg)
 
          if(font.ChooseFont(*this))
             SetUIFont(*this, font.pclName(), font.Size());
+         break;
+      }
+
+      case IDC_CAPTIONFONT_DEFAULT:
+         g_ppropGlobal->pclDockedCaptionFontName("Microsoft Sans Serif");
+         MessageBox(*this, "Caption font reset to default. Changes will take effect after restarting the app.", "Note:", MB_ICONINFORMATION|MB_OK);
+         break;
+
+      case IDC_CAPTIONHEIGHT_DEFAULT:
+         m_caption_height->Set(18);
+         break;
+
+      case IDC_CAPTIONFONT:
+      {
+         Prop::Font font;
+         font.pclName(g_ppropGlobal->pclDockedCaptionFontName());
+         font.Size(g_ppropGlobal->DockedCaptionHeight());
+
+         if(font.ChooseFont(*this))
+         {
+            g_ppropGlobal->pclDockedCaptionFontName(font.pclName());
+            g_ppropGlobal->DockedCaptionHeight(font.Size());
+            MessageBox(*this, "Changes will take effect after restarting the app.", "Note:", MB_ICONINFORMATION|MB_OK);
+         }
          break;
       }
 
@@ -1249,7 +1311,7 @@ LRESULT Dlg_UITheme::On(const Msg::DrawItem &msg)
    auto &entry=g_theme_entries[msg->itemID];
    bool is_header=&entry.color==&ThemeEntry::s_divider;
 
-   // Draw the standard listbox text
+   // DrawTop the standard listbox text
    DC dc(msg->hDC);
    Rect &rcItem=(Rect &)(msg->rcItem);
    if(!is_header)
@@ -1271,12 +1333,55 @@ LRESULT Dlg_UITheme::On(const Msg::DrawItem &msg)
 
    if(!is_header)
    {
-      // Draw the color sample
+      // DrawTop the color sample
       Rect rcSample(rcItem.left-rcItem.size().y, rcItem.top, rcItem.left, rcItem.bottom);
       dc.SetDCBrushColor(entry.color);
       dc.FillRect(rcSample, (HBRUSH)GetStockObject(DC_BRUSH));
    }
    return true;
+}
+
+struct Dlg_Output : SettingsDialog
+{
+   void OnCreate() override;
+   void Save() override { }
+
+private:
+
+   LRESULT WndProc(const Message &msg) override;
+   friend TWindowImpl;
+
+   // Window Messages
+   using SettingsDialog::On;
+   LRESULT On(const Msg::Command &msg);
+
+   enum
+   {
+      IDC_GLOBAL_OUTPUT_SETTINGS = 100,
+   };
+};
+
+LRESULT Dlg_Output::WndProc(const Message &msg)
+{
+   return Dispatch<SettingsDialog, Msg::Create, Msg::Command>(msg);
+}
+
+void Dlg_Output::OnCreate()
+{
+   auto &g=CreateSection("Output Windows");
+   g << m_layout.CreateButton(IDC_GLOBAL_OUTPUT_SETTINGS, "Global Output Settings...");
+}
+
+LRESULT Dlg_Output::On(const Msg::Command &msg)
+{
+   if(msg.iID()==IDC_GLOBAL_OUTPUT_SETTINGS && msg.uCodeNotify()==BN_CLICKED)
+   {
+      extern void CreateDialog_TextWindow(Window wndParent, Prop::TextWindow &propTextWindow);
+      CreateDialog_TextWindow(*this, GlobalTextSettings());
+      return msg.Success();
+   }
+
+   return msg.Success();
 }
 
 struct Dlg_Network : SettingsDialog
@@ -2014,6 +2119,451 @@ LRESULT Dlg_Emoji::On(const Msg::Command &msg)
    return msg.Success();
 }
 
+struct AI_ModelsRequest : HttpRequest
+{
+   struct Model
+   {
+      struct Details
+      {
+         OwnedString m_parameter_size;
+         OwnedString m_quantization_level;
+
+         static consteval const JSON::Info &GetJsonInfo()
+         {
+            static constexpr JSON::Strings strings{{"parameter_size", &Details::m_parameter_size}, {"quantization_level", &Details::m_quantization_level}};
+            static constexpr JSON::Info info{.strings=strings};
+            return info;
+         }
+      };
+
+      OwnedString m_name;
+      uint64 m_size{};
+      Details m_details;
+
+      static consteval const JSON::Info &GetJsonInfo()
+      {
+         static constexpr JSON::Strings strings{{"name", &Model::m_name}};
+         static constexpr JSON::Numbers number_values{{"size", &Model::m_size}};
+         static constexpr JSON::Objects object_values{{"details", &Model::m_details}};
+         static constexpr JSON::Info info{.strings=strings, .numbers=number_values, .objects=object_values};
+         return info;
+      }
+   };
+
+   struct Response
+   {
+      Collection<Model> m_models;
+
+      static consteval const JSON::Info &GetJsonInfo()
+      {
+         static constexpr JSON::Arrays array_values{{"models", &Response::m_models}};
+         static constexpr JSON::Info info{.arrays=array_values};
+         return info;
+      }
+   };
+
+   const Collection<Model> &GetModels() const { return m_response.m_models; }
+
+
+   AI_ModelsRequest(HttpConnection &http_connection, std::function<void()> on_complete, std::function<void(ConstString)> on_error)
+      : HttpRequest{http_connection},
+      m_on_complete{std::move(on_complete)},
+      m_on_error{std::move(on_error)}
+   {
+      if(Open("GET", "/api/tags"))
+         Send("");
+   }
+
+private:
+
+   void OnComplete(Array<const uint8> data) override
+   {
+      try
+      {
+         JSON::ParseObject(m_response.GetJsonInfo(), &m_response, ToString(data));
+      }
+      catch(const std::exception &message)
+      {
+         OnError(SzToString(message.what()));
+         return;
+      }
+      m_on_complete();
+   }
+
+   void OnError(ConstString error) override
+   {
+      m_on_error(error);
+   }
+
+   Response m_response;
+   std::function<void()> m_on_complete;
+   std::function<void(ConstString)> m_on_error;
+};
+
+struct AI_PullRequest : HttpRequest
+{
+   AI_PullRequest(HttpConnection &http_connection, ConstString model, std::function<void(ConstString)> on_status, std::function<void(bool)> on_complete)
+      : HttpRequest{http_connection},
+        m_on_status{std::move(on_status)},
+        m_on_complete{std::move(on_complete)}
+   {
+      if(!Open("POST", "/api/pull"))
+         return;
+
+      {
+         JSON::Writer json_body{m_request_buffer};
+         auto _ = json_body.Object();
+         json_body.WriteString("name", model);
+      }
+
+      Send("Content-Type: application/json\r\n");
+   }
+
+private:
+
+   struct JSON_PullStatus : JSON::Element
+   {
+      void OnString(ConstString name, ConstString value) override
+      {
+         if(name=="status")
+            m_status=value;
+         else if(name=="error")
+            m_error=value;
+      }
+
+      void OnNumber(ConstString name, double value) override
+      {
+         if(name=="total")
+            m_total=static_cast<uint64>(value);
+         else if(name=="completed")
+            m_completed=static_cast<uint64>(value);
+      }
+
+      OwnedString m_status;
+      OwnedString m_error;
+      uint64 m_total{};
+      uint64 m_completed{};
+   };
+
+   unsigned OnData_bg(Array<const uint8> data) override
+   {
+      auto response=ToString(data);
+
+      while(response)
+      {
+         ConstString next;
+         if(!response.Split('\n', response, next))
+            break;
+
+         if(!response)
+         {
+            response=next;
+            continue;
+         }
+
+         JSON_PullStatus element;
+         try
+         {
+            JSON::ParseObject(element, response);
+         }
+         catch(const std::exception &)
+         {
+         }
+
+         if(element.m_error)
+         {
+            m_last_status=element.m_error;
+            m_error=true;
+         }
+         else if(element.m_total>0)
+         {
+            unsigned pct=static_cast<unsigned>(element.m_completed*100/element.m_total);
+            m_last_status=HybridStringBuilder<>(element.m_status, " ", pct, "%");
+         }
+         else if(element.m_status)
+            m_last_status=std::move(element.m_status);
+
+         m_on_status(m_last_status);
+         response=next;
+      }
+
+      return data.Count();
+   }
+
+   void OnComplete(Array<const uint8> data) override
+   {
+      m_on_complete(!m_error);
+   }
+
+   std::function<void(ConstString)> m_on_status;
+   std::function<void(bool)> m_on_complete;
+   OwnedString m_last_status;
+   bool m_error{};
+};
+
+struct AI_DeleteRequest : HttpRequest
+{
+   AI_DeleteRequest(HttpConnection &http_connection, ConstString model, std::function<void()> on_complete)
+      : HttpRequest{http_connection},
+        m_on_complete{std::move(on_complete)}
+   {
+      if(!Open("DELETE", "/api/delete"))
+         return;
+
+      {
+         JSON::Writer json_body{m_request_buffer};
+         auto _ = json_body.Object();
+         json_body.WriteString("name", model);
+      }
+
+      Send("Content-Type: application/json\r\n");
+   }
+
+private:
+
+   void OnComplete(Array<const uint8> data) override
+   {
+      m_on_complete();
+   }
+
+   std::function<void()> m_on_complete;
+};
+
+struct Dlg_AI : SettingsDialog
+{
+private:
+
+   LRESULT WndProc(const Message &msg) override;
+   friend TWindowImpl;
+
+   void Save() override;
+   void OnCreate() override;
+
+   // Window Messages
+   using SettingsDialog::On;
+   LRESULT On(const Msg::Command &msg);
+
+   void FetchModels();
+   void OnModelsReceived();
+   void OnModelsError(ConstString error);
+
+   enum
+   {
+      IDC_SERVER = 100,
+      IDC_MODEL,
+      IDC_DOWNLOAD_MODEL,
+      IDC_DOWNLOAD,
+      IDC_BROWSE_MODELS,
+      IDC_DELETE,
+      IDC_INSTALL,
+      IDC_REFRESH,
+   };
+
+   AL::Edit *m_pedServer{};
+   Controls::ListView m_lvModel;
+   AL::Edit *mp_edDownloadModel{};
+   AL::Button *mp_button_download{};
+   AL::Static *mp_download_status{};
+
+   Prop::AI *m_pprop{&g_ppropGlobal->propAI()};
+   UniquePtr<HttpConnection> mp_http_connection;
+   UniquePtr<AI_ModelsRequest> m_models_request;
+   UniquePtr<AI_PullRequest> m_pull;
+   UniquePtr<AI_DeleteRequest> m_delete;
+};
+
+LRESULT Dlg_AI::WndProc(const Message &msg)
+{
+   return Dispatch<SettingsDialog, Msg::Create, Msg::Command>(msg);
+}
+
+void Dlg_AI::Save()
+{
+   m_pprop->pclServer(m_pedServer->GetText());
+
+   if(m_models_request)
+   {
+      int sel=m_lvModel.GetNextItem(LVNI_SELECTED);
+      if(sel>=0 && (unsigned)sel<m_models_request->GetModels().Count())
+         m_pprop->pclModel(m_models_request->GetModels()[m_lvModel.GetItemParam(sel)].m_name);
+   }
+}
+
+void Dlg_AI::OnCreate()
+{
+   mp_http_connection=MakeUnique<HttpConnection>(GetHttpSession(), m_pprop->pclServer());
+
+   auto &server=CreateSection("Ollama");
+
+   {
+      auto *p_gh=m_layout.CreateGroup_Horizontal(); server << p_gh;
+      p_gh->weight(0);
+      m_pedServer=m_layout.CreateEdit(IDC_SERVER, {40, 1});
+      *p_gh << m_layout.CreateStatic("Host") << m_pedServer;
+      server << m_layout.CreateStatic("Close and reopen this dialog for new host to apply");
+   }
+
+   m_lvModel.Create(*this, IDC_MODEL, LVS_REPORT | LVS_SINGLESEL | LVS_SHOWSELALWAYS);
+   m_lvModel.SetExtendedStyle(LVS_EX_FULLROWSELECT, LVS_EX_FULLROWSELECT);
+   m_lvModel.szMinimum().y+=200;
+   server << m_layout.AddControl(m_lvModel);
+
+   {
+      auto *p_gh=m_layout.CreateGroup_Horizontal(); server << p_gh;
+      *p_gh >> AL::Style::Attach_Right;
+      p_gh->weight(0);
+      *p_gh << m_layout.CreateButton(IDC_INSTALL, "Ollama Website")
+            << m_layout.CreateButton(IDC_REFRESH, "Refresh Model List")
+            << m_layout.CreateButton(IDC_BROWSE_MODELS, "Browse Models...")
+            << m_layout.CreateButton(IDC_DELETE, "Delete");
+   }
+
+   {
+      auto *p_gh=m_layout.CreateGroup_Horizontal(); server << p_gh;
+      p_gh->weight(0);
+      mp_edDownloadModel=m_layout.CreateEdit(IDC_DOWNLOAD_MODEL, {40, 1});
+      mp_button_download=m_layout.CreateButton(IDC_DOWNLOAD, "Download");
+      *p_gh << m_layout.CreateStatic("Download Model") << mp_edDownloadModel << mp_button_download;
+   }
+
+   {
+      auto *p_gh=m_layout.CreateGroup_Horizontal(); server << p_gh;
+      p_gh->weight(0);
+      mp_download_status=m_layout.CreateStatic(" \n ");
+      mp_download_status->weight(1);
+      *p_gh << mp_download_status;
+   }
+
+   m_pedServer->SetCueBanner("example.com:8889");
+   m_pedServer->SetText(m_pprop->pclServer());
+   mp_edDownloadModel->SetCueBanner("llama3:latest");
+
+   {
+      Controls::ListView::Column lvc;
+      lvc.Text("Name"); lvc.Width(250);
+      m_lvModel.InsertColumn(0, lvc);
+      lvc.Text("Parameters"); lvc.Width(120);
+      m_lvModel.InsertColumn(1, lvc);
+      lvc.Text("Quantization"); lvc.Width(120);
+      m_lvModel.InsertColumn(2, lvc);
+      lvc.Text("Size"); lvc.Width(100); lvc.Format(LVCFMT_RIGHT);
+      m_lvModel.InsertColumn(3, lvc);
+   }
+
+   FetchModels();
+}
+
+void Dlg_AI::FetchModels()
+{
+   m_lvModel.DeleteAllItems();
+
+   Controls::ListView::Item lvi;
+   lvi.Text("Populating...");
+   m_lvModel.InsertItem(lvi);
+
+   m_models_request=MakeUnique<AI_ModelsRequest>(*mp_http_connection, [this]() { OnModelsReceived(); }, [this](ConstString error) { OnModelsError(error); });
+}
+
+LRESULT Dlg_AI::On(const Msg::Command &msg)
+{
+   switch(msg.iID())
+   {
+      case IDC_INSTALL:
+      {
+         OpenURLAsync("https://ollama.com");
+         break;
+      }
+      case IDC_REFRESH:
+      {
+         FetchModels();
+         break;
+      }
+      case IDC_DOWNLOAD:
+      {
+         auto model_name=mp_edDownloadModel->GetText();
+         if(!model_name)
+            break;
+
+         mp_button_download->Enable(false);
+         mp_download_status->SetText("Starting download...");
+         m_pull=MakeUnique<AI_PullRequest>(*mp_http_connection, ConstString(model_name),
+            [this](ConstString status) { mp_download_status->SetText(status); },
+            [this](bool success)
+            {
+               mp_button_download->Enable(true);
+               if(success)
+               {
+                  mp_download_status->SetText("Download Complete");
+                  FetchModels();
+               }
+            });
+         break;
+      }
+
+      case IDC_BROWSE_MODELS:
+         OpenURLAsync("https://ollama.com/library");
+         break;
+
+      case IDC_DELETE:
+      {
+         if(!m_models_request)
+            break;
+
+         int sel=m_lvModel.GetNextItem(LVNI_SELECTED);
+         if(sel<0 || (unsigned)sel>=m_models_request->GetModels().Count())
+            break;
+
+         auto &model_name=m_models_request->GetModels()[sel].m_name;
+         m_delete=MakeUnique<AI_DeleteRequest>(*mp_http_connection, ConstString(model_name),
+            [this]()
+            {
+               FetchModels();
+            });
+         break;
+      }
+   }
+
+   return msg.Success();
+}
+
+void Dlg_AI::OnModelsReceived()
+{
+   if(!m_models_request)
+      return;
+
+   m_lvModel.DeleteAllItems();
+   int sel=-1;
+   int index=0;
+   for(auto &model : m_models_request->GetModels())
+   {
+      Controls::ListView::Item lvi(index);
+      lvi.Text(model.m_name);
+      lvi.Param(index);
+      int iItem=m_lvModel.InsertItem(lvi);
+      m_lvModel.SetItemText(iItem, 1, model.m_details.m_parameter_size);
+      m_lvModel.SetItemText(iItem, 2, model.m_details.m_quantization_level);
+
+      HybridStringBuilder<> size_str;
+      ByteCountToStringAbbreviated(size_str, model.m_size);
+      m_lvModel.SetItemText(iItem, 3, ConstString(size_str));
+
+      if(model.m_name==m_pprop->pclModel())
+         sel=index;
+      index++;
+   }
+
+   if(sel>=0)
+      m_lvModel.SetItemState(sel, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
+}
+
+void Dlg_AI::OnModelsError(ConstString error)
+{
+   m_lvModel.DeleteAllItems();
+
+   Controls::ListView::Item lvi;
+   lvi.Text(error);
+   m_lvModel.InsertItem(lvi);
+}
 
 struct Dlg_UserData : SettingsDialog
 {
@@ -2244,6 +2794,7 @@ LRESULT Dlg_Settings::On(const Msg::Create &msg)
       {
          auto *pG=m_layout.CreateGroup_Horizontal(); *pGV << pG;
          *pG >> (AL::Style::Attach_Left | AL::Style::Attach_Top);
+         pG->weight(0);
 
          auto *pbtOk=m_layout.CreateButton(IDOK, STR_OK); pbtOk->SizeBigger();
          auto *pbtCancel=m_layout.CreateButton(IDCANCEL, STR_Cancel); pbtCancel->SizeBigger();
@@ -2256,6 +2807,7 @@ LRESULT Dlg_Settings::On(const Msg::Create &msg)
    AddCategory(new Dlg_General(), "General");
    AddCategory(new Dlg_UITheme(), "UI Theme");
    AddCategory(new Dlg_Input(), "Input Windows");
+   AddCategory(new Dlg_Output(), "Output Windows");
    AddCategory(new Dlg_Logging(), "Logging");
    AddCategory(new Dlg_Network(), "Network");
    AddCategory(new Dlg_Taskbar(), "Taskbar");
@@ -2264,6 +2816,7 @@ LRESULT Dlg_Settings::On(const Msg::Create &msg)
    AddCategory(new Dlg_Scripting(), "Scripting");
    AddCategory(new Dlg_RestoreLogs(), "Restore Logs");
    AddCategory(new Dlg_AnsiColors(), "Ansi Colors");
+   AddCategory(new Dlg_AI(), "AI");
    AddCategory(new Dlg_UserData(), "User Data");
    mp_list_categories->SetCurSel(0);
 

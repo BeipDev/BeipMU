@@ -28,7 +28,7 @@ UniquePtr<Text::Line> TextToLine::Parse(ConstString string, bool use_pueblo, Pro
       switch(c)
       {
          case CHAR_ESC: // ESC
-            if(stream.CharSpy()=='[')
+            if(stream.CharSpy()=='[' || stream.CharSpy()==']')
                m_ansi_parser.Parse(stream, m_line_builder);
             break;
 
@@ -245,6 +245,25 @@ void *Command_Send::QueryInterface(TypeID id)
    if(id==GetTypeID<Command_Send>())
       return this;
    return nullptr;
+}
+
+bool Command_Send::GetTooltip(StringBuilder &string) const
+{
+   string("Sends: ", m_command, CRLF);
+   return true;
+}
+
+void *Command_Prompt::QueryInterface(TypeID id)
+{
+   if(id==GetTypeID<Command_Prompt>())
+      return this;
+   return nullptr;
+}
+
+bool Command_Prompt::GetTooltip(StringBuilder &string) const
+{
+   string("Sets Input Prompt To: ", m_command, CRLF);
+   return true;
 }
 
 bool TextToLine::HandlePuebloTag(Streams::Input &stream, Text::HTMLParser &html)

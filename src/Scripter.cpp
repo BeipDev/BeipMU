@@ -656,6 +656,13 @@ struct Chakra
 
          default:
          {
+            static bool s_show_help_once{true};
+            if(s_show_help_once)
+            {
+               ConsoleHTML("<icon information>For scripting help, type /shelp");
+               s_show_help_once=false;
+            }
+
             auto exception=GetAndClearException();
             ConstWString message=ValueToString(GetProperty(exception, GetPropertyIdFromName(L"message")));
 

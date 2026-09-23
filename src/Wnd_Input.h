@@ -16,6 +16,7 @@ struct InputControl : IEditHost, Controls::RichEdit, Events::Sends_Deleted
 
    void SetText(ConstString text);
    void ReplaceSelection(ConstString text);
+   void AppendText(ConstString text);
    bool IsPrimary() const;
 
    void ConvertReturns();
