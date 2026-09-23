@@ -300,7 +300,8 @@ try
          return;
 
       auto prompt=command_line.WithoutFirst(command.Length()+1);
-      ai.Request(prompt);
+      ai.SetPrompt(prompt);
+      ai.SubmitPrompt();
       return;
    }
 
@@ -1719,6 +1720,18 @@ try
          }
          mp_connection->Receive(ConstString("\x01B[0;37;40mResetting back to defaults" CRLF));
 
+         // OSC 8 Hyperlink test cases
+         mp_connection->Receive(ConstString(
+            "OSC 8 Hyperlink Tests" CRLF
+            " Hyperlink terminated with BEL: \x{1B}]8;;https://example.com\x{7}Click here for example\x{1B}]8;;\x{7}" CRLF
+            " Terminated with ST (ESC '\\'): \x{1B}]8;;https://example.com\x{1B}\\Click here (ST terminator)\x{1B}]8;;\x{1B}\\" CRLF
+            " Multiple hyperlinks in one line: \x{1B}]8;;https://a.com\x{7}A\x{1B}]8;;\x{7} and \x{1B}]8;;https://b.com\x{7}B\x{1B}]8;;\x{7}" CRLF
+            " Multiple without reset inbetween: \x{1B}]8;;https://a.com\x{7}A \x{1B}]8;;https://b.com\x{7}B\x{1B}]8;;\x{7}" CRLF
+            " Send 'look here': \x{1B}]8;;send:look%20here\x{7}Click to Look\x{1B}]8;;\x{7}" CRLF
+            " Prompt 'look here': \x{1B}]8;;prompt:look%20here\x{7}Click to Prompt Look\x{1B}]8;;\x{7}" CRLF
+            "End of OSC 8 tests" CRLF
+         ));
+
          mp_connection->Receive(ConstString("24-bit Color Ansi Test" CRLF));
          for(unsigned row=1;row<8;row++)
          {
@@ -1762,6 +1775,22 @@ try
          mp_wnd_text->AddHTML(R"(<font face="Times New Roman" size="32">Times New Roman 32 in <font color='fuchsia'>fuchsia </font><font color='yellow'>yellow </font><font color='aqua'>aqua </font><font face="Webdings">Webdings!)");
          mp_wnd_text->AddHTML(R"(<b><font color="#FF0000">Red</font> <font color="#00FF00">Green</font> <font color="#0000FF">Blue</font> <font color="#D2691E">Chocolate</font> <font color="#FFE4C4">Bisque</font> <font color="#FFD700">Gold</font></b>)");
          mp_wnd_text->AddHTML("<icon app>App <icon exclamation>Exclamation <icon information>Information <icon error>Error");
+         return;
+      }
+
+      if(IEquals(wl[1], "osc8"))
+      {
+         // OSC 8 Hyperlink test cases
+         mp_connection->Receive(ConstString(
+            "OSC 8 Hyperlink Tests" CRLF
+            // Basic hyperlink terminated with BEL
+            "\x01B]8;;https://example.com\x07Click here for example\x01B]8;;\x07" CRLF
+            // Hyperlink terminated with ST (ESC '\\')
+            "\x01B]8;;https://example.org\x1B\\Click here (ST terminator)\x01B]8;;\x1B\\" CRLF
+            // Multiple hyperlinks in one line
+            "Links: \x01B]8;;https://a.com\x07A\x01B]8;;\x07 and \x01B]8;;https://b.com\x07B\x01B]8;;\x07" CRLF
+            "End of OSC 8 tests" CRLF
+         ));
          return;
       }
 
@@ -2188,6 +2217,45 @@ try
       if(IEquals(wl[1], "gmcp_clientmedia"))
       {
          mp_connection->Receive(ConstString(GMCP_BEGIN R"+(client.media.play { "name":"audio/01_Ultima_Theme.mp3", "url" : "https://prelle.selfhost.eu:4079/", "type" : "music", "volume" : 60, "loops" : 1, "continue" : true })+" GMCP_END));
+         return;
+      }
+
+      if(IEquals(wl[1], "telnet"))
+      {
+         mp_wnd_text->AddHTML("<font color='aqua'>Running TELNET parser sanity test (negotiation + GMCP + prompt + SB recovery)");
+
+         mp_connection->Receive(ConstString("TELNET test: start" CRLF));
+
+         // Negotiation mix: supported + unsupported WILL/DO
+         mp_connection->Receive(ConstString(
+            "\xFF\xFB\x00" // IAC WILL BINARY
+            "\xFF\xFB\xC8" // IAC WILL unknown option
+            "\xFF\xFD\x18" // IAC DO TTYPE
+            "\xFF\xFD\xC7" // IAC DO unknown option
+            "TELNET test: negotiation burst parsed" CRLF));
+
+         // Valid GMCP frame
+         mp_connection->Receive(ConstString(
+            "\xFF\xFA\xC9"
+            "Core.Ping {}"
+            "\xFF\xF0"
+            "TELNET test: GMCP frame parsed" CRLF));
+
+         // Unknown SB recovery: escaped IAC + malformed IAC-in-SB, then proper close
+         mp_connection->Receive(ConstString(
+            "\xFF\xFA\xC8"
+            "abc"
+            "\xFF\xFF"
+            "def"
+            "\xFF\xF1"
+            "ghi"
+            "\xFF\xF0"
+            "TELNET test: unknown-SB recovery parsed" CRLF));
+
+         // Prompt marker should not desync normal text processing
+         mp_connection->Receive(ConstString("TELNET test: prompt preface" "\xFF\xF9" "TELNET test: after GA" CRLF));
+
+         mp_connection->Receive(ConstString("TELNET test: end" CRLF));
          return;
       }
 

@@ -42,6 +42,7 @@ enum CommandIDs : int
    ID_HELP_CONTENTS,
    ID_HELP_SCRIPT,
    ID_HELP_CHANGES,
+   ID_HELP_CHECKFORUPDATES,
    ID_NETWORK_DEBUGGER,
    ID_TRIGGER_DEBUGGER,
    ID_ALIAS_DEBUGGER,
@@ -618,9 +619,6 @@ private:
 
    DLNodeList<Wnd_Main> m_root_wnd_main;
    unsigned m_window_count{};
-
-   static unsigned s_badge_number;
-   static bool s_badge_has_important;
 
    OwnerPtr<Wnd_HistoryGraph> m_pHistoryGraph;
    Wnd_Taskbar *mp_wnd_taskbar{};

@@ -1,9 +1,12 @@
+struct ICoreWebView2Environment;
 struct ICoreWebView2Controller;
 struct ICoreWebView2;
 struct WebView_OM;
 
-struct Event_WebViewEnvironmentCreated { };
+struct Event_WebViewEnvironmentCreated { ICoreWebView2Environment &env; };
 struct Event_WebViewCreated { };
+
+void AttachWebViewEnvironment(Events::ReceiverOf<Event_WebViewEnvironmentCreated> &receiver);
 
 struct Wnd_WebView
  : DLNode<Wnd_WebView>, 

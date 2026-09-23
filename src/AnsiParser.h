@@ -5,8 +5,8 @@ struct AnsiParser
 {
    AnsiParser(const Prop::Ansi &prop_ansi) : m_prop_ansi{prop_ansi} { Reset(); }
 
-   void Reset() { m_state=State(); }
-   bool Parse(Streams::Input &ts, Text::LineBuilder &line_builder);
+   void Reset() { m_state=State(); m_in_osc8=false; }
+   void Parse(Streams::Input &ts, Text::LineBuilder &line_builder);
 
    enum eBlink
    {
@@ -36,4 +36,5 @@ private:
    const Prop::Ansi &m_prop_ansi;
 
    State m_state;
+   bool m_in_osc8{};
 };

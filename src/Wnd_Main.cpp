@@ -32,11 +32,7 @@ Prop::Docking g_propDockingClipboard;
 static CntPtrTo<Prop::MainWindowSettings> g_ppropMainWindowSettingsClipboard=MakeCounting<Prop::MainWindowSettings>();
 
 void SetBadgeInfo(int num, ConstString glyph_name);
-void CreateDialog_TextWindow(Window wndParent, Prop::TextWindow &propTextWindow);
-void CreateDialog_Connect(Window wnd, Wnd_MDI &wndMDI);
-void CreateDialog_SmartPaste(Window wndParent, Connection &connection, Prop::Connections &propConnections);
-void CreateDialog_InputWindow(Window wndParent, InputControl &input_window, Prop::InputWindow &propInputWindow);
-void CreateDialog_Logs(Connection &connection);
+void CheckForUpdatesAsync(Window parent, bool manual_check);
 
 void ShowStatistics(Text::Wnd &wnd)
 {
@@ -912,6 +908,11 @@ bool Wnd_Main::On(Text::Wnd &wnd_text, Text::Wnd_View &wnd_view, const Text::Rec
                {
                   SendLines(p_command->m_command);
                }
+               else if(auto *p_prompt=url.mp_custom->QueryInterface<Command_Prompt>())
+               {
+                  GetActiveInputWindow().SetText(p_prompt->m_command);
+                  GetActiveInputWindow().SetSelAll();
+               }
             }
             else
                SendLines(url.m_url);
@@ -1044,7 +1045,7 @@ void Wnd_Main::On(Text::Wnd &wnd_text, Text::Wnd_View &wnd_view, const Msg::RBut
       menu.Append(0, "Open as URL", [&]()
       {
          const Text::List::Selection &selection=wnd_text.GetTextList().SelectionGet();
-         if(!selection || selection.m_start.m_line!=selection.m_end.m_line)
+         if(!selection || selection.m_range[0].m_line!=selection.m_range[1].m_line)
             return;
 
          HybridStringBuilder<> string("http:\\\\");
@@ -1695,6 +1696,7 @@ void Wnd_Main::History_SelectUp(InputControl &edInput)
    // Are we before the last item of the history?
    if(m_history_pos>0)
    {
+      PinBelow(m_history_pos, lines.Count()); // In case someone deleted history lines and selected up
       History_CheckIfInputModified(edInput);
       m_history_pos--;
       History_SelectLine(edInput);
@@ -1713,6 +1715,7 @@ void Wnd_Main::History_SelectDown(InputControl &edInput)
    }
 
    const Text::Lines &lines=mp_wnd_text_history->GetTextList().GetLines();
+   PinBelow(m_history_pos, lines.Count()); // In case someone deleted history lines and selected down
 
    if(m_history_pos<lines.Count())
    {
@@ -2909,9 +2912,6 @@ void Wnd_MDI::RefreshTaskbar(Wnd_Main &window)
    mp_wnd_taskbar->Refresh(window);
 }
 
-unsigned Wnd_MDI::s_badge_number{};
-bool Wnd_MDI::s_badge_has_important{};
-
 void Wnd_MDI::RefreshBadgeCount()
 {
    if(!IsStoreApp())
@@ -2931,11 +2931,15 @@ void Wnd_MDI::RefreshBadgeCount()
       }
    }
 
+   static unsigned s_badge_number{};
+   static bool s_badge_has_important{};
+   static UIThreadMessagePoster s_poster;
+
    if(count!=s_badge_number || has_important!=s_badge_has_important)
    {
       s_badge_number=count;
       s_badge_has_important=has_important;
-      SetBadgeInfo(count, s_badge_has_important ? "alert" : ConstString());
+      s_poster.Post([]() { SetBadgeInfo(s_badge_number, s_badge_has_important ? "alert" : ConstString()); });
    }
 }
 
@@ -3082,6 +3086,7 @@ void Wnd_MDI::PopupMainMenu(int2 position)
       m.Append(MF_STRING, ID_HELP_CONTENTS, "&Contents...");
       m.Append(MF_STRING, ID_HELP_SCRIPT, "&Scripting...");
    	m.Append(MF_STRING, ID_HELP_CHANGES, "Changes...");
+      m.Append(MF_STRING, ID_HELP_CHECKFORUPDATES, "Check for updates");
       m.AppendSeparator();
       m.Append(MF_STRING, ID_HELP_ABOUT, "&About...");
       menu.Append(std::move(m), "&Help");
@@ -3154,6 +3159,7 @@ LRESULT Wnd_MDI::On(const Msg::Command &msg)
          return msg.Success();
 
 //      case ID_HELP_SUBSCRIBE: CreateWindow_Subscribe(*this); return msg.Success();
+      case ID_HELP_CHECKFORUPDATES: CheckForUpdatesAsync(*this, true); return msg.Success();
       case ID_HELP_ABOUT: CreateWindow_About(*this); return msg.Success();
    }
 
@@ -3512,6 +3518,9 @@ void CreateWindow_Root(ConstString command_line, int nCmdShow)
 
    if(g_ppropGlobal->fUpgraded() || g_ppropGlobal->fShowWelcome() || BETA_BUILD!=0)
       CreateWindow_About(Wnd_MDI::GetInstance());
+
+   if(!IsStoreApp() && g_ppropGlobal->fCheckForUpdates())
+      CheckForUpdatesAsync(Wnd_MDI::GetInstance(), false);
 
 #if BETA_BUILD!=0
    MessageBox(*Wnd_MDI::s_root_node.Next(), "This is a beta build, expect things to not be perfect.\nAnd as always, please try to break it!", "BETA reminder", MB_ICONEXCLAMATION|MB_OK);

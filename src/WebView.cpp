@@ -33,12 +33,27 @@ struct WebView2EnvironmentCreator : General::Unknown<ICoreWebView2CreateCoreWebV
 			return S_OK;
 
 		gp_environment=p_environment;
-		Send(Event_WebViewEnvironmentCreated());
+		Send(Event_WebViewEnvironmentCreated{*gp_environment});
 		return S_OK;
 	}
 
 	static inline CntPtrTo<WebView2EnvironmentCreator> sp_instance;
 };
+
+void AttachWebViewEnvironment(Events::ReceiverOf<Event_WebViewEnvironmentCreated> &receiver)
+{
+	if(!WebView2EnvironmentCreator::sp_instance)
+		MakeCounting<WebView2EnvironmentCreator>();
+
+	if(!gp_environment)
+		receiver.AttachTo(*WebView2EnvironmentCreator::sp_instance);
+	else
+	{
+		Events::SendersOf<Event_WebViewEnvironmentCreated> sender;
+		receiver.AttachTo(sender);
+      sender.Send(Event_WebViewEnvironmentCreated{*gp_environment});
+	}
+}
 
 struct WebView_OM
  : OM::Dispatch<OM::I::WebView>,
@@ -421,21 +436,14 @@ Wnd_WebView::Wnd_WebView(Wnd_Main &wnd_main, int2 size, ConstString id)
 
 LRESULT Wnd_WebView::On(const Msg::Create &msg)
 {
-	if(!WebView2EnvironmentCreator::sp_instance)
-		MakeCounting<WebView2EnvironmentCreator>();
-
-	if(!gp_environment)
-		AttachTo<Event_WebViewEnvironmentCreated>(*WebView2EnvironmentCreator::sp_instance);
-	else
-		On(Event_WebViewEnvironmentCreated());
-
+	AttachWebViewEnvironment(*this);
 	return msg.Success();
 }
 
-void Wnd_WebView::On(const Event_WebViewEnvironmentCreated &)
+void Wnd_WebView::On(const Event_WebViewEnvironmentCreated &event)
 {
 	// Create a CoreWebView2Controller and get the associated CoreWebView2 whose parent is the main window hWnd
-	gp_environment->CreateCoreWebView2Controller(hWnd(), Microsoft::WRL::Callback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(
+	event.env.CreateCoreWebView2Controller(hWnd(), Microsoft::WRL::Callback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(
 		[this](HRESULT result, ICoreWebView2Controller *p_controller) -> HRESULT {
 			if(FAILED(result) || !p_controller)
 				return S_OK; // Window closed?

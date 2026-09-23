@@ -9,9 +9,6 @@
 #include "Speller.h"
 #include "OM_Help.h"
 
-void CreateDialog_Find(Window wndParent, Controls::RichEdit &wndText);
-void CreateDialog_InputWindow(Window wndParent, InputControl &input_window, Prop::InputWindow &propInputWindow);
-
 DEFINE_GUID(IID_ITextServices, 0x8d33f740, 0xcf58, 0x11ce, 0xa8, 0x9d, 0x00, 0xaa, 0x00, 0x6c, 0xad, 0xc5);
 DEFINE_GUID(IID_ITextDocument, 0x8CC497C0, 0xA1DF, 0x11ce, 0x80, 0x98, 0x00, 0xAA, 0x00, 0x47, 0xBE, 0x5D);
 
@@ -497,6 +494,13 @@ void InputControl::SetText(ConstString text)
 void InputControl::ReplaceSelection(ConstString text)
 {
    Controls::RichEdit::ReplaceSel(text);
+}
+
+void InputControl::AppendText(ConstString text)
+{
+   SetSelEnd();
+   ReplaceSelection(text);
+   SendMessage(hWnd(), EM_SCROLLCARET, 0, 0);
 }
 
 bool InputControl::IsPrimary() const

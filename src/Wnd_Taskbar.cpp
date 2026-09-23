@@ -88,14 +88,15 @@ Color Wnd_Taskbar::DrawWindow(RectF rcWindow, Wnd_Main &wnd, unsigned tabNumber)
    RectF rcText(rcWindow);
    rcText.Inset(3, 0, 3, 0);
 
-   float emoji_top=(rcText.size().y-mp_font_emoji->Height()*m_font_size)/2.0f;
-   float text_top=(rcText.size().y-mp_font_text->Height()*m_font_size)/2.0f;
+   float emoji_baseline=rcText.center().y+mp_font_emoji->CenterBaseline()*m_font_size;
+   float text_baseline=rcText.center().y+mp_font_text->CenterBaseline()*m_font_size;
 
-   // Draw important activity indicator
+   // DrawTop important activity indicator
    if(auto activity_count=connection.GetMainWindow().GetImportantActivityCount())
    {
       int height=rcText.size().y;
-      RectF rcImportant{rcText}; rcImportant.right=rcImportant.left+height;
+      RectF rcImportant{rcText};
+      rcImportant.right=rcImportant.left+height;
       rcImportant.top+=1;
       rcImportant.bottom-=1;
 
@@ -115,38 +116,41 @@ Color Wnd_Taskbar::DrawWindow(RectF rcWindow, Wnd_Main &wnd, unsigned tabNumber)
          string("9+");
 
       float2 text_size{mp_font_text->Measure(string, m_font_size), mp_font_text->Height()*m_font_size};
-      mp_font_text->Draw(string, m_font_size, rcImportant.center()-text_size/2.0f, *mp_render_target, *mp_brush_dynamic);
+      mp_font_text->DrawTop(string, m_font_size, rcImportant.center()-text_size/2.0f, *mp_render_target, *mp_brush_dynamic);
       rcText.left+=height+2;
    }
 
-   // Draw logging indicator
+   // DrawTop logging indicator
    if(connection.IsLogging() && g_ppropGlobal->fTaskbarShowLogging())
    {
       FixedStringBuilder<16> string("●");
       if((connection.GetAutoLog()!=nullptr) + connection.GetLogs().Count()>1)
-         string("⁺");
+      {
+         string.Clear();
+         string("🞊");
+      }
 
       float width=mp_font_emoji->Measure(string, m_font_size);
       mp_brush_dynamic->SetColor(ToD2D(Color(225,0,0)));
-      mp_font_emoji->Draw(string, m_font_size, rcText.ptLT()+float2(0, emoji_top), *mp_render_target, *mp_brush_dynamic);
+      mp_font_emoji->Draw(string, m_font_size, rcText.ptLT()+float2(0, emoji_baseline), *mp_render_target, *mp_brush_dynamic);
       rcText.left+=width+1;
    }
 
-   // Draw disconnected icon
+   // DrawTop disconnected icon
    if(!connection.IsConnected())
    {
       float width=mp_font_emoji->Measure("⚡", m_font_size);
-      mp_font_emoji->Draw("⚡", m_font_size, rcText.ptLT()+float2(0, emoji_top), *mp_render_target, *mp_brush_dynamic);
+      mp_font_emoji->Draw("⚡", m_font_size, rcText.ptLT()+float2(0, emoji_baseline), *mp_render_target, *mp_brush_dynamic);
       rcText.left+=width+3.0f;
    }
-   else if(connection.m_mute_audio) // Draw muted icon only if connected
+   else if(connection.m_mute_audio) // DrawTop muted icon only if connected
    {
       float width=mp_font_emoji->Measure("🔇", m_font_size);
-      mp_font_emoji->Draw("🔇", m_font_size, rcText.ptLT()+float2(0, emoji_top), *mp_render_target, *mp_brush_dynamic);
+      mp_font_emoji->Draw("🔇", m_font_size, rcText.ptLT()+float2(0, emoji_baseline), *mp_render_target, *mp_brush_dynamic);
       rcText.left+=width+3.0f;
    }
 
-   // Draw world name
+   // DrawTop world name
    if(rcText.size().x>0) // Only if there's some space
    {
       FixedStringBuilder<256> string;
@@ -161,12 +165,12 @@ Color Wnd_Taskbar::DrawWindow(RectF rcWindow, Wnd_Main &wnd, unsigned tabNumber)
       auto find_info=font.CharFromPosition(string, m_font_size, rcText.size().x);
       if(find_info.index!=string.Count()) // Doesn't completely fit? Add ellipsis
          find_info=font.CharFromPosition(string, m_font_size, rcText.size().x-m_ellipsis_width);
-      float width=font.Draw(string.First(find_info.index), m_font_size, rcText.ptLT()+float2(0, text_top), *mp_render_target, *mp_brush_dynamic);
+      float width=font.Draw(string.First(find_info.index), m_font_size, rcText.ptLT()+float2(0, text_baseline), *mp_render_target, *mp_brush_dynamic);
       if(find_info.index!=string.Count())
-         font.Draw("…", m_font_size, rcText.ptLT()+float2(width, text_top), *mp_render_target, *mp_brush_dynamic);
+         font.Draw("…", m_font_size, rcText.ptLT()+float2(width, text_baseline), *mp_render_target, *mp_brush_dynamic);
    }
 
-   // Draw alt+# indicators
+   // DrawTop alt+# indicators
    if(tabNumber!=0)
    {
       FixedStringBuilder<32> number;
@@ -187,7 +191,7 @@ Color Wnd_Taskbar::DrawWindow(RectF rcWindow, Wnd_Main &wnd, unsigned tabNumber)
       mp_brush_dynamic->SetColor(ToD2D(g_taskbar_theme.text));
       mp_render_target->FillRectangle(ToD2D(rcNumber), mp_brush_dynamic);
       mp_brush_dynamic->SetColor(ToD2D(InvertLuma(g_taskbar_theme.text.ToFloat())));
-      mp_font_text->Draw(number, m_font_size, rcNumber.ptLT()+float2(3, text_top), *mp_render_target, *mp_brush_dynamic);
+      mp_font_text->Draw(number, m_font_size, rcNumber.ptLT()+float2(3, text_baseline), *mp_render_target, *mp_brush_dynamic);
    }
 
    return background;
@@ -396,6 +400,9 @@ LRESULT Wnd_Taskbar::On(const Msg::MouseMove &msg)
       if(m_tab_clicked_index>=m_wnd_MDI.GetWindowCount())
          return msg.Success();
 
+      if(Windows::Controls::s_layout_uses_control && !IsKeyPressed(VK_CONTROL))
+         return msg.Success();
+
       if(!m_dragging)
       {
          int cx_drag=abs(GetSystemMetrics(SM_CXDRAG));
@@ -497,15 +504,15 @@ void Wnd_Taskbar::Paint()
    Color background_color=g_taskbar_theme.background;
    mp_render_target->Clear(ToD2D(background_color));
 
-   // Draw the toolbar
+   // DrawTop the toolbar
    {
       mp_brush_dynamic->SetColor(ToD2D(g_taskbar_theme.text));
-      float top=(m_rcToolbar.size().y-mp_font_emoji->Height()*m_font_size)/2.0f;
+      float baseline=m_rcToolbar.center().y+mp_font_emoji->CenterBaseline()*m_font_size;
       for(unsigned i=0; i<std::size(c_toolbar_items); i++)
       {
          float width=mp_font_emoji->Measure(c_toolbar_items[i].m_icon, m_font_size);
          float x=(CalculateToolbarX(i)+CalculateToolbarX(i+1))/2;
-         mp_font_emoji->Draw(c_toolbar_items[i].m_icon, m_font_size, float2(x-width/2.0f, top), *mp_render_target, *mp_brush_dynamic);
+         mp_font_emoji->Draw(c_toolbar_items[i].m_icon, m_font_size, float2(x-width/2.0f, baseline), *mp_render_target, *mp_brush_dynamic);
       }
    }
 
@@ -558,7 +565,7 @@ void Wnd_Taskbar::Paint()
       {
          point.x-=mp_font_text->Measure(text, m_font_size);
          mp_brush_dynamic->SetColor(ToD2D(color));
-         mp_font_text->DrawBaseline(text, point, m_font_size, *mp_render_target, *mp_brush_dynamic);
+         mp_font_text->Draw(text, m_font_size, point, *mp_render_target, *mp_brush_dynamic);
       };
 
       DrawText(strIdleTime, g_taskbar_theme.text);

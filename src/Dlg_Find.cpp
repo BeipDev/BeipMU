@@ -251,22 +251,22 @@ bool Dlg_Find_TextWnd::Find(Text::List::Selection &selection)
    if(!Find(selection, rangeFound))
       return false;
 
-   selection.m_end.m_line=selection.m_start.m_line;
-   selection.m_start.m_char_index=rangeFound.begin;
-   selection.m_end.m_char_index=rangeFound.end;
+   selection.m_range[1].m_line=selection.m_range[0].m_line;
+   selection.m_range[0].m_char_index=rangeFound.begin;
+   selection.m_range[1].m_char_index=rangeFound.end;
    return true;
 }
 
 bool Dlg_Find_TextWnd::Find(Text::List::Selection &selection, uint2 &rangeFound)
 {
    auto &lines=m_wnd_text.GetTextList().GetLines();
-   auto &iter=selection.m_start.m_line;
+   auto &iter=selection.m_range[0].m_line;
 
    if(m_propfs.fForward())
    {
       // If already existing, search from previous position first
       // Move the selection a notch forwards (so we don't find the same thing twice)
-      if(selection && m_propfs.Find(selection.m_start.m_line->GetText(), selection.m_start.m_char_index+1, rangeFound))
+      if(selection && m_propfs.Find(selection.m_range[0].m_line->GetText(), selection.m_range[0].m_char_index+1, rangeFound))
          return true;
       if(!selection)
          iter=lines.begin();
@@ -285,7 +285,7 @@ bool Dlg_Find_TextWnd::Find(Text::List::Selection &selection, uint2 &rangeFound)
    {
       // If already existing, search from previous position first
       // Move the selection a notch backwards (so we don't find the same thing twice)
-      if(selection && m_propfs.Find(selection.m_start.m_line->GetText(), selection.m_end.m_char_index-1, rangeFound))
+      if(selection && m_propfs.Find(selection.m_range[0].m_line->GetText(), selection.m_range[1].m_char_index-1, rangeFound))
          return true;
       if(!selection)
          iter=lines.end();
