@@ -160,11 +160,6 @@ void TelnetParser::Parse(Array<const char> buffer)
                      m_state=State::Normal;
                      continue;
 
-                  case TELOPT_SGA:
-                     m_notify.OnTelnet(MakeString<TELNET_IAC, TELNET_DONT, TELOPT_SGA>);
-                     m_state=State::Normal;
-                     continue;
-
                   case TELOPT_GMCP:
                      m_notify.OnTelnet(MakeString<TELNET_IAC, TELNET_DO, TELOPT_GMCP>);
                      m_state=State::Normal;
@@ -175,7 +170,10 @@ void TelnetParser::Parse(Array<const char> buffer)
                #if _DEBUG
                OutputDebugString(FixedStringBuilder<256>("Unsupported Will Telnet option:", (int)(c), " ", Strings::Hex32(c, 2), '\n'));
                #endif
-               break;
+
+               m_notify.OnTelnet(FixedStringBuilder<16>(MakeString<TELNET_IAC, TELNET_DONT>, c));
+               m_state=State::Normal;
+               continue;
 
             case State::Do:
             {
@@ -256,10 +254,12 @@ void TelnetParser::Parse(Array<const char> buffer)
 
             case State::SB_IAC:
                if(c==TELNET_SE) { m_state=State::Normal; continue; }
+               if(c==TELNET_IAC) { m_state=State::SB_WaitForIAC; continue; } // Escaped IAC in SB payload
                #if _DEBUG
                OutputDebugString("State::SB_IAC did not see a TELNET_SE\n");
                #endif
-               break;
+               m_state=State::SB_WaitForIAC;
+               continue;
 
             case State::SB_GMCP:
                if(c==TELNET_IAC)
@@ -371,8 +371,8 @@ void TelnetParser::Parse(Array<const char> buffer)
                         // 1024 "MSLP"            supports the Mud Server Link Protocol for clickable link handling.
                         // 2048 "SSL"             supports SSL for data encryption, preferably TLS 1.3 or higher.
 
-                        // 1 "ANSI" + 4 "UTF-8" + 8 "256 Colors" + 256 "Truecolor" = 269
-                        reply("MTTS 269");
+                        // 1 "ANSI" + 4 "UTF-8" + 8 "256 Colors" + 256 "Truecolor" + 2048 = 2317
+                        reply("MTTS 2317");
                         if(m_ttype_sequence==4)
                            m_ttype_sequence=0;
                         break;

@@ -1,5 +1,14 @@
-4.00.331
+4.00.332
 
+Fix potential crash when deleting history items while navigating the history
+Fix blank title bar issue with docked windows
+Add OSC 8 hyperlink handling with standard + send & prompt url types
+Add option in UI Theme to set docked window caption height and font face
+BeipMU now checks for updates on startup and every 5 days if still running
+
+4.00.331 - 2026-2-17
+
+Add /shelp command to get scripting help of the available objects directly from the internal metadata
 Separate out map live tracking into two separate options, "Track based on what is seen" and "Track based on what you type"
 Make % variable expansion optional in filter trigger actions
 Fixed a crash in global UI settings when trying to set a default with no color selected
@@ -7,11 +16,12 @@ Fixed a crash when trying to send text in a connecting TLS connection (sending d
 Added ability to set id as a string value in /delay command (/delay id "blah" 5s "foo")
 Added width/height value fields to webview.open
 Add webview.close GMCP command to close existing webviews by id
-Add /shelp command to get scripting help of the available objects directly from the internal metadata
+Add webview.open GMCP value 'caption' to show/hide the window caption
 Add world/character/puppet names to undocked window titles
 Add WebView::GetPropertyString("ID")
 Parse <img src=> tags in Pueblo mode for better inline image display
 Extend trigger \# replacement to add \a## to support up to 99 capture groups
+Switch config.txt lock to a named mutex (should allow for better file sync/backup compatibility)
 
 4.00.330 - 2025-10-18
 

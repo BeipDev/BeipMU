@@ -177,7 +177,6 @@ Prop InputWindow(RefCounted)
 
 Prop AIWindow(RefCounted)
 {
-   String Server
 }
 
 Prop SpawnWindow
@@ -999,6 +998,12 @@ Prop CustomTheme
    Color Splitter
 }
 
+Prop AI
+{
+   String Server = "localhost:11434"
+   String Model
+}
+
 //*****************************************************************************
 //
 // The root property that all others are stored in
@@ -1009,6 +1014,7 @@ Prop Global
    Connections Connections
    Ansi        Ansi
    Keys        Keys
+   AI          AI
 
    Int  Version = 0 // We say zero so that the version number is always written out
                     // Since the main program will set it's value at startup
@@ -1045,6 +1051,7 @@ Prop Global
    Flag NotificationIcon = false
    Flag ShowSplash(NoWrite) = true
    Flag ShowWelcome = true
+   Flag CheckForUpdates = true
    Flag SendUnrecognizedCommands = false
    Flag PreventSmartQuotes = true
    Flag LayoutWithCtrl = false
@@ -1058,6 +1065,8 @@ Prop Global
 
    String UIFontName = "Calibri" // "Segoe UI"
    Int    UIFontSize = 13
+   String DockedCaptionFontName = "Microsoft Sans Serif" // Font for docked window caption bars (requires restart)
+   Int    DockedCaptionHeight = 18                       // Size of docked window caption bars (requires restart)
    Flag   DarkMode = false
    Int    Theme = 0 // 0 = Light Mode
    CustomTheme CustomTheme(DemandCreate) // If it exists, is used

@@ -114,7 +114,7 @@ void EditState::PushCommand(Command &command)
 struct Selection
 {
    Selection(Rect rc, Array2D<BYTE> map); // Select an existing area (making m_tiles_covered be empty, and m_tiles be what was already on the map)
-   Selection(int2 position, Array2D<const BYTE> tiles); // Draw a new area onto the map
+   Selection(int2 position, Array2D<const BYTE> tiles); // DrawTop a new area onto the map
 
    void Draw(Array2D<BYTE> map);
    void Undraw(Array2D<BYTE> map);
@@ -126,7 +126,7 @@ struct Selection
    OwnedArray2D<BYTE> m_tiles; // When valid, we own a floating block of tiles
    OwnedArray2D<BYTE> m_tiles_covered; // Saved area that m_pTiles is covering on the map
 #ifdef USE_ASSERTS
-   bool m_has_drawn{}; // Set to true on Draw(), False() on Undraw
+   bool m_has_drawn{}; // Set to true on DrawTop(), False() on Undraw
 #endif
 };
 
@@ -157,7 +157,7 @@ void Selection::Draw(Array2D<BYTE> map)
 
    // Save covered area
    m_tiles_covered.Slice(rcTiles).CopyFrom(map.Slice(rcMap));
-   // Draw new area
+   // DrawTop new area
    map.Slice(rcMap).CopyFrom(m_tiles.Slice(rcTiles));
 #ifdef _DEBUG
    Assert(!m_has_drawn);
