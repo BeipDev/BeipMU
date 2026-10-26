@@ -2,6 +2,7 @@
 #include "TextToLine.h"
 #include "CodePages.h"
 #include "ImageBanner.h"
+#include "MXP.h"
 
 TextToLine::TextToLine(Wnd_Main &wndMain)
  : m_wnd_main(wndMain),
@@ -13,7 +14,7 @@ TextToLine::~TextToLine()
 {
 }
 
-UniquePtr<Text::Line> TextToLine::Parse(ConstString string, bool use_pueblo, Prop::Server::Encoding encoding)
+UniquePtr<Text::Line> TextToLine::Parse(ConstString string, bool use_pueblo, Prop::Server::Encoding encoding, bool use_mxp)
 {
    Streams::Input stream(string);
    Text::HTMLParser html(stream, m_line_builder);
@@ -23,11 +24,24 @@ UniquePtr<Text::Line> TextToLine::Parse(ConstString string, bool use_pueblo, Pro
    else
       m_line_builder.SetStyleState(m_prev_line_state);
 
+   if(use_mxp)
+      m_mxp.BeginLine();
+
    while(unsigned char c=stream.CharGet())
    {
+      if(use_mxp)
+      {
+         if(m_mxp.PayBlank(c))
+            continue; // A blank a cell-sized IMAGE's label is standing in for
+         if(c!='<')
+            m_mxp.NotATag(); // TEMP SECURE (ESC[4z) only covers a tag that comes straight after it
+      }
+
       switch(c)
       {
          case CHAR_ESC: // ESC
+            if(use_mxp && m_mxp.ParseLineTag(stream, m_line_builder)) // ESC [ n z
+               break;
             if(stream.CharSpy()=='[' || stream.CharSpy()==']')
                m_ansi_parser.Parse(stream, m_line_builder);
             break;
@@ -45,7 +59,7 @@ UniquePtr<Text::Line> TextToLine::Parse(ConstString string, bool use_pueblo, Pro
          case CHAR_LF: m_line_builder.AppendNewLine(); break;
 
          case '&': // Possible entity
-            if(use_pueblo)
+            if(use_pueblo || (use_mxp && m_mxp.ParsesEntities()))
             {
                if(auto entity=html.ParseEntity())
                {
@@ -58,6 +72,15 @@ UniquePtr<Text::Line> TextToLine::Parse(ConstString string, bool use_pueblo, Pro
 
          case '<': // Style tag?
          {
+            if(use_mxp)
+            {
+               if(m_mxp.ParseTag(stream, html, m_line_builder))
+                  break;
+               // Refused: show it as typed. Pueblo does not get a second look at it.
+               m_line_builder.AppendChar(c);
+               break;
+            }
+
             if(use_pueblo)
             {
                if(HandlePuebloTag(stream, html))
@@ -101,6 +124,9 @@ UniquePtr<Text::Line> TextToLine::Parse(ConstString string, bool use_pueblo, Pro
          }
       }
    }
+
+   if(use_mxp)
+      m_mxp.EndLine(m_line_builder); // The line boundary: open tags close, the mode reverts
 
    m_prev_line_state=m_line_builder.GetStyleState();
    return m_line_builder.Create();

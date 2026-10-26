@@ -828,6 +828,7 @@ Prop Server(RefCounted)
    UInt32 LastIP(NoWrite) = 0
 
    Flag   Pueblo = false
+   Flag   MXP = false // Accept MXP (MUD eXtension Protocol) when the server offers it
    Flag   Prompts = false // MUD like prompt handling
    Flag   MCP = false // Enable MCP
    Flag   MCMP = false // Enable MCMP ((Mud Client Media Protocol)

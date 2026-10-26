@@ -9,6 +9,7 @@ struct SpawnWindow;
 struct Wnd_CaptureAbort;
 struct Log;
 struct Client_Media;
+struct ImageBanner;
 namespace GMCP
 {
 struct Avatar_Info;
@@ -21,6 +22,7 @@ namespace MCP
 };
 
 #include "Telnet.h"
+#include "MXP.h"
 #include "TextToLine.h"
 
 struct NetworkDebugHost : Text::IHost
@@ -66,6 +68,7 @@ struct Connection
    void TelnetParser::INotify::OnEncoding(Prop::Server::Encoding encoding) override;
    void TelnetParser::INotify::OnGMCP(ConstString string) override;
    void TelnetParser::INotify::OnDoNAWS() override;
+   void TelnetParser::INotify::OnMXP() override;
 
    void Display(ConstString string); // Parses ansi, html tags, etc.. turns it into a Text::Line, then puppets, then passes to Display
    void Display(UniquePtr<Text::Line> &&line); // Does triggers and then displays the line
@@ -311,6 +314,11 @@ private:
    bool m_in_receive{};
 
    bool m_pueblo{};
+   bool m_mxp{}; // MXP was negotiated on this connection
+   Collection<MXP::Image> m_mxp_images; // From the line Display(ConstString) just parsed, drawn by Display(UniquePtr)
+   MXP::Figures m_mxp_figures; // Cell-sized pictures waiting for the box round them to finish
+   void SendMXPReplies();
+   void AddMXPImages(ImageBanner &banner, Collection<MXP::Image> &images);
    bool m_raw_log_replay{}; // True when we're replaying a raw log (so no trigger sounds/sends/etc)
 
    int m_connect_retries{};

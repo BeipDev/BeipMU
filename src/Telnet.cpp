@@ -160,6 +160,20 @@ void TelnetParser::Parse(Array<const char> buffer)
                      m_state=State::Normal;
                      continue;
 
+                  case TELOPT_MXP:
+                     if(auto *p_server=m_notify.GetServer(); p_server && p_server->fMXP())
+                     {
+                        if(!m_mxp)
+                        {
+                           m_mxp=true;
+                           m_notify.OnTelnet(MakeString<TELNET_IAC, TELNET_DO, TELOPT_MXP>);
+                           m_notify.OnMXP();
+                        }
+                        m_state=State::Normal;
+                        continue;
+                     }
+                     break; // Refused below
+
                   case TELOPT_GMCP:
                      m_notify.OnTelnet(MakeString<TELNET_IAC, TELNET_DO, TELOPT_GMCP>);
                      m_state=State::Normal;
@@ -203,6 +217,21 @@ void TelnetParser::Parse(Array<const char> buffer)
                      m_notify.OnTelnet(MakeString<TELNET_IAC, TELNET_WILL, TELOPT_TTYPE>);
                      m_state=State::Normal;
                      continue;
+
+                  // The spec has the server send WILL, but some send DO. Either way it is the server asking.
+                  case TELOPT_MXP:
+                     if(auto *p_server=m_notify.GetServer(); p_server && p_server->fMXP())
+                     {
+                        if(!m_mxp)
+                        {
+                           m_mxp=true;
+                           m_notify.OnTelnet(MakeString<TELNET_IAC, TELNET_WILL, TELOPT_MXP>);
+                           m_notify.OnMXP();
+                        }
+                        m_state=State::Normal;
+                        continue;
+                     }
+                     break; // Refused below
 
 #if 0
                   case TELOPT_EOR:

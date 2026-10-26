@@ -200,7 +200,8 @@ void Connection::OnPrompt(ConstString string)
       RemovePrompt();
 
       m_timer_prompt.Reset();
-      auto p_line=m_text_to_line.Parse(string, m_pueblo, m_ppropServer->eEncoding());
+      auto p_line=m_text_to_line.Parse(string, m_pueblo, m_ppropServer->eEncoding(), m_mxp);
+      SendMXPReplies();
       mp_prompt=*p_line;
       GetOutput().Add(std::move(p_line));
    }
@@ -864,6 +865,11 @@ void Connection::Disconnect()
    mp_MCP=nullptr;
    mp_MCMP=nullptr;
    m_pueblo=false;
+   m_mxp=false; // Has to be negotiated again on the next socket, and the modes start clean
+   m_telnet_parser.m_mxp=false;
+   m_text_to_line.m_mxp.Reset();
+   m_mxp_images.Empty();
+   m_mxp_figures.Empty();
    m_line_image_url.Clear();
    mp_line_avatar_info=nullptr;
 
@@ -1146,7 +1152,8 @@ void Connection::Display(ConstString string)
    // Disabled due to the ansi test sending through the Receive function and winding up
    // here, as it must act as though the text was sent from a server!
    // Assert(m_ppropServer); // We should always have at least one of these
-   auto pTL=m_text_to_line.Parse(string, m_pueblo, m_ppropServer ? m_ppropServer->eEncoding() : Prop::Server::Encoding::UTF8);
+   auto pTL=m_text_to_line.Parse(string, m_pueblo, m_ppropServer ? m_ppropServer->eEncoding() : Prop::Server::Encoding::UTF8, m_mxp);
+   SendMXPReplies();
 
    if(mp_line_avatar_info)
    {
@@ -1190,7 +1197,26 @@ void Connection::Display(ConstString string)
       }
    }
 
+   if(m_mxp)
+      m_mxp_images=std::move(m_text_to_line.m_mxp.m_images);
    Display(std::move(pTL));
+}
+
+void Connection::SendMXPReplies()
+{
+   if(!m_mxp)
+      return;
+
+   // <VERSION> and <SUPPORT> answers. They go straight to the socket: they are not something the user typed.
+   for(auto &reply : m_text_to_line.m_mxp.m_replies)
+      RawSend(ConstString(reply));
+   m_text_to_line.m_mxp.m_replies.Empty();
+}
+
+void Connection::OnMXP()
+{
+   m_mxp=true;
+   m_text_to_line.m_mxp.Reset();
 }
 
 void Connection::TriggerDebugText(ConstString background_color, ConstString stroke_color, ConstString indent, ConstString message)
@@ -1207,6 +1233,20 @@ void Connection::AliasDebugText(ConstString background_color, ConstString stroke
 
 void Connection::Display(UniquePtr<Text::Line> &&p_line)
 {
+   // Taken first, so a line that returns early cannot leave its pictures for the next one.
+   // Pictures go under their line, except a figure laid out in cells (H=8c), which waits for
+   // the box round it to finish so the banner does not cut the box in two.
+   Collection<MXP::Image> mxp_images_above, mxp_images;
+   m_mxp_figures.Step(p_line->GetText(), mxp_images_above, mxp_images);
+   for(auto &image : m_mxp_images)
+   {
+      if(image.m_rows>0)
+         m_mxp_figures.Add(std::move(image));
+      else
+         mxp_images.Push(std::move(image));
+   }
+   m_mxp_images.Empty();
+
    // Handle \grab prefixes
    if(m_grab_prefix && p_line->GetText().StartsWith(m_grab_prefix))
    {
@@ -1348,19 +1388,31 @@ void Connection::Display(UniquePtr<Text::Line> &&p_line)
       }
    }
 
-   UniquePtr<Text::Line> p_image_line;
+   UniquePtr<Text::Line> p_image_line, p_image_line_above;
 
    if(g_ppropGlobal->fInlineImages())
    {
-      if(auto urls=p_line->GetImageUrls())
+      auto urls=p_line->GetImageUrls();
+      if(urls || mxp_images.Count())
       {
          auto p_banner=MakeCounting<ImageBanner>();
          for(auto &url : urls)
             p_banner->AddURL(std::move(url));
+         AddMXPImages(*p_banner, mxp_images);
 
          Text::LineBuilder line_builder;
          line_builder.AppendBanner(p_banner);
          p_image_line=line_builder.Create();
+      }
+
+      if(mxp_images_above.Count())
+      {
+         auto p_banner=MakeCounting<ImageBanner>();
+         AddMXPImages(*p_banner, mxp_images_above);
+
+         Text::LineBuilder line_builder;
+         line_builder.AppendBanner(p_banner);
+         p_image_line_above=line_builder.Create();
       }
    }
 
@@ -1409,9 +1461,25 @@ void Connection::Display(UniquePtr<Text::Line> &&p_line)
       p_wnd=p_spawn_window->mp_text;
    }
 
+   if(p_image_line_above)
+      p_wnd->Add(std::move(p_image_line_above));
    p_wnd->Add(std::move(p_line));
    if(p_image_line)
       p_wnd->Add(std::move(p_image_line));
+}
+
+// MXP <IMAGE>: the label is in the line, the picture goes in the banner.
+// A height the server asked for wins over the default; the tallest one if there are several.
+void Connection::AddMXPImages(ImageBanner &banner, Collection<MXP::Image> &images)
+{
+   int requested_height=0;
+   for(auto &image : images)
+   {
+      banner.AddURL(Text::ImageURL{ConstString(image.m_url)});
+      requested_height=std::max(requested_height, image.m_height);
+   }
+   if(requested_height)
+      banner.m_height=requested_height;
 }
 
 bool Connection::KillSpawnCapture()

@@ -11,6 +11,7 @@ struct TelnetParser
       virtual void OnEncoding(Prop::Server::Encoding encoding)=0;
       virtual void OnDoNAWS()=0;
       virtual void OnGMCP(ConstString string)=0;
+      virtual void OnMXP()=0; // MXP negotiated, parse what follows as MXP
       virtual Prop::Server *GetServer()=0;
    };
 
@@ -23,6 +24,7 @@ struct TelnetParser
 
    void SendNAWS(uint16_2 dims);
    bool m_do_naws{};
+   bool m_mxp{}; // Agreed once per connection, so a server repeating itself gets no second reply
    int m_ttype_sequence{};
 
 private:
